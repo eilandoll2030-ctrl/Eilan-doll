@@ -3462,36 +3462,272 @@ function designIdea(q){
   <button class="btn sm g" style="margin-top:10px" data-act="studioidea" data-j='${JSON.stringify(idea).replace(/'/g,"")}'>🎨 نفّذها في الاستوديو</button>`;
 }
 
-function localAI(q){
-  const n=norm(q),t=tokens(q);const has=(...w)=>w.some(x=>n.includes(norm(x)));
-  if(!t.length||(/^(مرحبا|هلا|السلام|اهلا|hi|hello|hey|صباح|مساء)/.test(n)&&t.length<=3))
-    return `<p>أهلاً بك في <b>عالم ${esc(S.settings.brand)}</b> 💜💚 أنا <b>Eilan AI</b> — مساعدك داخل المتصفح.</p><p>أستطيع أن أبحث لك عن المنتجات، أقترح أفكار تصاميم، أشرح معلومات من الموسوعة، أدلّك على الأماكن، وأوصلك لسيرفرات ديسكورد. جرّب أن تسألني!</p>`;
-  let out='';
-  // design idea
-  const wantsIdea=has('فكره','افكار','اقترح تصميم','الهام','ابتكر','صمم لي','idea','inspire');
-  // price intent
-  let prods=find(S.products,q,PF);let priceNote='';
-  const m=n.match(/(تحت|اقل من|ب|under|below|حدود)\s*(\d+)/);
-  if(m){const lim=+m[2];prods=(prods.length?prods:[...S.products]).filter(p=>p.price<=lim).sort((a,b)=>a.price-b.price);priceNote=`بميزانية ${lim} ر.س أو أقل`}
-  if(has('ارخص','رخيص','cheap','اقل سعر')){prods=(prods.length?prods:[...S.products]).sort((a,b)=>a.price-b.price);priceNote='مرتّبة من الأرخص'}
-  if(has('اغلى','افضل','الاكثر مبيع','best','ترشح','تنصح')&&!prods.length){prods=[...S.products].sort((a,b)=>(b.sales||0)-(a.sales||0));priceNote='الأكثر مبيعاً'}
-  if(has('مذاكر','دراس','study','طالب','طلاب')&&prods.length<2)prods=[...new Set([...prods,...S.products.filter(p=>/دراس|مذاكر|مخطط|تركيز|study|planner/.test(PF(p)))])];
-  const wk=find(S.wiki,q,WF),pl=find(S.places,q,LF),cs=find(S.courses,q,CF),sv=find(S.servers,q,SF);
-  const askPlace=has('اين','وين','موقع','مكان','تقع','where','خريطه','map');
-  const askDiscord=has('ديسكورد','discord','سيرفر','westred','ويسترد','انضم','مجتمع');
-  const askWhat=has('ما هو','ما هي','ماهو','ماهي','اشرح','عرف','وش هو','what is','معنى');
+function localAI(q) {
+  const rawQ = String(q || '').trim();
+  const n = norm(rawQ);
+  const t = tokens(rawQ);
+  const has = (...w) => w.some(x => n.includes(norm(x)));
 
-  if(wantsIdea)out+=designIdea(q);
-  if(askDiscord&&(sv.length||true)){const l=sv.length?sv:S.servers;out+=`<h5>💬 سيرفرات المجتمع</h5><p>يمكنك الانضمام من صفحة <a data-go="eilan://community">المجتمع</a>:</p>${l.slice(0,3).map(s=>`<p>${s.icon} <b>${esc(s.name)}</b> — ${esc(s.desc)} <a href="${esc(s.link)}" target="_blank" rel="noopener">انضم ↗</a></p>`).join('')}`}
-  if(pl.length&&(askPlace||!prods.length)){const p=pl[0];out+=`<h5>📍 ${esc(p.name)}</h5><p>${esc(p.desc)}</p><p class="mono" style="font-size:12px;color:var(--g)">${p.lat.toFixed(3)}, ${p.lng.toFixed(3)}</p><p><a data-go="eilan://places/${p.id}">عرض على خريطة إيلان</a> · <a href="https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lng}" target="_blank" rel="noopener">خرائط Google ↗</a></p>`}
-  else if(askPlace&&!pl.length){out+=`<p>لم أجد هذا المكان في خريطة إيلان بعد. <a href="https://www.google.com/maps/search/${enc(q)}" target="_blank" rel="noopener">ابحث عنه في خرائط Google ↗</a> أو أضفه من <a data-go="eilan://places">صفحة الأماكن</a>.</p>`}
-  if(wk.length&&!pdOff()&&!priceNote&&(askWhat||!prods.length||scoreText(wk[0].title,t)>=3)){const w=wk[0];out+=`<h5>📖 من EilanPedia</h5><p><b>${esc(w.title)}:</b> ${esc(w.summary)}</p><p><a data-go="eilan://wiki/${w.id}">اقرأ المقالة كاملة ←</a></p>`}
-  if(prods.length&&!askDiscord){out+=`<h5>🛍️ ${prods.length>1?'منتجات مقترحة':'منتج مقترح'} ${priceNote?'— '+priceNote:''}</h5>${prods.slice(0,3).map(mini).join('')}`}
-  if(cs.length&&has('تعلم','دوره','درس','learn','course','كيف')){out+=`<h5>📚 دورة مناسبة</h5><p>${cs[0].icon} <a data-go="eilan://learn/${cs[0].id}">${esc(cs[0].title)}</a> — ${esc(cs[0].desc)} (مجانية + XP)</p>`}
-  if(!out){out=`<p>لم أجد إجابة مباشرة داخل عالم إيلان عن «${esc(q)}» 🤔</p><p>جرّب: <a data-go="eilan://search?q=${enc(q)}">البحث الشامل</a> · <a href="https://www.google.com/search?q=${enc(q)}" target="_blank" rel="noopener">Google ↗</a> · <a href="https://ar.wikipedia.org/w/index.php?search=${enc(q)}" target="_blank" rel="noopener">ويكيبيديا ↗</a></p>${S.settings.apiKey?'':'<p class="mu" style="font-size:12px">💡 لإجابات أعمق في أي موضوع، أضف مفتاح Claude من لوحة التحكم ← الإعدادات.</p>'}`}
-  return out;
+  // 1. Greetings (التحيات والترحيب)
+  if (!t.length || (/^(مرحبا|هلا|السلام|اهلا|hi|hello|hey|صباح|مساء|يا هلا|اهلين)/.test(n) && t.length <= 3)) {
+    return `
+    <div class="ai-resp">
+      <p>أهلاً وسهلاً بك في <b>عالم إيلان دول (EILAN DOLL)</b> 💜🪐✨ أنا <b>Eilan AI</b>، عقلك الذكي ومستشارك المتكامل داخل المنصة.</p>
+      <p>أنا جاهز ومستعد للإجابة عن <b>أي سؤال أو فكرة تخطر ببالك</b>:</p>
+      <ul style="padding-right:20px;line-height:1.9;font-size:13.5px;color:var(--w)">
+        <li>🌍 <b>مقارنات وخطط السفر والسياحة:</b> (مقارنة باريس ولندن، جداول الرياض وجدة، الميزانيات، الأكل الحلال، وأفضل وقت للزيارة).</li>
+        <li>☕🍔 <b>ترشيحات المطاعم والكافيهات:</b> (أفضل كافيه رايق، مطاعم برجر، ستاربكس، البيك، كنتاكي، البوليفارد، والمولات).</li>
+        <li>🎮 <b>ألعاب وترفيه إيلان:</b> (ألعاب الجمعات العائلية، خمن الدول، الألغاز وتجميع نقاط الـ XP).</li>
+        <li>🎨 <b>استوديو التصميم والقوالب:</b> (تصميم البوسترات، قوالب العروض، الريلز، وطلب تصاميم خاصة).</li>
+        <li>🛍️ <b>المتجر والمنتجات الرقمية</b> والأسعار والعروض الحصرية.</li>
+      </ul>
+      <p class="mu" style="font-size:13px">جرّب أن تسألني: <i>«قارن بين باريس ولندن لسائح سعودي»</i> أو <i>«اقترح لي جدول 3 أيام في الرياض»</i> أو <i>«أفضل كافيه في جدة»</i>!</p>
+    </div>`;
+  }
+
+  // 2. City Comparison Intelligence (مقارنات المدن والعواصم)
+  const isComparison = has('قارن', 'مقارن', 'الفرق بين', 'وش افضل', 'مين افضل', 'ايهما افضل', 'ايش احسن', 'ولا', 'أم ');
+  
+  const foundCities = [];
+  if (typeof CT_DATA !== 'undefined' && Array.isArray(CT_DATA)) {
+    for (const city of CT_DATA) {
+      if (n.includes(norm(city.n)) || n.includes(norm(city.en)) || (city.wa && n.includes(norm(city.wa)))) {
+        if (!foundCities.some(x => x.id === city.id)) foundCities.push(city);
+      }
+    }
+  }
+
+  // Comparison between Paris and London
+  if ((has('باريس') && has('لندن')) || (isComparison && (has('باريس') || has('لندن'))) || (foundCities.some(c => c.id === 'paris') && foundCities.some(c => c.id === 'london'))) {
+    return `
+    <div class="ai-resp">
+      <h4 style="color:var(--g);font-size:16px;margin-bottom:8px">⚖️ مقارنة شاملة بين باريس ولندن (دليل السائح السعودي والعائلات)</h4>
+      <p>مرحباً بك! هذه مقارنة تفصيلية دقيقة بين العاصمتين العالميتين لمساعدتك في اتخاذ القرار الأنسب لرحلتك:</p>
+      
+      <table class="it-table" style="margin:12px 0;width:100%">
+        <thead>
+          <tr>
+            <th>وجه المقارنة</th>
+            <th>🇫🇷 باريس (مدينة النور)</th>
+            <th>🇬🇧 لندن (عاصمة الضباب)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>🏛️ المعالم والأنشطة</b></td>
+            <td>برج إيفل، متحف اللوفر، قصر فرساي، الشانزلزيه، وجولة نهر السين. طابعها فني ورومانسي وتاريخي عريق.</td>
+            <td>ساعة بيغ بن، عين لندن، برج لندن، قصر باكنغهام، المتاحف المجانية الضخمة، وعروض مسارح ويست إند.</td>
+          </tr>
+          <tr>
+            <td><b>💰 التكلفة والميزانية</b></td>
+            <td>متوسطة إلى مرتفعة. السكن والمطاعم أرخص من لندن بنسبة 15-20%. الميترو ممتاز وسهل ورخيص.</td>
+            <td>مرتفعة جداً (بالجنيه الإسترليني). السكن والتنقل من الأغلى في أوروبا، لكن دخول معظم المتاحف الكبرى مجاني.</td>
+          </tr>
+          <tr>
+            <td><b>🍽️ الأكل الحلال</b></td>
+            <td>متوفر في أحياء معينة (المطاعم المغربية، اللبنانية، والتركية)، ويتطلب بحثاً مسبقاً للتأكد.</td>
+            <td><b>تتفوق باكتساح!</b> خيارات الحلال في كل شارع (شوارع شهيرة مثل إدجوير رود، كوينزواي، نايتسبريدج)، ومطاعم خليجية شهيرة.</td>
+          </tr>
+          <tr>
+            <td><b>👨‍👩‍👧 ملاءمة العائلات</b></td>
+            <td>ممتازة بفضل وجود <b>ديزني لاند باريس</b> على بُعد 35 دقيقة، لكن لغة التعامل الفرنسية قد تتطلب جهداً بسيطاً.</td>
+            <td><b>الخيار الأول والأسهل للعائلات السعودية:</b> حدائق خيالية واسعة (هايد بارك، ريجنت بارك)، سهولة تامة في اللغة الإنجليزية، وتسوق لا يُعلى عليه.</td>
+          </tr>
+          <tr>
+            <td><b>🛍️ التسوق</b></td>
+            <td>عاصمة الموضة الفاخرة (شارع مونتين، لافاييت، وفال دي يوربي أوتلت). ميزة استرداد الضريبة (Tax-Free).</td>
+            <td>هارودز، سيلفريدجز، ريجنت ستريت، أكسفورد ستريت، وبيستر فيلج أوتلت. تجربة تسوق راقية جداً.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div style="background:rgba(45,232,154,0.1);border:1px solid var(--bd2);border-radius:12px;padding:12px;margin:12px 0">
+        <b style="color:var(--g)">💡 الخلاصة والنصيحة الذهبية:</b>
+        <p style="margin:6px 0 0;font-size:13.5px;color:var(--w);line-height:1.7">
+          • <b>اختر لندن:</b> إذا كانت الرحلة عائلية مع أطفال وكبار سن، أو تبحث عن راحة تامة في الأكل الحلال، التسوق، وسهولة اللغة والمواصلات.<br>
+          • <b>اختر باريس:</b> إذا كنت تبحث عن الأجواء الثقافية والرومانسية، والتصوير المعماري، أو ترغب في زيارة منتجع ديزني لاند العالمي.
+        </p>
+      </div>
+
+      <p class="mu xs">🔗 يمكنك تصفح تفاصيل كل مدينة وصورها وجولاتها 360° من قسم <a data-go="eilan://cities">المدن والعالم</a>.</p>
+    </div>`;
+  }
+
+  // Generic Comparison between any 2 cities
+  if (foundCities.length >= 2) {
+    const c1 = foundCities[0], c2 = foundCities[1];
+    return `
+    <div class="ai-resp">
+      <h4 style="color:var(--g)">⚖️ مقارنة ذكية بين ${esc(c1.n)} و ${esc(c2.n)}</h4>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0">
+        <div class="card" style="padding:12px">
+          <h5 style="color:var(--w)">📍 ${esc(c1.n)} (${esc(c1.c)})</h5>
+          <p style="font-size:13px;line-height:1.6">${esc(c1.d)}</p>
+          <small class="mu">🗓️ أفضل وقت للزيارة: ${esc(c1.best)}</small><br>
+          <small style="color:var(--g)">🏛️ أبرز المعالم: ${c1.lm.slice(0,3).map(l=>l.n).join('، ')}</small>
+        </div>
+        <div class="card" style="padding:12px">
+          <h5 style="color:var(--w)">📍 ${esc(c2.n)} (${esc(c2.c)})</h5>
+          <p style="font-size:13px;line-height:1.6">${esc(c2.d)}</p>
+          <small class="mu">🗓️ أفضل وقت للزيارة: ${esc(c2.best)}</small><br>
+          <small style="color:var(--g)">🏛️ أبرز المعالم: ${c2.lm.slice(0,3).map(l=>l.n).join('، ')}</small>
+        </div>
+      </div>
+      <p>تفضل بتصفح جدول الرحلات والميزانية التفصيلية من صفحة <a data-go="eilan://cities">المدن والعالم</a> ✈️</p>
+    </div>`;
+  }
+
+  // 3. Single City / Country Intelligence (أدلة المدن الفردية)
+  if (foundCities.length === 1 || has('مدينة', 'سياحة', 'سفر', 'رحلة', 'وجهة', 'طيران', 'ميزانية السفر')) {
+    const c = foundCities[0];
+    if (c) {
+      const lmNames = c.lm.map(l => l.n).join('، ');
+      return `
+      <div class="ai-resp">
+        <h4 style="color:var(--g);font-size:16px">🏙️ دليل ${esc(c.n)} — ${esc(c.tag)}</h4>
+        <p style="line-height:1.8;font-size:14px">${esc(c.d)}</p>
+        
+        <div style="background:rgba(139,92,246,0.1);border:1px solid var(--bd);border-radius:12px;padding:12px;margin:10px 0">
+          <div style="display:flex;flex-wrap:wrap;gap:14px;font-size:13px">
+            <span>📍 <b>الدولة / المنطقة:</b> ${esc(c.c)}</span>
+            <span>🗓️ <b>أفضل وقت للزيارة:</b> ${esc(c.best)}</span>
+            <span>🏛️ <b>أبرز المعالم:</b> ${esc(lmNames)}</span>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
+          <button class="btn sm g" data-go="eilan://places/city-${c.id}">تصفح معالم ${esc(c.n)} ↗</button>
+          <a class="btn sm" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(c.en + (c.r==='sa'?' Saudi Arabia':''))}" target="_blank" rel="noopener">🗺️ خرائط Google</a>
+          <button class="btn sm" data-go="eilan://cities">🧳 جدول الرحلة والميزانية بالريال</button>
+        </div>
+      </div>`;
+    }
+  }
+
+  // 4. Spots, Cafes, Restaurants, Entertainment Intelligence (الأماكن والمطاعم والكافيهات)
+  const isPlaceQuery = has('كافيه', 'كوفي', 'مقهى', 'مطعم', 'اكل', 'برجر', 'غداء', 'عشاء', 'ستاربكس', 'starbucks', '8oz', 'ثامن اونصة', 'البيك', 'albaik', 'كنتاكي', 'kfc', 'بارنز', 'بوليفارد', 'boulevard', 'حديقة', 'منتزه', 'مول', 'شاليه', 'منتجع', 'فندق', 'طلعة', 'خرجة');
+  if (isPlaceQuery && typeof EILAN_SPOTS_DATA !== 'undefined') {
+    let matchedSpots = EILAN_SPOTS_DATA.filter(s => {
+      const text = norm(s.name + ' ' + (s.brand||'') + ' ' + s.city + ' ' + s.catName + ' ' + s.desc);
+      return t.some(token => token.length > 2 && text.includes(token));
+    });
+    if (!matchedSpots.length) {
+      if (has('كافيه', 'قهوة')) matchedSpots = EILAN_SPOTS_DATA.filter(s => s.cat === 'cafe');
+      else if (has('مطعم', 'برجر', 'اكل')) matchedSpots = EILAN_SPOTS_DATA.filter(s => s.cat === 'restaurant');
+      else if (has('حديقة', 'بوليفارد', 'ترفيه')) matchedSpots = EILAN_SPOTS_DATA.filter(s => s.cat === 'park');
+      else if (has('مول', 'تسوق')) matchedSpots = EILAN_SPOTS_DATA.filter(s => s.cat === 'mall');
+      else if (has('شاليه', 'منتجع')) matchedSpots = EILAN_SPOTS_DATA.filter(s => s.cat === 'resort');
+    }
+
+    if (matchedSpots.length) {
+      const topSpots = matchedSpots.slice(0, 3);
+      return `
+      <div class="ai-resp">
+        <h4 style="color:var(--g)">📍 ترشيحات مميزة من دليل الأماكن والترفيه:</h4>
+        <div style="display:grid;gap:10px;margin:12px 0">
+          ${topSpots.map(s => `
+          <div class="card" style="padding:12px;display:flex;gap:12px;align-items:center">
+            <img src="${s.cover}" style="width:70px;height:70px;border-radius:10px;object-fit:cover" alt="">
+            <div style="flex:1">
+              <b style="color:var(--w);font-size:14px">${esc(s.name)}</b>
+              <div style="font-size:12px;color:var(--g)">★ ${s.rating||4.8} · ${esc(s.catName)} · ${esc(s.city)}</div>
+              <p class="mu xs" style="margin:4px 0">${esc(s.desc)}</p>
+              <div style="display:flex;gap:6px;margin-top:4px">
+                <a class="btn xs" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(s.name+' '+s.city)}" target="_blank" rel="noopener">🗺️ الملاحة واللوكيشن</a>
+                <button class="btn xs g" data-go="eilan://places/${s.id}">عرض الصور والتقييمات 📷</button>
+              </div>
+            </div>
+          </div>`).join('')}
+        </div>
+        <p class="mu xs">للمزيد من الكافيهات والمطاعم والحدائق تصفح <a data-go="eilan://places">قسم الأماكن والخرائط 🗺️</a>.</p>
+      </div>`;
+    }
+  }
+
+  // 5. Games & Entertainment Intelligence (ألعاب وترفيه)
+  if (has('لعبة', 'العاب', 'ترفيه', 'جمعات', 'تحدي', 'خمن', 'لغز', 'play', 'game', 'تسلية')) {
+    return `
+    <div class="ai-resp">
+      <h4 style="color:var(--g)">🎮 منطقة الترفيه والألعاب في عالم إيلان</h4>
+      <p>يحتوي عالم إيلان على باقة ألعاب وتحديات مسلية جداً للجمعات والعائلات والأصدقاء:</p>
+      <ul style="padding-right:20px;line-height:1.9;font-size:13.5px;color:var(--w)">
+        <li>🎯 <b>ألعاب تفاعلية فورية داخل المتصفح:</b> لعبة «خمّن الدولة»، لعبة «خمّن العملة»، واختبارات الذكاء وسرعة البديهة لكسب نقاط الـ <b>XP</b>.</li>
+        <li>🎲 <b>ألعاب الجمعات الرقمية بالمتجر:</b> لعبة «أسئلة عائلية»، لعبة «لحد يشدها»، ولعبة «كثّر بهارات» الجاهزة للتشغيل الفوري في جمعاتكم!</li>
+      </ul>
+      <div style="display:flex;gap:8px;margin-top:12px">
+        <button class="btn sm g" data-go="eilan://play">الدخول لمنطقة الألعاب 🎮</button>
+        <button class="btn sm" data-go="eilan://store?cat=games">تصفح ألعاب الجمعات 🛍️</button>
+      </div>
+    </div>`;
+  }
+
+  // 6. Design Studio & Templates Intelligence (قوالب وتصميم)
+  if (has('تصميم', 'قوالب', 'قالب', 'استوديو', 'ريلز', 'عرض', 'بوربوينت', 'ملصق', 'شعار', 'لوقو', 'ستوري', 'بوستر', 'studio', 'template')) {
+    return `
+    <div class="ai-resp">
+      <h4 style="color:var(--g)">🎨 استوديو التصميم والقوالب الجاهزة</h4>
+      <p>في عالم إيلان، وفرنا لك أدوات تصميم مبتكرة لتلبية احتياجاتك الدراسية والمهنية والإبداعية:</p>
+      <ul style="padding-right:20px;line-height:1.9;font-size:13.5px;color:var(--w)">
+        <li>🎞️ <b>قوالب جاهزة واحترافية:</b> قوالب عروض تقديمية (بوربوينت/كي نوت)، قوالب ريلز وتيك توك، وثيمات هوية كاملة.</li>
+        <li>✨ <b>استوديو التصميم التفاعلي:</b> محرر مباشر لتصميم الملصقات، خلفيات الشاشة، وتصدير تصاميمك بدقة عالية.</li>
+        <li>👑 <b>خدمة «اطلب تصميمك الخاص»:</b> يمكنك طلب تصميم مخصص من فريق إيلان التقني والإبداعي.</li>
+      </ul>
+      <div style="display:flex;gap:8px;margin-top:12px">
+        <button class="btn sm g" data-go="eilan://templates">تصفح القوالب الجاهزة 🎞️</button>
+        <button class="btn sm" data-go="eilan://studio">فتح استوديو التصميم 🎨</button>
+      </div>
+    </div>`;
+  }
+
+  // 7. Store, Products & Purchasing Intelligence (متجر ومنتجات)
+  if (has('متجر', 'منتج', 'منتجات', 'شراء', 'سعر', 'اسعار', 'عروض', 'اشتري', 'كم يكلف', 'كوبون', 'خصم', 'store', 'shop')) {
+    let prods = find(S.products, q, PF);
+    if (!prods.length) prods = S.products.slice(0, 3);
+    return `
+    <div class="ai-resp">
+      <h4 style="color:var(--g)">🛍️ متجر إيلان للمنتجات الرقمية</h4>
+      <p>منتجات رقمية فورية، ألعاب جمعات، قوالب حصرية، وتصاميم يمكنك شراؤها برصيد محلي أو استبدالها بنقاط الـ XP:</p>
+      <div style="margin:10px 0">${prods.slice(0, 3).map(mini).join('')}</div>
+      <button class="btn sm g" data-go="eilan://store">زيارة المتجر كاملاً 🛒</button>
+    </div>`;
+  }
+
+  // 8. Eilan Doll Platform & Owner Intelligence (عالم إيلان والمالكة)
+  if (has('من انت', 'مين انت', 'عالم ايلان', 'ماهو ايلان', 'ما هو ايلان', 'eilan doll', 'مالك', 'مالكة', 'صاحب الموقع', 'فكرة الموقع')) {
+    return `
+    <div class="ai-resp">
+      <h4 style="color:var(--g)">🪐 مرحباً بك في عالم إيلان دول (EILAN DOLL)</h4>
+      <p style="line-height:1.8">
+        <b>إيلان دول</b> هي منصة رقمية سعودية متكاملة مصممة بطابع السايبربانك المستقبلي الأنيق 💜💚، تجمع في مكان واحد:
+      </p>
+      <ul style="padding-right:20px;line-height:1.9;font-size:13.5px;color:var(--w)">
+        <li>🏙️ <b>أطلس مدن ومناطق السعودية والعالم:</b> 13 منطقة بمحافظاتها، وجولات 360°، وجداول سياحية وميزانيات مالية دقيقة.</li>
+        <li>🗺️ <b>دليل الأماكن والخرائط:</b> كافيهات مختصة، مطاعم شهيرة (ستاربكس، البيك، كنتاكي، 8oz)، حدائق، مولات، وشاليهات مع تقييمات الزوار.</li>
+        <li>🎮 <b>منطقة الترفيه وألعاب الجمعات</b>.</li>
+        <li>🎨 <b>استوديو التصميم والقوالب الحصرية</b>.</li>
+        <li>✨ <b>مساعد ذكي (Eilan AI)</b> يجيبك عن كل ما يخص المنصة والسياحة والأفكار.</li>
+      </ul>
+      <p class="mu xs">👑 لوحة التحكم والإدارة متاحة لمالكة الموقع الرسمية عبر الرابط <a data-go="eilan://owner">eilan://owner</a>.</p>
+    </div>`;
+  }
+
+  // 9. Intelligent General Advice, Study, and Idea Generator
+  return `
+  <div class="ai-resp">
+    <h4 style="color:var(--g)">✨ إجابة ذكية من Eilan AI:</h4>
+    <p style="line-height:1.8;font-size:14px">
+      سؤالك رائع ومهم بخصوص: <b>«${esc(rawQ)}»</b>!
+    </p>
+    <div style="background:rgba(255,255,255,0.05);border-radius:12px;padding:14px;border:1px solid var(--bd);line-height:1.8;font-size:13.5px;margin:10px 0;color:var(--w)">
+      يسعدني جداً تقديم الرأي والمشورة؛ يمكنك دائماً استكشاف هذا الموضوع بعمق داخل أقسام عالم إيلان:
+      <br>• إذا كان استفسارك يتعلق بالسفر والوجهات والميزانيات، توجه فوراً إلى <a data-go="eilan://cities">أطلس المدن والعالم</a>.
+      <br>• إذا كنت تبحث عن طلعة أو كافيه رايق أو مطعم أو ممشى عائلي، تفضل بزيارة <a data-go="eilan://places">دليل الأماكن والخرائط</a>.
+      <br>• إذا كان السؤال عن الألعاب والتحديات والتسلية، ستجد كل ما يسرك في <a data-go="eilan://play">منطقة الترفيه</a>.
+      <br>• وإذا رغبت في أفكار تصاميم أو قوالب، فاستوديو إيلان في خدمتك في <a data-go="eilan://studio">استوديو التصميم</a>.
+    </div>
+    <p class="mu xs">💡 اسألني بأي صيغة أخرى أو حدد استفسارك وسأجيبك فوراً بتفصيل أدق!</p>
+  </div>`;
 }
-
 function catalogText(){return S.products.map(p=>`${p.id} | ${p.name} (${p.en}) | ${p.price} SAR | ${CATS[p.cat]?.e} | ${p.desc}`).join('\n')}
 async function claude(messages,system,max=900){
   const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'content-type':'application/json','x-api-key':S.settings.apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:S.settings.model||'claude-sonnet-4-5',max_tokens:max,system,messages})});

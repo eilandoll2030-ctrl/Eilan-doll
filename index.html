@@ -10669,7 +10669,7 @@ function printTravelSchedule(){
   w.document.close();
 }
 
-let ctTab = 'guide'; // 'guide', 'schedule', 'tours', 'heritage', 'passport'
+let ctTab = 'cities'; // 'guide', 'schedule', 'tours', 'heritage', 'passport'
 
 /* Page Registration for P.cities */
 P.cities = {
@@ -10680,12 +10680,12 @@ P.cities = {
     else if (r.id === 'discover' || r.id === 'heritage') ctTab = 'discover';
     else if (r.id === 'schedule' || r.id === 'plan') ctTab = 'schedule';
     else if (r.id === 'passport') ctTab = 'passport';
-    else if (r.id === 'cities' || r.id === 'guide') { ctTab = 'cities'; ctSel = null; }
+    else if (!r.id || r.id === 'cities' || r.id === 'guide') { ctTab = 'cities'; ctSel = null; }
     else if (r.id && /^city-/.test(r.id)) {
       ctTab = 'cities';
       ctSel = decodeURIComponent(r.id.slice(5));
     } else {
-      ctTab = ctTab || 'cities';
+      ctTab = 'cities';
     }
 
     const tabs = [
@@ -10697,7 +10697,7 @@ P.cities = {
     ];
 
     let bodyHTML = '';
-    if (ctTab === 'cities') {
+    if (ctTab === 'cities' || ctTab === 'guide') {
       bodyHTML = ctHTML();
     } else if (ctTab === 'tours') {
       bodyHTML = mpToursHTML();
@@ -10707,6 +10707,8 @@ P.cities = {
       bodyHTML = ctScheduleHTML();
     } else if (ctTab === 'passport') {
       bodyHTML = mpPassportHTML();
+    } else {
+      bodyHTML = ctHTML();
     }
 
     return `

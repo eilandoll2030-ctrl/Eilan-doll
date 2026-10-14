@@ -9272,6 +9272,7 @@ if (!document.getElementById('plEnhancedStyles')) {
 /* ================= STATE & CONSTANTS ================= */
 let plTab = 'spots'; // 'spots', 'map', 'near', 'add'
 let plFilterCat = 'all'; // 'all', 'cafe', 'restaurant', 'resort', 'chalet', 'hotel'
+let plAppliedRoute = null; // apply incoming places sub-route once, not on every rerender
 let plFilterCity = 'all'; // 'all', 'tabuk', 'riyadh', 'jeddah', 'eastern', 'alula', 'redsea', 'makkah', 'asir', 'intl'
 let plBrand = 'all'; // 'all', '8oz', 'Starbucks', 'KFC', 'AlBaik', etc.
 let plQuery = '';
@@ -9865,38 +9866,38 @@ function renderFilterControls(spotsCount) {
 
     <!-- Main Categories Rail: Modern, Large, Touch-Friendly Icons -->
     <div class="pl-clean-cats">
-      <button class="pl-cat-btn ${plFilterCat==='all'?'on':''}" data-act="plcat" data-c="all" onclick="ACT.plcat({c:'all'});event.stopPropagation()">
+      <a href="/places/all/" class="pl-cat-btn ${plFilterCat==='all'?'on':''}" data-go="eilan://places/all" onclick="event.preventDefault();event.stopPropagation();ACT.plcat({c:'all'});go('eilan://places/all')">
         <span class="pl-cat-icon">🌟</span>
         <span class="pl-cat-label">الكل</span>
-      </button>
-      <button class="pl-cat-btn ${plFilterCat==='cafe'?'on':''}" data-act="plcat" data-c="cafe" onclick="ACT.plcat({c:'cafe'});event.stopPropagation()">
+      </a>
+      <a href="/places/cafes/" class="pl-cat-btn ${plFilterCat==='cafe'?'on':''}" data-go="eilan://places/cafes" onclick="event.preventDefault();event.stopPropagation();ACT.plcat({c:'cafe'});go('eilan://places/cafes')">
         <span class="pl-cat-icon">☕</span>
         <span class="pl-cat-label">كافيهات</span>
-      </button>
-      <button class="pl-cat-btn ${plFilterCat==='restaurant'?'on':''}" data-act="plcat" data-c="restaurant" onclick="ACT.plcat({c:'restaurant'});event.stopPropagation()">
+      </a>
+      <a href="/places/restaurants/" class="pl-cat-btn ${plFilterCat==='restaurant'?'on':''}" data-go="eilan://places/restaurants" onclick="event.preventDefault();event.stopPropagation();ACT.plcat({c:'restaurant'});go('eilan://places/restaurants')">
         <span class="pl-cat-icon">🍔</span>
         <span class="pl-cat-label">مطاعم</span>
-      </button>
-      <button class="pl-cat-btn ${plFilterCat==='park'?'on':''}" data-act="plcat" data-c="park" onclick="ACT.plcat({c:'park'});event.stopPropagation()">
+      </a>
+      <a href="/places/parks/" class="pl-cat-btn ${plFilterCat==='park'?'on':''}" data-go="eilan://places/parks" onclick="event.preventDefault();event.stopPropagation();ACT.plcat({c:'park'});go('eilan://places/parks')">
         <span class="pl-cat-icon">🌳</span>
         <span class="pl-cat-label">حدائق وترفيه</span>
-      </button>
-      <button class="pl-cat-btn ${plFilterCat==='mall'?'on':''}" data-act="plcat" data-c="mall" onclick="ACT.plcat({c:'mall'});event.stopPropagation()">
+      </a>
+      <a href="/places/malls/" class="pl-cat-btn ${plFilterCat==='mall'?'on':''}" data-go="eilan://places/malls" onclick="event.preventDefault();event.stopPropagation();ACT.plcat({c:'mall'});go('eilan://places/malls')">
         <span class="pl-cat-icon">🛍️</span>
         <span class="pl-cat-label">أسواق ومولات</span>
-      </button>
-      <button class="pl-cat-btn ${plFilterCat==='resort'?'on':''}" data-act="plcat" data-c="resort" onclick="ACT.plcat({c:'resort'});event.stopPropagation()">
+      </a>
+      <a href="/places/resorts/" class="pl-cat-btn ${plFilterCat==='resort'?'on':''}" data-go="eilan://places/resorts" onclick="event.preventDefault();event.stopPropagation();ACT.plcat({c:'resort'});go('eilan://places/resorts')">
         <span class="pl-cat-icon">🏖️</span>
         <span class="pl-cat-label">منتجعات</span>
-      </button>
-      <button class="pl-cat-btn ${plFilterCat==='chalet'?'on':''}" data-act="plcat" data-c="chalet" onclick="ACT.plcat({c:'chalet'});event.stopPropagation()">
+      </a>
+      <a href="/places/chalets/" class="pl-cat-btn ${plFilterCat==='chalet'?'on':''}" data-go="eilan://places/chalets" onclick="event.preventDefault();event.stopPropagation();ACT.plcat({c:'chalet'});go('eilan://places/chalets')">
         <span class="pl-cat-icon">🏡</span>
         <span class="pl-cat-label">شاليهات</span>
-      </button>
-      <button class="pl-cat-btn ${plFilterCat==='hotel'?'on':''}" data-act="plcat" data-c="hotel" onclick="ACT.plcat({c:'hotel'});event.stopPropagation()">
+      </a>
+      <a href="/places/hotels/" class="pl-cat-btn ${plFilterCat==='hotel'?'on':''}" data-go="eilan://places/hotels" onclick="event.preventDefault();event.stopPropagation();ACT.plcat({c:'hotel'});go('eilan://places/hotels')">
         <span class="pl-cat-icon">🏨</span>
         <span class="pl-cat-label">فنادق</span>
-      </button>
+      </a>
     </div>
 
     <!-- Dynamic Contextual Sub-bar (يتغير تلقائياً حسب الأيقونة المختارة!) -->
@@ -10782,18 +10783,22 @@ P.places = {
       setTimeout(() => go('eilan://cities/' + (r.id === 'cities' ? '' : r.id)), 20);
       return `<div class="empty" style="padding:40px;text-align:center"><div style="font-size:36px;margin-bottom:10px">✈️</div><h3>جارِ الانتقال إلى قسم مدن ومعالم السعودية والعالم المخصص…</h3><p class="mu">تم نقل وتخصيص محتوى المدن والجولات والتراث في قسم مستقل تماماً.</p></div>`;
     }
-    if (r.id === 'all') { plTab = 'spots'; plFilterCat = 'all'; plFilterCity = 'all'; plBrand = 'all'; plQuery = ''; plMaxDist = null; }
-    else if (r.id === 'map') plTab = 'map';
-    else if (r.id === 'near') { plTab = 'spots'; plSort = 'dist'; plLocateGPS(); }
-    else if (r.id === 'add') { plTab = 'add'; }
-    else if (r.id === 'cafes') { plTab = 'spots'; plFilterCat = 'cafe'; plFilterCity = 'all'; plBrand = 'all'; plQuery = ''; plMaxDist = null; }
-    else if (r.id === 'restaurants') { plTab = 'spots'; plFilterCat = 'restaurant'; plFilterCity = 'all'; plBrand = 'all'; plQuery = ''; plMaxDist = null; }
-    else if (r.id === 'parks') { plTab = 'spots'; plFilterCat = 'park'; plFilterCity = 'all'; plBrand = 'all'; plQuery = ''; plMaxDist = null; }
-    else if (r.id === 'malls') { plTab = 'spots'; plFilterCat = 'mall'; plFilterCity = 'all'; plBrand = 'all'; plQuery = ''; plMaxDist = null; }
-    else if (r.id === 'resorts') { plTab = 'spots'; plFilterCat = 'resort'; plFilterCity = 'all'; plBrand = 'all'; plQuery = ''; plMaxDist = null; }
-    else if (r.id === 'chalets') { plTab = 'spots'; plFilterCat = 'chalet'; plFilterCity = 'all'; plBrand = 'all'; plQuery = ''; plMaxDist = null; }
-    else if (r.id === 'hotels') { plTab = 'spots'; plFilterCat = 'hotel'; plFilterCity = 'all'; plBrand = 'all'; plQuery = ''; plMaxDist = null; }
-    else plTab = plTab || 'spots';
+    const routeKey = r.id || '';
+    if (routeKey !== plAppliedRoute) {
+      plAppliedRoute = routeKey;
+      if (routeKey === 'all') { plTab = 'spots'; plFilterCat = 'all'; plFilterCity = 'all'; plBrand = 'all'; plQuery = ''; plMaxDist = null; }
+      else if (routeKey === 'map') plTab = 'map';
+      else if (routeKey === 'near') { plTab = 'spots'; plSort = 'dist'; plLocateGPS(); }
+      else if (routeKey === 'add') plTab = 'add';
+      else if (routeKey === 'cafes') { plTab = 'spots'; plFilterCat = 'cafe'; plFilterCity = 'all'; plBrand = 'all'; plQuery = ''; plMaxDist = null; }
+      else if (routeKey === 'restaurants') { plTab = 'spots'; plFilterCat = 'restaurant'; plFilterCity = 'all'; plBrand = 'all'; plQuery = ''; plMaxDist = null; }
+      else if (routeKey === 'parks') { plTab = 'spots'; plFilterCat = 'park'; plFilterCity = 'all'; plBrand = 'all'; plQuery = ''; plMaxDist = null; }
+      else if (routeKey === 'malls') { plTab = 'spots'; plFilterCat = 'mall'; plFilterCity = 'all'; plBrand = 'all'; plQuery = ''; plMaxDist = null; }
+      else if (routeKey === 'resorts') { plTab = 'spots'; plFilterCat = 'resort'; plFilterCity = 'all'; plBrand = 'all'; plQuery = ''; plMaxDist = null; }
+      else if (routeKey === 'chalets') { plTab = 'spots'; plFilterCat = 'chalet'; plFilterCity = 'all'; plBrand = 'all'; plQuery = ''; plMaxDist = null; }
+      else if (routeKey === 'hotels') { plTab = 'spots'; plFilterCat = 'hotel'; plFilterCity = 'all'; plBrand = 'all'; plQuery = ''; plMaxDist = null; }
+      else plTab = plTab || 'spots';
+    }
 
     const spots = getFilteredSpots();
 
@@ -10876,7 +10881,7 @@ Object.assign(ACT, {
   placeshome: () => {
     plTab = 'spots';
     plFilterCat = 'all'; plFilterCity = 'all'; plBrand = 'all'; plQuery = ''; plMaxDist = null;
-    go('eilan://places');
+    go('eilan://places/all');
   },
   pltab: d => { plTab = d.t; rerender(); },
   pltoggleview: d => { plTab = d.v; rerender(); if (d.v === 'map') setTimeout(() => initPlacesMap(), 120); },

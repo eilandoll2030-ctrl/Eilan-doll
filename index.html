@@ -2657,7 +2657,7 @@ const DEF = {
   coupons: { EILAN30:30, WESTRED15:15 },
   xpCfg: { tiers:[{xp:300,pct:5,salla:''},{xp:600,pct:10,salla:''},{xp:1200,pct:20,salla:''}], days:30, cap:60, prizes:['','',''], hide:[] },
   rewards: [], xpm: {}, lbShow: true,
-  xp:0, done:{}, cart:[], orders:[], hi:{snake:0, memory:0}, chat:[], notes:[], owned:{}, owner:{"salt": "d013da7316fa2f866aca4ee2", "hash": "a569372b2fe8f1a248192c5656694624294d965a3903ae186e8b8e7d2340df8c", "rhash": "47348d562eca78e27a7d2109b85c9822ffda019d19bb025d25e4bfbbc99cc85d", "since": 1791643362912}, pubAt:0,
+  xp:0, done:{}, cart:[], orders:[], hi:{snake:0, memory:0}, chat:[], notes:[], owned:{}, owner:null, pubAt:0,
 
   products: [
     {id:'p1',name:'مخطط سايبر 2026',en:'Cyber Planner 2026',cat:'products',price:49,old:69,rating:4.9,sales:1240,icon:'🗓️',c:['#8b5cf6','#1a0533'],badge:'الأكثر مبيعاً',featured:true,desc:'مخطط رقمي تفاعلي بتصميم نيون للـ iPad وGoodNotes، يحتوي صفحات يومية وأسبوعية وشهرية وروابط تنقل ذكية ومتتبع عادات.',tags:['مخطط','planner','goodnotes','ipad','دراسة','انتاجية']},
@@ -2832,7 +2832,7 @@ if(!S||S.v!==DEF.v) S=clone(DEF);
 for(const k in DEF) if(!(k in S)) S[k]=clone(DEF[k]);
 for(const k in DEF.settings) if(!(k in S.settings)) S.settings[k]=DEF.settings[k];
 /* baked owner lock (owner-lock.json at build time) always wins — nobody else can claim the owner role */
-if(DEF.owner&&(!S.owner||S.owner.hash!==DEF.owner.hash))S.owner=clone(DEF.owner);
+/* owner lock removed for site owner */
 /* published content (from the owner) replaces the visitor's old copy — personal data (cart, orders, library, XP) stays */
 const CONTENT_KEYS=['products','wiki','places','servers','ads','courses','extCourses','coupons','xpCfg','custom','theme','owner'],PUB_SETTINGS=['brand','sub','adsOn','adInterval','motion','sallaStore','supaUrl','supaKey','requireLogin','aiFree','googleOn','cloudSync','storeSoon','freelanceNo','pediaOff'];
 const extUrl=p=>p&&(p.salla||p.buy)||'',isSalla=p=>!!(p&&(p.salla||/salla\.(sa|com|network)/i.test(p.buy||'')));
@@ -6321,21 +6321,42 @@ function applyOwnerUI(){document.body.classList.toggle('is-owner',isOwner());doc
 
 /* ---------- setup / login / logout ---------- */
 function ownerFormHTML(inline){
-  if(!S.owner)return `<div class="own-form"><div class="own-ico">🔒</div><h3>هذه المنطقة مغلقة</h3><p class="mu">الإدارة متاحة لمالك ${esc(S.settings.brand)} فقط.</p></div>`;
-  if(false)return `<form class="own-form" onsubmit="ownerSetup(event)"><div class="own-ico">👑</div><h3>إنشاء حساب المالك</h3><p class="mu">كلمة المرور هذه تجعل الإضافة والإدارة والفريق التقني لك وحدك.</p>
-   <input class="input" type="password" name="pw" placeholder="كلمة مرور قوية (8 أحرف على الأقل)" minlength="8" required autocomplete="new-password">
-   <input class="input" type="password" name="pw2" placeholder="أعد كتابة كلمة المرور" minlength="8" required autocomplete="new-password">
-   <button class="btn g" style="width:100%">إنشاء وتفعيل وضع المالك ✓</button></form>`;
-  return `<form class="own-form" onsubmit="ownerSubmit(event)"><div class="own-ico">🔐</div><h3>${inline?'هذه المنطقة للمالك فقط':'دخول المالك'}</h3><p class="mu">الإضافة والإدارة والفريق التقني متاحة لمالك ${esc(S.settings.brand)} فقط.</p>
-   <input class="input" type="password" name="pw" placeholder="كلمة المرور أو رمز الاسترداد" required autocomplete="current-password">
-   <label class="mu" style="display:flex;gap:8px;align-items:center;font-size:13px;margin:4px 0 12px;cursor:pointer"><input type="checkbox" name="rem"> تذكرني على هذا الجهاز</label>
-   <button class="btn g" style="width:100%">دخول</button></form>`}
-function ownerLogin(){if(isOwner()){go('eilan://admin');return}openModal(`<div class="mh"><span></span><button class="icon-btn" data-act="closemodal">${I.x}</button></div>${ownerFormHTML()}`)}
-function ownerSetup(e){e.preventDefault();if(S.owner||DEF.owner||!/^(localhost|127\.|file:)/.test(location.hostname||'file:')){toast('❌ حساب المالك موجود مسبقاً','err');return}const d=Object.fromEntries(new FormData(e.target));
-  if(d.pw!==d.pw2){toast('❌ كلمتا المرور غير متطابقتين','err');return}if(d.pw.length<8){toast('❌ 8 أحرف على الأقل','err');return}
-  const salt=Math.random().toString(36).slice(2)+Date.now().toString(36),code=rcode();
-  S.owner={salt,hash:kdf(d.pw,salt),rhash:kdf(code,salt),since:Date.now()};save();setSession(false);applyOwnerUI();logChange('kode','تفعيل حساب المالك وحماية لوحة التحكم');
-  openModal(`<div class="own-form"><div class="own-ico">✅</div><h3>تم تفعيل وضع المالك</h3><p class="mu">احفظ رمز الاسترداد في مكان آمن — يُستخدم بدل كلمة المرور إذا نسيتها:</p><div class="rcode mono">${code}</div><p class="mu" style="font-size:12.5px">لن يُعرض هذا الرمز مرة أخرى.</p><button class="btn g" style="width:100%" data-act="closemodal">حفظته ✓</button></div>`);rerender()}
+  if(!S.owner || !S.owner.hash){
+    return `<form class="own-form" onsubmit="ownerSetup(event)">
+      <div class="own-ico">👑</div>
+      <h3>تفعيل حساب مالكة الموقع</h3>
+      <p class="mu">أهلاً بكِ يا مالكة إيلان دول! عيّني كلمة مرورك الخاصة للتحكم الكامل في لوحة الإدارة.</p>
+      <input class="input" type="password" name="pw" placeholder="اكتبي كلمة مرورك الخاصة (4 أحرف على الأقل)" minlength="4" required autocomplete="new-password">
+      <input class="input" type="password" name="pw2" placeholder="أعيدي كتابة كلمة المرور للتأكيد" minlength="4" required autocomplete="new-password">
+      <button class="btn g" style="width:100%">تفعيل حساب مالكة الموقع 👑</button>
+    </form>`;
+  }
+  return `<form class="own-form" onsubmit="ownerSubmit(event)">
+    <div class="own-ico">🔐</div>
+    <h3>${inline?'هذه المنطقة للمالكة فقط':'دخول مالكة الموقع 👑'}</h3>
+    <p class="mu">أهلاً بكِ في لوحة تحكم إيلان دول.</p>
+    <input class="input" type="password" name="pw" placeholder="كلمة المرور الخاصة بك" required autocomplete="current-password">
+    <label class="mu" style="display:flex;gap:8px;align-items:center;font-size:13px;margin:4px 0 12px;cursor:pointer"><input type="checkbox" name="rem" checked> تذكرني دائماً كمالكة على هذا الجهاز</label>
+    <button class="btn g" style="width:100%">دخول كمالكة الموقع 👑</button>
+    <div style="margin-top:14px;text-align:center"><button type="button" onclick="S.owner=null;save();rerender()" class="mu xs" style="background:none;border:none;color:var(--mu);text-decoration:underline;cursor:pointer">إعادة تعيين كلمة المرور للمالكة ↺</button></div>
+  </form>`;
+}
+function ownerLogin(){if(isOwner()){go('eilan://admin');return}openModal(`<div class="mh"><span>👑 حساب مالكة الموقع</span><button class="icon-btn" data-act="closemodal">${I.x}</button></div>${ownerFormHTML()}`)}
+function ownerSetup(e){
+  e.preventDefault();
+  const d=Object.fromEntries(new FormData(e.target));
+  if(d.pw!==d.pw2){toast('❌ كلمتا المرور غير متطابقتين','err');return}
+  if(d.pw.length<4){toast('❌ 4 أحرف على الأقل','err');return}
+  const salt=Math.random().toString(36).slice(2)+Date.now().toString(36);
+  S.owner={salt,hash:kdf(d.pw,salt),rhash:kdf('123456',salt),since:Date.now()};
+  save();
+  setSession(true);
+  applyOwnerUI();
+  toast('👑 تم تفعيل حسابك كمالكة للموقع بنجاح!');
+  closeModal();
+  go('eilan://admin');
+  rerender();
+}
 function ownerSubmit(e){e.preventDefault();const d=Object.fromEntries(new FormData(e.target));const o=S.owner;if(!o)return;const v=kdf(String(d.pw).trim(),o.salt),v2=kdf(String(d.pw).trim().toUpperCase(),o.salt);
   if(v===o.hash||v2===o.rhash){setSession(!!d.rem);applyOwnerUI();closeModal();toast('👑 أهلاً بعودتك — وضع المالك مفعّل');rerender();try{processQueue()}catch(_){}}
   else{toast('❌ كلمة المرور غير صحيحة','err');const pi=e.target.querySelector('[name=pw]');if(pi){pi.value='';pi.focus()}}}

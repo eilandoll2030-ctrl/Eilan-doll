@@ -9844,7 +9844,7 @@ function renderFilterControls(spotsCount) {
       </div>
 
       <div class="pl-city-select-wrap" title="تصفية حسب المدينة">
-        <select class="pl-city-select" onchange="plFilterCity=this.value;rerender()">
+        <select class="pl-city-select" onchange="plTab='spots';plFilterCity=this.value;rerender()">
           ${citiesList.map(c => `<option value="${c.k}" ${plFilterCity===c.k?'selected':''}>${c.n}</option>`).join('')}
         </select>
       </div>
@@ -10847,6 +10847,7 @@ P.places = {
     if (inp) {
       inp.oninput = () => {
         plQuery = inp.value;
+        plTab = 'spots';
         const curStart = inp.selectionStart;
         const curEnd = inp.selectionEnd;
         rerender();
@@ -10873,6 +10874,7 @@ Object.assign(ACT, {
   pltab: d => { plTab = d.t; rerender(); },
   pltoggleview: d => { plTab = d.v; rerender(); if (d.v === 'map') setTimeout(() => initPlacesMap(), 120); },
   plcat: d => {
+    plTab = 'spots'; // Selecting a category always opens its result cards
     plFilterCat = d.c || 'all';
     plBrand = 'all'; // Always reset brand when switching category
     plQuery = '';    // Always clear search query when clicking a category
@@ -10883,6 +10885,7 @@ Object.assign(ACT, {
     rerender();
   },
   plbrand: d => {
+    plTab = 'spots'; // Brand sub-filters always show matching cards
     // Sub-chip brand: if clicked again, toggle back to 'all'
     if (plBrand.toLowerCase() === (d.b || '').toLowerCase()) {
       plBrand = 'all';
@@ -10893,7 +10896,7 @@ Object.assign(ACT, {
     rerender();
   },
   pldist: d => { plMaxDist = d.km ? +d.km : null; rerender(); },
-  plgps: () => { plLocateGPS(); },
+  plgps: () => { plTab = 'spots'; plLocateGPS(); },
   plpinpoint: () => { openLocationPinpointModal(); },
   plsetcity: d => { plSetCity(d.k); },
   plopen: d => { openSpotReviewsModal(d.id); },
@@ -10920,6 +10923,7 @@ Object.assign(ACT, {
     rerender();
   },
   plsetsearch: d => {
+    plTab = 'spots'; // Quick filters/search always return to the results list
     if (plQuery === d.q) {
       plQuery = '';
     } else {

@@ -2972,6 +2972,7 @@ function render(){
   v.innerHTML=`<div class="page">${pg.html(r)}</div>`;
   v.scrollTo({top:0,behavior:'instant'});
   try{pg.mount&&pg.mount(r)}catch(e){console.error(e)}
+  try{pg.post&&pg.post(r)}catch(e){console.error(e)}
   tabs[act].title=pg.title(r);tabs[act].icon=pg.icon;syncPath(r.page);if(!(typeof isEN==='function'&&isEN())){if(SEO_T[r.page])document.title=SEO_T[r.page];else if(r.page==='home')applyTheme()}
   renderTabs();$('#addr').value=curUrl();updateChrome();
   $$('.bm').forEach(b=>b.classList.toggle('on',b.dataset.go==='eilan://'+r.page||(r.page==='product'&&b.dataset.go==='eilan://store')));
@@ -10871,8 +10872,13 @@ P.places = {
 
 /* Actions registration for Places */
 Object.assign(ACT, {
+  placeshome: () => {
+    plTab = 'spots';
+    plFilterCat = 'all'; plFilterCity = 'all'; plBrand = 'all'; plQuery = ''; plMaxDist = null;
+    go('eilan://places');
+  },
   pltab: d => { plTab = d.t; rerender(); },
-  pltoggleview: d => { plTab = d.v; rerender(); if (d.v === 'map') setTimeout(() => initPlacesMap(), 120); },
+  pltoggleview: d => { plTab = d.v; rerender(); if (d.v === 'map') setTimeout(() => initPlacesMap(), 120); }
   plcat: d => {
     plTab = 'spots'; // Selecting a category always opens its result cards
     plFilterCat = d.c || 'all';
@@ -13269,7 +13275,7 @@ applyMode();applyLang();
   $('#bBack').innerHTML=I.back;$('#bFwd').innerHTML=I.fwd;$('#bReload').innerHTML=I.reload;$('#bHome').innerHTML=I.home;
   $('#bAI').innerHTML=I.spark;$('#bCart').insertAdjacentHTML('afterbegin',I.cart);$('#lockI').innerHTML=I.lock+' eilan';
   $('#aiClose').innerHTML=I.x;$('#cartClose').innerHTML=I.x;$('#aiSend').innerHTML=I.send;
-  $('#bookmarks').innerHTML=NAV.map((n,i)=>(i===NAV.length-2?'<span class="bm-sep"></span>':'')+`<span class="bm" data-go="eilan://${n.u}"><span class="e">${n.e}</span>${n.n}</span>`).join('');
+  $('#bookmarks').innerHTML=NAV.map((n,i)=>(i===NAV.length-2?'<span class="bm-sep"></span>':'')+`<span class="bm" data-go="eilan://${n.u}" ${n.u==='places'?'data-act="placeshome"':''}><span class="e">${n.e}</span>${n.n}</span>`).join('');
   $('#aiSugs').innerHTML=AI_SUGS.slice(0,4).map(s=>`<button class="chip" data-act="aisug" data-q="${esc(s)}">${esc(s)}</button>`).join('');
   $('#bBack').onclick=back;$('#bFwd').onclick=fwd;$('#bReload').onclick=()=>{loadbar();render()};$('#bHome').onclick=()=>go('eilan://home');
   $('#bNew').onclick=()=>newTab();$('#bAI').onclick=()=>openAI();$('#aiFab').onclick=()=>openAI();$('#bCart').onclick=openCart;

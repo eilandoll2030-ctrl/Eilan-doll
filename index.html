@@ -9036,7 +9036,219 @@ if (!document.getElementById('plEnhancedStyles')) {
       50% { transform: scale(1.15); box-shadow: 0 0 25px rgba(59, 130, 246, 1); }
       100% { transform: scale(0.9); }
     }
-  `;
+    /* Sleek Clean Streamlined Places Redesign */
+    .pl-clean-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 20px;
+      background: linear-gradient(180deg, rgba(26, 16, 48, 0.72) 0%, rgba(13, 8, 24, 0.92) 100%);
+      border: 1px solid rgba(139, 92, 246, 0.22);
+      border-radius: 18px;
+      padding: 14px 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+      backdrop-filter: blur(12px);
+    }
+    .pl-top-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .pl-search-field {
+      flex: 1;
+      min-width: 220px;
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .pl-sf-icon {
+      position: absolute;
+      right: 12px;
+      font-size: 15px;
+      color: var(--mu);
+      pointer-events: none;
+    }
+    .pl-search-field input {
+      width: 100%;
+      padding: 10px 38px 10px 34px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      color: #fff;
+      font-size: 13.5px;
+      outline: none;
+      transition: all .2s;
+    }
+    .pl-search-field input:focus {
+      background: rgba(255, 255, 255, 0.09);
+      border-color: var(--p2);
+      box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.25);
+    }
+    .pl-sf-clear {
+      position: absolute;
+      left: 10px;
+      background: none;
+      border: none;
+      color: var(--mu);
+      cursor: pointer;
+      font-size: 13px;
+      padding: 4px;
+    }
+    .pl-sf-clear:hover { color: #fff; }
+    .pl-city-select-wrap {
+      position: relative;
+    }
+    .pl-city-select {
+      appearance: none;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 12px;
+      color: #fff;
+      padding: 10px 28px 10px 14px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      outline: none;
+      transition: all .2s;
+    }
+    .pl-city-select:hover, .pl-city-select:focus {
+      border-color: var(--p2);
+      background: rgba(139, 92, 246, 0.15);
+    }
+    .pl-clean-cats {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 8px;
+      padding: 4px 0;
+    }
+    @media (max-width: 900px) {
+      .pl-clean-cats {
+        display: flex;
+        overflow-x: auto;
+        scrollbar-width: none;
+        padding-bottom: 4px;
+      }
+      .pl-clean-cats::-webkit-scrollbar { display: none; }
+    }
+    .pl-cat-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 10px 8px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #cbd5e1;
+      cursor: pointer;
+      transition: all .2s ease;
+      min-width: 80px;
+    }
+    .pl-cat-btn:hover {
+      background: rgba(139, 92, 246, 0.15);
+      border-color: rgba(139, 92, 246, 0.4);
+      color: #fff;
+      transform: translateY(-2px);
+    }
+    .pl-cat-btn.on {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.35), rgba(45, 232, 154, 0.2));
+      border-color: var(--g);
+      color: #fff;
+      box-shadow: 0 4px 18px rgba(45, 232, 154, 0.2);
+    }
+    .pl-cat-icon {
+      font-size: 24px;
+      line-height: 1;
+    }
+    .pl-cat-label {
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+    .pl-context-subbar {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding: 9px 12px;
+      background: rgba(0, 0, 0, 0.25);
+      border-radius: 12px;
+      border: 1px dashed rgba(139, 92, 246, 0.25);
+    }
+    .pl-context-subbar::-webkit-scrollbar { display: none; }
+    .pl-cs-label {
+      font-size: 11.5px;
+      font-weight: 800;
+      color: var(--g);
+      white-space: nowrap;
+      flex-shrink: 0;
+      margin-left: 4px;
+    }
+    .pl-subchip {
+      padding: 6px 13px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #cbd5e1;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all .15s;
+    }
+    .pl-subchip:hover {
+      background: rgba(139, 92, 246, 0.22);
+      border-color: var(--p2);
+      color: #fff;
+    }
+    .pl-subchip.on {
+      background: rgba(45, 232, 154, 0.2);
+      border-color: #2de89a;
+      color: #2de89a;
+      font-weight: 800;
+      box-shadow: 0 0 10px rgba(45, 232, 154, 0.25);
+    }
+    .pl-meta-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 4px 4px 0;
+      font-size: 12px;
+      color: var(--mu);
+    }
+    .pl-sort-select {
+      appearance: none;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      color: #fff;
+      padding: 4px 10px;
+      font-size: 12px;
+      cursor: pointer;
+      outline: none;
+    }
+    .pl-sort-select:hover {
+      border-color: var(--p2);
+    }
+    .pl-cities-link-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+      background: linear-gradient(90deg, rgba(139,92,246,0.14), rgba(45,232,154,0.08));
+      padding: 8px 14px;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      border: 1px solid rgba(139,92,246,0.25);
+    }
+
+    `;
   document.head.appendChild(plSt);
 }
 
@@ -9388,8 +9600,18 @@ function getFilteredSpots() {
 
   let res = all.filter(s => {
     if (plFilterCat !== 'all' && s.cat !== plFilterCat) return false;
-    if (plFilterCity !== 'all' && s.region !== plFilterCity) return false;
-    if (plBrand !== 'all' && s.brand !== plBrand) return false;
+    if (plFilterCity !== 'all') {
+      if (plFilterCity === 'jeddah') {
+        if (s.region !== 'jeddah' && s.region !== 'makkah') return false;
+      } else if (s.region !== plFilterCity) {
+        return false;
+      }
+    }
+    if (plBrand !== 'all') {
+      const sb = (s.brand || '').toLowerCase();
+      const pb = plBrand.toLowerCase();
+      if (sb !== pb && !sb.includes(pb)) return false;
+    }
     if (plMaxDist !== null && (s.dist == null || s.dist > plMaxDist)) return false;
     if (plQuery.trim()) {
       const q = plQuery.toLowerCase().trim();
@@ -9397,6 +9619,8 @@ function getFilteredSpots() {
                     (s.catName || '').toLowerCase().includes(q) ||
                     (s.brand || '').toLowerCase().includes(q) ||
                     (s.city || '').toLowerCase().includes(q) ||
+                    (s.region || '').toLowerCase().includes(q) ||
+                    (s.loc || '').toLowerCase().includes(q) ||
                     (s.desc || '').toLowerCase().includes(q) ||
                     (s.tags || []).some(t => t.toLowerCase().includes(q));
       if (!match) return false;
@@ -9415,134 +9639,239 @@ function getFilteredSpots() {
 }
 
 function renderLocationWidget() {
-  const isGps = userLocation.mode === 'gps' || (userLocation.city === 'gps');
-  const badgeText = isGps
-    ? `🎯 GPS مباشر دقيق ${userLocation.accuracy ? `(±${userLocation.accuracy}م)` : ''}`
-    : (userLocation.city === 'custom' ? '📌 موقع مخصص على الخريطة' : `🏙️ ${userLocation.name}`);
-
-  return `
-  <div class="pl-loc-bar">
-    <div class="pl-loc-info">
-      <span class="pl-radar-dot" style="${isGps ? 'background:#2de89a;' : 'background:#8b5cf6;'}"></span>
-      <div>
-        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
-          <span class="mu xs">نقطة الارتكاز لحساب المسافات والملاحة:</span>
-          <span class="pl-loc-badge ${isGps ? 'gps' : ''}">${badgeText}</span>
-        </div>
-        <div style="display:flex;align-items:center;gap:8px;margin-top:3px;flex-wrap:wrap">
-          <b class="pl-loc-name">${esc(userLocation.name)}</b>
-          ${userLocation.lat ? `
-            <span class="pl-loc-coords" onclick="copyVenueCoords(${userLocation.lat}, ${userLocation.lng}, 'موقعي')" title="انقر لنسخ الإحداثيات">
-              📍 ${userLocation.lat.toFixed(4)}°, ${userLocation.lng.toFixed(4)}° 📋
-            </span>
-          ` : ''}
-        </div>
-      </div>
-    </div>
-
-    <div class="pl-loc-actions">
-      <button class="btn g sm" id="btnPlGPS" data-act="plgps" title="تحديد موقعك الجغرافي الفوري عبر الأقمار الصناعية GPS">
-        🎯 تحديد موقعي الفوري (GPS)
-      </button>
-      <button class="btn sm" data-act="plpinpoint" title="حدد موقعك يدوياً بالنقر على الخريطة">
-        📌 تحديد على الخريطة
-      </button>
-      ${userLocation.lat ? `
-        <a class="btn sm" href="https://www.google.com/maps?q=${userLocation.lat},${userLocation.lng}" target="_blank" rel="noopener" title="عرض موقعك الحالي في Google Maps">
-          🌐 Google Maps ↗
-        </a>
-      ` : ''}
-    </div>
-
-    <!-- Quick Hub Cities Selection -->
-    <div class="pl-city-pills-row" style="width:100%;margin-top:6px;display:flex;align-items:center;gap:6px;overflow-x:auto;padding-top:4px">
-      <span class="mu xxs" style="flex-shrink:0">أو انتقل لمدينة:</span>
-      <div class="pl-city-pills">
-        ${QUICK_CITIES.map(c => `
-          <button class="chip xs ${userLocation.city === c.k ? 'on' : ''}" data-act="plsetcity" data-k="${c.k}">
-            ${c.label}
-          </button>
-        `).join('')}
-      </div>
-    </div>
-  </div>`;
+  return '';
 }
 
 function renderFilterControls(spotsCount) {
+  const isGps = userLocation.mode === 'gps' || (userLocation.city === 'gps');
+
+  // Dynamic Contextual Sub-bar based on plFilterCat
+  let subBarHTML = '';
+
+  if (plFilterCat === 'cafe') {
+    const cafeBrands = [
+      {k: 'all', n: '☕ كل الكافيهات'},
+      {k: 'Starbucks', n: 'ستاربكس Starbucks'},
+      {k: '8oz', n: 'ثامن أونصة 8oz'},
+      {k: 'Barns', n: 'بارنز Barn\'s'},
+      {k: 'HalfMillion', n: 'هاف مليون ½M'},
+      {k: 'Overdose', n: 'أوفر دوز Overdose'},
+      {k: 'Arabica', n: 'أرابيكا % Arabica'},
+      {k: 'Boost', n: 'بوست تبوك Boost'}
+    ];
+    subBarHTML = `
+    <div class="pl-context-subbar">
+      <span class="pl-cs-label">☕ كافيهات ومقاهي مختصة:</span>
+      ${cafeBrands.map(b => `
+        <button class="pl-subchip ${plBrand.toLowerCase()===b.k.toLowerCase()?'on':''}" data-act="plbrand" data-b="${b.k}">
+          ${b.n}
+        </button>
+      `).join('')}
+      <button class="pl-subchip ${plQuery==='سيارات'?'on':''}" data-act="plsetsearch" data-q="سيارات">🚗 خدمة سيارات</button>
+      <button class="pl-subchip ${plQuery==='خارجية'?'on':''}" data-act="plsetsearch" data-q="خارجية">🌿 جلسات خارجية</button>
+      <button class="pl-subchip ${plQuery==='عمل'?'on':''}" data-act="plsetsearch" data-q="عمل">📶 مناسب للعمل والمذاكرة</button>
+    </div>`;
+  } else if (plFilterCat === 'restaurant') {
+    const restBrands = [
+      {k: 'all', n: '🍔 كل المطاعم'},
+      {k: 'AlBaik', n: 'البيك Al Baik'},
+      {k: 'KFC', n: 'كنتاكي KFC'},
+      {k: 'SectionB', n: 'سكشن بي برجر'},
+      {k: 'Shawarmer', n: 'شاورمر Shawarmer'},
+      {k: 'NajdVillage', n: 'قرية نجد التراثية'},
+      {k: 'LPM', n: 'LPM فاخر'},
+      {k: 'CZNBurak', n: 'CZN بوراك'}
+    ];
+    subBarHTML = `
+    <div class="pl-context-subbar">
+      <span class="pl-cs-label">🍔 أشهر المطاعم والمطابخ:</span>
+      ${restBrands.map(b => `
+        <button class="pl-subchip ${plBrand.toLowerCase()===b.k.toLowerCase()?'on':''}" data-act="plbrand" data-b="${b.k}">
+          ${b.n}
+        </button>
+      `).join('')}
+      <button class="pl-subchip ${plQuery==='عائل'?'on':''}" data-act="plsetsearch" data-q="عائل">👨‍👩‍👧‍👦 عائلي</button>
+      <button class="pl-subchip ${plQuery==='سريعة'?'on':''}" data-act="plsetsearch" data-q="سريعة">⚡ وجبات سريعة</button>
+    </div>`;
+  } else if (plFilterCat === 'park') {
+    subBarHTML = `
+    <div class="pl-context-subbar">
+      <span class="pl-cs-label">🌳 حدائق ووجهات ترفيهية:</span>
+      <button class="pl-subchip ${!plQuery&&plBrand==='all'?'on':''}" data-act="plreset">🌳 كل الوجهات</button>
+      <button class="pl-subchip ${plBrand.toLowerCase()==='boulevard'?'on':''}" data-act="plbrand" data-b="Boulevard">🎡 بوليفارد سيتي ووورلد</button>
+      <button class="pl-subchip ${plQuery==='واجهة'?'on':''}" data-act="plsetsearch" data-q="واجهة">🌊 واجهة جدة البحرية</button>
+      <button class="pl-subchip ${plQuery==='حنيفة'?'on':''}" data-act="plsetsearch" data-q="حنيفة">🌴 وادي حنيفة بالرياض</button>
+      <button class="pl-subchip ${plQuery==='الأمير فهد'?'on':''}" data-act="plsetsearch" data-q="الأمير فهد">🌺 منتزه الأمير فهد تبوك</button>
+      <button class="pl-subchip ${plQuery==='فعاليات'?'on':''}" data-act="plsetsearch" data-q="فعاليات">🎠 فعاليات وممشى</button>
+    </div>`;
+  } else if (plFilterCat === 'mall') {
+    subBarHTML = `
+    <div class="pl-context-subbar">
+      <span class="pl-cs-label">🛍️ أسواق ومراكز تسوق:</span>
+      <button class="pl-subchip ${!plQuery?'on':''}" data-act="plsetsearch" data-q="">🛍️ كل المولات</button>
+      <button class="pl-subchip ${plQuery==='الرياض بارك'?'on':''}" data-act="plsetsearch" data-q="الرياض بارك">الرياض بارك</button>
+      <button class="pl-subchip ${plQuery==='رد سي'?'on':''}" data-act="plsetsearch" data-q="رد سي">رد سي مول جدة</button>
+      <button class="pl-subchip ${plQuery==='تبوك بارك'?'on':''}" data-act="plsetsearch" data-q="تبوك بارك">تبوك بارك</button>
+      <button class="pl-subchip ${plQuery==='دبي مول'?'on':''}" data-act="plsetsearch" data-q="دبي مول">دبي مول وبوليفارد</button>
+      <button class="pl-subchip ${plQuery==='سينما'?'on':''}" data-act="plsetsearch" data-q="سينما">🎬 سينما وترفيه</button>
+      <button class="pl-subchip ${plQuery==='تسوق'?'on':''}" data-act="plsetsearch" data-q="تسوق">🏷️ ماركات عالمية</button>
+    </div>`;
+  } else if (plFilterCat === 'resort') {
+    subBarHTML = `
+    <div class="pl-context-subbar">
+      <span class="pl-cs-label">🏖️ منتجعات واستجمام فاخر:</span>
+      <button class="pl-subchip ${!plQuery?'on':''}" data-act="plsetsearch" data-q="">🏖️ كل المنتجعات</button>
+      <button class="pl-subchip ${plQuery==='سانت ريجيس'?'on':''}" data-act="plsetsearch" data-q="سانت ريجيس">🌊 سانت ريجيس البحر الأحمر</button>
+      <button class="pl-subchip ${plQuery==='نجومة'?'on':''}" data-act="plsetsearch" data-q="نجومة">🏝️ نجومة ريتز-كارلتون</button>
+      <button class="pl-subchip ${plQuery==='هابيتاس'?'on':''}" data-act="plsetsearch" data-q="هابيتاس">🏜️ هابيتاس العلا</button>
+      <button class="pl-subchip ${plQuery==='بانيان'?'on':''}" data-act="plsetsearch" data-q="بانيان">🌴 بانيان تري العلا</button>
+      <button class="pl-subchip ${plQuery==='الدانة'?'on':''}" data-act="plsetsearch" data-q="الدانة">🏖️ منتجع شاطئ الدانة</button>
+      <button class="pl-subchip ${plQuery==='أتلانتس'?'on':''}" data-act="plsetsearch" data-q="أتلانتس">🌴 أتلانتس النخلة (دبي)</button>
+    </div>`;
+  } else if (plFilterCat === 'chalet') {
+    subBarHTML = `
+    <div class="pl-context-subbar">
+      <span class="pl-cs-label">🏡 شاليهات واستراحات خاصة:</span>
+      <button class="pl-subchip ${!plQuery?'on':''}" data-act="plsetsearch" data-q="">🏡 كل الشاليهات</button>
+      <button class="pl-subchip ${plQuery==='العمارية'?'on':''}" data-act="plsetsearch" data-q="العمارية">تلال العمارية (الرياض)</button>
+      <button class="pl-subchip ${plQuery==='أبحر'?'on':''}" data-act="plsetsearch" data-q="أبحر">شاليهات أبحر (جدة)</button>
+      <button class="pl-subchip ${plQuery==='نصف القمر'?'on':''}" data-act="plsetsearch" data-q="نصف القمر">شاليهات نصف القمر (الشرقية)</button>
+      <button class="pl-subchip ${plQuery==='واحة تبوك'?'on':''}" data-act="plsetsearch" data-q="واحة تبوك">واحة تبوك الريفية</button>
+      <button class="pl-subchip ${plQuery==='السودة'?'on':''}" data-act="plsetsearch" data-q="السودة">قمم السودة (عسير)</button>
+      <button class="pl-subchip ${plQuery==='مسبح'?'on':''}" data-act="plsetsearch" data-q="مسبح">🏊 مسبح خاص</button>
+    </div>`;
+  } else if (plFilterCat === 'hotel') {
+    subBarHTML = `
+    <div class="pl-context-subbar">
+      <span class="pl-cs-label">🏨 فنادق وإقامة فندقية:</span>
+      <button class="pl-subchip ${!plQuery?'on':''}" data-act="plsetsearch" data-q="">🏨 كل الفنادق</button>
+      <button class="pl-subchip ${plQuery==='فورسيزونز'?'on':''}" data-act="plsetsearch" data-q="فورسيزونز">فورسيزونز برج المملكة</button>
+      <button class="pl-subchip ${plQuery==='ريتز'?'on':''}" data-act="plsetsearch" data-q="ريتز">الريتز-كارلتون الرياض</button>
+      <button class="pl-subchip ${plQuery==='فيرمونت'?'on':''}" data-act="plsetsearch" data-q="فيرمونت">فيرمونت برج الساعة مكة</button>
+      <button class="pl-subchip ${plQuery==='روز وود'?'on':''}" data-act="plsetsearch" data-q="روز وود">روز وود جدة</button>
+      <button class="pl-subchip ${plQuery==='ميلينيوم'?'on':''}" data-act="plsetsearch" data-q="ميلينيوم">ميلينيوم تبوك</button>
+      <button class="pl-subchip ${plQuery==='برج العرب'?'on':''}" data-act="plsetsearch" data-q="برج العرب">برج العرب دبي</button>
+      <button class="pl-subchip ${plQuery==='سافوي'?'on':''}" data-act="plsetsearch" data-q="سافوي">ذا سافوي لندن</button>
+    </div>`;
+  } else {
+    // plFilterCat === 'all'
+    subBarHTML = `
+    <div class="pl-context-subbar">
+      <span class="pl-cs-label">⚡ وصول سريع لأشهر الوجهات:</span>
+      <button class="pl-subchip ${plBrand==='all'&&!plQuery?'on':''}" data-act="plreset">🌟 الكل</button>
+      <button class="pl-subchip ${plBrand.toLowerCase()==='starbucks'?'on':''}" data-act="plbrand" data-b="Starbucks">☕ ستاربكس</button>
+      <button class="pl-subchip ${plBrand.toLowerCase()==='albaik'?'on':''}" data-act="plbrand" data-b="AlBaik">🍗 البيك</button>
+      <button class="pl-subchip ${plBrand.toLowerCase()==='8oz'?'on':''}" data-act="plbrand" data-b="8oz">☕ 8oz</button>
+      <button class="pl-subchip ${plBrand.toLowerCase()==='kfc'?'on':''}" data-act="plbrand" data-b="KFC">🍗 كنتاكي</button>
+      <button class="pl-subchip ${plBrand.toLowerCase()==='boulevard'?'on':''}" data-act="plbrand" data-b="Boulevard">🎡 بوليفارد</button>
+      <button class="pl-subchip ${plFilterCat==='mall'?'on':''}" data-act="plcat" data-c="mall">🛍️ المولات</button>
+      <button class="pl-subchip ${plFilterCat==='resort'?'on':''}" data-act="plcat" data-c="resort">🏖️ المنتجعات</button>
+    </div>`;
+  }
+
+  const citiesList = [
+    {k: 'all', n: '📍 كل المدن والمناطق'},
+    {k: 'riyadh', n: 'الرياض'},
+    {k: 'jeddah', n: 'جدة ومكة'},
+    {k: 'eastern', n: 'الخبر والشرقية'},
+    {k: 'tabuk', n: 'تبوك ونيوم'},
+    {k: 'alula', n: 'العُـلا'},
+    {k: 'redsea', n: 'البحر الأحمر'},
+    {k: 'asir', n: 'أبها وعسير'},
+    {k: 'intl', n: 'وجهات دولية (دبي، لندن)'}
+  ];
+
+  const hasActiveFilters = plFilterCat !== 'all' || plFilterCity !== 'all' || plBrand !== 'all' || plQuery.trim() !== '' || plMaxDist !== null;
+
   return `
-  <div class="pl-search-wrap">
-    <div class="pl-search-row">
-      <div class="pl-input-box">
-        <span class="pl-s-icon">🔍</span>
-        <input type="text" id="plSearchInput" placeholder="ابحث باسم المطعم، الكافيه، الفندق، الشاليه، الماركة (ستاربكس، ثامن أونصة، كنتاكي، البيك، ريتز...) أو المدينة..." value="${esc(plQuery)}">
-        ${plQuery ? `<button class="pl-clear-btn" data-act="plclearquery">✕</button>` : ''}
+  <div class="pl-clean-wrap">
+    <!-- Top Action Bar: Search + City Dropdown + GPS + View Switch + Add Place -->
+    <div class="pl-top-row">
+      <div class="pl-search-field">
+        <span class="pl-sf-icon">🔍</span>
+        <input type="text" id="plSearchInput" placeholder="ابحث باسم الكافيه، المطعم، الفندق، الماركة (ستاربكس، البيك...) أو الحي..." value="${esc(plQuery)}">
+        ${plQuery ? `<button class="pl-sf-clear" data-act="plclearquery" title="مسح البحث">✕</button>` : ''}
       </div>
-      <div class="pl-sort-box">
-        <select id="plSortSel" onchange="plSort=this.value;rerender()">
-          <option value="dist" ${plSort==='dist'?'selected':''}>⚡ الأقرب لموقعي أولاً (GPS)</option>
+
+      <div class="pl-city-select-wrap" title="تصفية حسب المدينة">
+        <select class="pl-city-select" onchange="plFilterCity=this.value;rerender()">
+          ${citiesList.map(c => `<option value="${c.k}" ${plFilterCity===c.k?'selected':''}>${c.n}</option>`).join('')}
+        </select>
+      </div>
+
+      <button class="btn sm ${isGps ? 'g' : ''}" data-act="plgps" title="تحديد موقعك الجغرافي الفوري وحساب المسافات الدقيقة">
+        🎯 ${isGps ? 'موقعي (نشط)' : 'موقعي (GPS)'}
+      </button>
+
+      <button class="btn sm" data-act="pltoggleview" data-v="${plTab==='map' ? 'spots' : 'map'}" title="التبديل بين عرض القائمة والخريطة">
+        ${plTab==='map' ? '📋 القائمة' : '🗺️ الخريطة'}
+      </button>
+
+      <button class="btn sm g" data-act="pladdform" title="أضف مشروعك أو كافيهك أو فندقك على خريطة إيلان">
+        ➕ أضف مكاناً
+      </button>
+    </div>
+
+    <!-- Main Categories Rail: Modern, Large, Touch-Friendly Icons -->
+    <div class="pl-clean-cats">
+      <button class="pl-cat-btn ${plFilterCat==='all'?'on':''}" data-act="plcat" data-c="all">
+        <span class="pl-cat-icon">🌟</span>
+        <span class="pl-cat-label">الكل</span>
+      </button>
+      <button class="pl-cat-btn ${plFilterCat==='cafe'?'on':''}" data-act="plcat" data-c="cafe">
+        <span class="pl-cat-icon">☕</span>
+        <span class="pl-cat-label">كافيهات</span>
+      </button>
+      <button class="pl-cat-btn ${plFilterCat==='restaurant'?'on':''}" data-act="plcat" data-c="restaurant">
+        <span class="pl-cat-icon">🍔</span>
+        <span class="pl-cat-label">مطاعم</span>
+      </button>
+      <button class="pl-cat-btn ${plFilterCat==='park'?'on':''}" data-act="plcat" data-c="park">
+        <span class="pl-cat-icon">🌳</span>
+        <span class="pl-cat-label">حدائق وترفيه</span>
+      </button>
+      <button class="pl-cat-btn ${plFilterCat==='mall'?'on':''}" data-act="plcat" data-c="mall">
+        <span class="pl-cat-icon">🛍️</span>
+        <span class="pl-cat-label">أسواق ومولات</span>
+      </button>
+      <button class="pl-cat-btn ${plFilterCat==='resort'?'on':''}" data-act="plcat" data-c="resort">
+        <span class="pl-cat-icon">🏖️</span>
+        <span class="pl-cat-label">منتجعات</span>
+      </button>
+      <button class="pl-cat-btn ${plFilterCat==='chalet'?'on':''}" data-act="plcat" data-c="chalet">
+        <span class="pl-cat-icon">🏡</span>
+        <span class="pl-cat-label">شاليهات</span>
+      </button>
+      <button class="pl-cat-btn ${plFilterCat==='hotel'?'on':''}" data-act="plcat" data-c="hotel">
+        <span class="pl-cat-icon">🏨</span>
+        <span class="pl-cat-label">فنادق</span>
+      </button>
+    </div>
+
+    <!-- Dynamic Contextual Sub-bar (يتغير تلقائياً حسب الأيقونة المختارة!) -->
+    ${subBarHTML}
+
+    <!-- Result Meta & Sort Strip -->
+    <div class="pl-meta-bar">
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <span>تم العثور على <b style="color:var(--g)">${spotsCount}</b> وجهة معتمدة</span>
+        ${userLocation.city !== 'all' ? `
+          <span style="color:#c4b5fd">بالقرب من <b>${esc(userLocation.name)}</b></span>
+        ` : ''}
+        ${hasActiveFilters ? `
+          <button class="btn xs" data-act="plreset" style="padding:2px 8px;font-size:11px;background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.3);color:#fca5a5">
+            ✕ إعادة ضبط
+          </button>
+        ` : ''}
+      </div>
+
+      <div style="display:flex;align-items:center;gap:6px">
+        <span class="mu xs">الترتيب:</span>
+        <select class="pl-sort-select" onchange="plSort=this.value;rerender()">
+          <option value="dist" ${plSort==='dist'?'selected':''}>⚡ الأقرب لموقعي (GPS)</option>
           <option value="rating" ${plSort==='rating'?'selected':''}>⭐ الأعلى تقييماً</option>
           <option value="reviews" ${plSort==='reviews'?'selected':''}>💬 الأكثر مراجعات</option>
         </select>
-      </div>
-    </div>
-
-    <!-- Category Tabs -->
-    
-    <!-- Smart Outing & Leisure Quick Suggestions -->
-    <div class="pl-suggestions-bar">
-      <span class="pl-sug-title">⚡ طلعات مقترحة:</span>
-      <button type="button" class="pl-sug-btn ${plFilterCat==='cafe'?'on':''}" data-act="plcat" data-c="cafe">☕ قهوة وكافيه رايق</button>
-      <button type="button" class="pl-sug-btn ${plFilterCat==='restaurant'?'on':''}" data-act="plcat" data-c="restaurant">🍔 مطعم غداء أو عشاء</button>
-      <button type="button" class="pl-sug-btn ${plFilterCat==='park'?'on':''}" data-act="plcat" data-c="park">🌳 حديقة وممشى عائلي</button>
-      <button type="button" class="pl-sug-btn ${plFilterCat==='mall'?'on':''}" data-act="plcat" data-c="mall">🛍️ تسوق ومول تجاري</button>
-      <button type="button" class="pl-sug-btn ${plFilterCat==='resort'?'on':''}" data-act="plcat" data-c="resort">🏝️ منتجع أو شاليه</button>
-    </div>
-
-    <div class="pl-cat-bar">
-      ${SPOT_CATS.map(c => `
-        <button class="pl-cat-chip ${plFilterCat === c.k ? 'on' : ''}" data-act="plcat" data-c="${c.k}">
-          <span>${c.ic}</span> ${c.n}
-        </button>
-      `).join('')}
-    </div>
-
-    <!-- Famous Brands Filter -->
-    <div class="pl-brands-section">
-      <span class="pl-bf-label">أشهر الماركات:</span>
-      <div class="pl-brands-bar">
-        ${FAMOUS_BRANDS.map(b => `
-          <button class="pl-brand-pill ${plBrand === b.k ? 'on' : ''}" data-act="plbrand" data-b="${b.k}">
-            ${b.n}
-          </button>
-        `).join('')}
-      </div>
-    </div>
-
-    <!-- Regions and Distances Row -->
-    <div class="pl-subfilters-row">
-      <div class="pl-pills-group">
-        <span class="mu xs">المنطقة:</span>
-        <button class="chip xs ${plFilterCity==='all'?'on':''}" data-act="plcity" data-c="all">الكل</button>
-        <button class="chip xs ${plFilterCity==='tabuk'?'on':''}" data-act="plcity" data-c="tabuk">تبوك ونيوم</button>
-        <button class="chip xs ${plFilterCity==='riyadh'?'on':''}" data-act="plcity" data-c="riyadh">الرياض</button>
-        <button class="chip xs ${plFilterCity==='jeddah'?'on':''}" data-act="plcity" data-c="jeddah">جدة ومكة</button>
-        <button class="chip xs ${plFilterCity==='eastern'?'on':''}" data-act="plcity" data-c="eastern">الخبر والشرقية</button>
-        <button class="chip xs ${plFilterCity==='alula'?'on':''}" data-act="plcity" data-c="alula">العلا</button>
-        <button class="chip xs ${plFilterCity==='redsea'?'on':''}" data-act="plcity" data-c="redsea">البحر الأحمر</button>
-        <button class="chip xs ${plFilterCity==='asir'?'on':''}" data-act="plcity" data-c="asir">أبها وعسير</button>
-        <button class="chip xs ${plFilterCity==='intl'?'on':''}" data-act="plcity" data-c="intl">وجهات دولية (دبي، لندن)</button>
-      </div>
-
-      <div class="pl-pills-group" style="margin-right:auto">
-        <span class="mu xs">نطاق المسافة:</span>
-        <button class="chip xs ${plMaxDist===null?'on':''}" data-act="pldist" data-km="">جميع المسافات</button>
-        <button class="chip xs ${plMaxDist===5?'on':''}" data-act="pldist" data-km="5">أقل من 5 كم</button>
-        <button class="chip xs ${plMaxDist===15?'on':''}" data-act="pldist" data-km="15">أقل من 15 كم</button>
-        <button class="chip xs ${plMaxDist===50?'on':''}" data-act="pldist" data-km="50">أقل من 50 كم</button>
-      </div>
-
-      <div class="pl-count-badge">
-        يعرض <b>${spotsCount}</b> منشأة معتمدة
       </div>
     </div>
   </div>`;
@@ -10424,94 +10753,76 @@ P.places = {
       return `<div class="empty" style="padding:40px;text-align:center"><div style="font-size:36px;margin-bottom:10px">✈️</div><h3>جارِ الانتقال إلى قسم مدن ومعالم السعودية والعالم المخصص…</h3><p class="mu">تم نقل وتخصيص محتوى المدن والجولات والتراث في قسم مستقل تماماً.</p></div>`;
     }
     if (r.id === 'map') plTab = 'map';
-    else if (r.id === 'near') plTab = 'near';
-    else if (r.id === 'add') plTab = 'add';
-    else if (r.id === 'cafes') { plTab = 'spots'; plFilterCat = 'cafe'; }
-    else if (r.id === 'restaurants') { plTab = 'spots'; plFilterCat = 'restaurant'; }
-    else if (r.id === 'parks') { plTab = 'spots'; plFilterCat = 'park'; }
-    else if (r.id === 'malls') { plTab = 'spots'; plFilterCat = 'mall'; }
-    else if (r.id === 'resorts') { plTab = 'spots'; plFilterCat = 'resort'; }
-    else if (r.id === 'chalets') { plTab = 'spots'; plFilterCat = 'chalet'; }
-    else if (r.id === 'hotels') { plTab = 'spots'; plFilterCat = 'hotel'; }
-    else plTab = 'spots';
-
-    const tabs = [
-      ['spots', '🏪', 'دليل الأماكن والبحث'],
-      ['map', '🗺️', 'الخريطة الحية والملاحة'],
-      ['near', '📡', 'حولي الحين (GPS)'],
-      ['add', '➕', 'أضف منشأة أو مشروعاً']
-    ];
+    else if (r.id === 'near') { plTab = 'spots'; plSort = 'dist'; plLocateGPS(); }
+    else if (r.id === 'add') { plTab = 'add'; }
+    else if (r.id === 'cafes') { plTab = 'spots'; plFilterCat = 'cafe'; plBrand = 'all'; plQuery = ''; }
+    else if (r.id === 'restaurants') { plTab = 'spots'; plFilterCat = 'restaurant'; plBrand = 'all'; plQuery = ''; }
+    else if (r.id === 'parks') { plTab = 'spots'; plFilterCat = 'park'; plBrand = 'all'; plQuery = ''; }
+    else if (r.id === 'malls') { plTab = 'spots'; plFilterCat = 'mall'; plBrand = 'all'; plQuery = ''; }
+    else if (r.id === 'resorts') { plTab = 'spots'; plFilterCat = 'resort'; plBrand = 'all'; plQuery = ''; }
+    else if (r.id === 'chalets') { plTab = 'spots'; plFilterCat = 'chalet'; plBrand = 'all'; plQuery = ''; }
+    else if (r.id === 'hotels') { plTab = 'spots'; plFilterCat = 'hotel'; plBrand = 'all'; plQuery = ''; }
+    else plTab = plTab || 'spots';
 
     const spots = getFilteredSpots();
 
     let bodyHTML = '';
-    if (plTab === 'spots') {
+    if (plTab === 'map') {
       bodyHTML = `
-      ${renderLocationWidget()}
-      ${renderFilterControls(spots.length)}
+        <div class="card mp-mapc" style="height:620px;position:relative;border-radius:16px;overflow:hidden;border:1px solid rgba(139,92,246,0.3)">
+          <div id="plLeafletMap" class="mp-map" style="height:100%" dir="ltr"></div>
+        </div>
+      `;
+    } else if (plTab === 'add') {
+      bodyHTML = `
+        <div style="margin-bottom:14px">
+          <button class="btn sm" data-act="pltoggleview" data-v="spots">← عودة لدليل الأماكن</button>
+        </div>
+        ${renderAddSpotFormHTML()}
+      `;
+    } else {
+      bodyHTML = `
       <div class="pl-grid">
         ${spots.length ? spots.map(s => renderSpotCard(s)).join('') : `
-          <div class="empty" style="grid-column:1/-1;padding:40px 20px;text-align:center">
-            <div style="font-size:42px;margin-bottom:10px">🔍</div>
-            <h3>لا توجد نتائج مطابقة لبحثك</h3>
-            <p class="mu">جرب تغيير التصنيف، تصفير فلاتر الماركات أو توسيع نطاق المسافة الجغرافية.</p>
-            <button class="btn sm g" style="margin-top:12px" data-act="plreset">تصفير الفلاتر</button>
+          <div class="empty" style="grid-column:1/-1;padding:48px 20px;text-align:center;background:rgba(255,255,255,0.02);border:1px dashed rgba(255,255,255,0.1);border-radius:18px">
+            <div style="font-size:46px;margin-bottom:12px">🔍</div>
+            <h3 style="color:#fff;font-size:18px;margin-bottom:6px">لا توجد نتائج مطابقة لاختيارك</h3>
+            <p class="mu" style="font-size:14px;max-width:440px;margin:0 auto 16px">جرب اختيار تصنيف آخر، أو تصفير اسم الماركة والبحث، أو توسيع المدينة المختارة.</p>
+            <button class="btn sm g" data-act="plreset">🌟 إظهار كل الأماكن</button>
           </div>
         `}
       </div>`;
-    } else if (plTab === 'map') {
-      bodyHTML = plMapOnlyHTML();
-    } else if (plTab === 'near') {
-      bodyHTML = `
-      ${renderLocationWidget()}
-      <div class="card pl-hero" style="padding:16px;margin-bottom:16px">
-        <h3>📡 رادار الأماكن الأقرب إليك مباشرة</h3>
-        <p class="mu">مرتبة بدقة متصاعدة من الأقرب إليك جغرافياً بناءً على موقعك الحالي مع روابط الملاحة والمسار وخرائط Google Maps المدمجة.</p>
-      </div>
-      <div class="pl-grid">
-        ${spots.map(s => renderSpotCard(s)).join('')}
-      </div>`;
-    } else if (plTab === 'add') {
-      bodyHTML = renderAddSpotFormHTML();
     }
 
     return `
-    <div class="page-h">
-      <div>
-        <div class="eyebrow">EILAN SPOTS · CAFES · RESTAURANTS · RESORTS · CHALETS · HOTELS</div>
-        <h1>🗺️ الأماكن <span class="grad-t">والخرائط</span></h1>
-        <p>دليل وبوصلة أشهر المطاعم، الكافيهات، المنتجعات، الشاليهات والفنادق الفاخرة في المملكة والعالم · تحديد الموقع والملاحة الفورية وتضمين Google Maps</p>
+    <div class="pl-page-root">
+      <!-- Quick Bar linking to World / Cities -->
+      <div class="pl-cities-link-bar">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:16px">✈️</span>
+          <span style="font-size:13px;color:var(--w)"><b>تبحث عن مدن ومعالم السعودية والعالم وجداول السفر؟</b></span>
+        </div>
+        <button class="btn xs" data-go="eilan://cities" style="padding:4px 12px;font-weight:700">دليل المدن والسفر ↗</button>
       </div>
-      <div style="display:flex;gap:8px">
-        <button class="btn g" data-act="plnewplace">➕ أضف مكاناً أو مشروعاً</button>
-      </div>
+
+      <!-- Redesigned Streamlined Clean Header -->
+      ${renderFilterControls(spots.length)}
+
+      <!-- Main Content (Cards, Map, or Add Form) -->
+      ${bodyHTML}
     </div>
-    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;background:linear-gradient(90deg, rgba(139,92,246,0.15), rgba(45,232,154,0.1));padding:10px 16px;border-radius:12px;margin-bottom:14px;border:1px solid rgba(139,92,246,0.3)">
-      <div>
-        <span style="font-size:16px;margin-left:6px">🏙️</span>
-        <b style="color:#fff;font-size:13.5px">تبحث عن مدن ومعالم السعودية والعالم، جداول السفر، وجولات 360°؟</b>
-        <span class="mu xs" style="margin-right:6px">مجمعة بالكامل في قسم المدن والعالم المخصص.</span>
-      </div>
-      <button class="btn sm" data-go="eilan://cities" style="padding:6px 14px">الانتقال للمدن والعالم ✈️</button>
-    </div>
-    <div class="mp-tabs" style="margin-bottom:16px">
-      ${tabs.map(([k, ic, n]) => `
-        <button class="mp-tab ${plTab === k ? 'on' : ''}" data-act="pltab" data-t="${k}">
-          <span>${ic}</span> ${n}
-        </button>
-      `).join('')}
-    </div>
-    ${bodyHTML}
     `;
   },
   post: () => {
-    if (plTab === 'spots' || plTab === 'near') {
-      const inp = $('#plSearchInput');
-      if (inp) {
-        inp.oninput = () => { plQuery = inp.value; const grid = $('.pl-grid'); if (grid) rerender(); };
-      }
-    } else if (plTab === 'map') {
-      initPlacesMap();
+    const inp = $('#plSearchInput');
+    if (inp) {
+      inp.oninput = () => {
+        plQuery = inp.value;
+        rerender();
+      };
+    }
+    if (plTab === 'map') {
+      setTimeout(() => initPlacesMap(), 100);
     }
   }
 };
@@ -10519,7 +10830,8 @@ P.places = {
 /* Actions registration for Places */
 Object.assign(ACT, {
   pltab: d => { plTab = d.t; rerender(); },
-  plcat: d => { plFilterCat = d.c; rerender(); },
+  pltoggleview: d => { plTab = d.v; rerender(); if (d.v === 'map') setTimeout(() => initPlacesMap(), 120); },
+  plcat: d => { plFilterCat = d.c; plBrand = 'all'; plQuery = ''; rerender(); },
   plcity: d => { plFilterCity = d.c; rerender(); },
   plbrand: d => { plBrand = d.b; rerender(); },
   pldist: d => { plMaxDist = d.km ? +d.km : null; rerender(); },
@@ -10535,9 +10847,10 @@ Object.assign(ACT, {
   plshowonmap: d => { plTab = 'map'; rerender(); setTimeout(() => initPlacesMap(d.id), 120); },
   plclearquery: () => { plQuery = ''; rerender(); },
   plreset: () => { plFilterCat = 'all'; plFilterCity = 'all'; plBrand = 'all'; plQuery = ''; plMaxDist = null; rerender(); },
-  plnewplace: () => { plTab = 'add'; rerender(); }
+  plsetsearch: d => { plQuery = d.q; plBrand = 'all'; rerender(); },
+  plnewplace: () => { plTab = 'add'; rerender(); },
+  pladdform: () => { plTab = 'add'; rerender(); }
 });
-
 
 /* ================= CITIES & WORLD GUIDES + MASTER TRAVEL ITINERARY & BUDGET TABLE ================= */
 

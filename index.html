@@ -829,6 +829,36 @@ body:not(.logged-in) .xp-chip{display:none}
 body.logged-in .login-btn{display:none!important}
 @media(max-width:640px){.login-btn span{display:none}.login-btn{padding:7px 10px}}
 .auth{padding:4px 6px 8px;max-width:400px;margin:0 auto}
+/* Eilan secure browser-style visitor sign-in */
+#modal .mbox.auth-window{width:min(500px,100%);padding:0;overflow:hidden;background:transparent;border:0;box-shadow:none;max-height:94vh}
+.eilan-browser-auth{position:relative;overflow:auto;max-height:94vh;border-radius:22px;border:1px solid rgba(139,92,246,.58);background:radial-gradient(ellipse at 90% 0%,rgba(139,92,246,.19),transparent 45%),radial-gradient(ellipse at 0% 100%,rgba(45,232,154,.10),transparent 42%),#0b0814;box-shadow:0 26px 90px rgba(0,0,0,.62),0 0 44px rgba(139,92,246,.22);color:var(--w,#f8f7ff)}
+.ea-chrome{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:11px;padding:11px 14px;border-bottom:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.035)}
+.ea-dots{display:flex;gap:5px}.ea-dots i{width:8px;height:8px;border-radius:50%;display:block;background:#ff6384}.ea-dots i:nth-child(2){background:#ffc857}.ea-dots i:nth-child(3){background:var(--g,#2de89a)}
+.ea-address{height:30px;min-width:0;display:flex;align-items:center;justify-content:center;gap:7px;padding:0 10px;border:1px solid rgba(255,255,255,.1);border-radius:999px;background:rgba(0,0,0,.26);color:#d7d2e4;font:11px ui-monospace,monospace;direction:ltr;white-space:nowrap;overflow:hidden}
+.ea-address .ea-lock{color:var(--g,#2de89a)}.ea-online{font:700 9px ui-monospace,monospace;color:var(--g,#2de89a);letter-spacing:.08em}
+.ea-chrome .icon-btn{width:30px;height:30px;flex-shrink:0}
+.ea-body{padding:20px clamp(16px,5vw,28px) 22px}
+.ea-kicker{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:14px;font:700 10px ui-monospace,monospace;letter-spacing:.12em;color:#b9a9eb}
+.ea-kicker span:last-child{color:var(--g,#2de89a);letter-spacing:.04em}
+.ea-secure-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 9px;border:1px solid rgba(45,232,154,.25);border-radius:999px;background:rgba(45,232,154,.07)}
+.eilan-browser-auth .auth{max-width:410px;padding:0 2px 2px}
+.eilan-browser-auth .auth-head{margin-bottom:16px}.eilan-browser-auth .auth-head img{width:54px;height:54px;border:1px solid rgba(45,232,154,.32);box-shadow:0 0 22px rgba(139,92,246,.45)}
+.eilan-browser-auth .auth-head small{display:block;margin-top:3px}
+.eilan-browser-auth .auth-tabs{margin-bottom:15px;border:1px solid rgba(255,255,255,.055)}
+.eilan-browser-auth .auth input.input{min-height:46px;border-radius:12px;border-color:rgba(255,255,255,.12);background:rgba(255,255,255,.045)}
+.ea-field-label{display:block;margin:1px 2px -5px;color:#d4cee4;font-size:12px;font-weight:700}
+.ea-password{position:relative;direction:ltr;width:100%}.ea-password .input{width:100%;padding-inline-end:48px!important}
+.ea-eye{position:absolute;right:7px;top:50%;transform:translateY(-50%);width:34px;height:34px;display:grid;place-items:center;border:0;border-radius:9px;background:transparent;color:#b8aed1;cursor:pointer;font-size:17px}
+.ea-eye:hover,.ea-eye:focus-visible{color:var(--g,#2de89a);background:rgba(45,232,154,.09);outline:none}
+.ea-eye svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ea-pass-rules{padding:10px 11px;border-radius:12px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.07)}
+.ea-pass-rules>small{display:block;margin-bottom:7px;color:#c8bedc;font-weight:700;font-size:11px}
+.ea-rule-list{display:flex;flex-wrap:wrap;gap:6px}
+.ea-rule{display:inline-flex;align-items:center;gap:5px;padding:4px 8px;border-radius:999px;background:rgba(255,255,255,.04);color:#aaa2bb;font-size:10.5px;transition:.18s}
+.ea-rule:before{content:'○';font-size:12px}.ea-rule.ok{color:var(--g,#2de89a);background:rgba(45,232,154,.09)}.ea-rule.ok:before{content:'✓';font-weight:900}
+.ea-footnote{display:flex;align-items:center;justify-content:center;gap:7px;margin-top:15px;color:#aaa2bb;font-size:10px;text-align:center}
+.eilan-browser-auth .auth-msg{margin-top:8px}
+@media(max-width:560px){#modal{padding:8px}#modal .mbox.auth-window{width:100%;max-height:96dvh}.eilan-browser-auth{max-height:96dvh;border-radius:18px}.ea-chrome{padding:9px 11px;gap:8px}.ea-address{height:28px;font-size:10px}.ea-body{padding:17px 15px 19px}.eilan-browser-auth .auth-head img{width:48px;height:48px}.ea-rule{font-size:10px;padding:4px 7px}}
 .auth-head{display:flex;gap:12px;align-items:center;margin-bottom:14px}
 .auth-head img{width:52px;height:52px;border-radius:14px;box-shadow:0 0 18px rgba(176,38,255,.5)}
 .auth-head b{display:block;font-size:18px;font-weight:900}.auth-head small{color:var(--mu,#aab)}
@@ -3006,7 +3036,7 @@ function suggest(q){
 }
 
 /* ---------- DRAWERS / MODAL ---------- */
-function openModal(html,wide){$('#modal .mbox').className='mbox'+(wide?' wide':'');$('#modal .mbox').innerHTML=html;$('#modal').classList.add('open')}
+function openModal(html,wide){const box=$('#modal .mbox');box.className='mbox'+(wide?' wide':'')+(String(html).includes('eilan-browser-auth')?' auth-window':'');box.innerHTML=html;$('#modal').classList.add('open')}
 function closeModal(){$('#modal').classList.remove('open')}
 function openCart(){renderCart();$('#cart').classList.add('open');$('#overlay').classList.add('open')}
 function openAI(q){$('#aipanel').classList.add('open');$('#overlay').classList.add('open');renderChats();setTimeout(()=>{const i=$('#aipanel input');i.focus();if(q){sendAI(q)}},200)}
@@ -6807,7 +6837,7 @@ function userOK(){return !needLogin()||!!USER||isOwner()}
 
 /* ---------- Supabase REST ---------- */
 const SB_ERR={invalid_credentials:'البريد أو كلمة المرور غير صحيحة',invalid_grant:'البريد أو كلمة المرور غير صحيحة',email_not_confirmed:'فعّل حسابك أولاً من الرابط المرسل إلى بريدك',user_already_exists:'هذا البريد مسجّل مسبقاً — سجّل دخولك',
-  weak_password:'كلمة المرور ضعيفة — استخدم 8 أحرف أو أكثر مع أرقام',over_email_send_rate_limit:'محاولات كثيرة — انتظر دقيقة ثم أعد المحاولة',over_request_rate_limit:'محاولات كثيرة — انتظر قليلاً',
+  weak_password:'كلمة المرور تحتاج 6 أحرف على الأقل، وحرفاً إنجليزياً كبيراً ورقماً واحداً',over_email_send_rate_limit:'محاولات كثيرة — انتظر دقيقة ثم أعد المحاولة',over_request_rate_limit:'محاولات كثيرة — انتظر قليلاً',
   email_address_invalid:'البريد الإلكتروني غير صالح',signup_disabled:'التسجيل مغلق حالياً',user_not_found:'لا يوجد حساب بهذا البريد',same_password:'كلمة المرور الجديدة مطابقة للقديمة'};
 function sbMsg(j,st){const c=j&&(j.error_code||j.code||j.error),m=j&&(j.msg||j.error_description||j.message)||'';
   if(SB_ERR[c])return SB_ERR[c];if(c==='PGRST205'||c==='42P01'||/relation .*user_data|user_data.*schema cache/i.test(m))return 'جدول المزامنة user_data غير موجود — شغّل كود SQL من لوحة التحكم';if(c==='42501'||/row-level security/i.test(m))return 'صلاحيات الجدول ناقصة — أعد تشغيل كود SQL كاملاً';if(/JWT expired/i.test(m))return 'jwt_expired';if(/Invalid login/i.test(m))return SB_ERR.invalid_credentials;if(/already registered/i.test(m))return SB_ERR.user_already_exists;if(/not confirmed/i.test(m))return SB_ERR.email_not_confirmed;
@@ -6856,21 +6886,31 @@ function applyAuthUI(){document.body.classList.toggle('logged-in',!!USER||isOwne
 
 /* ---------- login / signup modal ---------- */
 let PENDING=null,authTab='login';
+function authPasswordField(name,placeholder,autocomplete,minLength=0){
+  const id='auth-'+name;
+  const extra=minLength?` minlength="${minLength}" oninput="authCheckPassword(this)"`:'';
+  return `<div class="ea-password"><input class="input" id="${id}" name="${name}" type="password" placeholder="${placeholder}" required autocomplete="${autocomplete}" dir="ltr"${extra}><button class="ea-eye" type="button" data-act="authtoggle" data-target="${id}" aria-label="إظهار كلمة المرور" title="إظهار كلمة المرور"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12s3.2-6 9.5-6 9.5 6 9.5 6-3.2 6-9.5 6-9.5-6-9.5-6Z"/><circle cx="12" cy="12" r="2.7"/></svg></button></div>`;
+}
+function authPasswordRulesHTML(){return `<div class="ea-pass-rules" data-pass-rules><small>متطلبات كلمة المرور</small><div class="ea-rule-list"><span class="ea-rule" data-rule="len">6 أحرف على الأقل</span><span class="ea-rule" data-rule="upper">حرف إنجليزي كبير</span><span class="ea-rule" data-rule="digit">رقم واحد على الأقل</span><span class="ea-rule" data-rule="match">التأكيد مطابق</span></div></div>`}
+function authPasswordIssue(pw){if(String(pw||'').length<6)return 'كلمة المرور يجب أن تحتوي على 6 أحرف على الأقل';if(!/[A-Z]/.test(String(pw||'')))return 'أضيفي حرفاً إنجليزياً كبيراً واحداً على الأقل (A–Z)';if(!/[0-9]/.test(String(pw||'')))return 'أضيفي رقماً واحداً على الأقل (0–9)';return ''}
+function authCheckPassword(input){const form=input&&input.closest('form');if(!form)return;const pw=form.querySelector('[name="pw"]')?.value||'',pw2=form.querySelector('[name="pw2"]')?.value||'';const valid={len:pw.length>=6,upper:/[A-Z]/.test(pw),digit:/[0-9]/.test(pw),match:pw.length>0&&pw===pw2};form.querySelectorAll('[data-rule]').forEach(el=>el.classList.toggle('ok',!!valid[el.dataset.rule]))}
 function authHTML(){const t=authTab;
   const head=`<div class="auth-head"><img src="${LOGO}" alt=""><div><b>عالم ${esc(S.settings.brand)}</b><small>${t==='signup'?'أنشئ حسابك وافتح كل العالم':t==='forgot'?'استعادة كلمة المرور':t==='newpw'?'كلمة مرور جديدة':'أهلاً بعودتك'}</small></div></div>`;
-  const tabs=t==='login'||t==='signup'?`<div class="auth-tabs"><button class="${t==='login'?'on':''}" data-act="authtab" data-t="login">تسجيل الدخول</button><button class="${t==='signup'?'on':''}" data-act="authtab" data-t="signup">حساب جديد</button></div>`:'';
+  const tabs=t==='login'||t==='signup'?`<div class="auth-tabs"><button type="button" class="${t==='login'?'on':''}" data-act="authtab" data-t="login">تسجيل الدخول</button><button type="button" class="${t==='signup'?'on':''}" data-act="authtab" data-t="signup">حساب جديد</button></div>`:'';
   const g=(t==='login'||t==='signup')&&sbOn()&&S.settings.googleOn?`<button type="button" class="g-btn" data-act="google"><svg viewBox="0 0 48 48" width="20" height="20"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-7.9l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg> المتابعة بحساب Google</button><div class="or"><span>أو بالبريد</span></div>`:'';
   let f=g;
-  if(t==='login')f+=`<form onsubmit="authSubmit(event,'login')"><input class="input" name="email" type="email" placeholder="البريد الإلكتروني" required autocomplete="email" dir="ltr"><input class="input" name="pw" type="password" placeholder="كلمة المرور" required autocomplete="current-password"><button class="btn g" style="width:100%">دخول</button><a class="auth-link" data-act="authtab" data-t="forgot">نسيت كلمة المرور؟</a></form>`;
-  if(t==='signup')f+=`<form onsubmit="authSubmit(event,'signup')"><input class="input" name="name" placeholder="اسمك" required maxlength="40" autocomplete="name"><input class="input" name="email" type="email" placeholder="البريد الإلكتروني" required autocomplete="email" dir="ltr"><input class="input" name="pw" type="password" placeholder="كلمة المرور (8 أحرف على الأقل)" minlength="8" required autocomplete="new-password"><input class="input" name="pw2" type="password" placeholder="أعد كتابة كلمة المرور" minlength="8" required autocomplete="new-password"><button class="btn g" style="width:100%">إنشاء الحساب ✓</button></form>`;
-  if(t==='forgot')f=`<form onsubmit="authSubmit(event,'forgot')"><p class="mu" style="font-size:13px">اكتب بريدك وسنرسل لك رابطاً لتعيين كلمة مرور جديدة.</p><input class="input" name="email" type="email" placeholder="البريد الإلكتروني" required dir="ltr"><button class="btn g" style="width:100%">إرسال الرابط</button><a class="auth-link" data-act="authtab" data-t="login">← رجوع لتسجيل الدخول</a></form>`;
-  if(t==='newpw')f=`<form onsubmit="authSubmit(event,'newpw')"><input class="input" name="pw" type="password" placeholder="كلمة المرور الجديدة (8+)" minlength="8" required autocomplete="new-password"><input class="input" name="pw2" type="password" placeholder="تأكيدها" minlength="8" required autocomplete="new-password"><button class="btn g" style="width:100%">حفظ كلمة المرور</button></form>`;
-  return `<div class="mh"><span></span><button class="icon-btn" data-act="closemodal">${I.x}</button></div><div class="auth">${head}${PENDING&&PENDING.why?`<div class="auth-why">🔒 ${esc(PENDING.why)}</div>`:''}${tabs}${f}<div class="auth-msg" id="authMsg"></div></div>`}
+  if(t==='login')f+=`<form onsubmit="authSubmit(event,'login')"><label class="ea-field-label" for="auth-email">البريد الإلكتروني</label><input class="input" id="auth-email" name="email" type="email" placeholder="name@example.com" required autocomplete="email" dir="ltr">${authPasswordField('pw','كلمة المرور','current-password')}<button class="btn g" type="submit" style="width:100%">دخول آمن <span aria-hidden="true">↗</span></button><a class="auth-link" data-act="authtab" data-t="forgot">نسيت كلمة المرور؟</a></form>`;
+  if(t==='signup')f+=`<form onsubmit="authSubmit(event,'signup')"><label class="ea-field-label" for="auth-name">الاسم</label><input class="input" id="auth-name" name="name" placeholder="اسمك" required maxlength="40" autocomplete="name"><label class="ea-field-label" for="auth-email">البريد الإلكتروني</label><input class="input" id="auth-email" name="email" type="email" placeholder="name@example.com" required autocomplete="email" dir="ltr"><label class="ea-field-label" for="auth-pw">أنشئي كلمة مرور</label>${authPasswordField('pw','6 أحرف + حرف كبير + رقم','new-password',6)}${authPasswordField('pw2','أعيدي كتابة كلمة المرور','new-password',6)}${authPasswordRulesHTML()}<button class="btn g" type="submit" style="width:100%">إنشاء حساب إيلان <span aria-hidden="true">✦</span></button></form>`;
+  if(t==='forgot')f=`<form onsubmit="authSubmit(event,'forgot')"><p class="mu" style="font-size:13px">اكتب بريدك وسنرسل لك رابطاً لتعيين كلمة مرور جديدة.</p><label class="ea-field-label" for="auth-email">البريد الإلكتروني</label><input class="input" id="auth-email" name="email" type="email" placeholder="name@example.com" required autocomplete="email" dir="ltr"><button class="btn g" type="submit" style="width:100%">إرسال رابط الاستعادة</button><a class="auth-link" data-act="authtab" data-t="login">← رجوع لتسجيل الدخول</a></form>`;
+  if(t==='newpw')f=`<form onsubmit="authSubmit(event,'newpw')"><label class="ea-field-label" for="auth-pw">كلمة المرور الجديدة</label>${authPasswordField('pw','6 أحرف + حرف كبير + رقم','new-password',6)}${authPasswordField('pw2','تأكيد كلمة المرور الجديدة','new-password',6)}${authPasswordRulesHTML()}<button class="btn g" type="submit" style="width:100%">حفظ كلمة المرور</button></form>`;
+  const path=t==='signup'?'create-account':t==='forgot'?'recovery':t==='newpw'?'new-password':'account';
+  return `<section class="eilan-browser-auth" role="dialog" aria-label="بوابة تسجيل الدخول إلى إيلان"><div class="ea-chrome" dir="ltr"><div class="ea-dots" aria-hidden="true"><i></i><i></i><i></i></div><div class="ea-address"><span class="ea-lock">🔒</span><span>eilan://secure/${path}</span><span class="ea-online">ONLINE</span></div><button class="icon-btn" type="button" data-act="closemodal" aria-label="إغلاق">${I.x}</button></div><div class="ea-body" dir="rtl"><div class="ea-kicker" dir="ltr"><span>EILAN BROWSER · ACCOUNT PORTAL</span><span class="ea-secure-badge">✦ SECURE</span></div><div class="auth">${head}${PENDING&&PENDING.why?`<div class="auth-why">🔒 ${esc(PENDING.why)}</div>`:''}${tabs}${f}<div class="auth-msg" id="authMsg" aria-live="polite"></div><div class="ea-footnote">🛡️ بياناتك محمية — دخول آمن إلى عالم إيلان</div></div></div></section>`}
 function openAuth(tab,why,fn){authTab=tab||'login';if(why||fn)PENDING={why,fn};openModal(authHTML());setTimeout(()=>{const i=$('#modal .auth input');if(i)i.focus()},60)}
 function requireLogin(why,fn){if(userOK()){fn&&fn();return true}openAuth('login',why||'سجّل دخولك لعالم إيلان للمتابعة',fn);return false}
-async function authSubmit(e,kind){e.preventDefault();const f=e.target,d=Object.fromEntries(new FormData(f)),msg=$('#authMsg'),btn=f.querySelector('button');
+async function authSubmit(e,kind){e.preventDefault();const f=e.target,d=Object.fromEntries(new FormData(f)),msg=$('#authMsg'),btn=f.querySelector('button[type="submit"]')||f.querySelector('button:not([type="button"])');
   const say=(m,ok)=>{if(msg){msg.className='auth-msg '+(ok?'ok':'err');msg.innerHTML=m}};const email=String(d.email||'').trim().toLowerCase();
-  if((kind==='signup'||kind==='newpw')&&d.pw!==d.pw2)return say('كلمتا المرور غير متطابقتين');if((kind==='signup'||kind==='newpw')&&String(d.pw).length<8)return say('كلمة المرور 8 أحرف على الأقل');
+  if(kind==='signup'||kind==='newpw'){if(d.pw!==d.pw2)return say('كلمتا المرور غير متطابقتين');const pwIssue=authPasswordIssue(d.pw);if(pwIssue)return say(pwIssue)}
+  if(!btn)return say('تعذّر إرسال النموذج — أعيدي المحاولة');
   btn.disabled=true;const old=btn.textContent;btn.textContent='جاري…';
   try{
     if(kind==='login'){const r=await AUTH().signIn(email,d.pw);loginDone(r.user,'👋 أهلاً بعودتك يا '+r.user.name)}
@@ -6989,7 +7029,7 @@ async function saveSupa(e){e.preventDefault();if(!isOwner())return ownerLogin();
   if(key&&/service_role/i.test(atobSafe(key.split('.')[1]||''))){m.className='auth-msg err';m.textContent='⛔ هذا مفتاح service_role السري — استخدم anon public key فقط';return}
   S.settings.supaUrl=url;S.settings.supaKey=key;save();logChange('kode',url?'ربط حسابات الزوار مع Supabase':'إلغاء ربط Supabase');toast(url?'✅ تم الحفظ — اختبر الاتصال':'تم الإلغاء');rerender()}
 const atobSafe=s=>{try{return atob(s.replace(/-/g,'+').replace(/_/g,'/'))}catch(e){return ''}};
-Object.assign(ACT,{login:()=>openAuth('login'),google:()=>{if(!sbOn())return;const b=$('.g-btn');if(b){b.disabled=true;b.lastChild.textContent=' جاري التحويل إلى Google…'}SBA.google()},syncnow:async()=>{await syncPull();accountModal()},signup:()=>openAuth('signup'),account:accountModal,logout,
+Object.assign(ACT,{authtoggle:d=>{const i=document.getElementById(d.target);if(!i)return;const show=i.type==='password';i.type=show?'text':'password';const b=$('#modal .ea-eye[data-target="'+d.target+'"]');if(b){b.setAttribute('aria-label',show?'إخفاء كلمة المرور':'إظهار كلمة المرور');b.setAttribute('aria-pressed',show?'true':'false');b.title=show?'إخفاء كلمة المرور':'إظهار كلمة المرور';b.innerHTML=show?'🙈':'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12s3.2-6 9.5-6 9.5 6 9.5 6-3.2 6-9.5 6-9.5-6-9.5-6Z"/><circle cx="12" cy="12" r="2.7"/></svg>';}},login:()=>openAuth('login'),google:()=>{if(!sbOn())return;const b=$('.g-btn');if(b){b.disabled=true;b.lastChild.textContent=' جاري التحويل إلى Google…'}SBA.google()},syncnow:async()=>{await syncPull();accountModal()},signup:()=>openAuth('signup'),account:accountModal,logout,
   authtab:d=>{authTab=d.t;if($('#modal.open .auth')||d.t==='newpw')openModal(authHTML());else openAuth(d.t)},
   supatest:async()=>{const m=$('#supaMsg');if(!sbOn()){m.className='auth-msg err';m.textContent='احفظ الرابط والمفتاح أولاً';return}m.className='auth-msg';m.textContent='جاري الاختبار…';
     try{const st=await SBA.test();const g=st&&st.external&&st.external.google;let t='?';try{await sb('/rest/v1/user_data?select=id&limit=1');t='✅'}catch(e){t='❌ (شغّل كود SQL)'}m.className='auth-msg ok';m.innerHTML=`✅ الاتصال ناجح — الحسابات الحقيقية جاهزة<br>Google في Supabase: ${g?'✅ مفعّل':'⛔ غير مفعّل بعد'}${S.settings.googleOn&&!g?' — <b>الزر ظاهر لكن Google غير مفعّل في Supabase!</b>':''}<br>جدول المزامنة: ${t}`}catch(err){m.className='auth-msg err';m.textContent='❌ '+err.message}},

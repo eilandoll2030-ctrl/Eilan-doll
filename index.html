@@ -10878,7 +10878,7 @@ Object.assign(ACT, {
     go('eilan://places');
   },
   pltab: d => { plTab = d.t; rerender(); },
-  pltoggleview: d => { plTab = d.v; rerender(); if (d.v === 'map') setTimeout(() => initPlacesMap(), 120); }
+  pltoggleview: d => { plTab = d.v; rerender(); if (d.v === 'map') setTimeout(() => initPlacesMap(), 120); },
   plcat: d => {
     plTab = 'spots'; // Selecting a category always opens its result cards
     plFilterCat = d.c || 'all';

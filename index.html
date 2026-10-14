@@ -9608,39 +9608,80 @@ function applyManualPinpoint() {
   rerender();
 }
 
+function spotMatchesQuery(s, q) {
+  if (!q) return true;
+  q = q.toLowerCase().trim();
+  if ((s.name || '').toLowerCase().includes(q)) return true;
+  if ((s.catName || '').toLowerCase().includes(q)) return true;
+  if ((s.brand || '').toLowerCase().includes(q)) return true;
+  if ((s.city || '').toLowerCase().includes(q)) return true;
+  if ((s.region || '').toLowerCase().includes(q)) return true;
+  if ((s.loc || '').toLowerCase().includes(q)) return true;
+  if ((s.desc || '').toLowerCase().includes(q)) return true;
+  if ((s.hours || '').toLowerCase().includes(q)) return true;
+  if (Array.isArray(s.tags) && s.tags.some(t => t.toLowerCase().includes(q))) return true;
+  return false;
+}
+
 function getFilteredSpots() {
   const all = getEilanSpots();
   all.forEach(s => {
     s.dist = calcDistKm(userLocation.lat, userLocation.lng, s.lat, s.lng);
   });
 
+  const q = (plQuery || '').trim();
+  let searchMatches = [];
+  if (q) {
+    searchMatches = all.filter(s => spotMatchesQuery(s, q));
+  }
+
   let res = all.filter(s => {
-    if (plFilterCat !== 'all' && s.cat !== plFilterCat) return false;
-    if (plFilterCity !== 'all') {
-      if (plFilterCity === 'jeddah') {
-        if (s.region !== 'jeddah' && s.region !== 'makkah') return false;
-      } else if (s.region !== plFilterCity) {
-        return false;
+    // 1. Universal free-text query (searches across all fields)
+    if (q) {
+      if (!spotMatchesQuery(s, q)) return false;
+    }
+
+    // 2. Category filter:
+    // If user typed a search query, but nothing in current category matches it,
+    // don't lock them out! Show matching places from other categories.
+    if (plFilterCat !== 'all') {
+      if (q) {
+        const hasCatMatch = searchMatches.some(x => x.cat === plFilterCat);
+        if (hasCatMatch && s.cat !== plFilterCat) return false;
+      } else {
+        if (s.cat !== plFilterCat) return false;
       }
     }
-    if (plBrand !== 'all') {
+
+    // 3. City filter:
+    if (plFilterCity !== 'all') {
+      if (q) {
+        const hasCityMatch = searchMatches.some(x => {
+          if (plFilterCity === 'jeddah') return x.region === 'jeddah' || x.region === 'makkah';
+          return x.region === plFilterCity;
+        });
+        if (hasCityMatch) {
+          if (plFilterCity === 'jeddah') {
+            if (s.region !== 'jeddah' && s.region !== 'makkah') return false;
+          } else if (s.region !== plFilterCity) return false;
+        }
+      } else {
+        if (plFilterCity === 'jeddah') {
+          if (s.region !== 'jeddah' && s.region !== 'makkah') return false;
+        } else if (s.region !== plFilterCity) return false;
+      }
+    }
+
+    // 4. Sub-chip brand filter (only if no free-text query)
+    if (!q && plBrand !== 'all') {
       const sb = (s.brand || '').toLowerCase();
       const pb = plBrand.toLowerCase();
       if (sb !== pb && !sb.includes(pb)) return false;
     }
+
+    // 5. Max distance filter
     if (plMaxDist !== null && (s.dist == null || s.dist > plMaxDist)) return false;
-    if (plQuery.trim()) {
-      const q = plQuery.toLowerCase().trim();
-      const match = (s.name || '').toLowerCase().includes(q) ||
-                    (s.catName || '').toLowerCase().includes(q) ||
-                    (s.brand || '').toLowerCase().includes(q) ||
-                    (s.city || '').toLowerCase().includes(q) ||
-                    (s.region || '').toLowerCase().includes(q) ||
-                    (s.loc || '').toLowerCase().includes(q) ||
-                    (s.desc || '').toLowerCase().includes(q) ||
-                    (s.tags || []).some(t => t.toLowerCase().includes(q));
-      if (!match) return false;
-    }
+
     return true;
   });
 
@@ -9660,6 +9701,7 @@ function renderLocationWidget() {
 
 function renderFilterControls(spotsCount) {
   const isGps = userLocation.mode === 'gps' || (userLocation.city === 'gps');
+  const allSpots = getEilanSpots();
 
   // Dynamic Contextual Sub-bar based on plFilterCat
   let subBarHTML = '';
@@ -9677,15 +9719,15 @@ function renderFilterControls(spotsCount) {
     ];
     subBarHTML = `
     <div class="pl-context-subbar">
-      <span class="pl-cs-label">☕ كافيهات ومقاهي مختصة:</span>
+      <span class="pl-cs-label">☕ خيارات الكافيهات:</span>
       ${cafeBrands.map(b => `
         <button class="pl-subchip ${plBrand.toLowerCase()===b.k.toLowerCase()?'on':''}" data-act="plbrand" data-b="${b.k}">
           ${b.n}
         </button>
       `).join('')}
-      <button class="pl-subchip ${plQuery==='سيارات'?'on':''}" data-act="plsetsearch" data-q="سيارات">🚗 خدمة سيارات</button>
-      <button class="pl-subchip ${plQuery==='خارجية'?'on':''}" data-act="plsetsearch" data-q="خارجية">🌿 جلسات خارجية</button>
       <button class="pl-subchip ${plQuery==='عمل'?'on':''}" data-act="plsetsearch" data-q="عمل">📶 مناسب للعمل والمذاكرة</button>
+      <button class="pl-subchip ${plQuery==='خارجية'?'on':''}" data-act="plsetsearch" data-q="خارجية">🌿 جلسات خارجية</button>
+      <button class="pl-subchip ${plQuery==='سيارات'?'on':''}" data-act="plsetsearch" data-q="سيارات">🚗 خدمة سيارات</button>
     </div>`;
   } else if (plFilterCat === 'restaurant') {
     const restBrands = [
@@ -9694,26 +9736,25 @@ function renderFilterControls(spotsCount) {
       {k: 'KFC', n: 'كنتاكي KFC'},
       {k: 'SectionB', n: 'سكشن بي برجر'},
       {k: 'Shawarmer', n: 'شاورمر Shawarmer'},
-      {k: 'NajdVillage', n: 'قرية نجد التراثية'},
-      {k: 'LPM', n: 'LPM فاخر'},
-      {k: 'CZNBurak', n: 'CZN بوراك'}
+      {k: 'NajdVillage', n: 'قرية نجد التراثية'}
     ];
     subBarHTML = `
     <div class="pl-context-subbar">
-      <span class="pl-cs-label">🍔 أشهر المطاعم والمطابخ:</span>
+      <span class="pl-cs-label">🍔 خيارات المطاعم:</span>
       ${restBrands.map(b => `
         <button class="pl-subchip ${plBrand.toLowerCase()===b.k.toLowerCase()?'on':''}" data-act="plbrand" data-b="${b.k}">
           ${b.n}
         </button>
       `).join('')}
-      <button class="pl-subchip ${plQuery==='عائل'?'on':''}" data-act="plsetsearch" data-q="عائل">👨‍👩‍👧‍👦 عائلي</button>
       <button class="pl-subchip ${plQuery==='سريعة'?'on':''}" data-act="plsetsearch" data-q="سريعة">⚡ وجبات سريعة</button>
+      <button class="pl-subchip ${plQuery==='عائل'?'on':''}" data-act="plsetsearch" data-q="عائل">👨‍👩‍👧‍👦 عائلي</button>
+      <button class="pl-subchip ${plQuery==='لحم'?'on':''}" data-act="plsetsearch" data-q="لحم">🥩 مشاوي ولحوم</button>
     </div>`;
   } else if (plFilterCat === 'park') {
     subBarHTML = `
     <div class="pl-context-subbar">
-      <span class="pl-cs-label">🌳 حدائق ووجهات ترفيهية:</span>
-      <button class="pl-subchip ${!plQuery&&plBrand==='all'?'on':''}" data-act="plreset">🌳 كل الوجهات</button>
+      <span class="pl-cs-label">🌳 خيارات الترفيه والحدائق:</span>
+      <button class="pl-subchip ${plBrand==='all'&&!plQuery?'on':''}" data-act="plbrand" data-b="all">🌳 كل الوجهات</button>
       <button class="pl-subchip ${plBrand.toLowerCase()==='boulevard'?'on':''}" data-act="plbrand" data-b="Boulevard">🎡 بوليفارد سيتي ووورلد</button>
       <button class="pl-subchip ${plQuery==='واجهة'?'on':''}" data-act="plsetsearch" data-q="واجهة">🌊 واجهة جدة البحرية</button>
       <button class="pl-subchip ${plQuery==='حنيفة'?'on':''}" data-act="plsetsearch" data-q="حنيفة">🌴 وادي حنيفة بالرياض</button>
@@ -9723,65 +9764,58 @@ function renderFilterControls(spotsCount) {
   } else if (plFilterCat === 'mall') {
     subBarHTML = `
     <div class="pl-context-subbar">
-      <span class="pl-cs-label">🛍️ أسواق ومراكز تسوق:</span>
+      <span class="pl-cs-label">🛍️ خيارات المولات والتسوق:</span>
       <button class="pl-subchip ${!plQuery?'on':''}" data-act="plsetsearch" data-q="">🛍️ كل المولات</button>
       <button class="pl-subchip ${plQuery==='الرياض بارك'?'on':''}" data-act="plsetsearch" data-q="الرياض بارك">الرياض بارك</button>
       <button class="pl-subchip ${plQuery==='رد سي'?'on':''}" data-act="plsetsearch" data-q="رد سي">رد سي مول جدة</button>
       <button class="pl-subchip ${plQuery==='تبوك بارك'?'on':''}" data-act="plsetsearch" data-q="تبوك بارك">تبوك بارك</button>
       <button class="pl-subchip ${plQuery==='دبي مول'?'on':''}" data-act="plsetsearch" data-q="دبي مول">دبي مول وبوليفارد</button>
       <button class="pl-subchip ${plQuery==='سينما'?'on':''}" data-act="plsetsearch" data-q="سينما">🎬 سينما وترفيه</button>
-      <button class="pl-subchip ${plQuery==='تسوق'?'on':''}" data-act="plsetsearch" data-q="تسوق">🏷️ ماركات عالمية</button>
     </div>`;
   } else if (plFilterCat === 'resort') {
     subBarHTML = `
     <div class="pl-context-subbar">
-      <span class="pl-cs-label">🏖️ منتجعات واستجمام فاخر:</span>
+      <span class="pl-cs-label">🏖️ خيارات المنتجعات:</span>
       <button class="pl-subchip ${!plQuery?'on':''}" data-act="plsetsearch" data-q="">🏖️ كل المنتجعات</button>
       <button class="pl-subchip ${plQuery==='سانت ريجيس'?'on':''}" data-act="plsetsearch" data-q="سانت ريجيس">🌊 سانت ريجيس البحر الأحمر</button>
-      <button class="pl-subchip ${plQuery==='نجومة'?'on':''}" data-act="plsetsearch" data-q="نجومة">🏝️ نجومة ريتز-كارلتون</button>
       <button class="pl-subchip ${plQuery==='هابيتاس'?'on':''}" data-act="plsetsearch" data-q="هابيتاس">🏜️ هابيتاس العلا</button>
       <button class="pl-subchip ${plQuery==='بانيان'?'on':''}" data-act="plsetsearch" data-q="بانيان">🌴 بانيان تري العلا</button>
-      <button class="pl-subchip ${plQuery==='الدانة'?'on':''}" data-act="plsetsearch" data-q="الدانة">🏖️ منتجع شاطئ الدانة</button>
-      <button class="pl-subchip ${plQuery==='أتلانتس'?'on':''}" data-act="plsetsearch" data-q="أتلانتس">🌴 أتلانتس النخلة (دبي)</button>
+      <button class="pl-subchip ${plQuery==='نجومة'?'on':''}" data-act="plsetsearch" data-q="نجومة">🏝️ نجومة ريتز-كارلتون</button>
+      <button class="pl-subchip ${plQuery==='مسبح'?'on':''}" data-act="plsetsearch" data-q="مسبح">🏊 مسابح خاصة</button>
     </div>`;
   } else if (plFilterCat === 'chalet') {
     subBarHTML = `
     <div class="pl-context-subbar">
-      <span class="pl-cs-label">🏡 شاليهات واستراحات خاصة:</span>
+      <span class="pl-cs-label">🏡 خيارات الشاليهات:</span>
       <button class="pl-subchip ${!plQuery?'on':''}" data-act="plsetsearch" data-q="">🏡 كل الشاليهات</button>
-      <button class="pl-subchip ${plQuery==='العمارية'?'on':''}" data-act="plsetsearch" data-q="العمارية">تلال العمارية (الرياض)</button>
       <button class="pl-subchip ${plQuery==='أبحر'?'on':''}" data-act="plsetsearch" data-q="أبحر">شاليهات أبحر (جدة)</button>
+      <button class="pl-subchip ${plQuery==='العمارية'?'on':''}" data-act="plsetsearch" data-q="العمارية">تلال العمارية (الرياض)</button>
       <button class="pl-subchip ${plQuery==='نصف القمر'?'on':''}" data-act="plsetsearch" data-q="نصف القمر">شاليهات نصف القمر (الشرقية)</button>
-      <button class="pl-subchip ${plQuery==='واحة تبوك'?'on':''}" data-act="plsetsearch" data-q="واحة تبوك">واحة تبوك الريفية</button>
-      <button class="pl-subchip ${plQuery==='السودة'?'on':''}" data-act="plsetsearch" data-q="السودة">قمم السودة (عسير)</button>
       <button class="pl-subchip ${plQuery==='مسبح'?'on':''}" data-act="plsetsearch" data-q="مسبح">🏊 مسبح خاص</button>
     </div>`;
   } else if (plFilterCat === 'hotel') {
     subBarHTML = `
     <div class="pl-context-subbar">
-      <span class="pl-cs-label">🏨 فنادق وإقامة فندقية:</span>
+      <span class="pl-cs-label">🏨 خيارات الفنادق:</span>
       <button class="pl-subchip ${!plQuery?'on':''}" data-act="plsetsearch" data-q="">🏨 كل الفنادق</button>
       <button class="pl-subchip ${plQuery==='فورسيزونز'?'on':''}" data-act="plsetsearch" data-q="فورسيزونز">فورسيزونز برج المملكة</button>
       <button class="pl-subchip ${plQuery==='ريتز'?'on':''}" data-act="plsetsearch" data-q="ريتز">الريتز-كارلتون الرياض</button>
       <button class="pl-subchip ${plQuery==='فيرمونت'?'on':''}" data-act="plsetsearch" data-q="فيرمونت">فيرمونت برج الساعة مكة</button>
       <button class="pl-subchip ${plQuery==='روز وود'?'on':''}" data-act="plsetsearch" data-q="روز وود">روز وود جدة</button>
       <button class="pl-subchip ${plQuery==='ميلينيوم'?'on':''}" data-act="plsetsearch" data-q="ميلينيوم">ميلينيوم تبوك</button>
-      <button class="pl-subchip ${plQuery==='برج العرب'?'on':''}" data-act="plsetsearch" data-q="برج العرب">برج العرب دبي</button>
-      <button class="pl-subchip ${plQuery==='سافوي'?'on':''}" data-act="plsetsearch" data-q="سافوي">ذا سافوي لندن</button>
     </div>`;
   } else {
-    // plFilterCat === 'all'
+    // plFilterCat === 'all' -> Clean general tags ONLY, NO conflicting brands!
     subBarHTML = `
     <div class="pl-context-subbar">
-      <span class="pl-cs-label">⚡ وصول سريع لأشهر الوجهات:</span>
-      <button class="pl-subchip ${plBrand==='all'&&!plQuery?'on':''}" data-act="plreset">🌟 الكل</button>
-      <button class="pl-subchip ${plBrand.toLowerCase()==='starbucks'?'on':''}" data-act="plbrand" data-b="Starbucks">☕ ستاربكس</button>
-      <button class="pl-subchip ${plBrand.toLowerCase()==='albaik'?'on':''}" data-act="plbrand" data-b="AlBaik">🍗 البيك</button>
-      <button class="pl-subchip ${plBrand.toLowerCase()==='8oz'?'on':''}" data-act="plbrand" data-b="8oz">☕ 8oz</button>
-      <button class="pl-subchip ${plBrand.toLowerCase()==='kfc'?'on':''}" data-act="plbrand" data-b="KFC">🍗 كنتاكي</button>
-      <button class="pl-subchip ${plBrand.toLowerCase()==='boulevard'?'on':''}" data-act="plbrand" data-b="Boulevard">🎡 بوليفارد</button>
-      <button class="pl-subchip ${plFilterCat==='mall'?'on':''}" data-act="plcat" data-c="mall">🛍️ المولات</button>
-      <button class="pl-subchip ${plFilterCat==='resort'?'on':''}" data-act="plcat" data-c="resort">🏖️ المنتجعات</button>
+      <span class="pl-cs-label">✨ فلترة سريعة:</span>
+      <button class="pl-subchip ${!plQuery && plBrand==='all' && plMaxDist===null ? 'on' : ''}" data-act="plreset">🌟 كل الأماكن (${allSpots.length})</button>
+      <button class="pl-subchip ${plSort==='rating' ? 'on' : ''}" onclick="plSort='rating';rerender()">⭐ الأعلى تقييماً</button>
+      <button class="pl-subchip ${plQuery==='مفتوح' ? 'on' : ''}" data-act="plsetsearch" data-q="مفتوح">🟢 مفتوح الآن</button>
+      <button class="pl-subchip ${plQuery==='خارجية' ? 'on' : ''}" data-act="plsetsearch" data-q="خارجية">🌿 جلسات خارجية</button>
+      <button class="pl-subchip ${plQuery==='عائل' ? 'on' : ''}" data-act="plsetsearch" data-q="عائل">👨‍👩‍👧‍👦 عائلي</button>
+      <button class="pl-subchip ${plQuery==='سيارات' ? 'on' : ''}" data-act="plsetsearch" data-q="سيارات">🚗 خدمة سيارات</button>
+      <button class="pl-subchip ${plQuery==='عمل' ? 'on' : ''}" data-act="plsetsearch" data-q="عمل">📶 مناسب للعمل والمذاكرة</button>
     </div>`;
   }
 
@@ -9805,7 +9839,7 @@ function renderFilterControls(spotsCount) {
     <div class="pl-top-row">
       <div class="pl-search-field">
         <span class="pl-sf-icon">🔍</span>
-        <input type="text" id="plSearchInput" placeholder="ابحث باسم الكافيه، المطعم، الفندق، الماركة (ستاربكس، البيك...) أو الحي..." value="${esc(plQuery)}">
+        <input type="text" id="plSearchInput" placeholder="ابحث باسم الكافيه، المطعم، الفندق، الماركة (ستاربكس، البيك، كنتاكي...) أو الحي..." value="${esc(plQuery)}">
         ${plQuery ? `<button class="pl-sf-clear" data-act="plclearquery" title="مسح البحث">✕</button>` : ''}
       </div>
 
@@ -9871,12 +9905,22 @@ function renderFilterControls(spotsCount) {
     <div class="pl-meta-bar">
       <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
         <span>تم العثور على <b style="color:var(--g)">${spotsCount}</b> وجهة معتمدة</span>
+        ${plQuery ? `
+          <span style="background:rgba(139,92,246,0.25);border:1px solid rgba(139,92,246,0.4);color:#ddd6fe;padding:2px 10px;border-radius:12px;font-size:12px">
+            🔍 البحث: <b>«${esc(plQuery)}»</b>
+          </span>
+        ` : ''}
+        ${plBrand !== 'all' ? `
+          <span style="background:rgba(45,232,154,0.18);border:1px solid rgba(45,232,154,0.35);color:#6ee7b7;padding:2px 10px;border-radius:12px;font-size:12px">
+            🏷️ الماركة: <b>${esc(plBrand)}</b>
+          </span>
+        ` : ''}
         ${userLocation.city !== 'all' ? `
           <span style="color:#c4b5fd">بالقرب من <b>${esc(userLocation.name)}</b></span>
         ` : ''}
         ${hasActiveFilters ? `
-          <button class="btn xs" data-act="plreset" style="padding:2px 8px;font-size:11px;background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.3);color:#fca5a5">
-            ✕ إعادة ضبط
+          <button class="btn xs" data-act="plreset" style="padding:2px 10px;font-size:11px;background:rgba(239,68,68,0.18);border:1px solid rgba(239,68,68,0.35);color:#fca5a5;cursor:pointer">
+            ✕ إلغاء وإظهار الكل
           </button>
         ` : ''}
       </div>
@@ -9884,45 +9928,14 @@ function renderFilterControls(spotsCount) {
       <div style="display:flex;align-items:center;gap:6px">
         <span class="mu xs">الترتيب:</span>
         <select class="pl-sort-select" onchange="plSort=this.value;rerender()">
-          <option value="dist" ${plSort==='dist'?'selected':''}>⚡ الأقرب لموقعي (GPS)</option>
-          <option value="rating" ${plSort==='rating'?'selected':''}>⭐ الأعلى تقييماً</option>
-          <option value="reviews" ${plSort==='reviews'?'selected':''}>💬 الأكثر مراجعات</option>
+          <option value="dist" ${plSort==='dist'?'selected':''}>الأقرب لموقعي (GPS)</option>
+          <option value="rating" ${plSort==='rating'?'selected':''}>الأعلى تقييماً ⭐</option>
+          <option value="reviews" ${plSort==='reviews'?'selected':''}>الأكثر مراجعات 💬</option>
         </select>
       </div>
     </div>
-  </div>`;
-}
-
-const activeCardEmbeds = new Set();
-
-function toggleSpotGmapEmbed(spotId, lat, lng) {
-  const wrap = $(`#gmapEmbedWrap_${spotId}`);
-  const btn = $(`#btnToggleEmbed_${spotId}`);
-  const arrow = $(`#arrowEmbed_${spotId}`);
-  const iframe = $(`#iframeCardEmbed_${spotId}`);
-  if (!wrap || !iframe) return;
-
-  if (wrap.style.display === 'none' || !wrap.style.display) {
-    wrap.style.display = 'block';
-    if (!iframe.src || iframe.src === 'about:blank' || iframe.src === window.location.href) {
-      iframe.src = iframe.getAttribute('data-src') || `https://maps.google.com/maps?q=${lat},${lng}&hl=ar&z=15&output=embed`;
-    }
-    if (arrow) arrow.innerText = '▴';
-    if (btn) btn.classList.add('on');
-    activeCardEmbeds.add(spotId);
-  } else {
-    wrap.style.display = 'none';
-    if (arrow) arrow.innerText = '▾';
-    if (btn) btn.classList.remove('on');
-    activeCardEmbeds.delete(spotId);
-  }
-}
-
-function switchCardGmapMode(spotId, mode, lat, lng) {
-  const iframe = $(`#iframeCardEmbed_${spotId}`);
-  if (!iframe) return;
-  const tParam = mode === 'k' ? '&t=k' : '';
-  iframe.src = `https://maps.google.com/maps?q=${lat},${lng}${tParam}&hl=ar&z=16&output=embed`;
+  </div>
+  `;
 }
 
 function renderSpotCard(s) {
@@ -10829,12 +10842,24 @@ P.places = {
     </div>
     `;
   },
-  post: () => {
+    post: () => {
     const inp = $('#plSearchInput');
     if (inp) {
       inp.oninput = () => {
         plQuery = inp.value;
+        const curStart = inp.selectionStart;
+        const curEnd = inp.selectionEnd;
         rerender();
+        const nextInp = $('#plSearchInput');
+        if (nextInp) {
+          nextInp.focus();
+          try { nextInp.setSelectionRange(curStart, curEnd); } catch(e){}
+        }
+      };
+      inp.onkeydown = (e) => {
+        if (e.key === 'Enter') {
+          inp.blur();
+        }
       };
     }
     if (plTab === 'map') {
@@ -10847,23 +10872,62 @@ P.places = {
 Object.assign(ACT, {
   pltab: d => { plTab = d.t; rerender(); },
   pltoggleview: d => { plTab = d.v; rerender(); if (d.v === 'map') setTimeout(() => initPlacesMap(), 120); },
-  plcat: d => { plFilterCat = d.c; plBrand = 'all'; plQuery = ''; rerender(); },
-  plcity: d => { plFilterCity = d.c; rerender(); },
-  plbrand: d => { plBrand = d.b; rerender(); },
+  plcat: d => {
+    plFilterCat = d.c || 'all';
+    plBrand = 'all'; // Always reset brand when switching category
+    plQuery = '';    // Always clear search query when clicking a category
+    rerender();
+  },
+  plcity: d => {
+    plFilterCity = d.c || 'all';
+    rerender();
+  },
+  plbrand: d => {
+    // Sub-chip brand: if clicked again, toggle back to 'all'
+    if (plBrand.toLowerCase() === (d.b || '').toLowerCase()) {
+      plBrand = 'all';
+    } else {
+      plBrand = d.b || 'all';
+    }
+    plQuery = '';
+    rerender();
+  },
   pldist: d => { plMaxDist = d.km ? +d.km : null; rerender(); },
   plgps: () => { plLocateGPS(); },
   plpinpoint: () => { openLocationPinpointModal(); },
   plsetcity: d => { plSetCity(d.k); },
   plopen: d => { openSpotReviewsModal(d.id); },
+  plreviews: d => { openSpotReviewsModal(d.id); },
+  pllightbox: d => { openPhotoLightbox(d.img, d.cap); },
   pladdphoto: d => { openVisitorPhotoModal(d.id); },
   pltogglegmap: d => {
     const s = getEilanSpots().find(x => x.id === d.id);
     if (s) toggleSpotGmapEmbed(d.id, s.lat, s.lng);
   },
   plshowonmap: d => { plTab = 'map'; rerender(); setTimeout(() => initPlacesMap(d.id), 120); },
-  plclearquery: () => { plQuery = ''; rerender(); },
-  plreset: () => { plFilterCat = 'all'; plFilterCity = 'all'; plBrand = 'all'; plQuery = ''; plMaxDist = null; rerender(); },
-  plsetsearch: d => { plQuery = d.q; plBrand = 'all'; rerender(); },
+  plclearquery: () => {
+    plQuery = '';
+    rerender();
+    const inp = $('#plSearchInput');
+    if (inp) { inp.value = ''; inp.focus(); }
+  },
+  plreset: () => {
+    plFilterCat = 'all';
+    plFilterCity = 'all';
+    plBrand = 'all';
+    plQuery = '';
+    plMaxDist = null;
+    rerender();
+  },
+  plsetsearch: d => {
+    if (plQuery === d.q) {
+      plQuery = '';
+    } else {
+      plQuery = d.q || '';
+    }
+    plBrand = 'all';
+    rerender();
+  },
   plnewplace: () => { plTab = 'add'; rerender(); },
   pladdform: () => { plTab = 'add'; rerender(); }
 });
@@ -11305,10 +11369,6 @@ P.cities = {
 
 /* Register Actions on ACT */
 Object.assign(ACT, {
-  pltab: d => { plTab = d.t; rerender(); },
-  plcity: d => { plCityFilter = d.c; rerender(); },
-  plcat: d => { plCatFilter = d.k; rerender(); },
-  plreset: () => { plCityFilter = ''; plCatFilter = ''; plQuery = ''; rerender(); },
   plcitysug: () => {
     const cities = ['الرياض', 'جدة', 'تبوك', 'مكة المكرمة', 'المدينة المنورة', 'الخبر والدمام'];
     const pick = cities[Math.floor(Math.random() * cities.length)];
@@ -11316,10 +11376,6 @@ Object.assign(ACT, {
     toast('🎯 تم اقتراح وتحديد أماكن في: ' + pick);
     rerender();
   },
-  plreviews: d => openSpotReviewsModal(d.id),
-  pllightbox: d => openPhotoLightbox(d.img, d.cap),
-  pladdform: () => mpBizReq(),
-
   cttab: d => { ctTab = d.t; if(d.t==='cities'||d.t==='guide') ctSel = null; rerender(); },
   itdays: d => { itDays = +d.d; rerender(); },
   ittier: d => { itTier = d.k; rerender(); },
@@ -11327,8 +11383,6 @@ Object.assign(ACT, {
   itbuy: d => buyTravelSchedule(d.city, d.days, d.total),
   itai: d => openAI(`أنا أخطط لرحلة إلى ${d.city} لمدة ${itDays} أيام بميزانية ${itTier==='vip'?'فاخرة':(itTier==='eco'?'اقتصادية':'متوسطة')}. اقترح لي نصائح توفير وأفضل كافيهات ومطاعم تناسب هذه الميزانية بالتفصيل.`)
 });
-
-
 
 /* ---------- stamps / XP ---------- */
 function mpStamp(key,label,xp,ic){const P=mpPass();if(P.st[key])return false;

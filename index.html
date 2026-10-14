@@ -9940,6 +9940,39 @@ function renderFilterControls(spotsCount) {
   `;
 }
 
+const activeCardEmbeds = new Set();
+
+function toggleSpotGmapEmbed(spotId, lat, lng) {
+  const wrap = $(`#gmapEmbedWrap_${spotId}`);
+  const btn = $(`#btnToggleEmbed_${spotId}`);
+  const arrow = $(`#arrowEmbed_${spotId}`);
+  const iframe = $(`#iframeCardEmbed_${spotId}`);
+  if (!wrap || !iframe) return;
+
+  if (wrap.style.display === 'none' || !wrap.style.display) {
+    wrap.style.display = 'block';
+    if (!iframe.src || iframe.src === 'about:blank' || iframe.src === window.location.href) {
+      iframe.src = iframe.getAttribute('data-src') || `https://maps.google.com/maps?q=${lat},${lng}&hl=ar&z=15&output=embed`;
+    }
+    if (arrow) arrow.innerText = '▴';
+    if (btn) btn.classList.add('on');
+    activeCardEmbeds.add(spotId);
+  } else {
+    wrap.style.display = 'none';
+    if (arrow) arrow.innerText = '▾';
+    if (btn) btn.classList.remove('on');
+    activeCardEmbeds.delete(spotId);
+  }
+}
+
+function switchCardGmapMode(spotId, mode, lat, lng) {
+  const iframe = $(`#iframeCardEmbed_${spotId}`);
+  if (!iframe) return;
+  const tParam = mode === 'k' ? '&t=k' : '';
+  iframe.src = `https://maps.google.com/maps?q=${lat},${lng}${tParam}&hl=ar&z=16&output=embed`;
+}
+
+
 function renderSpotCard(s) {
   const catBadge = s.cat === 'cafe' ? '☕ كافيه' :
                    s.cat === 'restaurant' ? '🍽️ مطعم' :

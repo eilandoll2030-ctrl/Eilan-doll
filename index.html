@@ -1346,11 +1346,12 @@ body.lang-en #bBack svg,body.lang-en #bFwd svg{transform:scaleX(-1)}
 .edu-card{padding:0;overflow:hidden;cursor:pointer;transition:transform .25s,box-shadow .25s,border-color .25s;display:flex;flex-direction:column}
 .edu-card:hover{transform:translateY(-4px);border-color:var(--ea);box-shadow:0 10px 30px -10px var(--ea)}
 .edu-cv{position:relative;aspect-ratio:210/297;background:#0b0716;overflow:hidden}
-.edu-cv img{width:100%;height:100%;object-fit:cover;display:block;animation:eduCoverDrift 12s ease-in-out infinite alternate;transform-origin:center}
-.edu-card:hover .edu-cv img{animation-play-state:paused;filter:saturate(1.08)}
+.edu-image-surface{position:absolute;inset:0;z-index:0;overflow:hidden;animation:eduCoverDrift 12s ease-in-out infinite alternate;transform-origin:center}
+.edu-image-surface img{width:100%;height:100%;object-fit:cover;display:block}
+.edu-card:hover .edu-image-surface,.edu-card:hover .edu-eyes-surface{animation-play-state:paused;filter:saturate(1.08)}
 .edu-cv:after{content:"";position:absolute;inset:-55%;z-index:1;pointer-events:none;background:linear-gradient(115deg,transparent 44%,rgba(255,255,255,.16) 50%,transparent 56%);transform:translateX(-75%);animation:eduCoverSheen 9s ease-in-out infinite}
-.edu-price{z-index:2}
-.edu-promo-btn{position:absolute;z-index:3;bottom:12px;left:50%;transform:translateX(-50%);border:1px solid rgba(255,255,255,.26);border-radius:999px;padding:8px 14px;background:rgba(7,4,14,.78);backdrop-filter:blur(8px);color:#fff;font:inherit;font-size:12px;font-weight:800;white-space:nowrap;cursor:pointer;box-shadow:0 0 18px color-mix(in srgb,var(--ea),transparent 45%);transition:background .2s,box-shadow .2s}
+.edu-price{z-index:5}
+.edu-promo-btn{position:absolute;z-index:6;bottom:12px;left:50%;transform:translateX(-50%);border:1px solid rgba(255,255,255,.26);border-radius:999px;padding:8px 14px;background:rgba(7,4,14,.78);backdrop-filter:blur(8px);color:#fff;font:inherit;font-size:12px;font-weight:800;white-space:nowrap;cursor:pointer;box-shadow:0 0 18px color-mix(in srgb,var(--ea),transparent 45%);transition:background .2s,box-shadow .2s}
 .edu-promo-btn:hover{background:var(--ea);box-shadow:0 0 24px color-mix(in srgb,var(--ea),transparent 20%)}
 @keyframes eduCoverDrift{from{transform:scale(1)}to{transform:scale(1.07)}}
 @keyframes eduCoverSheen{0%,20%{transform:translateX(-75%)}65%,100%{transform:translateX(75%)}}
@@ -1358,7 +1359,7 @@ body.lang-en #bBack svg,body.lang-en #bFwd svg{transform:scaleX(-1)}
 .edu-promo-head{margin-bottom:12px}
 .edu-promo-shell{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:22px;align-items:center}
 .edu-promo-art{position:relative;min-height:360px;aspect-ratio:4/5;border-radius:20px;overflow:hidden;border:1px solid var(--bd);background:#080611;isolation:isolate}
-.edu-promo-art>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;animation:eduPromoZoom 11s ease-in-out infinite alternate}
+.edu-promo-art .edu-image-surface,.edu-promo-art .edu-eyes-surface{animation-duration:11s}
 .edu-promo-art:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(4,3,9,.02) 25%,rgba(4,3,9,.72) 100%);z-index:1}
 .edu-promo-orbit{position:absolute;z-index:2;width:54%;aspect-ratio:1;border:1px solid color-mix(in srgb,var(--ea),transparent 20%);border-radius:50%;top:13%;left:23%;box-shadow:0 0 28px color-mix(in srgb,var(--ea),transparent 62%);animation:eduOrbit 8s linear infinite}
 .edu-promo-icon{position:absolute;z-index:3;top:9%;right:9%;width:58px;height:58px;display:grid;place-items:center;border-radius:18px;background:rgba(8,6,18,.78);border:1px solid color-mix(in srgb,var(--ea),transparent 10%);font-size:29px;box-shadow:0 0 28px color-mix(in srgb,var(--ea),transparent 58%);animation:eduFloat 3.4s ease-in-out infinite}
@@ -1373,13 +1374,30 @@ body.lang-en #bBack svg,body.lang-en #bFwd svg{transform:scaleX(-1)}
 .edu-promo-progress{height:3px;border-radius:4px;background:rgba(255,255,255,.09);margin:16px 0 14px;overflow:hidden}
 .edu-promo-progress i{display:block;height:100%;width:35%;border-radius:4px;background:var(--ea);box-shadow:0 0 12px var(--ea);animation:eduProgress 4.8s ease-in-out infinite}
 .edu-promo-actions{display:flex;gap:9px;flex-wrap:wrap}
+.edu-motion-layer{position:absolute;inset:0;z-index:3;overflow:hidden;pointer-events:none}
+.edu-file-orbit{position:absolute;left:14%;top:25%;width:72%;height:54%;border:1px dashed color-mix(in srgb,var(--ea),transparent 48%);border-radius:50%;animation:eduRing 18s linear infinite}
+.edu-orbit-item{position:absolute;left:50%;top:50%;width:0;height:0;transform-origin:0 0;animation:eduOrbit 9s linear infinite}
+.edu-orbit-item:nth-child(2){animation-delay:-3s}.edu-orbit-item:nth-child(3){animation-delay:-6s}
+.edu-orbit-symbol{position:absolute;left:var(--orbit-radius,48px);top:0;transform:translate(-50%,-50%);animation:eduCounter 9s linear infinite;width:30px;height:30px;display:grid;place-items:center;border-radius:10px;border:1px solid color-mix(in srgb,var(--ea),transparent 20%);background:rgba(7,4,14,.82);backdrop-filter:blur(5px);font-size:17px;box-shadow:0 0 16px color-mix(in srgb,var(--ea),transparent 50%)}
+.edu-cv{--orbit-radius:43px}.edu-promo-art{--orbit-radius:76px}
+.edu-eyes-surface{position:absolute;inset:0;z-index:2;animation:eduCoverDrift 12s ease-in-out infinite alternate;transform-origin:center;pointer-events:none}
+.edu-eye-pair{position:absolute;inset:0;z-index:2}
+.edu-eye{position:absolute;left:var(--eye-x);top:var(--eye-y);width:var(--eye-w,4.7%);height:var(--eye-h,1.8%);transform:translate(-50%,-50%);border-radius:50%;background:rgba(248,245,236,.94);box-shadow:0 0 2px rgba(0,0,0,.55);overflow:hidden;animation:eduBlink 7s ease-in-out infinite}
+.edu-eye:nth-child(2){animation-delay:.09s}
+.edu-eye i{position:absolute;left:43%;top:19%;width:31%;height:64%;border-radius:50%;background:#18131c;box-shadow:0 0 0 1px rgba(0,0,0,.18);animation:eduGaze 4.2s ease-in-out infinite}
+.edu-eye:nth-child(2) i{animation-delay:.08s}
+@keyframes eduOrbit{to{transform:rotate(360deg)}}
+@keyframes eduCounter{to{transform:translate(-50%,-50%) rotate(-360deg)}}
+@keyframes eduRing{to{transform:rotate(360deg)}}
+@keyframes eduGaze{0%,100%{left:43%}28%{left:61%}55%{left:32%}78%{left:52%}}
+@keyframes eduBlink{0%,39%,42%,72%,75%,100%{transform:translate(-50%,-50%) scaleY(1)}40.5%,73.5%{transform:translate(-50%,-50%) scaleY(.12)}}
 @keyframes eduPromoZoom{from{transform:scale(1)}to{transform:scale(1.09)}}
 @keyframes eduOrbit{to{transform:rotate(360deg)}}
 @keyframes eduFloat{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-12px) rotate(4deg)}}
 @keyframes eduPointIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 @keyframes eduProgress{0%{transform:translateX(120%)}100%{transform:translateX(-320%)}}
-@media(max-width:680px){.edu-promo-shell{grid-template-columns:1fr;gap:14px}.edu-promo-art{min-height:260px;max-height:43vh;aspect-ratio:16/10}.edu-promo-copy{padding:0}.edu-promo-modal{padding:18px!important}}
-@media(prefers-reduced-motion:reduce){.edu-cv img,.edu-cv:after,.edu-promo-art>img,.edu-promo-orbit,.edu-promo-icon,.edu-promo-points li,.edu-promo-progress i{animation:none!important}}
+@media(max-width:680px){.edu-promo-shell{grid-template-columns:1fr;gap:14px}.edu-promo-art{min-height:unset;max-height:none;aspect-ratio:4/5}.edu-promo-copy{padding:0}.edu-promo-modal{padding:18px!important}}
+@media(prefers-reduced-motion:reduce){.edu-image-surface,.edu-eyes-surface,.edu-cv:after,.edu-promo-orbit,.edu-promo-icon,.edu-promo-points li,.edu-promo-progress i,.edu-file-orbit,.edu-orbit-item,.edu-orbit-symbol,.edu-eye,.edu-eye i{animation:none!important}}
 .edu-price{position:absolute;top:10px;left:10px;background:rgba(7,4,14,.82);color:#8dffcf;font-weight:800;font-size:13px;padding:4px 10px;border-radius:20px;border:1px solid rgba(141,255,207,.35);backdrop-filter:blur(4px)}
 .edu-cb{padding:12px 14px 14px;display:flex;flex-direction:column;gap:4px;flex:1}
 .edu-cb h4{font-size:15px;font-weight:800;line-height:1.5}
@@ -13211,12 +13229,16 @@ function eduBuyHTML(f,big){const link=EDU_LINKS[f.id];
   return `<span class="edu-soon">🔔 يتوفر للشراء قريباً</span>`}
 function eduCardsHTML(){const L=EDU_FILES.filter(f=>eduCat==='الكل'||f.cat===eduCat);
   return L.map(f=>`<article class="edu-card card" data-go="eilan://edu/${f.id}" style="--ea:${f.c[0]}">
-   <div class="edu-cv"><img loading="lazy" src="${eduImg(f.id,'cover')}" alt="${esc(f.title)}"><span class="edu-price">${f.price} ر.س</span><button class="edu-promo-btn" data-act="edupromo" data-id="${f.id}" aria-label="شاهد إعلاناً متحركاً عن ${esc(f.title)}">▶ شاهد العرض المتحرك</button></div>
+   <div class="edu-cv">${eduMotionHTML(f,true,'card')}<span class="edu-price">${f.price} ر.س</span><button class="edu-promo-btn" data-act="edupromo" data-id="${f.id}" aria-label="شاهد إعلاناً متحركاً عن ${esc(f.title)}">▶ شاهد العرض المتحرك</button></div>
    <div class="edu-cb"><div class="edu-tags"><span class="tag">${esc(f.cat)}</span><span class="tag">PDF · ${f.pages} صفحة</span></div>
    <h4>${esc(f.title)}</h4><p>${esc(f.sub)}</p><div class="edu-more">التفاصيل والمعاينة ←</div></div></article>`).join('')}
+const EDU_MOTION={
+ dprod:{eyes:[46.8,54.5,44.7],items:['📄','🛍️','📦']},ideas:{eyes:[49.6,56.8,39.5],items:['💡','🎨','📲']},digcom:{eyes:[42.4,50.7,28.8],items:['📱','🛍️','💬']},sales:{eyes:[42.8,51.7,31],items:['📈','⭐','🛒']},seo:{eyes:[45.1,52.5,44.8],items:['🔎','📊','🌐']},site:{eyes:[45.7,53.5,30.7],items:['🌐','📁','🖥️']},canva:{eyes:[41.4,47.7,37.1],items:['🎨','🖌️','✨']},women:{eyes:[52.7,60.3,30],items:['🛍️','💡','📦']},pdf:{eyes:[43.7,52.6,29.2],items:['📄','⬇️','🗂️']}
+};
+function eduMotionHTML(f,eyes=false,mode='card'){const m=EDU_MOTION[f.id];if(!m)return '';const ex=x=>mode==='card'?(x*1.131-6.55).toFixed(2):x;return `<div class="edu-image-surface"><img loading="lazy" src="${eduImg(f.id,'cover')}" alt="${esc(f.title)}"></div>${eyes?`<div class="edu-eyes-surface"><div class="edu-eye-pair" style="--eye-y:${m.eyes[2]}%;--eye-w:${m.eyeW||4.7}%;--eye-h:${m.eyeH||1.8}%">${m.eyes.slice(0,2).map(x=>`<span class="edu-eye" style="--eye-x:${ex(x)}%"><i></i></span>`).join('')}</div></div>`:''}<div class="edu-motion-layer" aria-hidden="true"><div class="edu-file-orbit">${m.items.map(ic=>`<span class="edu-orbit-item"><span class="edu-orbit-symbol">${ic}</span></span>`).join('')}</div></div>`}
 function eduPromoHTML(f){const pts=(f.learn||[]).slice(0,3);return `<div class="edu-promo" style="--ea:${f.c[0]}">
   <div class="mh edu-promo-head"><div><div class="eyebrow">EILAN LEARNING · عرض سريع</div><h3 style="margin:4px 0 0">إعلان تعريفي متحرك</h3></div><button class="icon-btn" data-act="closemodal" aria-label="إغلاق">${I.x}</button></div>
-  <div class="edu-promo-shell"><div class="edu-promo-art"><img src="${eduImg(f.id,'cover')}" alt="${esc(f.title)}"><span class="edu-promo-orbit"></span><span class="edu-promo-icon">${f.icon}</span><span class="edu-promo-stamp">${f.pages} صفحة · دليل عملي</span></div>
+  <div class="edu-promo-shell"><div class="edu-promo-art">${eduMotionHTML(f,true,'modal')}<span class="edu-promo-icon">${f.icon}</span><span class="edu-promo-stamp">${f.pages} صفحة · دليل عملي</span></div>
   <div class="edu-promo-copy"><div class="eyebrow">${esc(f.cat)} · مكتبة إيلان</div><h2>${esc(f.title)}</h2><p>${esc(f.sub)}</p><h3>إيش راح تستفيد؟</h3><ul class="edu-promo-points">${pts.map((x,i)=>`<li style="--step:${i}"><b>0${i+1}</b><span>${esc(x)}</span></li>`).join('')}</ul><div class="edu-promo-progress"><i></i></div><div class="edu-promo-actions"><button class="btn g" data-act="edupromodetails" data-id="${f.id}">التفاصيل والمعاينة ←</button><button class="btn" data-act="closemodal">إغلاق</button></div></div></div></div>`}
 function eduSectionHTML(){return `<section class="edu-sec" id="eduSec"><div class="xsec-h"><div><div class="eyebrow">Eilan Learning Library</div>
   <h2>📚 مكتبة إيلان — <span class="grad-t">ملفات تعلّم وتطوير</span></h2>
@@ -13244,14 +13266,14 @@ P.edu={icon:'📘',title:r=>eduById(r.id)?.title||'مكتبة إيلان',html:r
     <h3 class="edu-h">📑 محتويات الملف</h3><ol class="edu-toc">${f.chapters.map((c,i)=>`<li><span>${String(i+1).padStart(2,'0')}</span>${esc(c)}</li>`).join('')}</ol>
     <h3 class="edu-h">👀 معاينة من الداخل</h3><div class="edu-prev">${['p1','p2'].map(t=>`<img loading="lazy" src="${eduImg(f.id,t)}" alt="صفحة من الملف" data-act="eduzoom" data-src="${eduImg(f.id,t)}">`).join('')}</div>
     <p class="mu edu-note">كل ملف مستقل بذاته — ويُسلَّم لك تلقائياً بعد إتمام الشراء من متجر إيلان. المعلومات تعليمية عامة؛ تحقّق دائماً من الأنظمة والرسوم المحدّثة لدى الجهات الرسمية.</p></div></div>
-  <h3 class="edu-h">ملفات أخرى قد تفيدك</h3><div class="edu-grid">${others.map(o=>`<article class="edu-card card" data-go="eilan://edu/${o.id}" style="--ea:${o.c[0]}"><div class="edu-cv"><img loading="lazy" src="${eduImg(o.id,'cover')}" alt="${esc(o.title)}"><span class="edu-price">${o.price} ر.س</span><button class="edu-promo-btn" data-act="edupromo" data-id="${o.id}">▶ شاهد العرض المتحرك</button></div><div class="edu-cb"><h4>${esc(o.title)}</h4><p>${esc(o.sub)}</p></div></article>`).join('')}</div></div>`},
+  <h3 class="edu-h">ملفات أخرى قد تفيدك</h3><div class="edu-grid">${others.map(o=>`<article class="edu-card card" data-go="eilan://edu/${o.id}" style="--ea:${o.c[0]}"><div class="edu-cv">${eduMotionHTML(o,true,'card')}<span class="edu-price">${o.price} ر.س</span><button class="edu-promo-btn" data-act="edupromo" data-id="${o.id}">▶ شاهد العرض المتحرك</button></div><div class="edu-cb"><h4>${esc(o.title)}</h4><p>${esc(o.sub)}</p></div></article>`).join('')}</div></div>`},
   mount:()=>{}};
 /* jump to the library when coming back from a file page */
 {const pg=P.learn,m=pg.mount;pg.mount=r=>{if(m)m(r);if(r&&r.q&&r.q.sec==='edu'){const s=$('#eduSec');if(s)setTimeout(()=>s.scrollIntoView({behavior:'smooth'}),80)}}}
 /* site search: library files show up in results */
 {const ps=P.search,h=ps.html;ps.html=r=>{let x=h(r);const q=norm(r.q.q||'');if(!q)return x;
   const hits=EDU_FILES.filter(f=>norm([f.title,f.sub,f.cat,f.desc,...f.learn,...f.chapters].join(' ')).includes(q)||q.split(' ').filter(w=>w.length>2).some(w=>norm(f.title+' '+f.cat).includes(w)));
-  if(!hits.length)return x;const blk=`<div class="edu-srch"><h3>📚 من مكتبة إيلان التعليمية</h3><div class="edu-grid">${hits.slice(0,3).map(o=>`<article class="edu-card card" data-go="eilan://edu/${o.id}" style="--ea:${o.c[0]}"><div class="edu-cv"><img loading="lazy" src="${eduImg(o.id,'cover')}" alt="${esc(o.title)}"><span class="edu-price">${o.price} ر.س</span><button class="edu-promo-btn" data-act="edupromo" data-id="${o.id}">▶ شاهد العرض المتحرك</button></div><div class="edu-cb"><h4>${esc(o.title)}</h4><p>${esc(o.sub)}</p></div></article>`).join('')}</div></div>`;
+  if(!hits.length)return x;const blk=`<div class="edu-srch"><h3>📚 من مكتبة إيلان التعليمية</h3><div class="edu-grid">${hits.slice(0,3).map(o=>`<article class="edu-card card" data-go="eilan://edu/${o.id}" style="--ea:${o.c[0]}"><div class="edu-cv">${eduMotionHTML(o,true,'card')}<span class="edu-price">${o.price} ر.س</span><button class="edu-promo-btn" data-act="edupromo" data-id="${o.id}">▶ شاهد العرض المتحرك</button></div><div class="edu-cb"><h4>${esc(o.title)}</h4><p>${esc(o.sub)}</p></div></article>`).join('')}</div></div>`;
   x=x.replace(/<div class="empty card">[\s\S]*?<\/div>[^<]*<\/div>/,'');const i=x.indexOf('<div style="display:grid;grid-template-columns:1fr 300px');return i>-1?x.slice(0,i)+blk+x.slice(i):x+blk}}
 
 /* ============ 🔔 «المتجر يفتح قريباً» — store closed for visitors until the owner opens it ============

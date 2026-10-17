@@ -13172,7 +13172,7 @@ const EDU_FILES=[{"id": "dprod", "title": "تجارة المنتجات الرق�
 const EDU_LINKS={/* dprod:'https://salla.sa/…' */};
 const EDU_CATS=['الكل',...new Set(EDU_FILES.map(f=>f.cat))];
 let eduCat='الكل';
-const eduImg=(id,t)=>`edu/${id}-${t}.webp`;
+const eduImg=(id,t)=>`/edu/${id}-${t}.webp`;
 const eduById=id=>EDU_FILES.find(f=>f.id===id);
 function eduBuyHTML(f,big){const link=EDU_LINKS[f.id];
   if(link&&!storeSoon())return `<a class="btn g ${big?'':'sm'}" href="${esc(link)}" target="_blank" rel="noopener">🛍️ اشترِ الملف — ${f.price} ر.س</a>`;

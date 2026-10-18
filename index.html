@@ -13198,7 +13198,8 @@ const EDU_FILES=[{"id": "dprod", "title": "تجارة المنتجات الرق�
 const EDU_LINKS={/* dprod:'https://salla.sa/…' */};
 const EDU_CATS=['الكل',...new Set(EDU_FILES.map(f=>f.cat))];
 let eduCat='الكل';
-const eduImg=(id,t)=>`/edu/${id}-${t}.webp`;
+const EDU_PREVIEW_PAGES=new Set(['dprod','ideas','digcom','sales','seo']);
+const eduImg=(id,t)=>{const page=(t==='p1'||t==='p2')&&!EDU_PREVIEW_PAGES.has(id)?'cover':t;return `/edu/${id}-${page}.webp`};
 const eduById=id=>EDU_FILES.find(f=>f.id===id);
 function eduBuyHTML(f,big){const link=EDU_LINKS[f.id];
   if(link&&!storeSoon())return `<a class="btn g ${big?'':'sm'}" href="${esc(link)}" target="_blank" rel="noopener">🛍️ اشترِ الملف — ${f.price} ر.س</a>`;
@@ -13237,7 +13238,7 @@ P.edu={icon:'📘',title:r=>eduById(r.id)?.title||'مكتبة إيلان',html:r
     <div class="edu-two"><div class="card"><h3>🎯 لمن هذا الملف؟</h3><ul>${f.for.map(x=>`<li dir="auto">${esc(x)}</li>`).join('')}</ul></div>
      <div class="card"><h3>🧠 ماذا ستتعلم؟</h3><ul>${f.learn.map(x=>`<li dir="auto">${esc(x)}</li>`).join('')}</ul></div></div>
     <h3 class="edu-h">📑 محتويات الملف</h3><ol class="edu-toc">${f.chapters.map((c,i)=>`<li><span>${String(i+1).padStart(2,'0')}</span>${esc(c)}</li>`).join('')}</ol>
-    <h3 class="edu-h">👀 معاينة من الداخل</h3><div class="edu-prev">${['p1','p2'].map(t=>`<img loading="lazy" src="${eduImg(f.id,t)}" alt="صفحة من الملف" data-act="eduzoom" data-src="${eduImg(f.id,t)}">`).join('')}</div>
+    <h3 class="edu-h">✨ صور توضيحية للموضوع</h3><div class="edu-prev">${['p1','p2'].map(t=>`<img loading="lazy" src="${eduImg(f.id,t)}" alt="توضيح بصري لـ ${esc(f.title)}" data-act="eduzoom" data-src="${eduImg(f.id,t)}">`).join('')}</div>
     <p class="mu edu-note">كل ملف مستقل بذاته — ويُسلَّم لك تلقائياً بعد إتمام الشراء من متجر إيلان. المعلومات تعليمية عامة؛ تحقّق دائماً من الأنظمة والرسوم المحدّثة لدى الجهات الرسمية.</p></div></div>
   <h3 class="edu-h">ملفات أخرى قد تفيدك</h3><div class="edu-grid">${others.map(o=>`<article class="edu-card card" data-go="eilan://edu/${o.id}" style="--ea:${o.c[0]}"><div class="edu-cv">${eduMotionHTML(o,true,'card')}<span class="edu-price">${o.price} ر.س</span><button class="edu-promo-btn" data-act="edupromo" data-id="${o.id}">▶ اعرف ماذا يقدم</button></div><div class="edu-cb"><h4>${esc(o.title)}</h4><p>${esc(o.sub)}</p></div></article>`).join('')}</div></div>`},
   mount:()=>{}};

@@ -6870,7 +6870,7 @@ function ownerFormHTML(inline){
     <div style="margin-top:14px;text-align:center"><button type="button" onclick="S.owner=null;save();rerender()" class="mu xs" style="background:none;border:none;color:var(--mu);text-decoration:underline;cursor:pointer">إعادة تعيين كلمة المرور للمالكة ↺</button></div>
   </form>`;
 }
-function ownerLogin(){if(isOwner()){go('eilan://admin');return}openModal(`<div class="mh"><span>👑 حساب مالكة الموقع</span><button class="icon-btn" data-act="closemodal">${I.x}</button></div>${ownerFormHTML()}`)}
+function ownerLogin(direct){if(isOwner()){go('eilan://admin');return}openModal(`<div class="mh"><span>👑 حساب مالكة الموقع</span><button class="icon-btn" data-act="closemodal">${I.x}</button></div>${ownerFormHTML()}`);if(direct){const form=$('#modal .own-form');if(form)form.dataset.direct='1';setTimeout(()=>{const i=$('#modal .own-form [name=pw]');if(i)i.focus()},80)}}
 function ownerSetup(e){
   e.preventDefault();
   const d=Object.fromEntries(new FormData(e.target));
@@ -6887,7 +6887,7 @@ function ownerSetup(e){
   rerender();
 }
 function ownerSubmit(e){e.preventDefault();const d=Object.fromEntries(new FormData(e.target));const o=S.owner;if(!o)return;const v=kdf(String(d.pw).trim(),o.salt),v2=kdf(String(d.pw).trim().toUpperCase(),o.salt);
-  if(v===o.hash||v2===o.rhash){setSession(!!d.rem);applyOwnerUI();closeModal();toast('👑 أهلاً بعودتك — وضع المالك مفعّل');rerender();try{processQueue()}catch(_){}}
+  if(v===o.hash||v2===o.rhash){const direct=e.target.dataset.direct==='1';setSession(!!d.rem);applyOwnerUI();closeModal();toast('👑 أهلاً بعودتك — وضع المالك مفعّل');if(direct)go('eilan://admin');else rerender();try{processQueue()}catch(_){}}
   else{toast('❌ كلمة المرور غير صحيحة','err');const pi=e.target.querySelector('[name=pw]');if(pi){pi.value='';pi.focus()}}}
 function ownerLogout(){window.__ownerMem=null;try{stS(sessionStorage,null)}catch(e){}try{stS(localStorage,null)}catch(e){}applyOwnerUI();toast('🔓 تم تسجيل الخروج من وضع المالك');
   const pg=parse(curUrl()).page;if(pg==='admin'||pg==='team')go('eilan://home');else rerender()}
@@ -7000,7 +7000,7 @@ document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.shiftKey&&(
   const xp=$('.xp-chip');if(xp)xp.insertAdjacentHTML('beforebegin','<button class="owner-chip own-only" data-go="eilan://admin" title="وضع المالك مفعّل">👑 <span>المالك</span></button>');
   const _r=render;render=function(){applyOwnerUI();_r()};
   /* no public owner banner — the owner enters privately via eilan://owner or the #owner link */
-  if(location.hash==='#owner'){try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}setTimeout(ownerLogin,600)}
+  if(location.hash==='#owner'){try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}setTimeout(()=>ownerLogin(true),600)}
 })();
 
 /* ================= SALLA LINK =================

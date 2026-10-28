@@ -295,9 +295,10 @@ label.f{display:block;font-size:12.5px;color:var(--mu);margin-bottom:6px;font-we
 .books-hero h1{font-size:clamp(28px,4vw,42px);font-weight:900;margin:7px 0 10px}
 .books-hero p{max-width:680px;color:var(--mu);line-height:1.9}
 .books-hero-acts{display:flex;gap:9px;flex-wrap:wrap;margin-top:18px}
-.books-tabs{display:flex;gap:9px;flex-wrap:wrap}.books-tabs .btn,.books-hero-acts>.btn{min-height:46px}
-.books-tabs .section-icon{width:20px;height:20px;flex:0 0 auto}.books-panel{min-width:0}
-@media(max-width:520px){.books-tabs{display:grid;grid-template-columns:1fr;width:100%}.books-tabs .btn,.books-hero-acts>.btn{width:100%}}
+.books-jumps{display:flex;gap:9px;flex-wrap:wrap}.books-jumps .btn,.books-section-action{min-height:46px}
+.books-jumps .section-icon{width:20px;height:20px;flex:0 0 auto}.books-panel{min-width:0}
+@media(max-width:520px){.books-jumps{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%}.books-jumps .btn{width:100%;padding-inline:10px;font-size:12px}}
+@media(max-width:360px){.books-jumps{grid-template-columns:1fr}}
 .books-hero-art{min-height:210px;display:grid;place-items:center;position:relative;overflow:hidden}
 .books-orbit{position:absolute;width:200px;aspect-ratio:1;border:1px dashed rgba(85,184,124,.45);border-radius:50%;animation:spin 28s linear infinite}
 .books-cover{width:142px;height:174px;border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:white;background:linear-gradient(145deg,#c9a54e,#173422 65%,#10251e);border:1px solid rgba(255,255,255,.3);box-shadow:0 25px 50px rgba(0,0,0,.4);rotate:-7deg;z-index:1}
@@ -3533,7 +3534,7 @@ P.home={icon:`<img class="tab-brand" src="${LOGO}" alt="">`,title:()=>'الرئ�
    ${[['products','product','Products','منتجات','مخططات، قوالب، خطوط، خلفيات وملصقات رقمية.','#c9a54e','eilan://store?cat=products'],
       ['experiences','experiences','Experiences','تجارب','أصوات تركيز وجلسات غامرة تعزلك عن الروتين.','#55b87c','eilan://store?cat=experiences'],
       ['entertainment','play','Entertainment','ترفيه','ألعاب، تحديات، وغرف هروب جماعية.','#e3c878','eilan://play'],
-      ['books','coloring','BOOKS & LEARNING','دفاتر التلوين وكتب','دفاتر تلوين ودورات وملفات تعلّم في مكان واحد.','#d8b65c','eilan://books']]
+      ['books','coloring','BOOKS & LEARNING','دفاتر التلوين وكتب','دفاتر تلوين وكتب وفيديو ومحتوى تعليمي في مكان واحد.','#d8b65c','eilan://books']]
      .map(x=>`<div class="pillar" style="--c:${x[5]}" data-go="${x[6]}"><div class="pe">${sectionIcon(x[1],['entertainment','learning'].includes(x[0])?'portal':'circle')}</div><h3><small>${x[2]}</small>${x[3]}</h3><p>${x[4]}</p><span class="go">←</span></div>`).join('')}
   </section>
   ${marqueeHTML()}
@@ -3546,7 +3547,7 @@ P.home={icon:`<img class="tab-brand" src="${LOGO}" alt="">`,title:()=>'الرئ�
   ${typeof TP_VIDS!=='undefined'?`<section class="sec hv-sec"><div class="hv-head"><div><div class="eyebrow">EILAN MOTION 3D</div><h2>قوالب فيديو <span class="grad-t">موشن 3D</span></h2><p class="mu">نفس الفكرة والحركة… بموضوعك أنت. اختر الفيديو واطلبه باسم مشروعك وصورك.</p></div><a class="btn sm g" href="#" data-go="eilan://templates">كل القوالب ←</a></div><div class="hv-grid">${TP_VIDS.map(v=>`<a class="hv-card" href="#" data-go="eilan://templates" data-hv="${v.id}"><video src="${v.src}" poster="${v.poster}" muted loop playsinline autoplay preload="metadata" disableremoteplayback disablepictureinpicture></video><span>${esc(v.n.split('—')[0].trim())}<small>موشن 3D · ${v.price} ر.س</small></span></a>`).join('')}</div></section>`:''}
   <section class="sec"><div class="sec-h"><div><div class="eyebrow">Trending now</div><h2>🔥 الأكثر رواجاً في المتجر</h2></div><a data-go="eilan://store">عرض كل المنتجات ←</a></div><div class="pgrid">${top.map(pcard).join('')}</div></section>
   <section class="sec"><div class="sec-h"><div><div class="eyebrow">Portals</div><h2>🌀 بوابات العالم الرقمي</h2></div></div>
-   <div class="portals">${[['ai','Eilan AI','اسأل عن أي منتج أو تصميم أو معلومة','eilan://ai'],['wiki','EilanPedia','موسوعة معرفية يمكنك الإضافة إليها','eilan://wiki'],['coloring','دفاتر التلوين وكتب','دفاتر تلوين ودورات وملفات تعلّم في مكان واحد.','eilan://books'],['templates','قوالب جاهزة','قوالب احترافية متحركة — أو اطلب تصميمك','eilan://templates'],['destinations','وجهاتي','المدن والعالم والأماكن والخرائط وجداولك','eilan://places'],['community','مجتمع Westred','سيرفرات ديسكورد للألعاب والتصميم والدراسة','eilan://community'],['team','الفريق التقني','أعطِ الأوامر لفريقك لتطوير الموقع','eilan://team']]
+   <div class="portals">${[['ai','Eilan AI','اسأل عن أي منتج أو تصميم أو معلومة','eilan://ai'],['wiki','EilanPedia','موسوعة معرفية يمكنك الإضافة إليها','eilan://wiki'],['coloring','دفاتر التلوين وكتب','دفاتر تلوين وكتب وفيديو ومحتوى تعليمي في مكان واحد.','eilan://books'],['templates','قوالب جاهزة','قوالب احترافية متحركة — أو اطلب تصميمك','eilan://templates'],['destinations','وجهاتي','المدن والعالم والأماكن والخرائط وجداولك','eilan://places'],['community','مجتمع Westred','سيرفرات ديسكورد للألعاب والتصميم والدراسة','eilan://community'],['team','الفريق التقني','أعطِ الأوامر لفريقك لتطوير الموقع','eilan://team']]
      .map(x=>`<div class="portal card" data-go="${x[3]}"><div class="pi">${sectionIcon(x[0],x[3]==='eilan://books'?'circle':'portal')}</div><div><h4>${x[1]}</h4><p>${x[2]}</p></div></div>`).join('')}</div></section>
   <section class="sec stats">${[[S.products.length,'منتج رقمي'],[S.wiki.length,'مقالة معرفية'],[S.places.length,'مكان على الخريطة'],[S.servers.length,'سيرفر ديسكورد']].map(s=>`<div class="stat card"><b class="grad-t">${s[0]}</b><span>${s[1]}</span></div>`).join('')}</section>
   ${footer()}`},
@@ -3563,7 +3564,7 @@ function journeyHTML(){
   const P=[['product','PRODUCTS','منتجات رقمية','مخططات، قوالب، خطوط، خلفيات وملصقات بطابع نيون.','eilan://store?cat=products','#c9a54e'],
     ['experiences','EXPERIENCES','تجارب غامرة','أصوات تركيز وجلسات بصرية تعزلك عن الروتين.','eilan://store?cat=experiences','#55b87c'],
     ['play','ENTERTAINMENT','ترفيه وتحديات','ألعاب، غرف هروب، وتحديات تكسبك XP.','eilan://play','#e3c878'],
-    ['coloring','BOOKS & LEARNING','دفاتر التلوين وكتب','دفاتر تلوين ودورات وملفات تعلّم في مكان واحد.','eilan://books','#d8b65c'],
+    ['coloring','BOOKS & LEARNING','دفاتر التلوين وكتب','دفاتر تلوين وكتب وفيديو ومحتوى تعليمي في مكان واحد.','eilan://books','#d8b65c'],
     ['community','COMMUNITY','مجتمع Westred','سيرفرات ديسكورد للألعاب والتصميم والمذاكرة.','eilan://community','#5865f2'],
     ['team','TECH TEAM','الفريق التقني','أعطِ الأوامر لفريقك ليطوّر العالم باستمرار.','eilan://team','#55b87c']];
   return `<section class="hscroll"><div class="hs-sticky"><div class="hs-head"><div><div class="eyebrow">Scroll to travel ←</div><h2>🚀 رحلة داخل عالم إيلان</h2></div><div class="hs-bar"><i></i></div></div>
@@ -14416,30 +14417,47 @@ if(!document.getElementById('notebookStyles')){
 /* ================= COLORING BOOKS + LEARNING · ONE SECTION ================= */
 Object.assign(I18N_EN,{
   'دفاتر التلوين وكتب':'Coloring Books & Learning',
-  'دفاتر تلوين ودورات وملفات تعلّم في مكان واحد.':'Coloring books, courses and learning files in one place.',
-  'دفاتر التلوين وكتب — إيلان دول':'Coloring Books & Learning — EILAN DOLL'
+  'دفاتر تلوين وكتب وفيديو ومحتوى تعليمي في مكان واحد.':'Coloring notebooks, books, videos and learning content in one place.',
+  'دفاتر التلوين وكتب — إيلان دول':'Coloring Books & Learning — EILAN DOLL',
+  'كتب وملفات':'Books & files',
+  'فيديو تعليمي':'Educational video',
+  'دروس ودورات معتمدة وكتب وملفات تعليمية.':'Lessons, accredited courses, books and learning files.',
+  'فيديوهات تعليمية قيد الإعداد':'Educational videos coming soon',
+  'ستظهر هنا الفيديوهات التعليمية عند إضافتها إلى الدروس.':'Educational videos will appear here when added to lessons.'
 });
 const coloringBooksPage=P.books,learningAcademyPage=P.learn;
 const asAcademyRoute=r=>Object.assign({},r,{page:'books',q:Object.assign({},r.q||{},{view:'academy'})});
-function coloringBooksBody(r){const x=coloringBooksPage.html(r),i=x.indexOf('<section class="sec">');return i<0?x:x.slice(i)}
+function coloringBooksBody(r){const x=coloringBooksPage.html(r),i=x.indexOf('<section class="sec">');return i<0?x:x.slice(i).replace('<section class="sec">','<section class="sec" id="books-coloring">')}
 function learningAcademyBody(r){const x=learningAcademyPage.html(r),src=x.indexOf('<section class="src-strip'),level=x.indexOf('<div class="level-card'),i=src>=0?src:level;return i<0?x:x.slice(i)}
-const unifiedBooksPage={icon:'🖍️',title:()=>'دفاتر التلوين وكتب',html:r=>{
-  const view=r.q&&r.q.view==='academy'?'academy':'coloring',academy=view==='academy';
-  return `<section class="books-hero books-unified-hero card"><div><div class="eyebrow">EILAN BOOKS & LEARNING</div>
+function educationalVideosHTML(){const videos=[];S.courses.forEach(c=>(c.lessons||[]).forEach((l,i)=>{if(String(l.v||'').trim())videos.push({c,l,i})}));
+  return `<section class="sec" id="books-video"><div class="sec-h"><div><div class="eyebrow">EDUCATIONAL VIDEOS</div><h2>${sectionIcon('templates','circle')} فيديو تعليمي</h2></div></div>
+  ${videos.length?`<div class="cgrid">${videos.map(({c,l,i})=>`<div class="course card" data-act="bookslesson" data-c="${c.id}" data-i="${i}"><div class="ch" style="background:linear-gradient(135deg,${c.c[0]},${c.c[1]})">▶</div><div class="cb"><span class="tag">فيديو تعليمي</span><h4>${esc(l.t)}</h4><p>${esc(c.title)}</p></div></div>`).join('')}</div>`:`<div class="book-empty card"><div class="be">▶</div><b>فيديوهات تعليمية قيد الإعداد</b><p>ستظهر هنا الفيديوهات التعليمية عند إضافتها إلى الدروس.</p></div>`}</section>`}
+function booksJump(to){const ids={coloring:'books-coloring',files:'eduSec',academy:'books-academy',video:'books-video'},el=document.getElementById(ids[to]||ids.coloring);if(!el)return;const reduce=document.body.classList.contains('no-motion')||matchMedia('(prefers-reduced-motion: reduce)').matches,view=$('#view');if(reduce&&view){const top=el.getBoundingClientRect().top-view.getBoundingClientRect().top+view.scrollTop;view.scrollTo({top,behavior:'instant'})}else el.scrollIntoView({behavior:'smooth',block:'start'})}
+const unifiedBooksPage={icon:'🖍️',title:()=>'دفاتر التلوين وكتب',html:()=>`
+  <section class="books-hero books-unified-hero card"><div><div class="eyebrow">EILAN BOOKS & LEARNING</div>
     <h1>${sectionIcon('coloring','circle')} دفاتر التلوين <span class="grad-t">وكتب</span></h1>
-    <p>دفاتر تلوين ودورات وملفات تعلّم في مكان واحد.</p>
-    <div class="books-hero-acts"><div class="books-tabs" role="tablist" aria-label="دفاتر التلوين وكتب">
-      <button class="btn ${academy?'':'g'}" role="tab" aria-selected="${!academy}" aria-controls="books-panel" data-act="booksview" data-v="coloring">${sectionIcon('coloring','circle')} دفاتر التلوين</button>
-      <button class="btn ${academy?'g':''}" role="tab" aria-selected="${academy}" aria-controls="books-panel" data-act="booksview" data-v="academy">${sectionIcon('academy','circle')} أكاديمية التعلّم</button>
-    </div>${academy?`<button class="btn" data-act="newcourse">${I.plus} كورس جديد</button>`:''}</div>
-  </div><div class="books-hero-art" aria-hidden="true"><span class="books-orbit"></span><div class="books-cover"><b>${sectionIcon('coloring','circle')}</b><small>EILAN DOLL</small></div><div class="books-cover-mini">${sectionIcon('academy','circle')}</div></div></section>
-  <div class="books-panel ${view}" id="books-panel" role="tabpanel">${academy?learningAcademyBody(r):coloringBooksBody(r)}</div>`},
-  mount:r=>{const academy=r.q&&r.q.view==='academy',pg=academy?learningAcademyPage:coloringBooksPage;if(pg.mount)pg.mount(r)}
+    <p>دفاتر تلوين وكتب وفيديو ومحتوى تعليمي في مكان واحد.</p>
+    <div class="books-hero-acts books-jumps" aria-label="دفاتر التلوين وكتب">
+      <button class="btn" data-act="booksjump" data-to="coloring">${sectionIcon('coloring','circle')} دفاتر التلوين</button>
+      <button class="btn" data-act="booksjump" data-to="files">${sectionIcon('notebook','circle')} كتب وملفات</button>
+      <button class="btn" data-act="booksjump" data-to="academy">${sectionIcon('academy','circle')} أكاديمية التعلّم</button>
+      <button class="btn" data-act="booksjump" data-to="video">${sectionIcon('templates','circle')} فيديو تعليمي</button>
+    </div>
+  </div><div class="books-hero-art" aria-hidden="true"><span class="books-orbit"></span><div class="books-cover"><b>${sectionIcon('coloring','circle')}</b><small>EILAN DOLL</small></div><div class="books-cover-mini">${sectionIcon('notebook','circle')}</div></div></section>
+  <div class="books-panel">${coloringBooksBody()}
+    <section class="sec books-academy-section" id="books-academy"><div class="sec-h"><div><div class="eyebrow">EILAN LEARNING</div><h2>${sectionIcon('academy','circle')} أكاديمية التعلّم</h2><p>دروس ودورات معتمدة وكتب وملفات تعليمية.</p></div><button class="btn g books-section-action" data-act="newcourse">${I.plus} كورس جديد</button></div>
+      ${learningAcademyBody()}
+    </section>
+    ${educationalVideosHTML()}
+  </div>`,
+  mount:r=>{if(coloringBooksPage.mount)coloringBooksPage.mount(r);if(learningAcademyPage.mount)learningAcademyPage.mount(r);if(r.q&&r.q.sec==='edu')setTimeout(()=>booksJump('files'),100);else if(r.q&&r.q.view==='academy')setTimeout(()=>booksJump('academy'),90)}
 };
 P.books=unifiedBooksPage;
 /* A safety alias for restored in-app history; normal old links canonicalize in resolve/render. */
 P.learn={icon:unifiedBooksPage.icon,title:unifiedBooksPage.title,html:r=>unifiedBooksPage.html(asAcademyRoute(r)),mount:r=>unifiedBooksPage.mount(asAcademyRoute(r))};
-ACT.booksview=d=>{const r=parse(curUrl()),q=new URLSearchParams(r.q||{}),academy=d.v==='academy';q.delete('sec');if(academy)q.set('view','academy');else q.delete('view');go('eilan://books'+(q.toString()?'?'+q.toString():''))};
+ACT.booksjump=d=>booksJump(d.to);
+ACT.booksview=d=>booksJump(d.v==='academy'?'academy':'coloring');
+ACT.bookslesson=d=>{const c=S.courses.find(x=>x.id===d.c);if(!c)return;lessonIdx=Math.max(0,Math.min((c.lessons||[]).length-1,+d.i||0));go('eilan://learn/'+c.id)};
 
 applyMode();applyLang();
 </script>

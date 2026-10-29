@@ -3733,6 +3733,7 @@ P.learn={icon:'📚',title:()=>'أكاديمية التعلّم',html:()=>`
   <div class="page-h"><div><div class="eyebrow">Eilan Academy</div><h1>${sectionIcon('academy')} أكاديمية <span class="grad-t">التعلّم</span></h1><p>دروس قصيرة وممتعة — كل درس تكمله يمنحك 20 XP تستبدلها بخصومات وألقاب.</p></div><div style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn" data-go="eilan://books">📒 كتب ودفاتر</a><button class="btn g" data-act="newcourse">${I.plus} كورس جديد</button></div></div>
   <div class="level-card card"><div class="lv">${level()}</div><div style="flex:1"><b style="font-size:18px">المستوى ${level()} · ${titleBadge(myTitle())}</b><div class="mu" style="font-size:13px;margin:4px 0 10px">${S.xp} XP · باقي ${100-S.xp%100} XP للمستوى التالي</div><div class="prog"><i style="width:${S.xp%100}%"></i></div></div><button class="btn sm lv-rw" data-go="eilan://rewards">🏆 المكافآت والمتصدرين</button></div>
   <div class="cgrid">${S.courses.map(c=>{const d=c.lessons.filter((l,i)=>S.done[c.id+':'+i]).length;return `<div class="course card" data-go="eilan://learn/${c.id}"><div class="ch" style="background:linear-gradient(135deg,${c.c[0]},${c.c[1]})">${c.icon}</div><div class="cb"><span class="tag">${c.level}</span><span class="tag">${c.lessons.length} دروس</span>${coursePrice(c)?`<span class="tag ${courseOwned(c)?'':'paid'}">${courseOwned(c)?'✓ مفتوح':coursePrice(c)+' ر.س'}</span>`:'<span class="tag">مجاني</span>'}<h4>${esc(c.title)}</h4><p>${esc(c.desc)}</p><div class="prog"><i style="width:${d/Math.max(1,c.lessons.length)*100}%"></i></div><div class="mu" style="font-size:12px;margin-top:6px">${d}/${c.lessons.length} مكتمل</div></div></div>`}).join('')}</div>`};
+const COLORING_PDF_URL=(()=>{try{return new URL('../coloring/Eilan-Doll-Coloring-Book.pdf',new URL(LOGO,document.baseURI)).href}catch(e){return '/coloring/Eilan-Doll-Coloring-Book.pdf'}})();
 P.books={icon:'🖍️',title:()=>'دفاتر التلوين — إيلان دول',html:()=>`
   <section class="books-hero card"><div><div class="eyebrow">EILAN COLORING BOOKS</div>
     <h1>${sectionIcon('coloring','circle')} دفاتر التلوين <span class="grad-t">إيلان</span></h1>
@@ -3740,7 +3741,7 @@ P.books={icon:'🖍️',title:()=>'دفاتر التلوين — إيلان دو
   </div><div class="books-hero-art" aria-hidden="true"><span class="books-orbit"></span><div class="books-cover"><b>${sectionIcon('coloring','circle')}</b><small>EILAN DOLL</small></div><div class="books-cover-mini">${sectionIcon('coloring','circle')}</div></div></section>
   <section class="sec"><div class="coloring-books"><article class="coloring-book card" data-coloring-book="jujutsu-kaisen">
     <div class="coloring-book-cover" aria-hidden="true"><small>EILAN DOLL</small>${sectionIcon('coloring','circle')}<b>JUJUTSU KAISEN<br>COLORING BOOK</b><span>6 PAGES · A4</span></div>
-    <div class="coloring-book-body"><div class="eyebrow">EILAN DOLL · COLORING BOOK</div><h3>دفتر تلوين Jujutsu Kaisen</h3><p>6 صفحات تلوين بخطوط واضحة، جاهزة للطباعة أو التلوين الرقمي.</p><div class="coloring-book-meta"><span class="tag">PDF</span><span class="tag">6 صفحات</span><span class="tag" dir="ltr">A4 · 300 DPI</span></div><div class="coloring-book-actions"><a class="btn g" href="https://eilan-doll.vercel.app/coloring/book/Eilan-Doll-Coloring-Book.pdf" target="_blank" rel="noopener" aria-label="فتح دفتر تلوين Jujutsu Kaisen بصيغة PDF">${I.ext} فتح دفتر التلوين</a></div></div>
+    <div class="coloring-book-body"><div class="eyebrow">EILAN DOLL · COLORING BOOK</div><h3>دفتر تلوين Jujutsu Kaisen</h3><p>6 صفحات أبيض وأسود من الصور الأصلية، مع اسم كل شخصية أسفل صفحتها.</p><div class="coloring-book-meta"><span class="tag">PDF</span><span class="tag">6 صفحات</span><span class="tag">أبيض وأسود</span></div><div class="coloring-book-actions"><a class="btn g" href="${COLORING_PDF_URL}" target="_blank" rel="noopener" aria-label="فتح دفتر تلوين Jujutsu Kaisen بصيغة PDF">${I.ext} فتح دفتر التلوين</a></div></div>
   </article></div></section>`};
 const coursePrice=c=>+c.price||0;
 const courseProduct=c=>S.products.find(p=>p.courseId===c.id);
@@ -14442,8 +14443,9 @@ Object.assign(I18N_EN,{
   'ستظهر هنا الفيديوهات التعليمية عند إضافتها إلى الدروس.':'Educational videos will appear here when added to lessons.',
   'دفاتر تلوين من عالم إيلان دول، جاهزة للفتح والطباعة والتلوين الرقمي.':'EILAN DOLL coloring books, ready to open, print and color digitally.',
   'دفتر تلوين Jujutsu Kaisen':'Jujutsu Kaisen Coloring Book',
-  '6 صفحات تلوين بخطوط واضحة، جاهزة للطباعة أو التلوين الرقمي.':'6 coloring pages with clear line art, ready to print or color digitally.',
+  '6 صفحات أبيض وأسود من الصور الأصلية، مع اسم كل شخصية أسفل صفحتها.':'6 black-and-white pages from the original images, with character names below.',
   '6 صفحات':'6 pages',
+  'أبيض وأسود':'Black & white',
   'فتح دفتر التلوين':'Open coloring book',
   'فتح دفتر تلوين Jujutsu Kaisen بصيغة PDF':'Open Jujutsu Kaisen coloring book PDF'
 });

@@ -60,3 +60,26 @@ python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
 1. Put the cleaned line-art PNG in `assets/`.
 2. Add an entry to `CHARACTERS` in both `src/plain.py` and `src/book.py`.
 3. Re-run the two commands above.
+
+## Interactive web book
+
+`coloring-book.html` (repo root) is the same book as a self-contained web app:
+page-by-page flipping, in-browser colouring, and no server needed.
+
+- **Built from** `src/build_web.py` — inlines every page as a WebP data URI, so the
+  single HTML file works offline, when saved, or when embedded on another site.
+- **Colouring** — bucket fill works on the same ink barrier the renderer uses
+  (one-pixel dilated), so colour never leaks past the outlines; brush and eraser
+  are freehand. Undo/redo, clear, export PNG, print.
+- **Persistence** — each page's paint is kept in `localStorage`, so a reload keeps
+  the artwork. Canvases for untouched pages are released as you turn away.
+- **Served at** `/coloring-book.html`; the site's 🖍️ *دفاتر التلوين* page embeds it.
+
+Rebuild after changing the pages:
+
+```bash
+.venv/bin/python src/plain.py        # page PNGs
+.venv/bin/python src/book.py         # PDF + covers
+.venv/bin/python src/build_web.py    # coloring-book.html
+.venv/bin/python src/pdf_links.py    # footer link on every PDF page
+```

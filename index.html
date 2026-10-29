@@ -3411,12 +3411,61 @@ P.learn={icon:'📚',title:()=>'أكاديمية التعلّم',html:()=>`
   <div class="page-h"><div><div class="eyebrow">Eilan Academy</div><h1>📚 أكاديمية <span class="grad-t">التعلّم</span></h1><p>دروس قصيرة وممتعة — كل درس تكمله يمنحك 20 XP تستبدلها بخصومات وألقاب.</p></div><div style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn" data-go="eilan://books">📒 كتب ودفاتر</a><button class="btn g" data-act="newcourse">${I.plus} كورس جديد</button></div></div>
   <div class="level-card card"><div class="lv">${level()}</div><div style="flex:1"><b style="font-size:18px">المستوى ${level()} · ${titleBadge(myTitle())}</b><div class="mu" style="font-size:13px;margin:4px 0 10px">${S.xp} XP · باقي ${100-S.xp%100} XP للمستوى التالي</div><div class="prog"><i style="width:${S.xp%100}%"></i></div></div><button class="btn sm lv-rw" data-go="eilan://rewards">🏆 المكافآت والمتصدرين</button></div>
   <div class="cgrid">${S.courses.map(c=>{const d=c.lessons.filter((l,i)=>S.done[c.id+':'+i]).length;return `<div class="course card" data-go="eilan://learn/${c.id}"><div class="ch" style="background:linear-gradient(135deg,${c.c[0]},${c.c[1]})">${c.icon}</div><div class="cb"><span class="tag">${c.level}</span><span class="tag">${c.lessons.length} دروس</span>${coursePrice(c)?`<span class="tag ${courseOwned(c)?'':'paid'}">${courseOwned(c)?'✓ مفتوح':coursePrice(c)+' ر.س'}</span>`:'<span class="tag">مجاني</span>'}<h4>${esc(c.title)}</h4><p>${esc(c.desc)}</p><div class="prog"><i style="width:${d/Math.max(1,c.lessons.length)*100}%"></i></div><div class="mu" style="font-size:12px;margin-top:6px">${d}/${c.lessons.length} مكتمل</div></div></div>`}).join('')}</div>`};
-P.books={icon:'🖍️',title:()=>'دفاتر التلوين — إيلان دول',html:()=>`
+P.books={icon:'🖍️',title:()=>'دفاتر التلوين — إيلان دول',html:()=>{
+  const BOOK=window.EILAN_BOOK||{href:'/coloring-book.html',pdf:'/coloring/book/Eilan-Doll-Coloring-Book.pdf',price:0,product:null};
+  const prod=BOOK.product&&S.products?S.products.find(p=>p.id===BOOK.product):null;
+  const owned=!prod||isOwner()||!!(S.owned&&S.owned[prod.id]);
+  const openBtn=owned
+    ? `<a class="btn g" href="${BOOK.href}" target="_blank" rel="noopener">🖍️ افتح الدفتر التفاعلي</a>`
+    : `<a class="btn g" href="${esc(extUrl(prod)||'#'+ 'store')}" ${extUrl(prod)?'target="_blank" rel="noopener"':''}>🛍️ اشترِ الدفتر — ${BOOK.price||prod.price||0} ر.س</a>`;
+  return `
   <section class="books-hero card"><div><div class="eyebrow">EILAN COLORING BOOKS</div>
-    <h1>🖍️ دفاتر التلوين <span class="grad-t">إيلان</span></h1>
-    <p>قسم مخصص لدفاتر التلوين من عالم إيلان دول. لا توجد صفحات أو دفاتر منشورة هنا الآن.</p>
+    <h1>🖍️ دفتر التلوين <span class="grad-t">إيلان</span></h1>
+    <p>دفتر تفاعلي يُفتح صفحة صفحة كأنه دفتر حقيقي — لوّن داخل المتصفح بقلم أو تعبئة، بدون تحميل أي برنامج.</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px">
+      ${openBtn}
+      <a class="btn" href="${BOOK.pdf}" download>⬇️ تحميل نسخة PDF</a>
+    </div>
   </div><div class="books-hero-art" aria-hidden="true"><span class="books-orbit"></span><div class="books-cover"><b>🖍️</b><small>EILAN DOLL</small></div><div class="books-cover-mini">✏️</div></div></section>
-  <section class="sec"><div class="book-empty card"><div class="be">🖍️</div><b>دفاتر التلوين قيد الإعداد</b><p>سيُضاف المحتوى هنا لاحقاً.</p></div></section>`};
+
+  <section class="sec"><div class="card" style="padding:16px">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:12px">
+      <div><div class="eyebrow">PREVIEW</div><b style="font-size:18px">جرّب الدفتر الآن</b></div>
+      <a class="btn sm" href="${BOOK.href}" target="_blank" rel="noopener">فتح بالحجم الكامل ↗</a>
+    </div>
+    <div id="bookFrameWrap" style="position:relative;border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,.12);background:#05030a">
+      <button id="bookFrameBtn" class="btn g" style="position:absolute;inset:0;width:100%;height:100%;border-radius:0;font-size:16px">
+        ▶ اضغط لتشغيل الدفتر التفاعلي
+      </button>
+    </div>
+    <p class="mu" style="font-size:12.5px;margin:10px 0 0">
+      ٨ صفحات · A4 · يعمل على الجوال والآيباد · حفظ تلقائي لتلوينك · يمكن حفظ الصورة بعد التلوين
+    </p>
+  </div></section>
+
+  <section class="sec"><div class="card" style="padding:16px">
+    <div class="eyebrow">EMBED</div>
+    <b style="font-size:16px">ضمّن الدفتر في أي موقع آخر</b>
+    <p class="mu" style="font-size:13px;margin:6px 0 10px">الملف مستقل تمامًا — الصور والخطوط داخله — فيعمل حتى لو لصقته في موقع آخر أو أرسلته كملف واحد.</p>
+    <textarea id="bookEmbed" readonly style="width:100%;height:74px;border-radius:10px;padding:10px;background:#0b0718;color:#c4b5fd;border:1px solid rgba(255,255,255,.14);font-family:monospace;font-size:12px;resize:vertical">&lt;iframe src="${location.origin}${BOOK.href}" style="width:100%;aspect-ratio:1240/1754;border:0;border-radius:12px" allowfullscreen&gt;&lt;/iframe&gt;</textarea>
+    <button class="btn sm" data-act="copyembed" style="margin-top:8px">📋 نسخ الكود</button>
+  </div></section>`;
+}};
+/* ---- coloring book: lazy iframe + embed copy ---- */
+P.books.mount=()=>{
+  const b=$('#bookFrameBtn'), w=$('#bookFrameWrap');
+  if(b&&w)b.onclick=()=>{
+    const BOOK=window.EILAN_BOOK||{href:'/coloring-book.html'};
+    w.innerHTML=`<iframe src="${BOOK.href}" title="دفتر التلوين" style="width:100%;height:min(78vh,900px);border:0;display:block;background:#05030a" allow="fullscreen" allowfullscreen></iframe>`;
+  };
+};
+ACT.copyembed=()=>{
+  const t=$('#bookEmbed'); if(!t)return;
+  t.select(); t.setSelectionRange(0,99999);
+  const done=()=>typeof toast==='function'?toast('تم نسخ كود التضمين'):0;
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t.value).then(done,()=>{document.execCommand('copy');done()})}
+  else{try{document.execCommand('copy');done()}catch(e){}}
+};
 const coursePrice=c=>+c.price||0;
 const courseProduct=c=>S.products.find(p=>p.courseId===c.id);
 function courseOwned(c){if(!c)return false;if(isOwner()||!coursePrice(c)||S.owned['c:'+c.id])return true;const p=courseProduct(c);return !!(p&&S.owned[p.id])}

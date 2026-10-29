@@ -309,6 +309,13 @@ label.f{display:block;font-size:12.5px;color:var(--mu);margin-bottom:6px;font-we
 .book-benefit .bi{font-size:28px;flex:none}.book-benefit b{display:block;margin:2px 0 4px}.book-benefit p{font-size:13px;color:var(--mu);line-height:1.7}
 .book-empty{grid-column:1/-1;padding:30px;text-align:center;border:1px dashed var(--bd2);border-radius:20px;background:rgba(201,165,78,.055)}
 .book-empty .be{font-size:38px;margin-bottom:8px}.book-empty p{color:var(--mu);margin-top:6px}
+.coloring-books{display:grid;gap:18px}.coloring-book{display:grid;grid-template-columns:170px minmax(0,1fr);gap:24px;align-items:center;padding:24px;overflow:hidden;background:radial-gradient(circle at 12% 100%,rgba(85,184,124,.13),transparent 45%),radial-gradient(circle at 90% 0,rgba(201,165,78,.13),transparent 45%),var(--card)}
+.coloring-book-cover{width:170px;aspect-ratio:210/297;padding:17px 14px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;gap:12px;border:1px solid rgba(227,200,120,.42);border-radius:14px;background:linear-gradient(150deg,#c9a54e 0,#31523b 24%,#10251c 70%,#08110d 100%);box-shadow:0 22px 42px -18px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.18);color:#fffdf8;text-align:center;transform:rotate(-2deg)}
+.coloring-book-cover .section-icon{width:50px;height:50px;color:#e3c878}.coloring-book-cover b{font:900 15px/1.45 var(--mono);letter-spacing:1px;direction:ltr}.coloring-book-cover small{font:700 9px/1.5 var(--mono);letter-spacing:2px;direction:ltr}.coloring-book-cover>span:last-child{font:700 8px var(--mono);letter-spacing:2px;color:#e3c878;direction:ltr}
+.coloring-book-body{min-width:0;display:flex;flex-direction:column;align-items:flex-start;justify-content:center}.coloring-book-body h3{margin:7px 0 8px;font-size:25px;line-height:1.4}.coloring-book-body p{margin:0 0 14px;color:var(--mu);line-height:1.8}.coloring-book-meta{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:17px}.coloring-book-actions{display:flex;gap:9px;flex-wrap:wrap}.coloring-book-actions .btn{min-height:44px}
+@media(max-width:520px){.coloring-book{grid-template-columns:105px minmax(0,1fr);gap:16px;padding:16px}.coloring-book-cover{width:105px;padding:11px 8px;border-radius:11px}.coloring-book-cover .section-icon{width:34px;height:34px}.coloring-book-cover b{font-size:10px}.coloring-book-cover small{font-size:7px;letter-spacing:1px}.coloring-book-cover>span:last-child{font-size:6px;letter-spacing:1px}.coloring-book-body h3{font-size:18px}.coloring-book-body p{font-size:12px}.coloring-book-actions .btn{padding-inline:12px;font-size:12px}}
+@media(max-width:380px){.coloring-book{grid-template-columns:1fr}.coloring-book-cover{width:120px;justify-self:center}.coloring-book-body{align-items:center;text-align:center}.coloring-book-meta,.coloring-book-actions{justify-content:center}}
+@media(prefers-reduced-motion:reduce){.coloring-book-cover{transform:none}}
 @media(max-width:760px){.books-hero{grid-template-columns:1fr}.books-hero-art{min-height:165px}.book-benefits{grid-template-columns:1fr}}
 
 /* ============ PRODUCTS ============ */
@@ -3729,9 +3736,12 @@ P.learn={icon:'📚',title:()=>'أكاديمية التعلّم',html:()=>`
 P.books={icon:'🖍️',title:()=>'دفاتر التلوين — إيلان دول',html:()=>`
   <section class="books-hero card"><div><div class="eyebrow">EILAN COLORING BOOKS</div>
     <h1>${sectionIcon('coloring','circle')} دفاتر التلوين <span class="grad-t">إيلان</span></h1>
-    <p>قسم مخصص لدفاتر التلوين من عالم إيلان دول. لا توجد صفحات أو دفاتر منشورة هنا الآن.</p>
+    <p>دفاتر تلوين من عالم إيلان دول، جاهزة للفتح والطباعة والتلوين الرقمي.</p>
   </div><div class="books-hero-art" aria-hidden="true"><span class="books-orbit"></span><div class="books-cover"><b>${sectionIcon('coloring','circle')}</b><small>EILAN DOLL</small></div><div class="books-cover-mini">${sectionIcon('coloring','circle')}</div></div></section>
-  <section class="sec"><div class="book-empty card"><div class="be">${sectionIcon('coloring','circle')}</div><b>دفاتر التلوين قيد الإعداد</b><p>سيُضاف المحتوى هنا لاحقاً.</p></div></section>`};
+  <section class="sec"><div class="coloring-books"><article class="coloring-book card" data-coloring-book="jujutsu-kaisen">
+    <div class="coloring-book-cover" aria-hidden="true"><small>EILAN DOLL</small>${sectionIcon('coloring','circle')}<b>JUJUTSU KAISEN<br>COLORING BOOK</b><span>6 PAGES · A4</span></div>
+    <div class="coloring-book-body"><div class="eyebrow">EILAN DOLL · COLORING BOOK</div><h3>دفتر تلوين Jujutsu Kaisen</h3><p>6 صفحات تلوين بخطوط واضحة، جاهزة للطباعة أو التلوين الرقمي.</p><div class="coloring-book-meta"><span class="tag">PDF</span><span class="tag">6 صفحات</span><span class="tag" dir="ltr">A4 · 300 DPI</span></div><div class="coloring-book-actions"><a class="btn g" href="https://eilan-doll.vercel.app/coloring/book/Eilan-Doll-Coloring-Book.pdf" target="_blank" rel="noopener" aria-label="فتح دفتر تلوين Jujutsu Kaisen بصيغة PDF">${I.ext} فتح دفتر التلوين</a></div></div>
+  </article></div></section>`};
 const coursePrice=c=>+c.price||0;
 const courseProduct=c=>S.products.find(p=>p.courseId===c.id);
 function courseOwned(c){if(!c)return false;if(isOwner()||!coursePrice(c)||S.owned['c:'+c.id])return true;const p=courseProduct(c);return !!(p&&S.owned[p.id])}
@@ -14429,7 +14439,13 @@ Object.assign(I18N_EN,{
   'دورات ودفاتر تلوين وكتب وملفات وفيديو تعليمي في مكان واحد.':'Courses, coloring notebooks, books, files and educational videos in one place.',
   'أكاديمية التعلّم — دورات ودفاتر تلوين وكتب | إيلان دول':'Learning Academy — Courses, Coloring Books & Files | EILAN DOLL',
   'فيديوهات تعليمية قيد الإعداد':'Educational videos coming soon',
-  'ستظهر هنا الفيديوهات التعليمية عند إضافتها إلى الدروس.':'Educational videos will appear here when added to lessons.'
+  'ستظهر هنا الفيديوهات التعليمية عند إضافتها إلى الدروس.':'Educational videos will appear here when added to lessons.',
+  'دفاتر تلوين من عالم إيلان دول، جاهزة للفتح والطباعة والتلوين الرقمي.':'EILAN DOLL coloring books, ready to open, print and color digitally.',
+  'دفتر تلوين Jujutsu Kaisen':'Jujutsu Kaisen Coloring Book',
+  '6 صفحات تلوين بخطوط واضحة، جاهزة للطباعة أو التلوين الرقمي.':'6 coloring pages with clear line art, ready to print or color digitally.',
+  '6 صفحات':'6 pages',
+  'فتح دفتر التلوين':'Open coloring book',
+  'فتح دفتر تلوين Jujutsu Kaisen بصيغة PDF':'Open Jujutsu Kaisen coloring book PDF'
 });
 const coloringBooksPage=P.books,learningAcademyPage=P.learn;
 const asAcademyRoute=r=>Object.assign({},r,{page:'books',q:Object.assign({},r.q||{},{view:'academy'})});

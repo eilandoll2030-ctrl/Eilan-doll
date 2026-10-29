@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>دفتر التلوين | EILAN DOLL</title>
+<meta name="description" content="دفتر تلوين إيلان دول — افتح الصفحات كأنها دفتر حقيقي ولوّنها مباشرة من المتصفح.">
+<meta name="theme-color" content="#05030a">
+<meta property="og:title" content="دفتر التلوين | EILAN DOLL">
+<meta property="og:description" content="دفتر تلوين تفاعلي — اقلب الصفحات ولوّنها من المتصفح.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Bebas+Neue&family=Poppins:wght@600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#05030a; --panel:#0c0918; --line:#241b3d;
+  --w:#f5f3ee; --mu:#a59cc0; --p:#8b5cf6; --g:#2de89a;
+  --paper:#ffffff;
+  --r:18px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  margin:0;background:var(--bg);color:var(--w);
+  font-family:Cairo,Tajawal,system-ui,-apple-system,"Segoe UI",sans-serif;
+  overflow:hidden;display:flex;flex-direction:column;
+  overscroll-behavior:none;
+}
+body::before{
+  content:"";position:fixed;inset:-20%;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(46% 38% at 18% 8%, rgba(139,92,246,.30), transparent 70%),
+    radial-gradient(42% 34% at 86% 92%, rgba(45,232,154,.16), transparent 70%),
+    radial-gradient(40% 40% at 50% 120%, rgba(139,92,246,.12), transparent 70%);
+  filter:blur(10px);
+}
+
+/* ---------- top bar ---------- */
+.bar{
+  position:relative;z-index:3;display:flex;align-items:center;gap:14px;
+  padding:10px 18px;border-bottom:1px solid var(--line);
+  background:rgba(8,5,16,.82);backdrop-filter:blur(14px);
+}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.brand b{
+  font-family:"Bebas Neue",Cairo,sans-serif;font-size:26px;letter-spacing:2.5px;
+  background:linear-gradient(100deg,#fff,#c4b5fd 55%,var(--g));
+  -webkit-background-clip:text;background-clip:text;color:transparent;line-height:1;
+}
+.brand small{display:block;color:var(--mu);font-size:11.5px;letter-spacing:.5px;margin-top:2px}
+.bar .sp{flex:1}
+.pager{
+  font-size:13px;color:var(--mu);background:rgba(255,255,255,.04);
+  border:1px solid var(--line);border-radius:999px;padding:7px 14px;white-space:nowrap
+}
+.pager b{color:var(--w);font-size:15px}
+.linkbtn{
+  display:inline-flex;align-items:center;gap:7px;text-decoration:none;
+  color:var(--mu);font-size:12.5px;border:1px solid var(--line);
+  border-radius:999px;padding:8px 14px;background:rgba(255,255,255,.03);
+  transition:.18s;white-space:nowrap
+}
+.linkbtn:hover{color:var(--w);border-color:var(--p);background:rgba(139,92,246,.14)}
+
+/* ---------- stage ---------- */
+.stage{
+  position:relative;z-index:2;flex:1;min-height:0;
+  display:flex;align-items:center;justify-content:center;
+  padding:14px 16px 6px;perspective:2200px;
+}
+.book{
+  position:relative;height:100%;max-height:100%;max-width:100%;
+  aspect-ratio:1240/1754;
+  border-radius:10px 4px 4px 10px;
+  background:linear-gradient(150deg,#221a33,#120d1f 60%,#0b0714);
+  padding:9px;box-shadow:
+    0 40px 90px -30px rgba(0,0,0,.9),
+    0 0 0 1px rgba(255,255,255,.07),
+    0 0 70px -20px rgba(139,92,246,.45);
+  transform-style:preserve-3d;
+}
+.stack{position:absolute;inset:9px;border-radius:4px 2px 2px 4px;background:#efece4;
+  box-shadow:0 0 0 1px rgba(0,0,0,.25) inset}
+.stack::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent 92%,rgba(0,0,0,.18))}
+
+.sheet{
+  position:absolute;inset:9px;border-radius:4px 2px 2px 4px;overflow:hidden;
+  background:var(--paper);transform-origin:right center;
+  backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  will-change:transform;
+  box-shadow:0 1px 0 rgba(0,0,0,.18), 0 0 0 1px rgba(0,0,0,.2);
+}
+.sheet canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
+.sheet.under{z-index:1}
+.sheet.top{z-index:2}
+.sheet.turn{transition:transform .62s cubic-bezier(.5,.03,.32,1)}
+.sheet .grain{
+  position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(120% 80% at 88% 50%, rgba(0,0,0,.10), transparent 45%);
+  opacity:.8;
+}
+
+/* spiral binding on the right (RTL book) */
+.spine{
+  position:absolute;top:9px;bottom:9px;right:-17px;width:26px;z-index:4;pointer-events:none;
+  background:
+    radial-gradient(circle at 50% 10px, #05030a 4.4px, transparent 4.8px) 0 0/26px 34px repeat-y,
+    linear-gradient(90deg, rgba(0,0,0,.55), rgba(255,255,255,.06));
+  border-radius:0 10px 10px 0;
+  mask-image:linear-gradient(90deg,transparent,#000 22%,#000);
+}
+.spine::before{
+  content:"";position:absolute;inset:0;
+  background:repeating-linear-gradient(to bottom,
+    transparent 0 6px, rgba(245,243,238,.55) 6px 9px, transparent 9px 34px);
+  opacity:.55;
+}
+
+/* ---------- tools ---------- */
+.dock{
+  position:relative;z-index:3;display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+  justify-content:center;padding:10px 14px calc(10px + env(safe-area-inset-bottom));
+  border-top:1px solid var(--line);background:rgba(8,5,16,.9);backdrop-filter:blur(14px);
+}
+.grp{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.035);
+  border:1px solid var(--line);border-radius:14px;padding:5px}
+.tb{
+  width:40px;height:40px;border-radius:10px;border:1px solid transparent;
+  background:transparent;color:var(--mu);display:grid;place-items:center;
+  cursor:pointer;transition:.15s;font-size:17px
+}
+.tb:hover{color:var(--w);background:rgba(255,255,255,.06)}
+.tb.on{color:#0a0714;background:linear-gradient(150deg,#fff,var(--g));
+  border-color:rgba(45,232,154,.7);box-shadow:0 0 22px -6px rgba(45,232,154,.6)}
+.tb:disabled{opacity:.32;cursor:not-allowed}
+.tb svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.9;
+  stroke-linecap:round;stroke-linejoin:round}
+
+.swatches{display:flex;align-items:center;gap:5px;flex-wrap:wrap;max-width:min(46vw,520px)}
+.sw{width:25px;height:25px;border-radius:50%;cursor:pointer;border:2px solid rgba(255,255,255,.22);
+  transition:.13s;flex:0 0 auto;padding:0}
+.sw:hover{transform:scale(1.14)}
+.sw.on{border-color:#fff;transform:scale(1.2);box-shadow:0 0 0 3px rgba(139,92,246,.45)}
+input[type=color]{
+  width:30px;height:30px;border:none;background:none;padding:0;cursor:pointer;border-radius:50%
+}
+input[type=range]{width:92px;accent-color:var(--g);cursor:pointer}
+
+.hint{
+  position:absolute;left:50%;bottom:22px;transform:translateX(-50%);
+  background:rgba(10,7,20,.92);border:1px solid var(--line);color:var(--w);
+  font-size:13px;padding:10px 18px;border-radius:999px;z-index:6;
+  pointer-events:none;opacity:0;transition:.3s;white-space:nowrap;
+  box-shadow:0 14px 40px -12px #000
+}
+.hint.show{opacity:1}
+
+/* cursor ring */
+.ring{
+  position:fixed;width:24px;height:24px;border-radius:50%;pointer-events:none;z-index:99;
+  border:1.5px solid rgba(0,0,0,.55);box-shadow:0 0 0 1.5px rgba(255,255,255,.85) inset;
+  transform:translate(-50%,-50%);opacity:0;transition:opacity .15s
+}
+.ring.on{opacity:1}
+
+/* nav arrows */
+.arrow{
+  position:absolute;top:50%;transform:translateY(-50%);z-index:5;
+  width:44px;height:64px;border-radius:12px;border:1px solid var(--line);
+  background:rgba(10,7,20,.72);color:var(--w);cursor:pointer;display:grid;place-items:center;
+  backdrop-filter:blur(8px);transition:.16s;opacity:.55
+}
+.arrow:hover{opacity:1;border-color:var(--p);background:rgba(139,92,246,.25)}
+.arrow:disabled{opacity:.12;cursor:default}
+.arrow.prev{right:-64px}
+.arrow.next{left:-64px}
+@media (max-width:900px){.arrow.prev{right:2px}.arrow.next{left:2px}}
+
+.tools-note{color:var(--mu);font-size:11.5px;display:none}
+@media (min-width:1080px){.tools-note{display:block}}
+
+/* loader */
+#boot{
+  position:fixed;inset:0;z-index:200;display:grid;place-items:center;
+  background:var(--bg);transition:opacity .5s,visibility .5s
+}
+#boot.hide{opacity:0;visibility:hidden}
+#boot .in{text-align:center}
+#boot .ttl{font-family:"Bebas Neue",sans-serif;font-size:40px;letter-spacing:5px;
+  background:linear-gradient(100deg,#fff,#c4b5fd,var(--g));-webkit-background-clip:text;
+  background-clip:text;color:transparent}
+#boot .sub{color:var(--mu);font-size:13px;margin-top:6px}
+#boot .bar2{width:180px;height:3px;border-radius:3px;background:#1a1430;margin:18px auto 0;overflow:hidden}
+#boot .bar2 i{display:block;height:100%;width:40%;border-radius:3px;
+  background:linear-gradient(90deg,var(--p),var(--g));animation:sl 1s infinite}
+@keyframes sl{0%{transform:translateX(120%)}100%{transform:translateX(-260%)}}
+
+@media (max-width:700px){
+  .bar{padding:8px 12px;gap:8px}
+  .brand b{font-size:20px}
+  .brand small{display:none}
+  .linkbtn span{display:none}
+  .stage{padding:8px 8px 4px}
+  .dock{gap:6px;padding:8px 8px calc(8px + env(safe-area-inset-bottom))}
+  .tb{width:36px;height:36px;font-size:15px}
+  .swatches{max-width:100%;order:3;width:100%;justify-content:center}
+  .sw{width:22px;height:22px}
+  input[type=range]{width:70px}
+  .spine{right:-11px;width:18px}
+}
+@media (prefers-reduced-motion:reduce){
+  .sheet.turn{transition-duration:.01ms}
+}
+@media print{
+  .bar,.dock,.arrow,#boot,.spine,.hint{display:none!important}
+  body{background:#fff;overflow:visible;height:auto}
+  .stage{padding:0}
+  .book{box-shadow:none;background:#fff;padding:0;aspect-ratio:auto;height:auto}
+  .sheet, .stack{position:relative;inset:auto;box-shadow:none}
+  .sheet.under{display:none}
+}
+</style>
+</head>
+<body>
+
+<div id="boot"><div class="in">
+  <div class="ttl">EILAN DOLL</div>
+  <div class="sub">يجهّز دفتر التلوين…</div>
+  <div class="bar2"><i></i></div>
+</div></div>
+
+<header class="bar">
+  <div class="brand">
+    <div>
+      <b>EILAN DOLL</b>
+      <small>دفتر التلوين · COLORING BOOK</small>
+    </div>
+  </div>
+  <div class="sp"></div>
+  <div class="pager">صفحة <b id="pgNow">1</b> / <span id="pgAll">8</span></div>
+  <a class="linkbtn" href="coloring/book/Eilan-Doll-Coloring-Book.pdf" download>
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/></svg>
+    <span>تحميل PDF</span>
+  </a>
+  <a class="linkbtn" href="./">الموقع</a>
+</header>
+
+<main class="stage" id="stage">
+  <button class="arrow prev" id="bPrev" title="السابق" aria-label="السابق">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+  </button>
+
+  <div class="book" id="book">
+    <div class="stack"></div>
+    <div class="sheet under" id="sUnder"><canvas id="cvUnder"></canvas><div class="grain"></div></div>
+    <div class="sheet top" id="sTop"><canvas id="cvTop"></canvas><div class="grain"></div></div>
+    <div class="spine"></div>
+  </div>
+
+  <button class="arrow next" id="bNext" title="التالي" aria-label="التالي">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
+  </button>
+
+  <div class="hint" id="hint"></div>
+</main>
+
+<div class="dock">
+  <div class="grp">
+    <button class="tb on" data-tool="fill" title="تعبئة (F)">
+      <svg viewBox="0 0 24 24"><path d="M4 14l6-6 7 7-6 6z"/><path d="M11 5l3-3 6 6-3 3"/><path d="M19 17c1.3 1.6 2 2.6 2 3.4a2 2 0 11-4 0c0-.8.7-1.8 2-3.4z" fill="currentColor" stroke="none"/></svg>
+    </button>
+    <button class="tb" data-tool="brush" title="قلم (B)">
+      <svg viewBox="0 0 24 24"><path d="M3 21c2.5 0 4-1 5-3"/><path d="M14.5 4.5l5 5L10 19l-5 1 1-5z"/></svg>
+    </button>
+    <button class="tb" data-tool="eraser" title="ممحاة (E)">
+      <svg viewBox="0 0 24 24"><path d="M8 20h11"/><path d="M15.5 3.5l5 5a2 2 0 010 2.8L12 20H7l-3.5-3.5a2 2 0 010-2.8z"/></svg>
+    </button>
+  </div>
+
+  <div class="grp">
+    <div class="swatches" id="swatches"></div>
+    <input type="color" id="custom" value="#f472b6" title="لون مخصص">
+  </div>
+
+  <div class="grp">
+    <input type="range" id="size" min="2" max="46" value="14" title="حجم القلم">
+  </div>
+
+  <div class="grp">
+    <button class="tb" id="bUndo" title="تراجع (Ctrl+Z)">
+      <svg viewBox="0 0 24 24"><path d="M9 14L4 9l5-5"/><path d="M4 9h9a7 7 0 010 14h-3"/></svg>
+    </button>
+    <button class="tb" id="bRedo" title="إعادة">
+      <svg viewBox="0 0 24 24"><path d="M15 14l5-5-5-5"/><path d="M20 9h-9a7 7 0 000 14h3"/></svg>
+    </button>
+    <button class="tb" id="bClear" title="مسح التلوين">
+      <svg viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M6 6l1 15h10l1-15"/></svg>
+    </button>
+  </div>
+
+  <div class="grp">
+    <button class="tb" id="bSave" title="حفظ الصورة">
+      <svg viewBox="0 0 24 24"><path d="M12 3v12m0 0l-4-4m4 4l4-4"/><path d="M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/></svg>
+    </button>
+    <button class="tb" id="bPrint" title="طباعة">
+      <svg viewBox="0 0 24 24"><path d="M6 9V3h12v6"/><path d="M6 18H4a2 2 0 01-2-2v-4a2 2 0 012-2h16a2 2 0 012 2v4a2 2 0 01-2 2h-2"/><path d="M6 14h12v7H6z"/></svg>
+    </button>
+  </div>
+
+  <span class="tools-note" id="note">حفظ تلقائي</span>
+</div>
+
+<div class="ring" id="ring"></div>
+
+<script>
+const PAGES = __PAGES_JSON__;
+const W = __W__, H = __H__;
+
+/* ---------- state ---------- */
+let cur = 0, busy = false;
+const lineImg = new Map();     // i -> Image
+const barrier = new Map();     // i -> Uint8Array
+const paintCv = new Map();     // i -> canvas
+const undoSt = new Map();      // i -> [dataURL]
+const redoSt = new Map();      // i -> [dataURL]
+const dirty = new Set();       // pages the user actually painted
+let tool = 'fill', color = '#f472b6', size = 14, drawing = false, last = null;
+
+const cvTop = document.getElementById('cvTop');
+const cvUnder = document.getElementById('cvUnder');
+cvTop.width = cvUnder.width = W;
+cvTop.height = cvUnder.height = H;
+
+/* ---------- palette ---------- */
+const PALETTE = [
+  '#f9c9a8','#eab08c','#c98a5e','#8d5a36',
+  '#f472b6','#ec4899','#ef4444','#f97316',
+  '#facc15','#a3e635','#22c55e','#2de89a',
+  '#38bdf8','#3b82f6','#8b5cf6','#a855f7',
+  '#1f2937','#4b5563','#9ca3af','#ffffff'
+];
+
+/* ---------- helpers ---------- */
+const $ = s => document.querySelector(s);
+const key = i => 'eilandoll.book.v2.' + i;
+
+function paintFor(i){
+  if(!paintCv.has(i)){
+    const c = document.createElement('canvas');
+    c.width = W; c.height = H;
+    const x = c.getContext('2d', {willReadFrequently:true});
+    x.fillStyle = '#ffffff'; x.fillRect(0,0,W,H);
+    let saved = null;
+    try{ saved = localStorage.getItem(key(i)); }catch(e){}
+    if(saved){ const im = new Image(); im.onload = () => { x.drawImage(im,0,0); if(i===cur) render(); }; im.src = saved; }
+    paintCv.set(i, c);
+  }
+  return paintCv.get(i);
+}
+
+function imgFor(i){
+  if(!lineImg.has(i)){
+    const im = new Image();
+    im.decoding = 'async';
+    im.src = PAGES[i].src;
+    im.onload = () => { if(i===cur || i===cur+1) render(); };
+    lineImg.set(i, im);
+  }
+  return lineImg.get(i);
+}
+
+function barrierFor(i){
+  if(barrier.has(i)) return barrier.get(i);
+  const im = imgFor(i);
+  if(!im.complete || !im.naturalWidth) return null;
+  const c = document.createElement('canvas'); c.width = W; c.height = H;
+  const x = c.getContext('2d', {willReadFrequently:true});
+  x.drawImage(im,0,0,W,H);
+  const d = x.getImageData(0,0,W,H).data;
+  const ink = new Uint8Array(W*H);
+  for(let k=0,p=0;k<ink.length;k++,p+=4){
+    ink[k] = (d[p]*0.299 + d[p+1]*0.587 + d[p+2]*0.114) < 132 ? 1 : 0;
+  }
+  // close small gaps so the bucket doesn't leak
+  const out = new Uint8Array(W*H);
+  for(let y=0;y<H;y++){
+    const row = y*W;
+    for(let x2=0;x2<W;x2++){
+      if(!ink[row+x2]) continue;
+      const y0 = y>0?y-1:0, y1 = y<H-1?y+1:H-1;
+      const x0 = x2>0?x2-1:0, x1 = x2<W-1?x2+1:W-1;
+      for(let yy=y0;yy<=y1;yy++) for(let xx=x0;xx<=x1;xx++) out[yy*W+xx]=1;
+    }
+  }
+  barrier.set(i, out);
+  return out;
+}
+
+/* ---------- render ---------- */
+function drawInto(cv, i){
+  const c = cv.getContext('2d');
+  c.globalCompositeOperation = 'source-over';
+  c.fillStyle = '#ffffff';
+  c.fillRect(0,0,W,H);
+  const p = paintCv.get(i);
+  if(p) c.drawImage(p,0,0);
+  const li = lineImg.get(i);
+  if(li && li.complete && li.naturalWidth){
+    c.globalCompositeOperation = 'multiply';
+    c.drawImage(li,0,0,W,H);
+    c.globalCompositeOperation = 'source-over';
+  }
+}
+function render(){
+  drawInto(cvTop, cur);
+  document.getElementById('pgNow').textContent = cur + 1;
+  const pg = PAGES[cur];
+  document.querySelectorAll('.tb[data-tool]').forEach(b => b.disabled = !pg.colorable);
+}
+
+/* ---------- painting ---------- */
+function toCanvas(e){
+  const r = cvTop.getBoundingClientRect();
+  return { x:(e.clientX - r.left) * W / r.width, y:(e.clientY - r.top) * H / r.height };
+}
+
+function snapshot(){
+  const p = paintFor(cur);
+  if(!undoSt.has(cur)) undoSt.set(cur, []);
+  const arr = undoSt.get(cur);
+  arr.push(p.toDataURL('image/png'));
+  if(arr.length > 14) arr.shift();
+  redoSt.set(cur, []);
+}
+
+function floodFill(sx, sy, hex){
+  const bar = barrierFor(cur);
+  if(!bar) return;
+  const x0 = Math.round(sx), y0 = Math.round(sy);
+  if(x0<1 || y0<1 || x0>=W-1 || y0>=H-1) return;
+  const seed = y0*W + x0;
+  if(bar[seed]) return;
+
+  const mask = new Uint8Array(W*H);
+  const stack = [seed];
+  mask[seed] = 1;
+  let n = 0;
+  while(stack.length){
+    const k = stack.pop(); n++;
+    const y = (k/W)|0, x = k - y*W;
+    if(x > 0){ const j = k-1; if(!mask[j] && !bar[j]){ mask[j]=1; stack.push(j); } }
+    if(x < W-1){ const j = k+1; if(!mask[j] && !bar[j]){ mask[j]=1; stack.push(j); } }
+    if(y > 0){ const j = k-W; if(!mask[j] && !bar[j]){ mask[j]=1; stack.push(j); } }
+    if(y < H-1){ const j = k+W; if(!mask[j] && !bar[j]){ mask[j]=1; stack.push(j); } }
+  }
+  if(n < 12) return;
+
+  const rgb = hx(hex);
+  const c = paintFor(cur);
+  const ctx = c.getContext('2d', {willReadFrequently:true});
+  const im = ctx.getImageData(0,0,W,H);
+  const d = im.data;
+  for(let k=0, p=0; k<mask.length; k++, p+=4){
+    if(mask[k]){ d[p]=rgb[0]; d[p+1]=rgb[1]; d[p+2]=rgb[2]; d[p+3]=255; }
+  }
+  // bleed one pixel under the ink so no white halo survives
+  for(let y=1;y<H-1;y++){
+    const row = y*W;
+    for(let x=1;x<W-1;x++){
+      const k = row+x;
+      if(!bar[k] || mask[k]) continue;
+      if(mask[k-1] || mask[k+1] || mask[k-W] || mask[k+W]){
+        const p = k*4;
+        d[p]=rgb[0]; d[p+1]=rgb[1]; d[p+2]=rgb[2]; d[p+3]=255;
+      }
+    }
+  }
+  ctx.putImageData(im,0,0);
+  render();
+}
+
+function hx(h){
+  h = h.replace('#','');
+  if(h.length === 3) h = h.split('').map(c=>c+c).join('');
+  return [parseInt(h.slice(0,2),16), parseInt(h.slice(2,4),16), parseInt(h.slice(4,6),16)];
+}
+
+function strokeTo(pt){
+  const c = paintFor(cur);
+  const x = c.getContext('2d');
+  x.strokeStyle = tool === 'eraser' ? '#ffffff' : color;
+  x.lineWidth = size * (W / 1240);
+  x.lineCap = 'round'; x.lineJoin = 'round';
+  x.beginPath();
+  x.moveTo(last.x, last.y);
+  x.lineTo(pt.x, pt.y);
+  x.stroke();
+  dirty.add(cur);
+  last = pt;
+  render();
+}
+
+/* ---------- pointer ---------- */
+let ringEl = $('#ring');
+function showRing(e){
+  ringEl.style.left = e.clientX + 'px';
+  ringEl.style.top = e.clientY + 'px';
+  if(tool !== 'fill'){
+    const s = size * (cvTop.getBoundingClientRect().width / W);
+    ringEl.style.width = ringEl.style.height = Math.max(8, s) + 'px';
+  }else{
+    ringEl.style.width = ringEl.style.height = '24px';
+  }
+  ringEl.classList.add('on');
+}
+
+cvTop.addEventListener('pointermove', e => {
+  showRing(e);
+  if(!drawing || tool === 'fill') return;
+  strokeTo(toCanvas(e));
+});
+cvTop.addEventListener('pointerleave', () => ringEl.classList.remove('on'));
+cvTop.addEventListener('pointerdown', e => {
+  if(busy || !PAGES[cur].colorable) return;
+  e.preventDefault();
+  cvTop.setPointerCapture(e.pointerId);
+  const pt = toCanvas(e);
+  snapshot();
+  if(tool === 'fill'){ floodFill(pt.x, pt.y, color); dirty.add(cur); persist(); return; }
+  drawing = true; last = pt; strokeTo(pt);
+});
+cvTop.addEventListener('pointerup', e => {
+  if(drawing){ drawing = false; persist(); }
+});
+
+function persist(){
+  try{
+    const p = paintCv.get(cur);
+    if(p) localStorage.setItem(key(cur), p.toDataURL('image/png'));
+  }catch(err){/* quota */}
+}
+
+/* ---------- navigation ---------- */
+const sTop = $('#sTop'), sUnder = $('#sUnder');
+
+function prepare(i){ imgFor(i); paintFor(i); }
+
+function turn(dir){
+  if(busy) return;
+  const target = cur + dir;
+  if(target < 0 || target >= PAGES.length) return;
+  busy = true;
+  prepare(target);
+
+  const finish = () => {
+    cur = target;
+    paintFor(cur);
+    sTop.classList.remove('turn');
+    sTop.style.transform = '';
+    sUnder.style.zIndex = 1;
+    busy = false;
+    render();
+    updateArrows();
+    gc();
+  };
+
+  if(dir > 0){
+    /* the open page swings away to the right, revealing the next one */
+    drawInto(cvUnder, target);
+    sUnder.style.zIndex = 2; sTop.style.zIndex = 3;
+    sTop.style.willChange = 'transform';
+    sTop.classList.add('turn');
+    void sTop.offsetWidth;
+    sTop.style.transform = 'rotateY(180deg)';
+    setTimeout(finish, 650);
+  } else {
+    /* the previous page swings back in from the spine */
+    drawInto(cvTop, target);
+    sTop.classList.remove('turn');
+    sTop.style.transform = 'rotateY(180deg)';   /* snap, no transition */
+    void sTop.offsetWidth;
+    sTop.classList.add('turn');
+    requestAnimationFrame(() => { sTop.style.transform = 'rotateY(0deg)'; });
+    setTimeout(finish, 680);
+  }
+}
+
+/* drop canvases for pages the user never painted */
+function gc(){
+  for(const i of Array.from(paintCv.keys())){
+    if(i === cur || i === cur + 1 || i === cur - 1) continue;
+    if(dirty.has(i) || undoSt.has(i)) continue;
+    paintCv.delete(i);
+    barrier.delete(i);
+  }
+}
+
+function persistAll(){ /* saved on stroke end; page turns just keep state */ }
+
+function updateArrows(){
+  $('#bPrev').disabled = cur <= 0;
+  $('#bNext').disabled = cur >= PAGES.length - 1;
+  document.getElementById('pgNow').textContent = cur + 1;
+}
+
+/* ---------- tools ---------- */
+document.querySelectorAll('.tb[data-tool]').forEach(b => {
+  b.onclick = () => {
+    document.querySelectorAll('.tb[data-tool]').forEach(x => x.classList.remove('on'));
+    b.classList.add('on');
+    tool = b.dataset.tool;
+    cvTop.style.cursor = tool === 'fill' ? 'crosshair' : 'none';
+  };
+});
+
+const swWrap = $('#swatches');
+PALETTE.forEach(c => {
+  const b = document.createElement('button');
+  b.className = 'sw'; b.style.background = c; b.title = c;
+  if(c === color) b.classList.add('on');
+  b.onclick = () => {
+    color = c;
+    document.querySelectorAll('.sw').forEach(x => x.classList.remove('on'));
+    b.classList.add('on');
+    if(tool !== 'brush') document.querySelector('.tb[data-tool=brush]').click();
+  };
+  swWrap.appendChild(b);
+});
+$('#custom').oninput = e => {
+  color = e.target.value;
+  document.querySelectorAll('.sw').forEach(x => x.classList.remove('on'));
+  if(tool !== 'brush') document.querySelector('.tb[data-tool=brush]').click();
+};
+$('#size').oninput = e => size = +e.target.value;
+
+$('#bUndo').onclick = () => {
+  const arr = undoSt.get(cur); if(!arr || !arr.length) return;
+  if(!redoSt.has(cur)) redoSt.set(cur, []);
+  redoSt.get(cur).push(paintFor(cur).toDataURL('image/png'));
+  const data = arr.pop();
+  const im = new Image();
+  im.onload = () => {
+    const c = paintFor(cur), x = c.getContext('2d');
+    x.fillStyle = '#fff'; x.fillRect(0,0,W,H); x.drawImage(im,0,0);
+    render(); persist();
+  };
+  im.src = data;
+};
+$('#bRedo').onclick = () => {
+  const arr = redoSt.get(cur); if(!arr || !arr.length) return;
+  const data = arr.pop();
+  if(!undoSt.has(cur)) undoSt.set(cur, []);
+  undoSt.get(cur).push(paintFor(cur).toDataURL('image/png'));
+  const im = new Image();
+  im.onload = () => {
+    const c = paintFor(cur), x = c.getContext('2d');
+    x.fillStyle = '#fff'; x.fillRect(0,0,W,H); x.drawImage(im,0,0);
+    render(); persist();
+  };
+  im.src = data;
+};
+$('#bClear').onclick = () => {
+  snapshot();
+  const c = paintFor(cur), x = c.getContext('2d');
+  x.fillStyle = '#fff'; x.fillRect(0,0,W,H);
+  render(); persist();
+  toast('تم مسح الصفحة');
+};
+
+function composed(){
+  const c = document.createElement('canvas');
+  c.width = W; c.height = H;
+  const x = c.getContext('2d');
+  x.fillStyle = '#fff'; x.fillRect(0,0,W,H);
+  const p = paintCv.get(cur); if(p) x.drawImage(p,0,0);
+  const li = lineImg.get(cur);
+  if(li){ x.globalCompositeOperation = 'multiply'; x.drawImage(li,0,0,W,H); x.globalCompositeOperation = 'source-over'; }
+  return c;
+}
+
+$('#bSave').onclick = () => {
+  if(!PAGES[cur].colorable) return toast('هذه الصفحة غلاف');
+  const c = composed();
+  c.toBlob(b => {
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(b);
+    a.download = 'EilanDoll_' + PAGES[cur].slug + '_colored.png';
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+    toast('تم حفظ صورتك');
+  }, 'image/png');
+};
+
+$('#bPrint').onclick = () => {
+  const w = window.open('', '_blank');
+  w.document.write('<img src="' + composed().toDataURL('image/png') + '" style="width:100%" onload="window.print()">');
+  w.document.close();
+};
+
+$('#bPrev').onclick = () => turn(-1);
+$('#bNext').onclick = () => turn(1);
+
+/* ---------- keyboard ---------- */
+addEventListener('keydown', e => {
+  if(e.key === 'ArrowLeft') turn(1);
+  else if(e.key === 'ArrowRight') turn(-1);
+  else if(e.key === 'f') document.querySelector('.tb[data-tool=fill]').click();
+  else if(e.key === 'b') document.querySelector('.tb[data-tool=brush]').click();
+  else if(e.key === 'e') document.querySelector('.tb[data-tool=eraser]').click();
+  else if((e.ctrlKey || e.metaKey) && e.key === 'z'){ e.preventDefault(); $('#bUndo').click(); }
+});
+
+/* ---------- toast ---------- */
+let tTimer;
+function toast(msg){
+  const h = $('#hint');
+  h.textContent = msg;
+  h.classList.add('show');
+  clearTimeout(tTimer);
+  tTimer = setTimeout(() => h.classList.remove('show'), 1800);
+}
+
+/* ---------- init ---------- */
+cvTop.style.cursor = 'crosshair';
+$('#pgAll').textContent = PAGES.length;
+prepare(0);
+updateArrows();
+
+const first = imgFor(0);
+const boot = () => {
+  render(); persist();
+  setTimeout(() => document.getElementById('boot').classList.add('hide'), 260);
+  setTimeout(() => toast('اسحب لليسار لقلب الصفحة · أو استخدم الأسهم'), 900);
+};
+if(first.complete && first.naturalWidth) boot();
+else { first.onload = () => boot(); }
+setTimeout(() => { if(!document.getElementById('boot').classList.contains('hide')) boot(); }, 2500);
+
+// preload neighbours quietly
+setTimeout(() => { prepare(1); }, 700);
+</script>
+</body>
+</html>

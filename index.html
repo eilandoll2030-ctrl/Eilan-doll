@@ -3058,8 +3058,7 @@ const NAV=[
  {u:'templates',n:'قوالب جاهزة',e:'🎞️',k:['templates','قوالب','قالب','عرض تقديمي','ريلز','اطلب تصميم','تصميم خاص']},
  {u:'learn',n:'أكاديمية التعلّم',e:'📚',k:['learn','تعلم','اكاديميه','دورات']},
  {u:'play',n:'منطقة الترفيه',e:'🎮',k:['play','العاب','ترفيه','game','خمن','خمّن','guess','دول','بلدان']},
- {u:'places',n:'الأماكن والخرائط (مطاعم ومقاهي ومنتجعات)',e:'🗺️',k:['places','map','places/maps','كافيهات','مطاعم','حدائق','اسواق','starbucks','kfc','8oz','eighth ounce','اماكن','ترفيه']},
- {u:'cities',n:'مدن ومعالم السعودية والعالم',e:'🏙️',k:['cities','world','city','مدن','عالم','دول','معالم','سياحه','سفر','جدول','رحلات','landmarks','travel','360']},
+ {u:'trip',n:'وجهتي',e:'🧭',k:['trip','وجهتي','وجهاتي','destinations','places','map','places/maps','كافيهات','مطاعم','حدائق','اسواق','starbucks','kfc','8oz','eighth ounce','اماكن','ترفيه','cities','world','city','مدن','عالم','دول','معالم','سياحه','سفر','جدول','رحلات','landmarks','travel','360']},
  {u:'community',n:'المجتمع · Discord',e:'💬',k:['community','discord','ديسكورد','مجتمع','westred','ويسترد']},
  {u:'library',n:'مكتبتي',e:'🔖',k:['library','مكتبتي','مشترياتي','تحميلاتي','downloads']},
  {u:'team',n:'الفريق التقني',e:'🛠️',k:['team','فريق','تقني']},
@@ -3116,7 +3115,7 @@ function render(){
   try{pg.post&&pg.post(r)}catch(e){console.error(e)}
   tabs[act].title=pg.title(r);tabs[act].icon=pg.icon;syncPath(r.page,r.id);if(!(typeof isEN==='function'&&isEN())){if(SEO_T[r.page])document.title=SEO_T[r.page];else if(r.page==='home')applyTheme()}
   renderTabs();$('#addr').value=curUrl();updateChrome();
-  $$('.bm').forEach(b=>b.classList.toggle('on',b.dataset.go==='eilan://'+r.page||(r.page==='product'&&b.dataset.go==='eilan://store')));
+  $$('.bm').forEach(b=>b.classList.toggle('on',b.dataset.go==='eilan://'+r.page||(b.dataset.go==='eilan://trip'&&(r.page==='places'||r.page==='cities'))||(r.page==='product'&&b.dataset.go==='eilan://store')));
   moveBead();setTimeout(moveBead,400);
   $('#bBack').disabled=tabs[act].i===0;$('#bFwd').disabled=tabs[act].i>=tabs[act].hist.length-1;
 }
@@ -11081,6 +11080,17 @@ function submitNewSpotForm(form){
   plTab = 'spots';
   rerender();
 }
+
+
+/* ===== وجهتي: one section for cities + places ===== */
+P.trip={icon:'🧭',title:()=>'وجهتي — المدن والأماكن والفنادق',
+html:()=>{const L=(u,t,d)=>`<a data-go="${u}" style="display:block;padding:12px 14px;border:1px solid var(--bd);border-radius:12px;margin-top:8px;cursor:pointer"><b style="display:block">${t}</b><span class="mu" style="font-size:12px">${d}</span></a>`;
+return `<div style="max-width:980px;margin:0 auto;padding:8px 4px"><h1 style="font-size:30px;margin:6px 0">وجهتي</h1><p class="mu">كل اللي تحتاجينه لرحلتك في مكان واحد: المدن والمعالم من جهة، والأماكن والفنادق من جهة.</p>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:16px">
+<section style="border:1px solid var(--bd);border-radius:18px;padding:18px"><h2 style="margin:0 0 4px">🏙️ المدن والمعالم</h2><p class="mu" style="margin:0">السعودية والعالم، جولات وجداول وميزانيات</p>
+${L('eilan://cities','مدن ومعالم','تصفحي المدن وأشهر معالمها')}${L('eilan://cities/tours','جولات 360°','شوفي المعالم كأنك هناك')}${L('eilan://cities/discover','اكتشف السعودية','مناطق وتراث وأماكن مميزة')}${L('eilan://cities/schedule','خطط رحلتك والميزانية','جدول رحلة وتقدير تكلفة')}${L('eilan://cities/passport','جوازي','سجل المدن اللي زرتيها')}</section>
+<section style="border:1px solid var(--bd);border-radius:18px;padding:18px"><h2 style="margin:0 0 4px">📍 الأماكن والفنادق</h2><p class="mu" style="margin:0">مطاعم ومقاهي ومنتجعات وفنادق وغيرها</p>
+${L('eilan://places/all','كل الأماكن','دليل مع روابط Google Maps')}</section></div></div>`}};
 
 /* ================= PAGE REGISTRATION FOR P.places ================= */
 P.places = {

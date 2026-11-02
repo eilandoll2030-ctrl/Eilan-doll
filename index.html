@@ -792,7 +792,7 @@ body.no-motion .bm-bead{transition:none}
 .page,.page.pg-fwd,.page.pg-new,.page.pg-back{animation:pgSoft .4s cubic-bezier(.22,.8,.3,1) both}
 @keyframes pgSoft{from{opacity:0;transform:translateY(12px)}}
 #wipe{display:none!important}
-.bmwrap{position:relative;z-index:6;min-width:0;flex:none;margin:26px 12px 8px;border-radius:18px;background:rgba(16,17,13,.85)}
+.bmwrap{position:relative;z-index:6;min-width:0;flex:none;margin:26px 12px 8px;border-radius:18px;background:rgba(16,17,13,.22)}
 @property --cx{syntax:'<length>';inherits:true;initial-value:0px}
 .bmwrap{transition:--cx .75s cubic-bezier(.3,1.35,.45,1)}
 .bmwrap::before{content:"";position:absolute;inset:0;border-radius:inherit;border:1px solid rgba(232,182,74,.38);pointer-events:none;-webkit-mask:linear-gradient(90deg,#000 calc(var(--cx,50%) - 46px),transparent calc(var(--cx,50%) - 46px),transparent calc(var(--cx,50%) + 46px),#000 calc(var(--cx,50%) + 46px)) top/100% 30px no-repeat,linear-gradient(#000,#000) bottom/100% calc(100% - 30px) no-repeat;mask:linear-gradient(90deg,#000 calc(var(--cx,50%) - 46px),transparent calc(var(--cx,50%) - 46px),transparent calc(var(--cx,50%) + 46px),#000 calc(var(--cx,50%) + 46px)) top/100% 30px no-repeat,linear-gradient(#000,#000) bottom/100% calc(100% - 30px) no-repeat}

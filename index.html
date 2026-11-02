@@ -781,12 +781,10 @@ body.no-motion ei-c.ei .cb,body.no-motion ei-c.ei .cf{animation:none}
 @media (prefers-reduced-motion:reduce){ei-c.ei .cb,ei-c.ei .cf{animation:none!important}}
 
 /* meniscus bead: a glossy gold bead slides to the open section (spring + stretch) */
-.bookmarks{position:relative;padding-top:44px}
 .bm-bead{position:absolute;top:5px;left:0;width:38px;height:38px;border-radius:50%;pointer-events:none;z-index:2;
   background:radial-gradient(circle at 36% 28%,#FFF6D2 0,#F2C75C 28%,#D9A53A 60%,#A9741A 100%);
   box-shadow:0 0 0 4px rgba(16,17,13,.96),0 10px 22px rgba(232,182,74,.45),inset 0 -5px 9px rgba(120,70,0,.35);
   transform:translateX(var(--bx,0px)) scaleX(var(--sx,1));transition:transform .6s cubic-bezier(.34,1.56,.64,1)}
-.bm.on{background:transparent;box-shadow:none;color:#E8B64A}
 :where(html.light) .bm-bead{box-shadow:0 0 0 3px rgba(243,233,210,.96),0 0 12px rgba(176,124,30,.5)}
 body.no-motion .bm-bead{transition:none}
 
@@ -794,8 +792,8 @@ body.no-motion .bm-bead{transition:none}
 .page,.page.pg-fwd,.page.pg-new,.page.pg-back{animation:pgSoft .4s cubic-bezier(.22,.8,.3,1) both}
 @keyframes pgSoft{from{opacity:0;transform:translateY(12px)}}
 #wipe{display:none!important}
-.bookmarks{border-bottom:0;background:linear-gradient(var(--bd),var(--bd)) no-repeat 0 30px/100% 1px,rgba(16,17,13,.85)}
-.bm-bead{width:34px;height:34px;top:13px;transition:transform .75s cubic-bezier(.3,1.35,.45,1)}
+.bmwrap{position:relative;z-index:6;min-width:0;max-width:100%;width:100%;flex:none}
+.bm-bead{width:40px;height:40px;top:-20px;left:0;background:radial-gradient(circle at 50% 50%,#EFD58A 0,#E2BC66 46%,#D4A94F 47%,#CFA248 62%,#B88A32 100%);box-shadow:0 0 0 3px rgba(16,17,13,.95),0 6px 16px rgba(232,182,74,.35),inset 0 2px 3px rgba(255,255,255,.45);transition:transform .75s cubic-bezier(.3,1.35,.45,1)}
 
 .ei-pick button ei-c.ei{width:1.3em;height:1.3em;vertical-align:0}
 body.no-motion ei-c.ei{transition:none}
@@ -2737,7 +2735,7 @@ html.light .floaters{opacity:.42}
     <div class="xp-chip" data-go="eilan://learn"><span class="av" id="xpAv">E</span><div><b id="xpName">Explorer</b><small id="xpLv">Lv.1</small></div></div>
     <div id="loadbar"></div>
   </div>
-  <div class="bookmarks" id="bookmarks"></div>
+  <div class="bmwrap" id="bmwrap"><div class="bookmarks" id="bookmarks"></div></div>
   <main id="view"></main>
   <div class="statusbar"><span class="live"><i></i> EILAN NETWORK · ONLINE</span><span>🛍 <b id="stProducts">0</b> products</span><span>💬 <b id="stServers">0</b> discord servers</span><span>🛠 team: <b id="stTeam">idle</b></span><span class="sp"></span><span class="sa-st no-ei">🇸🇦 made in saudi arabia</span><span>eilan://secure · v2.0</span><span id="clock"></span></div>
 </div>
@@ -2944,14 +2942,15 @@ function eilFaceHTML(){return `<div class="eil-bob"><div class="eil-face"><img s
   requestAnimationFrame(frame);
 })();
 
-function moveBead(){const bar=document.getElementById('bookmarks');if(!bar)return;let bd=bar.querySelector('.bm-bead');if(!bd){bd=document.createElement('i');bd.className='bm-bead';bar.appendChild(bd)}
+function moveBead(){const bar=document.getElementById('bookmarks'),wr=document.getElementById('bmwrap');if(!bar||!wr)return;let bd=wr.querySelector('.bm-bead');if(!bd){bd=document.createElement('i');bd.className='bm-bead';wr.appendChild(bd)}
   const on=bar.querySelector('.bm.on');if(!on){bd.style.opacity=0;return}bd.style.opacity=1;
-  const x=on.offsetLeft+on.offsetWidth/2-17;const first=!bd.dataset.p;
-  if(!first&&Math.abs(+bd.dataset.p-x)>2){bd.style.setProperty('--sx','2.4');clearTimeout(bd._t);bd._t=setTimeout(()=>bd.style.setProperty('--sx','1'),340)}
+  const w=wr.getBoundingClientRect(),o=on.getBoundingClientRect();const x=Math.max(0,Math.min(w.width-40,o.left-w.left+o.width/2-20));const first=!bd.dataset.p;
+  if(!first&&Math.abs(+bd.dataset.p-x)>2){bd.style.setProperty('--sx','1.5');clearTimeout(bd._t);bd._t=setTimeout(()=>bd.style.setProperty('--sx','1'),300)}
   if(first)bd.style.transition='none';
   bd.style.setProperty('--bx',x+'px');bd.dataset.p=x;
   if(first){void bd.offsetWidth;bd.style.transition=''}
-  const want=on.offsetLeft+on.offsetWidth/2-bar.clientWidth/2;try{bar.scrollTo({left:want,behavior:'smooth'})}catch(e){bar.scrollLeft=want}}
+  const want=bar.scrollLeft+(o.left-w.left)+o.width/2-bar.clientWidth/2;if(!bar._sc){bar._sc=1;bar.addEventListener('scroll',()=>{const b=wr.querySelector('.bm-bead'),n=bar.querySelector('.bm.on');if(b&&n){const w=wr.getBoundingClientRect(),q=n.getBoundingClientRect();b.style.transition='none';const xx=Math.max(0,Math.min(w.width-40,q.left-w.left+q.width/2-20));b.style.setProperty('--bx',xx+'px');b.dataset.p=xx}},{passive:true})}
+  try{bar.scrollTo({left:want,behavior:'smooth'})}catch(e){bar.scrollLeft=want}}
 addEventListener('resize',()=>{const b=document.querySelector('.bm-bead');if(b)delete b.dataset.p;moveBead()});
 /* ================= EILAN DOLL — BROWSER CORE ================= */
 const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];

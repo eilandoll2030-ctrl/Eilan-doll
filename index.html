@@ -764,7 +764,7 @@ ei-c.ei+ei-c.ei{margin-inline-start:.1em}
 .ei-pick button.on{border-color:var(--g);background:rgba(232,182,74,.12);box-shadow:0 0 14px -4px var(--g)}
 /* icon container: gate in the top menu bar & tabs, circle everywhere else */
 #bookmarks .bm,.tabs .tab{align-items:center}
-#bookmarks ei-c.ei,.tabs ei-c.ei{width:2.15em;height:2.15em;vertical-align:middle;position:relative;top:-.04em}
+#bookmarks ei-c.ei,.tabs ei-c.ei{width:1.8em;height:1.8em;vertical-align:middle;position:relative;top:-.04em}
 
 /* cube icons: wave + shine + float run in the top bar, tabs, section cards and hero; static elsewhere */
 ei-c.ei svg{overflow:visible}
@@ -793,20 +793,10 @@ body.no-motion .bm-bead{transition:none}
 @keyframes pgSoft{from{opacity:0;transform:translateY(12px)}}
 #wipe{display:none!important}
 .bmwrap{position:relative;z-index:6;min-width:0;flex:none;margin:26px 12px 8px;border-radius:18px;background:rgba(16,17,13,.22)}
-@property --cx{syntax:'<length>';inherits:true;initial-value:0px}
-.bmwrap{transition:--cx .75s cubic-bezier(.3,1.35,.45,1)}
-.bmwrap::before{content:"";position:absolute;inset:0;border-radius:inherit;border:1px solid rgba(232,182,74,.38);pointer-events:none;-webkit-mask:linear-gradient(90deg,#000 calc(var(--cx,50%) - 46px),transparent calc(var(--cx,50%) - 46px),transparent calc(var(--cx,50%) + 46px),#000 calc(var(--cx,50%) + 46px)) top/100% 30px no-repeat,linear-gradient(#000,#000) bottom/100% calc(100% - 30px) no-repeat;mask:linear-gradient(90deg,#000 calc(var(--cx,50%) - 46px),transparent calc(var(--cx,50%) - 46px),transparent calc(var(--cx,50%) + 46px),#000 calc(var(--cx,50%) + 46px)) top/100% 30px no-repeat,linear-gradient(#000,#000) bottom/100% calc(100% - 30px) no-repeat}
-.bmwrap::after{content:"";position:absolute;top:0;left:calc(var(--cx,0px) - 46px);width:92px;height:30px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='92' height='30' viewBox='0 0 92 30'%3E%3Cpath d='M0 .5C20 .5 22 27 46 27S72 .5 92 .5' fill='none' stroke='%23E8B64A' stroke-opacity='.38' stroke-width='1'/%3E%3C/svg%3E") no-repeat;pointer-events:none}
-.bmwrap .bm.on{background:transparent;box-shadow:none}
-.bmwrap .bookmarks{padding-top:24px;background:transparent;border-bottom:0;border-radius:inherit}
+.bmwrap{margin:0}
+.bm-bead{display:none!important}
 .bm-bead{width:40px;height:40px;top:-20px;left:0;background:radial-gradient(circle at 50% 50%,#EFD58A 0,#E2BC66 46%,#D4A94F 47%,#CFA248 62%,#B88A32 100%);box-shadow:inset 0 2px 3px rgba(255,255,255,.45);transition:transform .75s cubic-bezier(.3,1.35,.45,1)}
 
-/* top bar: bare cube glyphs (no tile), bigger; the open section glows gold */
-#bookmarks ei-c.ei{width:3em;height:3em}
-#bookmarks ei-c.ei svg>rect:first-child{fill:transparent}
-#bookmarks .bm{gap:8px}
-#bookmarks .bm:not(.on) ei-c.ei svg{opacity:.9;transition:opacity .3s,filter .3s}
-#bookmarks .bm.on ei-c.ei svg{opacity:1;filter:drop-shadow(0 0 7px rgba(232,182,74,.75)) brightness(1.15)}
 
 .ei-pick button ei-c.ei{width:1.3em;height:1.3em;vertical-align:0}
 body.no-motion ei-c.ei{transition:none}
@@ -2955,7 +2945,7 @@ function eilFaceHTML(){return `<div class="eil-bob"><div class="eil-face"><img s
   requestAnimationFrame(frame);
 })();
 
-function moveBead(){const bar=document.getElementById('bookmarks'),wr=document.getElementById('bmwrap');if(!bar||!wr)return;let bd=wr.querySelector('.bm-bead');if(!bd){bd=document.createElement('i');bd.className='bm-bead';wr.appendChild(bd)}
+function moveBead(){const act0=document.querySelector('#bookmarks .bm.on');if(act0)try{act0.scrollIntoView({inline:'center',block:'nearest',behavior:'smooth'})}catch(e){}return;const bar=document.getElementById('bookmarks'),wr=document.getElementById('bmwrap');if(!bar||!wr)return;let bd=wr.querySelector('.bm-bead');if(!bd){bd=document.createElement('i');bd.className='bm-bead';wr.appendChild(bd)}
   const on=bar.querySelector('.bm.on');if(!on){bd.style.opacity=0;return}bd.style.opacity=1;
   const w=wr.getBoundingClientRect(),o=on.getBoundingClientRect();const x=Math.max(0,Math.min(w.width-40,o.left-w.left+o.width/2-20));const first=!bd.dataset.p;
   if(!first&&Math.abs(+bd.dataset.p-x)>2){bd.style.setProperty('--sx','1.5');clearTimeout(bd._t);bd._t=setTimeout(()=>bd.style.setProperty('--sx','1'),300)}
@@ -6745,7 +6735,7 @@ function eiSvgCube(k){
 const ARCH_G={"trophy":'<path d="M23 22 H41 V31 a9 9 0 0 1-18 0Z" fill="#F1E8D2"/><path d="M23 25 H18 a5 5 0 0 0 6 7 M41 25 H46 a5 5 0 0 1-6 7" fill="none" stroke="#CDA24E" stroke-width="2.4" stroke-linecap="round"/><rect x="29.500" y="39" width="5" height="5" fill="#F1E8D2"/><rect x="24" y="44" width="16" height="4.500" rx="2" fill="#CDA24E"/>',"home": "<path d=\"M32 20 L47 33 H43 V47 H21 V33 H17 Z\" fill=\"#F1E8D2\"/><rect x=\"28.5\" y=\"37\" width=\"7\" height=\"10\" rx=\"2\" fill=\"#2E6347\"/>", "store": "<rect x=\"18\" y=\"26\" width=\"28\" height=\"8\" rx=\"2\" fill=\"#CDA24E\"/><rect x=\"20.5\" y=\"34\" width=\"23\" height=\"13\" fill=\"#F1E8D2\"/><rect x=\"28\" y=\"38\" width=\"8\" height=\"9\" rx=\"1.5\" fill=\"#2E6347\"/>", "wiki": "<path d=\"M32 47 C28 43.5 22 43 17 44.5 V27 C22 25.5 28 26 32 29.5 C36 26 42 25.5 47 27 V44.5 C42 43 36 43.5 32 47Z\" fill=\"#F1E8D2\"/><path d=\"M32 29.5 V47\" stroke=\"#2E6347\" stroke-width=\"1.8\"/><circle cx=\"43\" cy=\"22\" r=\"2.6\" fill=\"#CDA24E\"/>", "ai": "<path d=\"M20 25 H44 a5 5 0 0 1 5 5 V38 a5 5 0 0 1-5 5 H33 L25 49 V43 H20 a5 5 0 0 1-5-5 V30 a5 5 0 0 1 5-5Z\" fill=\"#F1E8D2\"/><path d=\"M32 29 L34 34 L39 36 L34 38 L32 43 L30 38 L25 36 L30 34Z\" fill=\"#2E6347\"/><path d=\"M45 18 l1.4 3.2 3.2 1.4-3.2 1.4-1.4 3.2-1.4-3.2-3.2-1.4 3.2-1.4Z\" fill=\"#CDA24E\"/>", "studio": "<path d=\"M32 21 C42 21 48 27 48 34 C48 40 43 42 39 40 C35 38 33 43 36 46 C38 48 36 50 32 50 C23 50 16 43 16 35 C16 27 22 21 32 21Z\" fill=\"#F1E8D2\"/><circle cx=\"26\" cy=\"31\" r=\"3\" fill=\"#CDA24E\"/><circle cx=\"34\" cy=\"28\" r=\"3\" fill=\"#2E6347\"/><circle cx=\"41\" cy=\"33\" r=\"3\" fill=\"#CDA24E\"/>", "templates": "<rect x=\"18\" y=\"23\" width=\"12\" height=\"12\" rx=\"3.5\" fill=\"#F1E8D2\"/><rect x=\"34\" y=\"23\" width=\"12\" height=\"12\" rx=\"3.5\" fill=\"#F1E8D2\"/><rect x=\"18\" y=\"38\" width=\"12\" height=\"12\" rx=\"3.5\" fill=\"#F1E8D2\"/><rect x=\"34\" y=\"38\" width=\"12\" height=\"12\" rx=\"3.5\" fill=\"#CDA24E\"/>", "learning": "<path d=\"M32 21 L50 29 L32 37 L14 29Z\" fill=\"#CDA24E\"/><path d=\"M22 34 V42 C27 47 37 47 42 42 V34 L32 38.5Z\" fill=\"#F1E8D2\"/><path d=\"M50 29 V39\" stroke=\"#CDA24E\" stroke-width=\"2\" stroke-linecap=\"round\"/>", "entertainment": "<path d=\"M22 29 H42 a9 9 0 0 1 8.700 11 L49 45 a4 4 0 0 1-7 1.500 L39 42 H25 L22 46.500 A4 4 0 0 1 15 45 L13.300 40 A9 9 0 0 1 22 29Z\" fill=\"#F1E8D2\"/><path d=\"M22 33 V40 M18.500 36.500 H25.500\" stroke=\"#2E6347\" stroke-width=\"2.600\" stroke-linecap=\"round\"/><circle cx=\"41\" cy=\"34\" r=\"2.200\" fill=\"#CDA24E\"/><circle cx=\"46\" cy=\"38\" r=\"2.200\" fill=\"#2E6347\"/>", "places": "<path d=\"M32 19 a10 10 0 0 1 10 10 c0 8-10 19-10 19 s-10-11-10-19 a10 10 0 0 1 10-10Z\" fill=\"#F1E8D2\"/><circle cx=\"32\" cy=\"29\" r=\"4\" fill=\"#CDA24E\"/>", "city": "<rect x=\"16\" y=\"33\" width=\"10\" height=\"15\" rx=\"1.500\" fill=\"#F1E8D2\"/><rect x=\"27.500\" y=\"23\" width=\"11\" height=\"25\" rx=\"1.500\" fill=\"#F1E8D2\"/><rect x=\"40\" y=\"35\" width=\"9\" height=\"13\" rx=\"1.500\" fill=\"#F1E8D2\"/><g fill=\"#2E6347\"><rect x=\"30\" y=\"27\" width=\"2.500\" height=\"3\"/><rect x=\"34\" y=\"27\" width=\"2.500\" height=\"3\"/><rect x=\"30\" y=\"33\" width=\"2.500\" height=\"3\"/><rect x=\"34\" y=\"33\" width=\"2.500\" height=\"3\"/></g><circle cx=\"45\" cy=\"25\" r=\"2.800\" fill=\"#CDA24E\"/>", "community": "<path d=\"M18 22 H36 a4 4 0 0 1 4 4 V33 a4 4 0 0 1-4 4 H27 L21 41 V37 H18 a4 4 0 0 1-4-4 V26 a4 4 0 0 1 4-4Z\" fill=\"#F1E8D2\"/><path d=\"M32 33 H46 a4 4 0 0 1 4 4 V42 a4 4 0 0 1-4 4 H43 V50 L37 46 H32 a4 4 0 0 1-4-4 V37 a4 4 0 0 1 4-4Z\" fill=\"#CDA24E\"/>", "library": "<rect x=\"17\" y=\"24\" width=\"30\" height=\"7.500\" rx=\"2\" fill=\"#F1E8D2\"/><rect x=\"21\" y=\"33\" width=\"26\" height=\"7.500\" rx=\"2\" fill=\"#CDA24E\"/><rect x=\"17\" y=\"42\" width=\"30\" height=\"7.500\" rx=\"2\" fill=\"#F1E8D2\"/>", "team": "<path d=\"M21 46 L38 29\" stroke=\"#F1E8D2\" stroke-width=\"6\" stroke-linecap=\"round\"/><circle cx=\"41\" cy=\"26\" r=\"8\" fill=\"#CDA24E\"/><circle cx=\"43.500\" cy=\"23.500\" r=\"3\" fill=\"#2E6347\"/>", "admin": "<circle cx=\"32\" cy=\"35\" r=\"12.500\" fill=\"none\" stroke=\"#F1E8D2\" stroke-width=\"5\" stroke-dasharray=\"4.900 4.900\"/><circle cx=\"32\" cy=\"35\" r=\"9\" fill=\"#F1E8D2\"/><circle cx=\"32\" cy=\"35\" r=\"3.800\" fill=\"#2E6347\"/>"};
 const _archCache={};
 function archSvg(k){return _archCache[k]||(_archCache[k]='<svg viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="eag" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#62A276"/><stop offset="1" stop-color="#2C6446"/></linearGradient></defs><path d="M12 56 V30 a20 20 0 0 1 40 0 V56Z" fill="url(#eag)"/><g>'+ARCH_G[k]+'</g><rect x="8" y="57.500" width="48" height="3" rx="1.500" fill="#F1E8D2"/></svg>')}
-function eiSvg(k){return ARCH_G[k]?archSvg(k):eiSvgCube(k)}
+function eiSvg(k){return eiSvgCube(k)}
 function eiEl(k){const s=document.createElement('ei-c');s.className='ei ei-'+k;s.innerHTML=eiSvg(k);return s}
 document.addEventListener('click',e=>{const ei=e.target.closest&&e.target.closest('ei-c.ei');if(!ei)return;ei.classList.remove('ei-burst');void ei.offsetWidth;ei.classList.add('ei-burst');setTimeout(()=>ei.classList.remove('ei-burst'),1400)},true);
 function procText(n){

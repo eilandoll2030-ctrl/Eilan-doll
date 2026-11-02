@@ -792,9 +792,11 @@ body.no-motion .bm-bead{transition:none}
 .page,.page.pg-fwd,.page.pg-new,.page.pg-back{animation:pgSoft .4s cubic-bezier(.22,.8,.3,1) both}
 @keyframes pgSoft{from{opacity:0;transform:translateY(12px)}}
 #wipe{display:none!important}
-.bmwrap{position:relative;z-index:6;min-width:0;max-width:100%;width:100%;flex:none}
-.bookmarks{padding-top:34px}
-.bm-bead{width:30px;height:30px;top:4px;left:0;background:radial-gradient(circle at 50% 50%,#EFD58A 0,#E2BC66 46%,#D4A94F 47%,#CFA248 62%,#B88A32 100%);box-shadow:0 0 0 3px rgba(16,17,13,.95),0 6px 16px rgba(232,182,74,.35),inset 0 2px 3px rgba(255,255,255,.45);transition:transform .75s cubic-bezier(.3,1.35,.45,1)}
+.bmwrap{position:relative;z-index:6;min-width:0;flex:none;margin:26px 12px 8px;border-radius:18px;background:rgba(16,17,13,.85)}
+.bmwrap::before{content:"";position:absolute;inset:0;border-radius:inherit;border:1px solid rgba(232,182,74,.38);pointer-events:none;-webkit-mask:radial-gradient(circle at var(--cx,50%) 0,transparent 27px,#000 28px);mask:radial-gradient(circle at var(--cx,50%) 0,transparent 27px,#000 28px)}
+.bmwrap::after{content:"";position:absolute;left:calc(var(--cx,50%) - 27px);top:-27px;width:54px;height:54px;border-radius:50%;border:1px solid rgba(232,182,74,.38);clip-path:inset(50% 0 0 0);pointer-events:none;transition:left .75s cubic-bezier(.3,1.35,.45,1)}
+.bmwrap .bookmarks{padding-top:24px;background:transparent;border-bottom:0;border-radius:inherit}
+.bm-bead{width:34px;height:34px;top:-17px;left:0;background:radial-gradient(circle at 36% 28%,#FFF1BE 0,#EBC25E 35%,#D9A53A 70%,#B07C1E 100%);box-shadow:0 6px 18px rgba(232,182,74,.45),inset 0 -4px 7px rgba(120,70,0,.3);transition:transform .75s cubic-bezier(.3,1.35,.45,1)}
 
 .ei-pick button ei-c.ei{width:1.3em;height:1.3em;vertical-align:0}
 body.no-motion ei-c.ei{transition:none}
@@ -2945,12 +2947,12 @@ function eilFaceHTML(){return `<div class="eil-bob"><div class="eil-face"><img s
 
 function moveBead(){const bar=document.getElementById('bookmarks'),wr=document.getElementById('bmwrap');if(!bar||!wr)return;let bd=wr.querySelector('.bm-bead');if(!bd){bd=document.createElement('i');bd.className='bm-bead';wr.appendChild(bd)}
   const on=bar.querySelector('.bm.on');if(!on){bd.style.opacity=0;return}bd.style.opacity=1;
-  const w=wr.getBoundingClientRect(),o=on.getBoundingClientRect();const x=Math.max(0,Math.min(w.width-30,o.left-w.left+o.width/2-15));const first=!bd.dataset.p;
+  const w=wr.getBoundingClientRect(),o=on.getBoundingClientRect();const x=Math.max(0,Math.min(w.width-34,o.left-w.left+o.width/2-17));const first=!bd.dataset.p;
   if(!first&&Math.abs(+bd.dataset.p-x)>2){bd.style.setProperty('--sx','1.5');clearTimeout(bd._t);bd._t=setTimeout(()=>bd.style.setProperty('--sx','1'),300)}
   if(first)bd.style.transition='none';
-  bd.style.setProperty('--bx',x+'px');bd.dataset.p=x;
+  bd.style.setProperty('--bx',x+'px');wr.style.setProperty('--cx',(x+17)+'px');bd.dataset.p=x;
   if(first){void bd.offsetWidth;bd.style.transition=''}
-  const want=bar.scrollLeft+(o.left-w.left)+o.width/2-bar.clientWidth/2;if(!bar._sc){bar._sc=1;bar.addEventListener('scroll',()=>{const b=wr.querySelector('.bm-bead'),n=bar.querySelector('.bm.on');if(b&&n){const w=wr.getBoundingClientRect(),q=n.getBoundingClientRect();b.style.transition='none';const xx=Math.max(0,Math.min(w.width-30,q.left-w.left+q.width/2-15));b.style.setProperty('--bx',xx+'px');b.dataset.p=xx}},{passive:true})}
+  const want=bar.scrollLeft+(o.left-w.left)+o.width/2-bar.clientWidth/2;if(!bar._sc){bar._sc=1;bar.addEventListener('scroll',()=>{const b=wr.querySelector('.bm-bead'),n=bar.querySelector('.bm.on');if(b&&n){const w=wr.getBoundingClientRect(),q=n.getBoundingClientRect();b.style.transition='none';const xx=Math.max(0,Math.min(w.width-34,q.left-w.left+q.width/2-17));b.style.setProperty('--bx',xx+'px');wr.style.setProperty('--cx',(xx+17)+'px');b.dataset.p=xx}},{passive:true})}
   try{bar.scrollTo({left:want,behavior:'smooth'})}catch(e){bar.scrollLeft=want}}
 addEventListener('resize',()=>{const b=document.querySelector('.bm-bead');if(b)delete b.dataset.p;moveBead()});
 /* ================= EILAN DOLL — BROWSER CORE ================= */

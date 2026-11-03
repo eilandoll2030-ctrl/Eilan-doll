@@ -13654,10 +13654,10 @@ applyMode();applyLang();
       const ctx=cv.getContext('2d'),S=cv.width/N,t0=performance.now(),DUR=.7,ease=t=>{const c=1.7;return 1+(c+1)*Math.pow(t-1,3)+c*Math.pow(t-1,2)};
       let end=0;const frame=now=>{const T=(now-t0)/1000;ctx.clearRect(0,0,cv.width,cv.height);let fin=true;
         for(const q of cells){let u=(T-q.dl)/DUR;if(u<=0){fin=false;continue}if(u<1)fin=false;u=Math.min(1,u);const e=ease(u),inv=1-e;
-          const cx=(q.x+.5)*S+Math.cos(q.a)*q.m*inv,cy=(q.y+.5)*S+Math.sin(q.a)*q.m*inv,sz=S*.84*Math.min(1,u*2.2);
+          const cx=(q.x+.5)*S+Math.cos(q.a)*q.m*inv,cy=(q.y+.5)*S+Math.sin(q.a)*q.m*inv,sz=S*(.84+(T>q.dl+DUR?.12*Math.sin(T*3.2-(q.x+q.y)*.4):0))*Math.min(1,u*2.2);
           ctx.save();ctx.globalAlpha=Math.min(1,u*3);ctx.translate(cx,cy);ctx.rotate(q.r*inv);ctx.fillStyle=q.c;ctx.fillRect(-sz/2,-sz/2,sz,sz);ctx.restore()}
-        if(!fin||now-t0<1800)requestAnimationFrame(frame);else{done()}};
-      requestAnimationFrame(frame);setTimeout(()=>{if(!boot.classList.contains('show-t'))done()},3000)}catch(e){done()}};
+        if(T>1.8)boot.classList.add('show-t');if(!boot.classList.contains('hide'))requestAnimationFrame(frame)};
+      requestAnimationFrame(frame);setTimeout(()=>boot.classList.add('show-t'),3000)}catch(e){done()}};
     im.onerror=done;im.src=img.src})();
   const logs=['loading digital world…','connecting eilan network…','syncing westred servers…','waking up the tech team…','welcome, explorer ✦'];
   logs.forEach((l,i)=>setTimeout(()=>{const b=$('#bootLog');if(b)b.textContent=l},600*(i+1)));

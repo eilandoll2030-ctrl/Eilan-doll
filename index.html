@@ -13715,7 +13715,7 @@ html.light .xo-c,html.light .cc-c{background:linear-gradient(145deg,#fff,#efe9da
 </style>
 <script>
 /* ================= 🎮 EILAN GAMES ZONE — cube catalog =================
-   every game shows: animated cube icon · printable or device-only · where it plays */
+   every game shows: animated cube icon · plays inside the site */
 const GZC_PAT={"g-guess":"..#####..|.##...##.|.##...##.|.....##..|....##...|...##....|.........|...##....|...##....","g-xo":"..#..#..|..#..#..|########|..#..#..|..#..#..|########|..#..#..|..#..#..","g-snake":".........|.....###.|.....#.##|.....#...|.#####...|.#.......|.#####...|.....#...|######...","g-catch":"...###...|..#...#..|.#.....#.|#...#...#|#..###..#|#...#...#|.#.....#.|..#...#..|...###...","g-chili":"......##.|.....##..|...####..|..#####..|.######..|.#####...|.####....|.###.....|##.......","g-x":"##...##|.##.##.|..###..|..###..|.##.##.|##...##","g-o":"..###..|.##.##.|##...##|##...##|.##.##.|..###.."};
 Object.assign(CUBE_PAT,GZC_PAT);
 const gzL=(a,e)=>isEN()?e:a;
@@ -13732,28 +13732,27 @@ const GZI={
  gift:'<svg viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="5" rx="1"/><path d="M5 13v8h14v-8M12 8v13M12 8c-2-4-6-4-6-1.5S12 8 12 8zM12 8c2-4 6-4 6-1.5S12 8 12 8z"/></svg>',
  x:'<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>'};
 const gzCube=k=>`<ei-c class="ei ei-${k}">${eiSvgCube(k)}</ei-c>`;
-/* the catalog — print: true = there is a PDF that prints; dev: plays on the device */
+/* the catalog — every game plays inside the site (no printable versions) */
 const GZC_LIST=()=>{
  const paid=(id,key,open,o)=>{if(!S.products.some(p=>p.id===id))return null;let un=false,pr=25,url='';
    try{un=o.un();const p=o.pd();pr=+(o.price?o.price():p.price)||25;url=extUrl(p)||''}catch(e){}
-   return Object.assign({id,k:key,open,paid:true,un,price:pr,ext:url,print:true,pdfNote:gzL('PDF مع الشراء','PDF with purchase')},o.t)};
+   return Object.assign({id,k:key,open,paid:true,un,price:pr,ext:url,print:false},o.t)};
  const L=[
-  {id:'guess',k:'g-guess',free:true,print:true,pdf:'/games/pdf/Eilan-Guess-Khammen.pdf',n:gzL('خمّن؟','Guess?'),en:'Guess?',d:gzL('طلّع اسم البلد من الإيموجي والحروف — ١٠ أسئلة عربي و١٠ إنجليزي.','Find the country from emojis & letters — 10 Arabic + 10 English.'),pl:gzL('لاعب أو أكثر','1+ players'),tm:gzL('١٠ دقائق','10 min'),
+  {id:'guess',k:'g-guess',free:true,print:false,n:gzL('خمّن؟','Guess?'),en:'Guess?',d:gzL('طلّع اسم البلد من الإيموجي والحروف — ١٠ أسئلة عربي و١٠ إنجليزي.','Find the country from emojis & letters — 10 Arabic + 10 English.'),pl:gzL('لاعب أو أكثر','1+ players'),tm:gzL('١٠ دقائق','10 min'),
    btns:`<button class="btn g" data-act="guessopen" data-m="party">${GZI.play}${gzL('العب هنا','Play here')}</button><button class="btn" data-act="guessopen" data-m="solo">${gzL('وضع التحدي','Challenge')}</button>`},
   paid('g-lahad','party','lhopen',{un:()=>lhUnlocked(),pd:()=>lhProd(),t:{n:gzL('لحد يشدها','Party Game'),en:'Party Game',d:gzL('بطاقات صراحة وتحديات وسباقات «أول واحد…» — مرّروا الجهاز واقلبوا البطاقة.','Truth cards, dares and "first one to…" races — pass the device and flip.'),pl:gzL('٣ لاعبين أو أكثر','3+ players'),tm:gzL('٣٠+ دقيقة','30+ min'),code:'lhcode',pid:'g-lahad'}}),
   paid('g-family','home','fmopen',{un:()=>fmUnlocked(),pd:()=>fmProd(),t:{n:gzL('أسئلة عائلية','Family Game'),en:'Family Game',d:gzL('أسئلة سريعة للعائلة — أسرع واحد يجاوب صح ياخذ النقطة.','Quick family questions — fastest correct answer scores.'),pl:gzL('لاعبين أو أكثر','2+ players'),tm:gzL('٢٠+ دقيقة','20+ min'),code:'fmcode',pid:'g-family'}}),
   paid('g-bahar','g-chili','bhopen',{un:()=>bhUnlocked(),pd:()=>bhProd(),t:{n:gzL('كثّر بهارات','Spice It Up'),en:'Spice It Up',d:gzL('فريقين وقصص: واحد بس يكثّر بهارات — تقدرون تطلّعون الكذاب؟','Two teams, one storyteller spices it up — can you spot the liar?'),pl:gzL('فريقين · ٤+','2 teams · 4+'),tm:gzL('٣٠+ دقيقة','30+ min'),code:'bhcode',pid:'g-bahar'}}),
   paid('g-mashaer','love','msopen',{un:()=>msUnlocked(),pd:()=>msProd(),t:{n:gzL('مشاعر','Feelings'),en:'Feelings',d:gzL('لعبة لشخصين عزيزين: أسئلة من القلب ولحظات مع بعض.','For two close people: heartfelt questions and moments together.'),pl:gzL('لشخصين','2 players'),tm:gzL('٣٠+ دقيقة','30+ min'),code:'mscode',pid:'g-mashaer'}}),
   paid('g-nisf','night','nsopen',{un:()=>nsUnlocked(),pd:()=>nsProd(),price:()=>nsPrice(),t:{n:gzL('نص الليل','Midnight Talks'),en:'Midnight Talks',d:gzL('أسئلة صراحة للسهرة على ٣ مراحل تتعمّق مع الليل.','Late-night honesty questions in 3 deepening stages.'),pl:gzL('شخصين أو أكثر','2+ players'),tm:gzL('٤٥+ دقيقة','45+ min'),code:'nscode',pid:'g-nisf'}}),
-  {id:'memory',k:'brain',free:true,print:true,pdf:'/games/pdf/Eilan-Memory-Cards.pdf',n:gzL('ذاكرة إيلان','Eilan Memory'),en:'Memory',d:gzL('طابق أزواج المكعبات بأقل حركات — وبطاقات PDF تنقصّ وتنلعب بالكشتة.','Match the cube pairs in fewest moves — plus cut-out PDF cards.'),pl:gzL('لاعب أو أكثر','1+ players'),tm:gzL('٥ دقائق','5 min'),local:'memory'},
-  {id:'xo',k:'g-xo',free:true,print:true,pdf:'/games/pdf/Eilan-XO.pdf',n:gzL('إكس أو إيلان','Eilan XO'),en:'XO',d:gzL('تحدَّ Eilan أو صديقك على نفس الجهاز — وأوراق جولات تنطبع مع تحدي ٤×٤.','Beat Eilan or a friend on one device — printable round sheets + 4×4 challenge.'),pl:gzL('لشخصين','2 players'),tm:gzL('دقيقتين','2 min'),local:'xo'},
+  {id:'memory',k:'brain',free:true,print:false,n:gzL('ذاكرة إيلان','Eilan Memory'),en:'Memory',d:gzL('طابق أزواج المكعبات بأقل عدد من الحركات.','Match the cube pairs in the fewest moves.'),pl:gzL('لاعب أو أكثر','1+ players'),tm:gzL('٥ دقائق','5 min'),local:'memory'},
+  {id:'xo',k:'g-xo',free:true,print:false,n:gzL('إكس أو إيلان','Eilan XO'),en:'XO',d:gzL('تحدَّ Eilan أو صديقك على نفس الجهاز.','Beat Eilan or a friend on one device.'),pl:gzL('لشخصين','2 players'),tm:gzL('دقيقتين','2 min'),local:'xo'},
   {id:'catch',k:'g-catch',free:true,print:false,n:gzL('اصطد المكعب','Cube Catch'),en:'Cube Catch',d:gzL('المكعبات تولّع وتختفي بسرعة — اصطدها قبل لا تطفي خلال ٣٠ ثانية!','Cubes light up and vanish — catch as many as you can in 30 seconds!'),pl:gzL('لاعب واحد','1 player'),tm:gzL('٣٠ ثانية','30 sec'),local:'catch'},
   {id:'snake',k:'g-snake',free:true,print:false,n:'Neon Snake',en:gzL('الثعبان','Snake'),d:gzL('الأسهم أو الأزرار — كل نقطة = 1 XP عند انتهاء الجولة.','Arrows or on-screen pad — every point = 1 XP.'),pl:gzL('لاعب واحد','1 player'),tm:gzL('حر','Endless'),local:'snake'}];
  return L.filter(Boolean)};
 function gzcCard(g){
  const pr=g.print;
- const tags=(pr?`<span class="gzc-tag pr">${GZI.print}${gzL('تنطبع · PDF','Printable · PDF')}</span><span class="gzc-tag dv">${GZI.dev}${gzL('وتنلعب على الجهاز','Plays on device')}</span>`
-    :`<span class="gzc-tag on">${GZI.dev}${gzL('على الجهاز فقط — ما تنطبع','Device only — not printable')}</span>`);
+ const tags=`<span class="gzc-tag dv">${GZI.web}${gzL('تنلعب داخل الموقع','Plays in the site')}</span><span class="gzc-tag on">${GZI.dev}${gzL('جوال · آيباد · كمبيوتر','Phone · iPad · computer')}</span>`;
  const price=g.paid?(g.un?`<span class="gzc-price own">${gzL('مفعّلة ✓','Unlocked ✓')}</span>`:`<span class="gzc-price">${g.price} ${gzL('ر.س','SAR')}</span>`):`<span class="gzc-price free">${gzL('مجانية','Free')}</span>`;
  let btns=g.btns||'';
  if(g.local)btns=`<button class="btn g" data-act="gzplay" data-g="${g.local}">${GZI.play}${gzL('العب هنا','Play here')}</button>`;
@@ -13761,35 +13760,26 @@ function gzcCard(g){
    :`<button class="btn g" data-act="${g.open}" data-m="trial">${GZI.gift}${gzL('جرّب مجاناً','Free trial')}</button>`
    +(g.ext?`<a class="btn p" href="${esc(g.ext)}" target="_blank" rel="noopener">${GZI.bag}${gzL('اشترِ','Buy')}</a>`:`<button class="btn p" data-go="eilan://product/${g.pid}">${GZI.bag}${gzL('اشترِ','Buy')}</button>`)
    +`<button class="btn" data-act="${g.code}" title="${gzL('عندي كود','I have a code')}">${GZI.key}</button>`;
- if(g.pdf)btns+=`<a class="btn" href="${g.pdf}" target="_blank" rel="noopener" download title="${gzL('تحميل PDF للطباعة أو الآيباد','Download PDF')}">${GZI.dl}PDF</a>`;
  const artAct=g.local?`data-act="gzplay" data-g="${g.local}"`:g.paid?`data-act="${g.open}" data-m="${g.un?'play':'trial'}"`:`data-act="guessopen" data-m="party"`;
  return `<article class="gzc card" data-print="${pr?1:0}">
-  <div class="gzc-art" ${artAct} role="button" aria-label="${esc(g.n)}"><div class="gzc-corner no-ei">${pr?`<span class="pr" title="${gzL('تنطبع','Printable')}">${GZI.print}</span>`:''}<span class="dv" title="${gzL('تنلعب على الجهاز','Plays on device')}">${GZI.dev}</span></div>${price}${gzCube(g.k)}</div>
+  <div class="gzc-art" ${artAct} role="button" aria-label="${esc(g.n)}">${price}${gzCube(g.k)}</div>
   <div class="gzc-b"><h3>${esc(g.n)} <bdi dir="ltr">${esc(g.en)}</bdi></h3><p>${esc(g.d)}</p>
-   <div class="gzc-tags no-ei">${tags}${g.pdfNote?`<span class="gzc-tag pd">${GZI.dl}${g.pdfNote}</span>`:''}</div>
+   <div class="gzc-tags no-ei">${tags}</div>
    <div class="gzc-meta no-ei"><span>${GZI.ppl}${esc(g.pl)}</span><span>${GZI.time}${esc(g.tm)}</span></div>
    <div class="gzc-btns no-ei">${btns}</div></div></article>`}
 const GZS={f:'all',el:null,clean:[]};
-P.play={icon:'🎮',title:()=>gzL('منطقة الترفيه','Entertainment Zone'),html:()=>{const L=GZC_LIST(),np=L.filter(g=>g.print).length;return `
+P.play={icon:'🎮',title:()=>gzL('منطقة الترفيه','Entertainment Zone'),html:()=>{const L=GZC_LIST();return `
  <div class="gzc-hero">
   <div class="gzc-intro card"><div class="gzc-float" aria-hidden="true">${CUBE_RAMP.map(c=>`<i style="background:${c}"></i>`).join('')}</div>
    <div class="eyebrow">ENTERTAINMENT ZONE</div><h1>${gzL('منطقة','The')} <span class="grad-t">${gzL('الترفيه','Fun Zone')}</span></h1>
-   <p>${gzL('ألعاب للجَمعات والكشتات والسهرات — العبها هنا داخل الموقع، أو حمّلها PDF وتنعرض على الآيباد والجوال أو تنطبع.','Games for gatherings, trips and late nights — play right here, or grab the PDF to show on iPad / phone or print.')}</p></div>
+   <p>${gzL('ألعاب للجَمعات والكشتات والسهرات — كلها تنلعب هنا داخل الموقع، على الجوال والآيباد والكمبيوتر.','Games for gatherings, trips and late nights — all played right here, on phone, iPad or computer.')}</p></div>
   <div class="gzc-legend card no-ei">
-   <div class="lg"><span class="gzc-tag pr">${GZI.print}${gzL('تنطبع','Printable')}</span><div><b>${gzL('PDF للطباعة وللشاشة','PDF for print & screen')}</b>${gzL('ورق A4، أو افتحه على الآيباد والجوال.','A4 paper, or open it on iPad / phone.')}</div></div>
-   <div class="lg"><span class="gzc-tag dv">${GZI.dev}${gzL('على الجهاز','On device')}</span><div><b>${gzL('تنلعب داخل الموقع','Plays inside the site')}</b>${gzL('أجمل نسخة: حركة وأصوات ونقاط XP.','The best version: motion, sound and XP.')}</div></div>
-   <div class="lg"><span class="gzc-tag on">${GZI.dev}${gzL('جهاز فقط','Device only')}</span><div><b>${gzL('ما تنطبع','Not printable')}</b>${gzL('ألعاب سرعة تحتاج شاشة.','Speed games that need a screen.')}</div></div></div></div>
- <div class="gzc-bar no-ei">
-  <button class="chip ${GZS.f==='all'?'on':''}" data-act="gzf" data-f="all">${gzL('كل الألعاب','All games')} · ${L.length}</button>
-  <button class="chip ${GZS.f==='print'?'on':''}" data-act="gzf" data-f="print">${GZI.print}${gzL('تنطبع','Printable')} · ${np}</button>
-  <button class="chip ${GZS.f==='device'?'on':''}" data-act="gzf" data-f="device">${GZI.dev}${gzL('على الجهاز فقط','Device only')} · ${L.length-np}</button>
-  <span class="sp"></span><span class="mu" style="font-size:12.5px">${gzL('أفضل نتيجة بالذاكرة','Best memory')}: <b>${S.hi.memory||'—'}</b> · Snake: <b>${S.hi.snake||0}</b> · ${gzL('المكعب','Catch')}: <b>${S.hi.catch||0}</b></span></div>
+   <div class="lg"><span class="gzc-tag dv">${GZI.web}${gzL('داخل الموقع','In the site')}</span><div><b>${gzL('بدون تحميل','No download')}</b>${gzL('اضغط على المكعب وتبدأ اللعبة فوراً.','Tap the cube and the game starts.')}</div></div>
+   <div class="lg"><span class="gzc-tag on">${GZI.dev}${gzL('كل الأجهزة','Any device')}</span><div><b>${gzL('جوال · آيباد · كمبيوتر','Phone · iPad · computer')}</b>${gzL('بالطول أو بالعرض، الشاشة تتظبط لحالها.','Portrait or landscape — it adapts.')}</div></div>
+   <div class="lg"><span class="gzc-tag pr">XP</span><div><b>${gzL('نقاط وأرقام قياسية','Points & records')}</b>${gzL('كل لعبة تكسّبك XP وتحفظ أفضل نتيجة لك.','Every game earns XP and keeps your best score.')}</div></div></div></div>
+ <div class="gzc-bar no-ei"><span class="chip on">${gzL('كل الألعاب','All games')} · ${L.length}</span><span class="sp"></span><span class="mu" style="font-size:12.5px">${gzL('أفضل نتيجة بالذاكرة','Best memory')}: <b>${S.hi.memory||'—'}</b> · Snake: <b>${S.hi.snake||0}</b> · ${gzL('المكعب','Catch')}: <b>${S.hi.catch||0}</b></span></div>
  <div class="gzc-grid" id="gzcGrid" data-f="${GZS.f}">${L.map(gzcCard).join('')}</div>
- <div class="gzc-tips card no-ei">
-  <div><b>${GZI.dev}${gzL('على الآيباد والجوال','On iPad & phone')}</b>${gzL('اضغط PDF ← مشاركة ← «حفظ في الملفات» أو افتحه في GoodNotes، واعرضه بالشاشة الكاملة.','Tap PDF → Share → "Save to Files" or open in GoodNotes, then go full screen.')}</div>
-  <div><b>${GZI.print}${gzL('للطباعة','To print')}</b>${gzL('A4 بالحجم الفعلي (100%). للبطاقات: ورق مقوّى، واطبع الظهر على الوجه الثاني.','A4 at actual size (100%). For cards use thick paper; print backs double-sided.')}</div>
-  <div><b>${GZI.web}${gzL('داخل الموقع','Inside the site')}</b>${gzL('اضغط على المكعب أو «العب هنا» — تجمع XP وتنحفظ أفضل نتيجة لك.','Tap the cube or "Play here" — earn XP and keep your best score.')}</div></div>
- ${(()=>{const ex=S.products.filter(p=>(p.cat==='entertainment'||p.cat==='experiences')&&!/^g-/.test(p.id));return ex.length?`<section class="sec"><div class="sec-h"><h2>🎟️ ${gzL('تجارب ترفيهية من المتجر','Fun experiences from the store')}</h2></div><div class="pgrid">${ex.map(pcard).join('')}</div></section>`:''})()}`},
+  ${(()=>{const ex=S.products.filter(p=>(p.cat==='entertainment'||p.cat==='experiences')&&!/^g-/.test(p.id));return ex.length?`<section class="sec"><div class="sec-h"><h2>🎟️ ${gzL('تجارب ترفيهية من المتجر','Fun experiences from the store')}</h2></div><div class="pgrid">${ex.map(pcard).join('')}</div></section>`:''})()}`},
  mount(){CLEAN.push(gzwClose)}};
 ACT.gzf=d=>{GZS.f=d.f;const g=$('#gzcGrid');if(g)g.dataset.f=d.f;$$('.gzc-bar .chip').forEach(b=>b.classList.toggle('on',b.dataset.f===d.f))};
 
@@ -13805,8 +13795,8 @@ ACT.gzplay=d=>{const g=d.g;
  if(g==='snake'){gzwOpen('g-snake','Neon Snake','EILAN ARCADE',`<div class="game-stage"><canvas id="snake" width="400" height="400"></canvas><div class="snake-ov" id="snOv"><div><button class="btn g" data-act="snakestart">${gzL('ابدأ اللعب','Start')}</button></div></div></div>
    <div class="scorebar"><span>${gzL('النقاط','Score')}: <b id="snS">0</b></span><span>${gzL('الأعلى','Best')}: <b id="snH">${S.hi.snake||0}</b></span></div><br>
    <div class="pad"><span></span><button data-act="dir" data-d="u">▲</button><span></span><button data-act="dir" data-d="r">▶</button><button data-act="dir" data-d="d">▼</button><button data-act="dir" data-d="l">◀</button></div>`);gzGrab(snakeInit)}
- else if(g==='memory'){gzwOpen('brain',gzL('ذاكرة إيلان','Eilan Memory'),'EILAN MEMORY',`<div class="mem" id="mem"></div><div class="scorebar"><span>${gzL('الحركات','Moves')}: <b id="memM">0</b></span><span>${gzL('أفضل نتيجة','Best')}: <b>${S.hi.memory||'—'}</b></span><button class="btn xs" data-act="memreset">↻ ${gzL('جولة جديدة','New round')}</button><a class="btn xs no-ei" href="/games/pdf/Eilan-Memory-Cards.pdf" target="_blank" rel="noopener">${GZI.print} PDF</a></div>`);memInit()}
- else if(g==='xo'){gzwOpen('g-xo',gzL('إكس أو إيلان','Eilan XO'),'EILAN XO',`<div class="xo-modes no-ei"><button class="chip" data-act="xomode" data-v="cpu">${gzL('ضد Eilan','vs Eilan')}</button><button class="chip" data-act="xomode" data-v="2p">${gzL('لاعبين على نفس الجهاز','2 players, 1 device')}</button></div><div class="xo-b" id="xoB"></div><div class="xo-msg" id="xoMsg"></div><div class="scorebar no-ei" id="xoSc"></div><div class="scorebar no-ei"><button class="btn xs" data-act="xonew">↻ ${gzL('جولة جديدة','New round')}</button><a class="btn xs" href="/games/pdf/Eilan-XO.pdf" target="_blank" rel="noopener">${GZI.print} PDF</a></div>`);xoInit()}
+ else if(g==='memory'){gzwOpen('brain',gzL('ذاكرة إيلان','Eilan Memory'),'EILAN MEMORY',`<div class="mem" id="mem"></div><div class="scorebar"><span>${gzL('الحركات','Moves')}: <b id="memM">0</b></span><span>${gzL('أفضل نتيجة','Best')}: <b>${S.hi.memory||'—'}</b></span><button class="btn xs" data-act="memreset">↻ ${gzL('جولة جديدة','New round')}</button></div>`);memInit()}
+ else if(g==='xo'){gzwOpen('g-xo',gzL('إكس أو إيلان','Eilan XO'),'EILAN XO',`<div class="xo-modes no-ei"><button class="chip" data-act="xomode" data-v="cpu">${gzL('ضد Eilan','vs Eilan')}</button><button class="chip" data-act="xomode" data-v="2p">${gzL('لاعبين على نفس الجهاز','2 players, 1 device')}</button></div><div class="xo-b" id="xoB"></div><div class="xo-msg" id="xoMsg"></div><div class="scorebar no-ei" id="xoSc"></div><div class="scorebar no-ei"><button class="btn xs" data-act="xonew">↻ ${gzL('جولة جديدة','New round')}</button></div>`);xoInit()}
  else if(g==='catch'){gzwOpen('g-catch',gzL('اصطد المكعب','Cube Catch'),'EILAN ARCADE',`<div class="cc-time"><i id="ccT"></i></div><div class="cc-b" id="ccB">${Array.from({length:16},(_,i)=>`<button class="cc-c" data-act="cchit" data-i="${i}" aria-label="cube ${i+1}"><i></i></button>`).join('')}</div><div class="scorebar"><span>${gzL('النقاط','Score')}: <b id="ccS">0</b></span><span>${gzL('سلسلة','Combo')}: <b id="ccC">0</b></span><span>${gzL('الأعلى','Best')}: <b id="ccH">${S.hi.catch||0}</b></span></div><div class="cc-ov" id="ccOv"><button class="btn g" data-act="ccstart">${GZI.play}${gzL('ابدأ — ٣٠ ثانية','Start — 30 sec')}</button></div>`);GZS.clean.push(ccStop)}};
 
 /* ---------- XO ---------- */

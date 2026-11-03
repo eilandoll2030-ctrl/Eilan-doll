@@ -60,11 +60,11 @@ svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-l
 #boot{position:fixed;inset:0;z-index:999;background:#0E0F0A;display:grid;place-items:center;transition:opacity .7s,visibility .7s}
 #boot.hide{opacity:0;visibility:hidden}
 /* intro: logo builds itself from sunrise cubes, then the name appears */
-.boot-mark{position:relative;width:180px;height:180px;margin:0 auto}
+.boot-mark{position:relative;width:min(300px,72vw);height:min(300px,72vw);margin:0 auto}
 .boot-mark canvas,.boot-mark img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
 .boot-mark .boot-logo{animation:none;opacity:0;transition:opacity .7s}
 .boot-mark .boot-logo.on{opacity:1}
-.boot-mark canvas{transition:opacity .6s}.boot-mark canvas.off{opacity:0}
+.boot-mark canvas{transition:opacity .6s;filter:drop-shadow(0 0 22px rgba(79,132,96,.45))}.boot-mark canvas.off{opacity:0}
 .boot-title,.boot-sub{opacity:0;transform:translateY(8px);transition:opacity .7s,transform .7s}
 #boot.show-t .boot-title,#boot.show-t .boot-sub{opacity:1;transform:none}
 #boot.show-t .boot-sub{transition-delay:.2s}
@@ -2729,7 +2729,7 @@ html.light .floaters{opacity:.42}
 <noscript><div style="max-width:760px;margin:40px auto;padding:20px;color:#fff;font-family:sans-serif;line-height:1.8"><h1>إيلان دول — EILAN DOLL | العالم الرقمي</h1><p>إيلان دول عالم رقمي متكامل في موقع واحد: متجر منتجات رقمية وألعاب عائلية تفاعلية (لحد يشدها، أسئلة عائلية، كثّر بهارات، مشاعر)، أكاديمية دورات معتمدة من جهات حقيقية، استوديو تصميم، محرك بحث ومساعد ذكاء اصطناعي Eilan AI، ومجتمع على ديسكورد.</p><p>EILAN DOLL — The Digital World: store, accredited courses, family games, design studio, search and AI in one place. Please enable JavaScript.</p></div></noscript>
 <div class="bgfx"><div class="grid"></div><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div></div>
 
-<div id="boot"><div class="boot-in"><div class="boot-mark"><canvas id="bootCv" width="360" height="360"></canvas><img class="boot-logo" data-logo alt="EILAN DOLL"></div><div class="boot-title grad-t">EILAN DOLL</div><div class="boot-sub">THE DIGITAL WORLD</div><div class="boot-bar"><i></i></div><div class="boot-log" id="bootLog">initializing eilan core…</div></div></div>
+<div id="boot"><div class="boot-in"><div class="boot-mark"><canvas id="bootCv" width="640" height="640"></canvas><img class="boot-logo" data-logo alt="EILAN DOLL"></div><div class="boot-title grad-t">EILAN DOLL</div><div class="boot-sub">THE DIGITAL WORLD</div><div class="boot-bar"><i></i></div><div class="boot-log" id="bootLog">initializing eilan core…</div></div></div>
 
 <div id="app">
   <div class="titlebar">
@@ -13647,14 +13647,14 @@ applyMode();applyLang();
     const done=()=>{img.classList.add('on');cv.classList.add('off');boot.classList.add('show-t')};
     if(reduce){done();return}
     const im=new Image();im.onload=()=>{try{
-      const N=42,oc=document.createElement('canvas');oc.width=oc.height=N;const ox=oc.getContext('2d');
+      const N=44,oc=document.createElement('canvas');oc.width=oc.height=N;const ox=oc.getContext('2d');
       const k=Math.min(N/im.width,N/im.height),w=im.width*k,h=im.height*k;ox.drawImage(im,(N-w)/2,(N-h)/2,w,h);
       const d=ox.getImageData(0,0,N,N).data,cells=[];
-      for(let y=0;y<N;y++)for(let x=0;x<N;x++){const i=(y*N+x)*4;if(d[i+3]>90)cells.push({x,y,c:`rgb(${d[i]},${d[i+1]},${d[i+2]})`,dl:(1-y/N)*.9+Math.random()*.35,a:Math.random()*6.28,m:110+Math.random()*170,r:(Math.random()-.5)*5})}
+      for(let y=0;y<N;y++)for(let x=0;x<N;x++){const i=(y*N+x)*4;if(d[i+3]>70)cells.push({x,y,c:`rgb(${d[i]},${d[i+1]},${d[i+2]})`,dl:(1-y/N)*.9+Math.random()*.35,a:Math.random()*6.28,m:110+Math.random()*170,r:(Math.random()-.5)*5})}
       const ctx=cv.getContext('2d'),S=cv.width/N,t0=performance.now(),DUR=.7,ease=t=>{const c=1.7;return 1+(c+1)*Math.pow(t-1,3)+c*Math.pow(t-1,2)};
       let end=0;const frame=now=>{const T=(now-t0)/1000;ctx.clearRect(0,0,cv.width,cv.height);let fin=true;
         for(const q of cells){let u=(T-q.dl)/DUR;if(u<=0){fin=false;continue}if(u<1)fin=false;u=Math.min(1,u);const e=ease(u),inv=1-e;
-          const cx=(q.x+.5)*S+Math.cos(q.a)*q.m*inv,cy=(q.y+.5)*S+Math.sin(q.a)*q.m*inv,sz=S*(.84+(T>q.dl+DUR?.12*Math.sin(T*3.2-(q.x+q.y)*.4):0))*Math.min(1,u*2.2);
+          const cx=(q.x+.5)*S+Math.cos(q.a)*q.m*inv,cy=(q.y+.5)*S+Math.sin(q.a)*q.m*inv,sz=S*(.86+(T>q.dl+DUR?.12*Math.sin(T*3.2-(q.x+q.y)*.4):0))*Math.min(1,u*2.2);
           ctx.save();ctx.globalAlpha=Math.min(1,u*3);ctx.translate(cx,cy);ctx.rotate(q.r*inv);ctx.fillStyle=q.c;ctx.fillRect(-sz/2,-sz/2,sz,sz);ctx.restore()}
         if(T>1.8)boot.classList.add('show-t');if(!boot.classList.contains('hide'))requestAnimationFrame(frame)};
       requestAnimationFrame(frame);setTimeout(()=>boot.classList.add('show-t'),3000)}catch(e){done()}};

@@ -13619,6 +13619,243 @@ if(typeof lhFront==='function'){const _lf=lhFront;lhFront=function(c){return _lf
 
 applyMode();applyLang();
 </script>
+<!-- EILAN GAMES ZONE (source: games/src/play-zone.html) -->
+<style>
+/* ===== Eilan Games Zone — cube catalog (.gzc-*) + game window (.gzw-*) ===== */
+.gzc-hero{display:grid;grid-template-columns:1.4fr 1fr;gap:18px;align-items:stretch;margin-bottom:18px}
+.gzc-intro{padding:22px 24px;position:relative;overflow:hidden}
+.gzc-intro h1{font-size:30px;line-height:1.25;margin:6px 0 8px}
+.gzc-intro p{color:var(--mu);max-width:520px}
+.gzc-intro .gzc-float{position:absolute;inset-inline-end:18px;top:18px;display:flex;gap:7px;opacity:.9}
+.gzc-intro .gzc-float i{width:12px;height:12px;border-radius:4px;display:block;animation:gzcBob 3.2s ease-in-out infinite}
+.gzc-intro .gzc-float i:nth-child(2){animation-delay:-.6s}.gzc-intro .gzc-float i:nth-child(3){animation-delay:-1.2s}.gzc-intro .gzc-float i:nth-child(4){animation-delay:-1.8s}.gzc-intro .gzc-float i:nth-child(5){animation-delay:-2.4s}
+@keyframes gzcBob{50%{transform:translateY(-6px) rotate(8deg)}}
+.gzc-legend{padding:18px 20px;display:flex;flex-direction:column;gap:10px;justify-content:center}
+.gzc-legend .lg{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--mu);line-height:1.55}
+.gzc-legend .lg b{color:var(--w);display:block;font-size:13.5px}
+.gzc-tag{display:inline-flex;align-items:center;gap:5px;height:24px;padding:0 9px;border-radius:999px;font-size:11.5px;font-weight:800;white-space:nowrap;flex-shrink:0}
+.gzc-tag svg{width:13px;height:13px;stroke-width:2.2}
+.gzc-tag.pr{background:rgba(232,182,74,.14);color:#E8B64A;border:1px solid rgba(232,182,74,.35)}
+.gzc-tag.dv{background:rgba(109,194,122,.13);color:#7FD08B;border:1px solid rgba(109,194,122,.32)}
+.gzc-tag.on{background:rgba(239,233,218,.06);color:var(--mu);border:1px dashed rgba(239,233,218,.25)}
+.gzc-tag.pd{background:rgba(79,132,96,.16);color:var(--p2);border:1px solid var(--bd)}
+.gzc-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:4px 0 16px}
+.gzc-bar .chip.on{background:var(--grad);color:#14150F;border-color:transparent;font-weight:800}
+.gzc-bar .sp{flex:1}
+.gzc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
+.gzc-grid[data-f="print"] .gzc[data-print="0"],.gzc-grid[data-f="device"] .gzc[data-print="1"]{display:none}
+.gzc{position:relative;display:flex;flex-direction:column;border-radius:22px;overflow:hidden;transition:transform .35s cubic-bezier(.2,1.2,.4,1),box-shadow .35s,border-color .35s}
+.gzc:hover{transform:translateY(-4px);border-color:var(--bd2);box-shadow:0 24px 50px -24px rgba(0,0,0,.85),0 0 0 1px rgba(232,182,74,.12)}
+.gzc-art{position:relative;aspect-ratio:16/10;display:grid;place-items:center;background:radial-gradient(120% 90% at 50% 110%,rgba(79,132,96,.38),transparent 60%),linear-gradient(160deg,#20231a,#121310);border-bottom:1px solid var(--bd);cursor:pointer;overflow:hidden}
+.gzc-art::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(79,132,96,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(79,132,96,.08) 1px,transparent 1px);background-size:22px 22px;mask-image:radial-gradient(circle at 50% 55%,#000 30%,transparent 75%);-webkit-mask-image:radial-gradient(circle at 50% 55%,#000 30%,transparent 75%)}
+.gzc-art ei-c.ei{width:104px;height:104px;filter:drop-shadow(0 12px 22px rgba(0,0,0,.55)) drop-shadow(0 0 18px rgba(232,182,74,.18))}
+.gzc:hover .gzc-art ei-c.ei{transform:translateY(-4px) scale(1.06) rotate(-3deg);filter:drop-shadow(0 14px 24px rgba(0,0,0,.6)) drop-shadow(0 0 24px rgba(232,182,74,.38))}
+.gzc-corner{position:absolute;top:10px;inset-inline-start:10px;display:flex;gap:6px;z-index:1}
+.gzc-corner span{width:30px;height:30px;border-radius:10px;display:grid;place-items:center;backdrop-filter:blur(8px);background:rgba(20,21,15,.65);border:1px solid var(--bd)}
+.gzc-corner span svg{width:15px;height:15px}
+.gzc-corner .pr{color:#E8B64A;border-color:rgba(232,182,74,.4)}.gzc-corner .dv{color:#7FD08B}
+.gzc-price{position:absolute;top:10px;inset-inline-end:10px;z-index:1;font-size:11.5px;font-weight:800;padding:4px 10px;border-radius:999px;background:rgba(20,21,15,.7);border:1px solid var(--bd2);color:var(--g)}
+.gzc-price.free{color:#7FD08B;border-color:rgba(109,194,122,.4)}.gzc-price.own{color:#14150F;background:var(--grad);border-color:transparent}
+.gzc-b{padding:15px 16px 16px;display:flex;flex-direction:column;gap:9px;flex:1}
+.gzc-b h3{font-size:17px;line-height:1.3;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.gzc-b h3 bdi{font-size:12.5px;color:var(--mu);font-weight:600}
+.gzc-b p{font-size:13px;color:var(--mu);line-height:1.6;margin:0}
+.gzc-tags{display:flex;gap:6px;flex-wrap:wrap}
+.gzc-meta{display:flex;gap:12px;font-size:12px;color:var(--mu2);flex-wrap:wrap}
+.gzc-meta span{display:inline-flex;align-items:center;gap:4px}.gzc-meta svg{width:13px;height:13px}
+.gzc-btns{display:flex;gap:7px;flex-wrap:wrap;margin-top:auto;padding-top:4px}
+.gzc-btns .btn{height:36px;padding:0 13px;font-size:13px;border-radius:11px}
+.gzc-btns .btn svg{width:15px;height:15px}
+.gzc-tips{margin-top:22px;padding:18px 20px;display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.gzc-tips div{font-size:13px;color:var(--mu);line-height:1.6}.gzc-tips b{display:flex;align-items:center;gap:7px;color:var(--w);margin-bottom:3px;font-size:14px}
+.gzc-tips svg{color:var(--g)}
+@media (max-width:860px){.gzc-hero{grid-template-columns:1fr}.gzc-tips{grid-template-columns:1fr}}
+@media (max-width:560px){.gzc-grid{grid-template-columns:1fr 1fr;gap:10px}.gzc-art ei-c.ei{width:72px;height:72px}.gzc-b{padding:11px 11px 12px;gap:7px}.gzc-b h3{font-size:15px}.gzc-b p{display:none}.gzc-meta{display:none}.gzc-btns .btn{flex:1;height:34px;padding:0 8px;font-size:12px}.gzc-tags .dv,.gzc-tags .pd{display:none}.gzc-tag{font-size:11px;padding:0 7px}.gzc-bar .sp{display:none}.gzc-intro h1{font-size:24px}.gzc-corner span{width:26px;height:26px}}
+@media (max-width:380px){.gzc-grid{grid-template-columns:1fr}}
+
+/* game window */
+.gzw{position:fixed;inset:0;z-index:300;display:grid;place-items:center;padding:16px;background:rgba(8,9,6,.72);backdrop-filter:blur(10px);animation:gzwIn .25s ease}
+@keyframes gzwIn{from{opacity:0}}
+.gzw-box{width:min(560px,100%);max-height:calc(100vh - 32px);overflow:auto;border-radius:24px;padding:18px 18px 20px;background:linear-gradient(170deg,#1f2219,#14150F);border:1px solid var(--bd2);box-shadow:0 40px 90px -30px #000;animation:gzwUp .35s cubic-bezier(.2,1.2,.4,1)}
+@keyframes gzwUp{from{transform:translateY(24px) scale(.97);opacity:0}}
+.gzw-h{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.gzw-h ei-c.ei{width:40px;height:40px}
+.gzw-h h3{flex:1;font-size:18px;line-height:1.2}.gzw-h h3 small{display:block;font-size:11px;letter-spacing:2.5px;color:var(--g);font-family:var(--mono)}
+.gzw-x{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:rgba(255,255,255,.05);border:1px solid var(--bd)}
+.gzw .scorebar{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;font-size:13.5px;color:var(--mu);margin-top:10px;align-items:center}
+.gzw .scorebar b{color:var(--w)}
+.gzw .game-stage{max-width:400px;margin:0 auto}
+.gzw .pad{max-width:200px;margin:0 auto}
+.gzw .mem{max-width:400px}
+/* XO */
+.xo-modes{display:flex;gap:7px;justify-content:center;margin-bottom:12px}
+.xo-b{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;max-width:330px;margin:0 auto}
+.xo-c{aspect-ratio:1;border-radius:18px;background:linear-gradient(145deg,#272a1f,#15160f);border:1px solid var(--bd);display:grid;place-items:center;transition:.2s}
+.xo-c:hover:not(.f){border-color:var(--bd2);transform:translateY(-2px)}
+.xo-c svg{width:62%;height:62%;animation:xoPop .35s cubic-bezier(.2,1.6,.4,1)}
+.xo-c.w{border-color:var(--g);box-shadow:0 0 22px -4px var(--g)}
+@keyframes xoPop{from{transform:scale(.3) rotate(-25deg);opacity:0}}
+.xo-msg{text-align:center;font-weight:800;margin-top:12px;min-height:24px}
+/* Cube Catch */
+.cc-b{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;max-width:340px;margin:0 auto;touch-action:manipulation}
+.cc-c{aspect-ratio:1;border-radius:16px;background:linear-gradient(145deg,#24271c,#131410);border:1px solid var(--bd);position:relative;overflow:hidden}
+.cc-c i{position:absolute;inset:14%;border-radius:26%;background:var(--c);box-shadow:0 0 26px -2px var(--c),inset 0 -6px 0 rgba(0,0,0,.18),inset 0 6px 0 rgba(255,255,255,.25);transform:scale(0);transition:transform .18s cubic-bezier(.2,1.6,.4,1)}
+.cc-c.on i{transform:scale(1)}
+.cc-c.hit{animation:ccHit .3s}.cc-c.miss{animation:ccMiss .3s}
+@keyframes ccHit{50%{background:rgba(232,182,74,.35)}}@keyframes ccMiss{30%,70%{transform:translateX(4px)}50%{transform:translateX(-4px)}}
+.cc-ov{text-align:center;padding:10px 0 4px}.cc-ov h3{margin:6px 0}
+.cc-time{height:6px;border-radius:6px;background:rgba(255,255,255,.07);max-width:340px;margin:0 auto 12px;overflow:hidden}.cc-time i{display:block;height:100%;width:100%;background:var(--grad);transition:width .25s linear}
+/* light mode */
+html.light .gzc-art{background:radial-gradient(120% 90% at 50% 110%,rgba(79,132,96,.25),transparent 60%),linear-gradient(160deg,#f4efe2,#e9e2cf)}
+html.light .gzc-corner span,html.light .gzc-price{background:rgba(255,255,255,.85)}
+html.light .gzc-tag.on{color:#5c5b4c;border-color:rgba(47,90,61,.3)}
+html.light .gzc-tag.pr{color:#9a6f12}html.light .gzc-tag.dv{color:#2F7A45}
+html.light .gzw-box{background:linear-gradient(170deg,#fbf8f0,#f1ecdf)}
+html.light .xo-c,html.light .cc-c{background:linear-gradient(145deg,#fff,#efe9da)}
+</style>
+<script>
+/* ================= 🎮 EILAN GAMES ZONE — cube catalog =================
+   every game shows: animated cube icon · printable or device-only · where it plays */
+const GZC_PAT={"g-guess":"..#####..|.##...##.|.##...##.|.....##..|....##...|...##....|.........|...##....|...##....","g-xo":"..#..#..|..#..#..|########|..#..#..|..#..#..|########|..#..#..|..#..#..","g-snake":".........|.....###.|.....#.##|.....#...|.#####...|.#.......|.#####...|.....#...|######...","g-catch":"...###...|..#...#..|.#.....#.|#...#...#|#..###..#|#...#...#|.#.....#.|..#...#..|...###...","g-chili":"......##.|.....##..|...####..|..#####..|.######..|.#####...|.####....|.###.....|##.......","g-x":"##...##|.##.##.|..###..|..###..|.##.##.|##...##","g-o":"..###..|.##.##.|##...##|##...##|.##.##.|..###.."};
+Object.assign(CUBE_PAT,GZC_PAT);
+const gzL=(a,e)=>isEN()?e:a;
+const GZI={
+ print:'<svg viewBox="0 0 24 24"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M6 14h12v7H6z"/></svg>',
+ dev:'<svg viewBox="0 0 24 24"><rect x="6.5" y="2" width="11" height="20" rx="2.5"/><path d="M11 18h2"/></svg>',
+ web:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>',
+ dl:'<svg viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>',
+ play:'<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>',
+ ppl:'<svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14.8c2 .8 3.2 2.5 3.6 5.2"/></svg>',
+ time:'<svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M9 2h6"/></svg>',
+ key:'<svg viewBox="0 0 24 24"><circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M17 6l3 3M15 8l2 2"/></svg>',
+ bag:'<svg viewBox="0 0 24 24"><path d="M5 8h14l-1.2 12H6.2z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>',
+ gift:'<svg viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="5" rx="1"/><path d="M5 13v8h14v-8M12 8v13M12 8c-2-4-6-4-6-1.5S12 8 12 8zM12 8c2-4 6-4 6-1.5S12 8 12 8z"/></svg>',
+ x:'<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>'};
+const gzCube=k=>`<ei-c class="ei ei-${k}">${eiSvgCube(k)}</ei-c>`;
+/* the catalog — print: true = there is a PDF that prints; dev: plays on the device */
+const GZC_LIST=()=>{
+ const paid=(id,key,open,o)=>{if(!S.products.some(p=>p.id===id))return null;let un=false,pr=25,url='';
+   try{un=o.un();const p=o.pd();pr=+(o.price?o.price():p.price)||25;url=extUrl(p)||''}catch(e){}
+   return Object.assign({id,k:key,open,paid:true,un,price:pr,ext:url,print:true,pdfNote:gzL('PDF مع الشراء','PDF with purchase')},o.t)};
+ const L=[
+  {id:'guess',k:'g-guess',free:true,print:true,pdf:'/games/pdf/Eilan-Guess-Khammen.pdf',n:gzL('خمّن؟','Guess?'),en:'Guess?',d:gzL('طلّع اسم البلد من الإيموجي والحروف — ١٠ أسئلة عربي و١٠ إنجليزي.','Find the country from emojis & letters — 10 Arabic + 10 English.'),pl:gzL('لاعب أو أكثر','1+ players'),tm:gzL('١٠ دقائق','10 min'),
+   btns:`<button class="btn g" data-act="guessopen" data-m="party">${GZI.play}${gzL('العب هنا','Play here')}</button><button class="btn" data-act="guessopen" data-m="solo">${gzL('وضع التحدي','Challenge')}</button>`},
+  paid('g-lahad','party','lhopen',{un:()=>lhUnlocked(),pd:()=>lhProd(),t:{n:gzL('لحد يشدها','Party Game'),en:'Party Game',d:gzL('بطاقات صراحة وتحديات وسباقات «أول واحد…» — مرّروا الجهاز واقلبوا البطاقة.','Truth cards, dares and "first one to…" races — pass the device and flip.'),pl:gzL('٣ لاعبين أو أكثر','3+ players'),tm:gzL('٣٠+ دقيقة','30+ min'),code:'lhcode',pid:'g-lahad'}}),
+  paid('g-family','home','fmopen',{un:()=>fmUnlocked(),pd:()=>fmProd(),t:{n:gzL('أسئلة عائلية','Family Game'),en:'Family Game',d:gzL('أسئلة سريعة للعائلة — أسرع واحد يجاوب صح ياخذ النقطة.','Quick family questions — fastest correct answer scores.'),pl:gzL('لاعبين أو أكثر','2+ players'),tm:gzL('٢٠+ دقيقة','20+ min'),code:'fmcode',pid:'g-family'}}),
+  paid('g-bahar','g-chili','bhopen',{un:()=>bhUnlocked(),pd:()=>bhProd(),t:{n:gzL('كثّر بهارات','Spice It Up'),en:'Spice It Up',d:gzL('فريقين وقصص: واحد بس يكثّر بهارات — تقدرون تطلّعون الكذاب؟','Two teams, one storyteller spices it up — can you spot the liar?'),pl:gzL('فريقين · ٤+','2 teams · 4+'),tm:gzL('٣٠+ دقيقة','30+ min'),code:'bhcode',pid:'g-bahar'}}),
+  paid('g-mashaer','love','msopen',{un:()=>msUnlocked(),pd:()=>msProd(),t:{n:gzL('مشاعر','Feelings'),en:'Feelings',d:gzL('لعبة لشخصين عزيزين: أسئلة من القلب ولحظات مع بعض.','For two close people: heartfelt questions and moments together.'),pl:gzL('لشخصين','2 players'),tm:gzL('٣٠+ دقيقة','30+ min'),code:'mscode',pid:'g-mashaer'}}),
+  paid('g-nisf','night','nsopen',{un:()=>nsUnlocked(),pd:()=>nsProd(),price:()=>nsPrice(),t:{n:gzL('نص الليل','Midnight Talks'),en:'Midnight Talks',d:gzL('أسئلة صراحة للسهرة على ٣ مراحل تتعمّق مع الليل.','Late-night honesty questions in 3 deepening stages.'),pl:gzL('شخصين أو أكثر','2+ players'),tm:gzL('٤٥+ دقيقة','45+ min'),code:'nscode',pid:'g-nisf'}}),
+  {id:'memory',k:'brain',free:true,print:true,pdf:'/games/pdf/Eilan-Memory-Cards.pdf',n:gzL('ذاكرة إيلان','Eilan Memory'),en:'Memory',d:gzL('طابق أزواج المكعبات بأقل حركات — وبطاقات PDF تنقصّ وتنلعب بالكشتة.','Match the cube pairs in fewest moves — plus cut-out PDF cards.'),pl:gzL('لاعب أو أكثر','1+ players'),tm:gzL('٥ دقائق','5 min'),local:'memory'},
+  {id:'xo',k:'g-xo',free:true,print:true,pdf:'/games/pdf/Eilan-XO.pdf',n:gzL('إكس أو إيلان','Eilan XO'),en:'XO',d:gzL('تحدَّ Eilan أو صديقك على نفس الجهاز — وأوراق جولات تنطبع مع تحدي ٤×٤.','Beat Eilan or a friend on one device — printable round sheets + 4×4 challenge.'),pl:gzL('لشخصين','2 players'),tm:gzL('دقيقتين','2 min'),local:'xo'},
+  {id:'catch',k:'g-catch',free:true,print:false,n:gzL('اصطد المكعب','Cube Catch'),en:'Cube Catch',d:gzL('المكعبات تولّع وتختفي بسرعة — اصطدها قبل لا تطفي خلال ٣٠ ثانية!','Cubes light up and vanish — catch as many as you can in 30 seconds!'),pl:gzL('لاعب واحد','1 player'),tm:gzL('٣٠ ثانية','30 sec'),local:'catch'},
+  {id:'snake',k:'g-snake',free:true,print:false,n:'Neon Snake',en:gzL('الثعبان','Snake'),d:gzL('الأسهم أو الأزرار — كل نقطة = 1 XP عند انتهاء الجولة.','Arrows or on-screen pad — every point = 1 XP.'),pl:gzL('لاعب واحد','1 player'),tm:gzL('حر','Endless'),local:'snake'}];
+ return L.filter(Boolean)};
+function gzcCard(g){
+ const pr=g.print;
+ const tags=(pr?`<span class="gzc-tag pr">${GZI.print}${gzL('تنطبع · PDF','Printable · PDF')}</span><span class="gzc-tag dv">${GZI.dev}${gzL('وتنلعب على الجهاز','Plays on device')}</span>`
+    :`<span class="gzc-tag on">${GZI.dev}${gzL('على الجهاز فقط — ما تنطبع','Device only — not printable')}</span>`);
+ const price=g.paid?(g.un?`<span class="gzc-price own">${gzL('مفعّلة ✓','Unlocked ✓')}</span>`:`<span class="gzc-price">${g.price} ${gzL('ر.س','SAR')}</span>`):`<span class="gzc-price free">${gzL('مجانية','Free')}</span>`;
+ let btns=g.btns||'';
+ if(g.local)btns=`<button class="btn g" data-act="gzplay" data-g="${g.local}">${GZI.play}${gzL('العب هنا','Play here')}</button>`;
+ if(g.paid)btns=g.un?`<button class="btn g" data-act="${g.open}" data-m="play">${GZI.play}${gzL('العب الآن','Play now')}</button>`
+   :`<button class="btn g" data-act="${g.open}" data-m="trial">${GZI.gift}${gzL('جرّب مجاناً','Free trial')}</button>`
+   +(g.ext?`<a class="btn p" href="${esc(g.ext)}" target="_blank" rel="noopener">${GZI.bag}${gzL('اشترِ','Buy')}</a>`:`<button class="btn p" data-go="eilan://product/${g.pid}">${GZI.bag}${gzL('اشترِ','Buy')}</button>`)
+   +`<button class="btn" data-act="${g.code}" title="${gzL('عندي كود','I have a code')}">${GZI.key}</button>`;
+ if(g.pdf)btns+=`<a class="btn" href="${g.pdf}" target="_blank" rel="noopener" download title="${gzL('تحميل PDF للطباعة أو الآيباد','Download PDF')}">${GZI.dl}PDF</a>`;
+ const artAct=g.local?`data-act="gzplay" data-g="${g.local}"`:g.paid?`data-act="${g.open}" data-m="${g.un?'play':'trial'}"`:`data-act="guessopen" data-m="party"`;
+ return `<article class="gzc card" data-print="${pr?1:0}">
+  <div class="gzc-art" ${artAct} role="button" aria-label="${esc(g.n)}"><div class="gzc-corner no-ei">${pr?`<span class="pr" title="${gzL('تنطبع','Printable')}">${GZI.print}</span>`:''}<span class="dv" title="${gzL('تنلعب على الجهاز','Plays on device')}">${GZI.dev}</span></div>${price}${gzCube(g.k)}</div>
+  <div class="gzc-b"><h3>${esc(g.n)} <bdi dir="ltr">${esc(g.en)}</bdi></h3><p>${esc(g.d)}</p>
+   <div class="gzc-tags no-ei">${tags}${g.pdfNote?`<span class="gzc-tag pd">${GZI.dl}${g.pdfNote}</span>`:''}</div>
+   <div class="gzc-meta no-ei"><span>${GZI.ppl}${esc(g.pl)}</span><span>${GZI.time}${esc(g.tm)}</span></div>
+   <div class="gzc-btns no-ei">${btns}</div></div></article>`}
+const GZS={f:'all',el:null,clean:[]};
+P.play={icon:'🎮',title:()=>gzL('منطقة الترفيه','Entertainment Zone'),html:()=>{const L=GZC_LIST(),np=L.filter(g=>g.print).length;return `
+ <div class="gzc-hero">
+  <div class="gzc-intro card"><div class="gzc-float" aria-hidden="true">${CUBE_RAMP.map(c=>`<i style="background:${c}"></i>`).join('')}</div>
+   <div class="eyebrow">ENTERTAINMENT ZONE</div><h1>${gzL('منطقة','The')} <span class="grad-t">${gzL('الترفيه','Fun Zone')}</span></h1>
+   <p>${gzL('ألعاب للجَمعات والكشتات والسهرات — العبها هنا داخل الموقع، أو حمّلها PDF وتنعرض على الآيباد والجوال أو تنطبع.','Games for gatherings, trips and late nights — play right here, or grab the PDF to show on iPad / phone or print.')}</p></div>
+  <div class="gzc-legend card no-ei">
+   <div class="lg"><span class="gzc-tag pr">${GZI.print}${gzL('تنطبع','Printable')}</span><div><b>${gzL('PDF للطباعة وللشاشة','PDF for print & screen')}</b>${gzL('ورق A4، أو افتحه على الآيباد والجوال.','A4 paper, or open it on iPad / phone.')}</div></div>
+   <div class="lg"><span class="gzc-tag dv">${GZI.dev}${gzL('على الجهاز','On device')}</span><div><b>${gzL('تنلعب داخل الموقع','Plays inside the site')}</b>${gzL('أجمل نسخة: حركة وأصوات ونقاط XP.','The best version: motion, sound and XP.')}</div></div>
+   <div class="lg"><span class="gzc-tag on">${GZI.dev}${gzL('جهاز فقط','Device only')}</span><div><b>${gzL('ما تنطبع','Not printable')}</b>${gzL('ألعاب سرعة تحتاج شاشة.','Speed games that need a screen.')}</div></div></div></div>
+ <div class="gzc-bar no-ei">
+  <button class="chip ${GZS.f==='all'?'on':''}" data-act="gzf" data-f="all">${gzL('كل الألعاب','All games')} · ${L.length}</button>
+  <button class="chip ${GZS.f==='print'?'on':''}" data-act="gzf" data-f="print">${GZI.print}${gzL('تنطبع','Printable')} · ${np}</button>
+  <button class="chip ${GZS.f==='device'?'on':''}" data-act="gzf" data-f="device">${GZI.dev}${gzL('على الجهاز فقط','Device only')} · ${L.length-np}</button>
+  <span class="sp"></span><span class="mu" style="font-size:12.5px">${gzL('أفضل نتيجة بالذاكرة','Best memory')}: <b>${S.hi.memory||'—'}</b> · Snake: <b>${S.hi.snake||0}</b> · ${gzL('المكعب','Catch')}: <b>${S.hi.catch||0}</b></span></div>
+ <div class="gzc-grid" id="gzcGrid" data-f="${GZS.f}">${L.map(gzcCard).join('')}</div>
+ <div class="gzc-tips card no-ei">
+  <div><b>${GZI.dev}${gzL('على الآيباد والجوال','On iPad & phone')}</b>${gzL('اضغط PDF ← مشاركة ← «حفظ في الملفات» أو افتحه في GoodNotes، واعرضه بالشاشة الكاملة.','Tap PDF → Share → "Save to Files" or open in GoodNotes, then go full screen.')}</div>
+  <div><b>${GZI.print}${gzL('للطباعة','To print')}</b>${gzL('A4 بالحجم الفعلي (100%). للبطاقات: ورق مقوّى، واطبع الظهر على الوجه الثاني.','A4 at actual size (100%). For cards use thick paper; print backs double-sided.')}</div>
+  <div><b>${GZI.web}${gzL('داخل الموقع','Inside the site')}</b>${gzL('اضغط على المكعب أو «العب هنا» — تجمع XP وتنحفظ أفضل نتيجة لك.','Tap the cube or "Play here" — earn XP and keep your best score.')}</div></div>
+ ${(()=>{const ex=S.products.filter(p=>(p.cat==='entertainment'||p.cat==='experiences')&&!/^g-/.test(p.id));return ex.length?`<section class="sec"><div class="sec-h"><h2>🎟️ ${gzL('تجارب ترفيهية من المتجر','Fun experiences from the store')}</h2></div><div class="pgrid">${ex.map(pcard).join('')}</div></section>`:''})()}`},
+ mount(){CLEAN.push(gzwClose)}};
+ACT.gzf=d=>{GZS.f=d.f;const g=$('#gzcGrid');if(g)g.dataset.f=d.f;$$('.gzc-bar .chip').forEach(b=>b.classList.toggle('on',b.dataset.f===d.f))};
+
+/* ---------- game window (memory · xo · catch · snake) ---------- */
+function gzwClose(){GZS.clean.splice(0).forEach(f=>{try{f()}catch(e){}});if(GZS.el){GZS.el.remove();GZS.el=null}}
+function gzwOpen(k,title,sub,body){gzwClose();const w=document.createElement('div');w.className='gzw';
+ w.innerHTML=`<div class="gzw-box" role="dialog" aria-modal="true"><div class="gzw-h">${gzCube(k)}<h3><small>${sub}</small>${title}</h3><button class="gzw-x no-ei" data-act="gzwclose" aria-label="${gzL('إغلاق','Close')}">${GZI.x}</button></div>${body}</div>`;
+ w.addEventListener('click',e=>{if(e.target===w)gzwClose()});document.body.appendChild(w);GZS.el=w;
+ const esc_=e=>{if(e.key==='Escape')gzwClose()};document.addEventListener('keydown',esc_);GZS.clean.push(()=>document.removeEventListener('keydown',esc_))}
+ACT.gzwclose=gzwClose;
+const gzGrab=fn=>{const n=CLEAN.length;fn();GZS.clean.push(...CLEAN.splice(n))};
+ACT.gzplay=d=>{const g=d.g;
+ if(g==='snake'){gzwOpen('g-snake','Neon Snake','EILAN ARCADE',`<div class="game-stage"><canvas id="snake" width="400" height="400"></canvas><div class="snake-ov" id="snOv"><div><button class="btn g" data-act="snakestart">${gzL('ابدأ اللعب','Start')}</button></div></div></div>
+   <div class="scorebar"><span>${gzL('النقاط','Score')}: <b id="snS">0</b></span><span>${gzL('الأعلى','Best')}: <b id="snH">${S.hi.snake||0}</b></span></div><br>
+   <div class="pad"><span></span><button data-act="dir" data-d="u">▲</button><span></span><button data-act="dir" data-d="r">▶</button><button data-act="dir" data-d="d">▼</button><button data-act="dir" data-d="l">◀</button></div>`);gzGrab(snakeInit)}
+ else if(g==='memory'){gzwOpen('brain',gzL('ذاكرة إيلان','Eilan Memory'),'EILAN MEMORY',`<div class="mem" id="mem"></div><div class="scorebar"><span>${gzL('الحركات','Moves')}: <b id="memM">0</b></span><span>${gzL('أفضل نتيجة','Best')}: <b>${S.hi.memory||'—'}</b></span><button class="btn xs" data-act="memreset">↻ ${gzL('جولة جديدة','New round')}</button><a class="btn xs no-ei" href="/games/pdf/Eilan-Memory-Cards.pdf" target="_blank" rel="noopener">${GZI.print} PDF</a></div>`);memInit()}
+ else if(g==='xo'){gzwOpen('g-xo',gzL('إكس أو إيلان','Eilan XO'),'EILAN XO',`<div class="xo-modes no-ei"><button class="chip" data-act="xomode" data-v="cpu">${gzL('ضد Eilan','vs Eilan')}</button><button class="chip" data-act="xomode" data-v="2p">${gzL('لاعبين على نفس الجهاز','2 players, 1 device')}</button></div><div class="xo-b" id="xoB"></div><div class="xo-msg" id="xoMsg"></div><div class="scorebar no-ei" id="xoSc"></div><div class="scorebar no-ei"><button class="btn xs" data-act="xonew">↻ ${gzL('جولة جديدة','New round')}</button><a class="btn xs" href="/games/pdf/Eilan-XO.pdf" target="_blank" rel="noopener">${GZI.print} PDF</a></div>`);xoInit()}
+ else if(g==='catch'){gzwOpen('g-catch',gzL('اصطد المكعب','Cube Catch'),'EILAN ARCADE',`<div class="cc-time"><i id="ccT"></i></div><div class="cc-b" id="ccB">${Array.from({length:16},(_,i)=>`<button class="cc-c" data-act="cchit" data-i="${i}" aria-label="cube ${i+1}"><i></i></button>`).join('')}</div><div class="scorebar"><span>${gzL('النقاط','Score')}: <b id="ccS">0</b></span><span>${gzL('سلسلة','Combo')}: <b id="ccC">0</b></span><span>${gzL('الأعلى','Best')}: <b id="ccH">${S.hi.catch||0}</b></span></div><div class="cc-ov" id="ccOv"><button class="btn g" data-act="ccstart">${GZI.play}${gzL('ابدأ — ٣٠ ثانية','Start — 30 sec')}</button></div>`);GZS.clean.push(ccStop)}};
+
+/* ---------- XO ---------- */
+const XO={b:[],turn:'X',mode:'cpu',sc:{X:0,O:0,T:0},over:false,busy:false};
+const XO_W=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+function xoMark(m){const rows=CUBE_PAT[m==='X'?'g-x':'g-o'].split('|'),H=rows.length,W=rows[0].length,P=60/Math.max(W,H),Z=P*.84;let h=`<svg viewBox="0 0 64 64">`;
+ rows.forEach((r,y)=>{for(let x=0;x<W;x++)if(r[x]==='#'){const c=m==='X'?CUBE_RAMP[Math.min(1,Math.floor(y/H*2))]:CUBE_RAMP[3+Math.min(1,Math.floor(y/H*2))];h+=`<rect x="${(2+(64-P*W)/2-2+(x+.5)*P-Z/2).toFixed(1)}" y="${((64-P*H)/2+(y+.5)*P-Z/2).toFixed(1)}" width="${Z.toFixed(1)}" height="${Z.toFixed(1)}" rx="${(Z*.28).toFixed(1)}" fill="${c}"/>`}});return h+'</svg>'}
+const xoWin=b=>{for(const l of XO_W)if(b[l[0]]&&b[l[0]]===b[l[1]]&&b[l[0]]===b[l[2]])return l;return null};
+function xoDraw(){const B=$('#xoB');if(!B)return;const w=xoWin(XO.b)||[];
+ B.innerHTML=XO.b.map((v,i)=>`<button class="xo-c ${v?'f':''} ${w.includes(i)?'w':''}" data-act="xo" data-i="${i}" aria-label="${v||i+1}">${v?xoMark(v):''}</button>`).join('');
+ $('#xoSc').innerHTML=`<span>✕ ${XO.mode==='cpu'?gzL('أنت','You'):gzL('اللاعب ١','Player 1')}: <b>${XO.sc.X}</b></span><span>${gzL('تعادل','Draw')}: <b>${XO.sc.T}</b></span><span>◯ ${XO.mode==='cpu'?'Eilan':gzL('اللاعب ٢','Player 2')}: <b>${XO.sc.O}</b></span>`;
+ $$('.xo-modes .chip').forEach(c=>c.classList.toggle('on',c.dataset.v===XO.mode))}
+function xoMsg(t){const m=$('#xoMsg');if(m)m.innerHTML=t}
+function xoInit(){XO.b=Array(9).fill('');XO.turn='X';XO.over=false;XO.busy=false;xoDraw();xoMsg(XO.mode==='cpu'?gzL('دورك — أنت ✕','Your turn — you are ✕'):gzL('دور ✕','✕ to play'))}
+function xoEnd(){const w=xoWin(XO.b);if(w){XO.over=true;const p=XO.b[w[0]];XO.sc[p]++;xoDraw();
+   if(XO.mode==='cpu'){if(p==='X'){xoMsg(gzL('فزت على Eilan! 🏆','You beat Eilan! 🏆'));S.hi.xo=(S.hi.xo||0)+1;save();addXP(3,'XO')}else xoMsg(gzL('Eilan فازت هالمرة 😄 جرّب ثاني','Eilan won this time 😄 try again'))}
+   else xoMsg(gzL(`فاز ${p==='X'?'✕':'◯'} 🎉`,`${p==='X'?'✕':'◯'} wins 🎉`));return true}
+ if(XO.b.every(Boolean)){XO.over=true;XO.sc.T++;xoDraw();xoMsg(gzL('تعادل! 🤝','Draw! 🤝'));return true}return false}
+function xoCpu(){const b=XO.b,free=b.map((v,i)=>v?-1:i).filter(i=>i>=0);
+ const find=m=>{for(const i of free){b[i]=m;const w=xoWin(b);b[i]='';if(w)return i}return -1};
+ let i=find('O');if(i<0)i=find('X');if(i<0&&Math.random()<.18)i=free[Math.floor(Math.random()*free.length)];
+ if(i<0&&!b[4])i=4;if(i<0){const c=[0,2,6,8].filter(x=>!b[x]);i=c.length?c[Math.floor(Math.random()*c.length)]:free[0]}return i}
+ACT.xo=d=>{const i=+d.i;if(XO.over||XO.busy||XO.b[i])return;XO.b[i]=XO.turn;if(xoEnd())return;
+ if(XO.mode==='2p'){XO.turn=XO.turn==='X'?'O':'X';xoDraw();xoMsg(gzL(`دور ${XO.turn==='X'?'✕':'◯'}`,`${XO.turn==='X'?'✕':'◯'} to play`));return}
+ XO.busy=true;xoDraw();xoMsg(gzL('Eilan تفكّر…','Eilan is thinking…'));setTimeout(()=>{if(!$('#xoB'))return;XO.b[xoCpu()]='O';XO.busy=false;if(!xoEnd()){xoDraw();xoMsg(gzL('دورك','Your turn'))}},420)};
+ACT.xonew=xoInit;ACT.xomode=d=>{XO.mode=d.v;XO.sc={X:0,O:0,T:0};xoInit()};
+
+/* ---------- Cube Catch ---------- */
+const CC={run:false,sc:0,combo:0,end:0,tmr:null,lit:{},dur:30000};
+function ccStop(){CC.run=false;clearTimeout(CC.tmr);clearInterval(CC.clock);Object.values(CC.lit).forEach(clearTimeout);CC.lit={}}
+function ccSpawn(){if(!CC.run)return;const cells=$$('#ccB .cc-c');if(!cells.length)return ccStop();
+ const free=cells.map((c,i)=>c.classList.contains('on')?-1:i).filter(i=>i>=0);if(free.length){const i=free[Math.floor(Math.random()*free.length)],c=cells[i];
+   c.style.setProperty('--c',CUBE_RAMP[Math.floor(Math.random()*5)]);c.classList.add('on');
+   const t=CC.end-Date.now(),life=Math.max(520,1150-(CC.dur-t)/CC.dur*600);
+   CC.lit[i]=setTimeout(()=>{c.classList.remove('on');delete CC.lit[i];CC.combo=0;const e=$('#ccC');if(e)e.textContent=0},life)}
+ const left=CC.end-Date.now();CC.tmr=setTimeout(ccSpawn,Math.max(260,700-(CC.dur-left)/CC.dur*420))}
+ACT.ccstart=()=>{ccStop();CC.run=true;CC.sc=0;CC.combo=0;CC.end=Date.now()+CC.dur;$('#ccS').textContent=0;$('#ccC').textContent=0;$('#ccOv').innerHTML='';
+ $$('#ccB .cc-c').forEach(c=>c.classList.remove('on'));
+ CC.clock=setInterval(()=>{const l=CC.end-Date.now(),b=$('#ccT');if(b)b.style.width=Math.max(0,l/CC.dur*100)+'%';if(l<=0)ccDone()},200);ccSpawn()};
+function ccDone(){ccStop();$$('#ccB .cc-c').forEach(c=>c.classList.remove('on'));const nb=CC.sc>(S.hi.catch||0);if(nb){S.hi.catch=CC.sc;save()}
+ const h=$('#ccH');if(h)h.textContent=S.hi.catch||0;
+ const o=$('#ccOv');if(o)o.innerHTML=`<h3>${gzL('انتهى الوقت','Time\'s up')} — ${CC.sc} ${gzL('مكعب','cubes')}${nb?' · '+gzL('رقم قياسي!','New best!'):''}</h3><button class="btn g" data-act="ccstart">↻ ${gzL('العب مجدداً','Play again')}</button>`;
+ const xp=Math.floor(CC.sc/3);if(xp)addXP(xp,gzL('اصطد المكعب','Cube Catch'))}
+ACT.cchit=d=>{if(!CC.run)return;const i=+d.i,c=$$('#ccB .cc-c')[i];if(!c)return;
+ if(c.classList.contains('on')){clearTimeout(CC.lit[i]);delete CC.lit[i];c.classList.remove('on');CC.combo++;CC.sc+=CC.combo>=5?2:1;c.classList.remove('hit');void c.offsetWidth;c.classList.add('hit')}
+ else{CC.combo=0;c.classList.remove('miss');void c.offsetWidth;c.classList.add('miss')}
+ $('#ccS').textContent=CC.sc;$('#ccC').textContent=CC.combo};
+</script>
+<!-- /EILAN GAMES ZONE -->
 <script>
 /* ================= INIT ================= */
 (function init(){

@@ -1429,33 +1429,25 @@ body.lang-en #bBack svg,body.lang-en #bFwd svg{transform:scaleX(-1)}
 .hero-art .fl .fl-brand{width:19px;height:19px;object-fit:contain;flex-shrink:0}
 .hero-art .f2{color:var(--emerald)}
 
-/* ===== Home cube constellation · calm horizontal motion, touch-friendly destinations ===== */
-.cube-scene{--cube-size:clamp(52px,5.2vw,68px);--cube-gap:12px;position:relative;width:min(300px,100%);height:310px;margin:auto;direction:ltr;isolation:isolate;animation:cubeSceneDrift 7s ease-in-out infinite;will-change:transform}
-.cube-scene::before{content:"";position:absolute;inset:12% -4% 4%;z-index:-1;border-radius:50%;background:radial-gradient(ellipse,rgba(85,184,124,.18),rgba(216,180,92,.07) 42%,transparent 70%);filter:blur(18px);pointer-events:none}
-.cube-stack{position:absolute;top:49%;left:50%;z-index:1;display:grid;gap:var(--cube-gap);transform:translate(-50%,-42%) rotate(-4deg)}
-.cube-row{display:flex;gap:var(--cube-gap);animation:cubeRowDrift 5.8s ease-in-out infinite;will-change:transform}
-.cube-row:nth-child(2){animation-direction:reverse;animation-duration:6.6s}.cube-row:nth-child(3){animation-duration:7.2s;animation-delay:-2.1s}
-.hero-cube{display:block;flex:0 0 var(--cube-size);width:var(--cube-size);height:var(--cube-size);padding:0;border:0;border-radius:22px;background:none;cursor:pointer;animation:cubeBob 4.8s ease-in-out var(--d,0s) infinite;will-change:transform;-webkit-tap-highlight-color:transparent}
-.hero-cube.cube-float{position:absolute;top:0;left:32px;z-index:2;width:max(44px,calc(var(--cube-size)*.82));height:max(44px,calc(var(--cube-size)*.82));flex-basis:auto}
-.cube-face{position:relative;display:block;width:100%;height:100%;overflow:hidden;border-radius:22px;background:linear-gradient(145deg,rgba(255,255,255,.34),transparent 42%),linear-gradient(145deg,var(--cube),var(--cube-deep));box-shadow:inset 1px 1px 0 rgba(255,255,255,.38),inset -6px -8px 14px rgba(0,0,0,.13),0 8px 0 var(--cube-shadow),0 16px 24px -12px rgba(0,0,0,.58);transition:transform .25s cubic-bezier(.2,.8,.2,1),filter .25s,box-shadow .25s}
-.cube-face::before{content:"";position:absolute;top:9%;left:12%;width:42%;height:20%;border-radius:999px;background:rgba(255,255,255,.19);filter:blur(3px);transform:rotate(-24deg)}
-.cube-face::after{content:"";position:absolute;inset:1px;border:1px solid rgba(255,255,255,.17);border-radius:inherit;pointer-events:none}
-.tone-emerald{--cube:#65c78e;--cube-deep:#34865b;--cube-shadow:#1d5138}.tone-mint{--cube:#b2ddc4;--cube-deep:#78b695;--cube-shadow:#39664f}.tone-deep{--cube:#2f7354;--cube-deep:#17442f;--cube-shadow:#0a291c}.tone-ivory{--cube:#f4f1e5;--cube-deep:#d6dbb9;--cube-shadow:#747b5c}.tone-champ{--cube:#ecd28a;--cube-deep:#d0a64b;--cube-shadow:#745421}
-.hero-cube:hover .cube-face,.hero-cube:focus-visible .cube-face{transform:translateY(-6px) scale(1.06);filter:brightness(1.08);box-shadow:inset 1px 1px 0 rgba(255,255,255,.42),inset -6px -8px 14px rgba(0,0,0,.11),0 10px 0 var(--cube-shadow),0 22px 30px -12px rgba(0,0,0,.64)}
-.hero-cube:active .cube-face{transform:translateY(2px) scale(.97)}.hero-cube:focus-visible{outline:2px solid var(--champ2);outline-offset:5px}
-.cube-caption{position:absolute;right:0;bottom:0;left:0;z-index:2;color:var(--mu);font-size:12px;font-weight:700;text-align:center;direction:rtl;pointer-events:none}.cube-cap-en{display:none}body.lang-en .cube-cap-ar{display:none}body.lang-en .cube-cap-en{display:inline}body.lang-en .cube-caption{direction:ltr}
-.cube-art .fl{z-index:3}.cube-art .f1{top:4%;right:-3%}.cube-art .f2{bottom:5%;left:-3%}
-@keyframes cubeSceneDrift{0%,100%{transform:translateX(-10px)}50%{transform:translateX(10px)}}
-@keyframes cubeRowDrift{0%,100%{transform:translateX(-7px)}50%{transform:translateX(7px)}}
-@keyframes cubeBob{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-5px) rotate(1.5deg)}}
-body.no-motion .cube-scene,body.no-motion .cube-row,body.no-motion .hero-cube{animation:none!important}body.no-motion .cube-face{transition:none}
-@media(prefers-reduced-motion:reduce){.cube-scene,.cube-row,.hero-cube{animation:none!important}.cube-face{transition:none}}
-@media(max-width:860px){
-  .hero .hero-copy{display:contents}.hero .kicker{order:1}.hero .brand-wordmark{order:2}.hero .hero-sub{order:3}.hero .hero-art{display:grid;order:4;min-height:275px;width:100%;margin:2px auto 4px;translate:none;rotate:none;scale:none}.hero .lead{order:5}.hero .mega{order:6}.hero .hero-chips{order:7}
-  .hero .kicker,.hero .brand-wordmark,.hero .hero-sub,.hero .lead,.hero .mega,.hero .hero-chips{position:relative;z-index:1;min-width:0;max-width:100%}
-  .cube-scene{--cube-size:60px;width:280px;height:250px}.cube-art .fl{display:none}.cube-caption{bottom:-22px}
-}
-@media(max-width:560px){.hero .hero-art{min-height:245px;margin-top:0}.cube-scene{--cube-size:50px;--cube-gap:10px;width:230px;height:215px}.hero-cube.cube-float{left:26px}.cube-face,.hero-cube{border-radius:16px}.cube-caption{font-size:11px}}
+/* ===== Reference logo cubes · same artwork + automatic 10-second seasonal motion ===== */
+.hero-art .lg-hub{direction:ltr;position:relative;width:min(100%,300px);display:grid;grid-template-columns:repeat(3,1fr);gap:6.5%;margin:34px 0 8px}
+.lg-t{position:relative;z-index:var(--i);aspect-ratio:1;border:0;padding:0;border-radius:27%;background:var(--c);cursor:pointer;animation:lgstack 3s cubic-bezier(.22,1.25,.36,1) both,lgSeason10 10s cubic-bezier(.22,.8,.3,1) infinite;animation-delay:calc(var(--i)*.11s),calc(4s + var(--i)*.07s);transition:transform .25s,filter .25s,box-shadow .25s;-webkit-tap-highlight-color:transparent}
+.lg-t:hover,.lg-t:focus-visible{transform:translateY(-5px) scale(1.05);filter:brightness(1.1);box-shadow:0 14px 30px rgba(0,0,0,.4);outline:none;z-index:20}
+.lg-t:focus-visible{box-shadow:0 0 0 3px var(--champ2),0 14px 30px rgba(0,0,0,.4)}
+.lg-t::after{content:attr(data-l);position:absolute;left:50%;bottom:calc(100% + 8px);translate:-50% 4px;padding:5px 11px;border-radius:10px;background:rgba(16,17,13,.95);border:1px solid var(--bd);color:#F4EFDD;font-size:12px;font-weight:700;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .2s,translate .2s}
+.lg-t:hover::after,.lg-t:focus-visible::after{opacity:1;translate:-50% 0}
+.lg-t.lg-ai{position:absolute;width:29%;top:-24%;right:-15%;animation:lgstack 3s cubic-bezier(.22,1.25,.36,1) both,lgAiSeason10 10s ease-in-out 4.6s infinite;animation-delay:1.3s,4.6s}
+.lg-cap{margin-top:30px;text-align:center;font-size:12px;color:var(--mu);letter-spacing:.5px}.lg-cap-en{display:none}body.lang-en .lg-cap-ar{display:none}body.lang-en .lg-cap-en{display:inline}
+@keyframes lgstack{0%{opacity:0;transform:translate(var(--dx),calc(var(--dy) - 260%)) rotate(calc((var(--i) - 4)*2.2deg)) scale(.92)}
+ 22%{opacity:1;transform:translate(var(--dx),calc(var(--dy) - var(--i)*3%)) rotate(calc((var(--i) - 4)*2.2deg)) scale(.92)}
+ 48%{opacity:1;transform:translate(var(--dx),calc(var(--dy) - var(--i)*3%)) rotate(calc((var(--i) - 4)*2.2deg)) scale(.92)}
+ 100%{opacity:1;transform:none}}
+@keyframes lgSeason10{0%,62%,100%{transform:none}72%{transform:translate(var(--season-x),var(--season-y)) rotate(var(--season-r)) scale(1.025)}80%{transform:translate(var(--season-bx),var(--season-by)) rotate(var(--season-br))}88%{transform:none}}
+@keyframes lgAiSeason10{0%,28%,54%,62%,100%{transform:translateY(0)}14%,42%{transform:translateY(-7px)}72%{transform:translate(var(--season-x),var(--season-y)) rotate(var(--season-r)) scale(1.04)}80%{transform:translate(var(--season-bx),var(--season-by)) rotate(var(--season-br))}88%{transform:none}}
+.hero-art{translate:none!important;rotate:none!important;scale:none!important}
+body.no-motion .lg-t,body.no-motion .lg-t.lg-ai{animation:none!important}
+@media(max-width:860px){.hero-art{display:grid!important;margin-top:6px}.hero-art .lg-hub{width:min(74vw,290px);margin-top:46px}.lg-cap{margin-top:22px}}
+@media(prefers-reduced-motion:reduce){.lg-t,.lg-t.lg-ai{animation:none!important}}
 .announce{direction:ltr;border-color:rgba(85,184,124,.25);background:linear-gradient(90deg,rgba(47,128,84,.28),rgba(85,184,124,.10),rgba(216,180,92,.08))}
 .announce .mq{direction:rtl;text-align:right}
 .announce b{background:var(--champ);color:#172014}
@@ -3100,16 +3092,14 @@ const DEF = {
    The exact black circle-and-trapezoid figure is part of the artwork, not a separate doll. */
 const EIL_FACE="/assets/brand-portal-vivid.png";
 function eilFaceHTML(){return `<div class="eil-bob"><div class="eil-face portal-face"><img src="${EIL_FACE}" alt="بوابة EILAN DOLL" draggable="false"></div></div>`}
-function cubeWorldHTML(feat){
-  const cubes=[
-    ['متجر إيلان','EILAN Store','eilan://store','ivory'],['أكاديمية التعلّم','Learning Academy','eilan://books','mint'],['منطقة الترفيه','Entertainment','eilan://play','deep'],
-    ['Eilan AI','Eilan AI','eilan://ai','deep'],['القوالب الجاهزة','Templates','eilan://templates','emerald'],['وجهاتي','Destinations','eilan://places','mint'],
-    ['مجتمع Westred','Community','eilan://community','emerald'],['مكتبتي','My Library','eilan://library','deep'],['المكافآت','Rewards','eilan://rewards','ivory']
-  ];
-  const rows=[0,1,2].map(r=>`<div class="cube-row">${cubes.slice(r*3,r*3+3).map((c,i)=>{const n=r*3+i;return `<button type="button" class="hero-cube tone-${c[3]}" style="--d:${(-n*.31).toFixed(2)}s" data-go="${c[2]}" aria-label="${c[1]} · ${c[0]}" title="${c[0]}"><span class="cube-face" aria-hidden="true"></span></button>`}).join('')}</div>`).join('');
-  const featureUrl=feat?.id?`eilan://product/${feat.id}`:'eilan://store',featureName=esc(feat?.name||'المنتج المميز');
-  return `<div class="cube-scene" role="group" aria-label="Explore EILAN · استكشف أقسام إيلان"><button type="button" class="hero-cube cube-float tone-champ" style="--d:-1.2s" data-go="${featureUrl}" aria-label="المنتج المميز: ${featureName}" title="${featureName}"><span class="cube-face" aria-hidden="true"></span></button><div class="cube-stack">${rows}</div><div class="cube-caption"><span class="cube-cap-ar">اضغط أي مكعب وادخل العالم</span><span class="cube-cap-en">Choose a cube and enter the world</span></div></div>`;
+function cubeWorldHTML(now=new Date()){
+  const season=['winter','winter','spring','spring','spring','summer','summer','summer','autumn','autumn','autumn','winter'][now.getMonth()];
+  const motion={winter:[7,-4,1.5],spring:[3,-11,2],summer:[11,0,1.5],autumn:[8,6,2.5]}[season];
+  const motionVars=i=>{const dir=i%2?-1:1,lift=i%3===1?-1:1,x=motion[0]*dir,y=motion[1]*lift,r=motion[2]*dir;return `--season-x:${x.toFixed(1)}px;--season-y:${y.toFixed(1)}px;--season-r:${r.toFixed(1)}deg;--season-bx:${(-x*.35).toFixed(1)}px;--season-by:${(-y*.35).toFixed(1)}px;--season-br:${(-r*.5).toFixed(1)}deg`};
+  const tiles=[['#EBDDB0','متجر إيلان','eilan://store'],['#7FAA8A','قوالب جاهزة','eilan://templates'],0,['#3E7A55','أكاديمية التعلّم','eilan://books'],['#4A2682','الترفيه','eilan://play'],['#2F5E42','وجهتي','eilan://places'],['#2F5E42','المجتمع','eilan://community'],['#3E7A55','مكتبتي','eilan://library'],['#7FAA8A','المكافآت','eilan://rewards']];
+  return `<div class="lg-hub" data-cube-season="${season}">${tiles.map((x,i)=>x?`<button type="button" class="lg-t" style="--c:${x[0]};--i:${i};--dx:${(1-i%3)*122}%;--dy:${(1-Math.floor(i/3))*122}%;${motionVars(i)}" data-go="${x[2]}" data-l="${x[1]}" aria-label="${x[1]}"></button>`:'<span></span>').join('')}<button type="button" class="lg-t lg-ai" style="--c:#E0B454;--i:9;--dx:-174%;--dy:205%;${motionVars(9)}" data-go="eilan://ai" data-l="Eilan AI" aria-label="Eilan AI"></button></div><div class="lg-cap"><span class="lg-cap-ar">اضغط أي مكعب وادخل العالم</span><span class="lg-cap-en">Choose a cube and enter the world</span></div>`;
 }
+
 (function(){
   let el=null,eyes=[],tx=0,ty=0,cx=0,cy=0,last=-1e9,t0=0,nextBlink=0,blinkAt=-1;
   function aim(x,y){if(!el)return;const r=el.getBoundingClientRect();if(!r.width)return;
@@ -3562,7 +3552,6 @@ P.notfound={icon:'⚠️',title:()=>'غير موجود',html:()=>`<div class="em
 /* ---------- HOME ---------- */
 P.home={icon:`<img class="tab-brand" src="${LOGO}" alt="">`,title:()=>'الرئيسية · '+S.settings.brand,html:()=>{
   const top=[...S.products].sort((a,b)=>(b.featured?1e9:0)+(b.sales||0)-((a.featured?1e9:0)+(a.sales||0))).slice(0,4);
-  const feat=S.products.find(p=>p.featured)||top[0];
   return `
   ${S.custom.announce?`<div class="announce"><b>جديد</b><div class="mq"><span>${esc(S.custom.announce)}</span></div><img class="announce-brand" src="${LOGO}" alt=""></div>`:''}
   <section class="hero">
@@ -3574,8 +3563,7 @@ P.home={icon:`<img class="tab-brand" src="${LOGO}" alt="">`,title:()=>'الرئ�
     <form class="mega" onsubmit="event.preventDefault();go(this.q.value)">${I.search}<input name="q" placeholder="ابحث عن منتج، تصميم، مكان، معلومة… أو اسأل Eilan AI" autocomplete="off"><button class="btn g">استكشف</button></form>
     <div class="hero-chips">${['مخطط دراسي','خلفيات نيون','فكرة تصميم ملصق','أين تقع العلا؟','سيرفر Westred','دورة UI'].map(t=>`<button class="chip" data-go="eilan://search?q=${enc(t)}">${t}</button>`).join('')}</div>
    </div>
-   <div class="hero-art cube-art">${cubeWorldHTML(feat)}
-    <div class="fl f1"><img class="fl-brand" src="${LOGO}" alt=""> ${S.products.length} منتج رقمي</div><div class="fl f2"><img class="fl-brand" src="${LOGO}" alt=""> ${S.servers.length} سيرفرات نشطة</div></div>
+   <div class="hero-art">${cubeWorldHTML()}</div>
   </section>
   <section class="pillars">
    ${[['products','product','Products','منتجات','مخططات، قوالب، خطوط، خلفيات وملصقات رقمية.','#c9a54e','eilan://store?cat=products'],

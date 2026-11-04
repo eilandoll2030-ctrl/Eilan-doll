@@ -96,6 +96,8 @@ html.light .xo-c,html.light .cc-c{background:linear-gradient(145deg,#fff,#efe9da
    every game shows: animated cube icon · plays inside the site */
 const GZC_PAT={"g-guess":"..#####..|.##...##.|.##...##.|.....##..|....##...|...##....|.........|...##....|...##....","g-xo":"..#..#..|..#..#..|########|..#..#..|..#..#..|########|..#..#..|..#..#..","g-snake":".........|.....###.|.....#.##|.....#...|.#####...|.#.......|.#####...|.....#...|######...","g-catch":"...###...|..#...#..|.#.....#.|#...#...#|#..###..#|#...#...#|.#.....#.|..#...#..|...###...","g-chili":"......##.|.....##..|...####..|..#####..|.######..|.#####...|.####....|.###.....|##.......","g-x":"##...##|.##.##.|..###..|..###..|.##.##.|##...##","g-o":"..###..|.##.##.|##...##|##...##|.##.##.|..###.."};
 Object.assign(CUBE_PAT,GZC_PAT);
+/* all paid games are 30 SAR (also fixes copies saved in the browser) */
+['g-lahad','g-family','g-bahar','g-mashaer','g-nisf'].forEach(id=>{const p=S.products.find(x=>x.id===id);if(p&&+p.price===25){p.price=30;try{save()}catch(e){}}});
 const gzL=(a,e)=>isEN()?e:a;
 const GZI={
  print:'<svg viewBox="0 0 24 24"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M6 14h12v7H6z"/></svg>',
@@ -117,7 +119,7 @@ function gzTrialUsed(k){let n=(S.gtrial&&S.gtrial[k])||0;try{n=Math.max(n,+local
 const gzTrialLeft=k=>Math.max(0,GZ_TRIALS-gzTrialUsed(k));
 function gzTrialUse(k){const n=gzTrialUsed(k)+1;S.gtrial=Object.assign({},S.gtrial,{[k]:n});save();try{localStorage.setItem('eilanTrial_'+k,n)}catch(e){}}
 const GZ_PAID={lahad:['lh','g-lahad','لحد يشدها','Party Game'],family:['fm','g-family','أسئلة عائلية','Family Game'],bahar:['bh','g-bahar','كثّر بهارات','Spice It Up'],mashaer:['ms','g-mashaer','مشاعر','Feelings'],nisf:['ns','g-nisf','نص الليل','Midnight Talks']};
-function gzBuyBtn(k){const m=GZ_PAID[k],p=S.products.find(x=>x.id===m[1])||{};const u=(typeof extUrl==='function'&&extUrl(p))||'',pr=+p.price||25;
+function gzBuyBtn(k){const m=GZ_PAID[k],p=S.products.find(x=>x.id===m[1])||{};const u=(typeof extUrl==='function'&&extUrl(p))||'',pr=+p.price||30;
  return u?`<a class="btn g" href="${esc(u)}" target="_blank" rel="noopener">${GZI.bag}${gzL('اشترِ اللعبة كاملة','Buy the full game')} — ${pr} ${gzL('ر.س','SAR')}</a>`:`<button class="btn g" data-act="gzgo" data-u="eilan://product/${m[1]}">${GZI.bag}${gzL('اشترِ اللعبة كاملة','Buy the full game')} — ${pr} ${gzL('ر.س','SAR')}</button>`}
 ACT.gzgo=d=>{closeModal();go(d.u)};
 function gzTrialOver(k){const m=GZ_PAID[k];
@@ -134,8 +136,8 @@ Object.keys(GZ_PAID).forEach(k=>{const pre=GZ_PAID[k][0],sn=pre+'Start',cn=pre+'
 ACT.gzvid=d=>{const k=d.v,t=d.t||'';openModal(`<div class="mh"><h3>${GZI.play} ${gzL('شرح اللعبة','How to play')}${t?' · '+esc(t):''}</h3><button class="icon-btn" data-act="closemodal">${I.x}</button></div>
  <video class="gzv-v" src="/games/video/${k}.mp4" controls autoplay playsinline style="width:100%;border-radius:14px;background:#000"></video>`,true)};
 const GZC_LIST=()=>{
- const paid=(id,key,open,o)=>{if(!S.products.some(p=>p.id===id))return null;let un=false,pr=25,url='';
-   try{un=o.un();const p=o.pd();pr=+(o.price?o.price():p.price)||25;url=extUrl(p)||''}catch(e){}
+ const paid=(id,key,open,o)=>{if(!S.products.some(p=>p.id===id))return null;let un=false,pr=30,url='';
+   try{un=o.un();const p=o.pd();pr=+(o.price?o.price():p.price)||30;url=extUrl(p)||''}catch(e){}
    return Object.assign({id,k:key,open,paid:true,un,price:pr,ext:url,print:true,vid:o.v,tk:o.v,left:gzTrialLeft(o.v)},o.t)};
  const L=[
   {id:'guess',k:'g-guess',free:true,print:true,vid:'guess',pdf:gzL('/games/pdf/Eilan-Khammen-Print-AR.pdf','/games/pdf/Eilan-Guess-Print-EN.pdf'),n:gzL('خمّن؟','Guess?'),en:'Guess?',d:gzL('طلّع اسم البلد من الإيموجي والحروف — ١٠ أسئلة عربي و١٠ إنجليزي.','Find the country from emojis & letters — 10 Arabic + 10 English.'),pl:gzL('لاعب أو أكثر','1+ players'),tm:gzL('١٠ دقائق','10 min'),

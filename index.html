@@ -1385,6 +1385,22 @@ body.lang-en #bBack svg,body.lang-en #bFwd svg{transform:scaleX(-1)}
 .hero-art .eil-bob{position:relative;z-index:1;width:min(100%,330px);animation:bob 6s ease-in-out infinite;filter:drop-shadow(0 30px 50px rgba(79,132,96,.45))}
 .hero-art .eil-face{position:relative;will-change:transform}
 .hero-art .eil-face img{display:block;width:100%;animation:none;filter:none;user-select:none;-webkit-user-drag:none;pointer-events:none}
+
+/* ===== hero hub: the logo cubes are the navigation ===== */
+.hero-art .lg-hub{direction:ltr;position:relative;width:min(100%,300px);display:grid;grid-template-columns:repeat(3,1fr);gap:6.5%;margin:34px 0 8px}
+.lg-t{direction:rtl;aspect-ratio:1;border:0;border-radius:27%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:4px;background:var(--c);color:var(--k);font-family:inherit;cursor:pointer;animation:lgpop .7s cubic-bezier(.2,1.4,.4,1) both;animation-delay:calc(var(--i)*.08s + .15s);transition:transform .25s,filter .25s,box-shadow .25s}
+.lg-t b{font-size:12.5px;font-weight:800;line-height:1.15;text-align:center}
+.lg-t .lg-i{display:grid;place-items:center;width:38px;height:38px}
+.lg-t .lg-i ei-c,.lg-t .lg-i .ei{width:38px;height:38px;display:block}
+.lg-t:hover,.lg-t:focus-visible{transform:translateY(-5px) scale(1.05);filter:brightness(1.08);box-shadow:0 14px 30px rgba(0,0,0,.4);outline:none}
+.lg-t.lg-ai{position:absolute;width:29%;top:-24%;right:-15%;animation:lgpop .7s cubic-bezier(.2,1.4,.4,1) both,lgfloat 4.5s ease-in-out 1.3s infinite;animation-delay:.95s,1.3s}
+.lg-cap{margin-top:30px;text-align:center;font-size:12px;color:var(--mu);letter-spacing:.5px}
+@keyframes lgpop{from{opacity:0;transform:scale(.4) translateY(26px)}to{opacity:1;transform:none}}
+@keyframes lgfloat{50%{transform:translateY(-7px)}}
+.hero-art{translate:none!important;rotate:none!important;scale:none!important}
+@media (max-width:860px){.hero-art{display:grid!important;margin-top:6px}.hero-art .lg-hub{width:min(74vw,290px);margin-top:46px}.lg-t{gap:3px;padding:3px}.lg-t b{font-size:10.5px}.lg-t .lg-i,.lg-t .lg-i ei-c,.lg-t .lg-i .ei{width:26px;height:26px}.lg-cap{margin-top:22px}}
+.lg-t .lg-i{flex:none;overflow:hidden}.lg-t .lg-i svg{display:block;width:100%;height:100%}.lg-t b{white-space:nowrap}
+@media (prefers-reduced-motion:reduce){.lg-t,.lg-t.lg-ai{animation:none}}
 .eil-eye{position:absolute;top:45.06%;width:8.56%;height:11.21%;border-radius:50%;background:#EFE9DA;box-shadow:0 0 8px rgba(255,255,255,.28);will-change:transform}
 .eil-eye.l{left:34.29%}.eil-eye.r{left:57.04%}
 /* ===== Eilan Learning Library (edu.js) ===== */
@@ -3271,8 +3287,7 @@ P.home={icon:'🌐',title:()=>'الرئيسية · '+S.settings.brand,html:()=>{
     <form class="mega" onsubmit="event.preventDefault();go(this.q.value)">${I.search}<input name="q" placeholder="ابحث عن منتج، تصميم، مكان، معلومة… أو اسأل Eilan AI" autocomplete="off"><button class="btn g">استكشف</button></form>
     <div class="hero-chips">${['مخطط دراسي','خلفيات نيون','فكرة تصميم ملصق','أين تقع العلا؟','سيرفر Westred','دورة UI'].map(t=>`<button class="chip" data-go="eilan://search?q=${enc(t)}">${t}</button>`).join('')}</div>
    </div>
-   <div class="hero-art"><div class="ring"></div><div class="ring r2"></div><div class="orbit" style="--n:4">${['📲','🔊','🎮','📚'].map((e,i)=>`<span style="--i:${i}"><i>${e}</i></span>`).join('')}</div><div class="orbit o-b" style="--n:3">${['✨','💬','🎨'].map((e,i)=>`<span style="--i:${i}"><i>${e}</i></span>`).join('')}</div>${eilFaceHTML()}
-    <div class="fl f1">📲 ${S.products.length} منتج رقمي</div><div class="fl f2">● ${S.servers.length} سيرفرات نشطة</div><div class="fl f3" data-go="eilan://product/${feat?.id}" style="cursor:pointer">⭐ ${esc(feat?.name||'')}</div></div>
+   <div class="hero-art"><div class="lg-hub">${[['#EBDDB0','#14150F','🛍️','متجر إيلان','eilan://store'],['#7FAA8A','#10110D','🎞️','قوالب جاهزة','eilan://templates'],0,['#3E7A55','#F4EFDD','📚','الأكاديمية','eilan://learn'],['#4A2682','#F4EFDD','🎮','الترفيه','eilan://play'],['#2F5E42','#F4EFDD','🧭','وجهتي','eilan://places'],['#2F5E42','#F4EFDD','💬','المجتمع','eilan://community'],['#3E7A55','#F4EFDD','🔖','مكتبتي','eilan://library'],['#7FAA8A','#10110D','🏆','المكافآت','eilan://rewards']].map((x,i)=>x?`<button class="lg-t" style="--c:${x[0]};--k:${x[1]};--i:${i}" data-go="${x[4]}" aria-label="${x[3]}"><span class="lg-i">${x[2]}</span><b>${x[3]}</b></button>`:'<span></span>').join('')}<button class="lg-t lg-ai" style="--c:#E0B454;--k:#14150F;--i:9" data-go="eilan://ai" aria-label="Eilan AI"><span class="lg-i">✨</span><b>Eilan AI</b></button></div><div class="lg-cap">اضغط أي مكعب وادخل العالم</div></div>
   </section>
   <section class="pillars">
    ${[['products','📲','Products','منتجات','مخططات، قوالب، خطوط، خلفيات وملصقات رقمية.','#4F8460','eilan://store?cat=products'],

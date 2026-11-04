@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8">
+<!-- Eilan Doll game explainer — deterministic frames: render(t) is called by render.py for each frame -->
+<style>
+@font-face{font-family:Cairo;src:url(/coloring/fonts/Cairo_700Bold.ttf);font-weight:700}
+@font-face{font-family:Cairo;src:url(/coloring/fonts/Cairo_900Black.ttf);font-weight:900}
+@font-face{font-family:Poppins;src:url(/coloring/fonts/Poppins_700Bold.ttf);font-weight:700}
+@font-face{font-family:Poppins;src:url(/coloring/fonts/Poppins_800ExtraBold.ttf);font-weight:800}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1280px;height:720px;overflow:hidden;background:#14150F}
+body{font-family:Cairo,"Noto Color Emoji",sans-serif;color:#EFE9DA;position:relative}
+#bg{position:absolute;inset:0;overflow:hidden}
+.orb{position:absolute;border-radius:50%;filter:blur(90px)}
+.grid{position:absolute;inset:-40% -20% 0;background-image:linear-gradient(rgba(79,132,96,.09) 1px,transparent 1px),linear-gradient(90deg,rgba(79,132,96,.09) 1px,transparent 1px);background-size:56px 56px;transform:perspective(900px) rotateX(60deg) translateY(30%);mask-image:linear-gradient(to top,#000 8%,transparent 62%);-webkit-mask-image:linear-gradient(to top,#000 8%,transparent 62%)}
+#wm{position:absolute;top:26px;left:34px;display:flex;align-items:center;gap:10px;font-family:Poppins;font-weight:800;font-size:15px;letter-spacing:3px;color:#C9D8C3;direction:ltr;z-index:5}
+#wm img{width:38px;height:38px}
+#wm small{display:block;font-size:9px;letter-spacing:3.4px;color:#8A8A78;font-weight:700}
+#dots{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:5}
+#dots i{width:34px;height:6px;border-radius:4px;background:rgba(239,233,218,.14);overflow:hidden;position:relative}
+#dots i b{position:absolute;inset:0;background:linear-gradient(90deg,#4F8460,#E8B64A);transform-origin:right;transform:scaleX(0)}
+.scene{position:absolute;inset:0;opacity:0;will-change:opacity,transform}
+.center{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.eb{font-family:Poppins;font-weight:800;letter-spacing:5px;font-size:16px;color:#E8B64A}
+.t1{font-weight:900;font-size:86px;line-height:1.15}
+.t1 bdi{font-family:Poppins;font-weight:800;font-size:40px;color:#B9B8A8;display:block;letter-spacing:1px;margin-top:2px}
+.t2{font-weight:900;font-size:52px;line-height:1.3}
+.t3{font-weight:700;font-size:28px;color:#B9B8A8;line-height:1.55}
+.grad{background:linear-gradient(90deg,#7FA98A,#E8B64A);-webkit-background-clip:text;background-clip:text;color:transparent}
+.step{position:absolute;inset:0;display:grid;grid-template-columns:1.05fr 1fr;align-items:center;padding:90px 80px 80px}
+.step .txt{display:flex;flex-direction:column;gap:14px}
+.num{font-family:Poppins;font-weight:800;font-size:120px;line-height:.9;color:transparent;-webkit-text-stroke:2.4px #E8B64A;letter-spacing:2px}
+.ill{position:relative;height:460px;display:grid;place-items:center}
+.pill{display:inline-flex;align-items:center;gap:10px;padding:10px 22px;border-radius:999px;font-weight:900;font-size:24px;background:rgba(239,233,218,.06);border:1.5px solid rgba(79,132,96,.4)}
+.pill.g{background:linear-gradient(135deg,#E8B64A,#6DC27A);color:#14150F;border:0}
+.pill.o{border-color:rgba(232,182,74,.55);color:#E8B64A}
+.card{width:330px;height:430px;border-radius:30px;background:linear-gradient(160deg,#F6F1E3,#E9E1CB);color:#1F3A2B;padding:30px 28px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:18px;box-shadow:0 30px 70px -20px #000,0 0 0 1px rgba(232,182,74,.25);position:absolute}
+.card .ctag{font-family:Cairo;font-weight:900;font-size:17px;padding:5px 14px;border-radius:999px;background:#2F5A3D;color:#F6F1E3}
+.card .cx{font-weight:900;font-size:33px;line-height:1.45}
+.card .cb{font-family:Poppins;font-weight:800;font-size:12px;letter-spacing:3px;color:#8E8A70;position:absolute;bottom:20px}
+.back{background:linear-gradient(160deg,#2C5A3E,#14150F);display:grid;place-items:center}
+.back img{width:150px}
+.tile{width:150px;height:150px;border-radius:30px;background:#F6F1E3;color:#1F3A2B;display:grid;place-items:center;font-weight:900;font-size:76px;box-shadow:0 10px 0 #CFC4A3,0 24px 50px -16px #000}
+.op{font-weight:900;font-size:60px;color:#E8B64A}
+.chip{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:16px;background:rgba(28,30,22,.9);border:1.5px solid rgba(79,132,96,.45);font-weight:900;font-size:26px}
+.cell{border-radius:22px;background:linear-gradient(145deg,#272a1f,#15160f);border:1.5px solid rgba(79,132,96,.35);display:grid;place-items:center;position:relative;overflow:hidden}
+.ring{width:240px;height:240px;border-radius:50%;display:grid;place-items:center;font-family:Poppins;font-weight:800;font-size:90px}
+.phone{width:150px;height:270px;border-radius:30px;background:#0e0f0b;border:5px solid #3a3f2e;display:grid;place-items:center;position:absolute;box-shadow:0 30px 60px -20px #000}
+.phone .scr{width:118px;height:220px;border-radius:18px;background:linear-gradient(160deg,#F6F1E3,#E2D7B8);display:grid;place-items:center}
+.person{position:absolute;width:96px;height:96px;border-radius:50%;display:grid;place-items:center;font-weight:900;font-size:36px;color:#14150F}
+</style></head><body>
+<div id="bg"><div class="orb" style="width:620px;height:620px;background:#4F8460;opacity:.34;top:-220px;right:-140px" id="o1"></div><div class="orb" style="width:520px;height:520px;background:#E8B64A;opacity:.14;bottom:-240px;left:-160px" id="o2"></div><div class="grid" id="grid"></div></div>
+<div id="wm"><img id="logo" alt=""><div>EILAN DOLL<small>THE DIGITAL WORLD</small></div></div>
+<div id="stage"></div><div id="dots"></div>
+<script>
+const CUBE_PAT=/*CUBE_PAT*/{};const LOGO=/*LOGO*/"";
+const RAMP=['#F6E3A8','#E8B64A','#B9CC6A','#6DC27A','#1FB36B'];
+document.getElementById('logo').src=LOGO;
+const $=s=>document.querySelector(s);
+const cl=(x,a=0,b=1)=>Math.max(a,Math.min(b,x));
+const ease=x=>{x=cl(x);return x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2};
+const back=x=>{x=cl(x);const c=1.6;return 1+(c+1)*Math.pow(x-1,3)+c*Math.pow(x-1,2)};
+const ramp=(t,a,b)=>cl((t-a)/(b-a));
+/* cube icon with per-cube elements so they can fly in */
+function cubeIcon(key,size,bg=true){const rows=(CUBE_PAT[key]||CUBE_PAT.spark).split('|'),H=rows.length,W=rows[0].length;
+  const P=Math.min(7.4,60/W,60/H),Z=P*.82,OX=(64-P*W)/2,OY=(64-P*H)/2;let seed=7;for(const c of key)seed=(seed*31+c.charCodeAt(0))|0;
+  const rnd=()=>{seed=(seed*1103515245+12345)&0x7fffffff;return seed/0x7fffffff};
+  let h=`<svg viewBox="0 0 64 64" width="${size}" height="${size}" style="overflow:visible">${bg?'<rect width="64" height="64" rx="15" fill="#1C1E16" class="ib"/>':''}`;
+  rows.forEach((r,y)=>{for(let x=0;x<W;x++)if(r[x]==='#'){const cx=OX+(x+.5)*P,cy=OY+(y+.5)*P,a=rnd()*6.283,m=40+rnd()*60;
+    h+=`<rect class="cq" data-dx="${(Math.cos(a)*m).toFixed(1)}" data-dy="${(Math.sin(a)*m).toFixed(1)}" data-d="${rnd().toFixed(3)}" x="${(cx-Z/2).toFixed(2)}" y="${(cy-Z/2).toFixed(2)}" width="${Z.toFixed(2)}" height="${Z.toFixed(2)}" rx="${(Z*.27).toFixed(2)}" fill="${RAMP[Math.min(4,Math.floor(y/Math.max(1,H-1)*5))]}" style="transform-box:fill-box;transform-origin:center"/>`}});
+  return h+'</svg>'}
+function assemble(root,p){root.querySelectorAll('.cq').forEach(r=>{const d=+r.dataset.d,q=back(ramp(p,d*.45,d*.45+.55));
+  r.style.transform=`translate(${(1-q)*r.dataset.dx}px,${(1-q)*r.dataset.dy}px) rotate(${(1-q)*140}deg) scale(${.3+.7*q})`;r.style.opacity=cl(q*1.4)});
+  const b=root.querySelector('.ib');if(b)b.style.opacity=ease(ramp(p,0,.5))}
+function shimmer(root,t){root.querySelectorAll('.cq').forEach((r,i)=>{const s=.5+.5*Math.sin(t*3.2-i*.35);r.style.filter=`brightness(${1+s*.28})`})}
+
+/* ------------------------------------------------------------------ games */
+const GAMES={
+ guess:{ic:'g-guess',n:'خمّن؟',en:'Guess?',sub:'طلّع اسم البلد من الإيموجي والحروف',free:true,print:true,
+  steps:[['يطلع لك إيموجي وحروف','ركّز في الصورة والحرف اللي جنبها',{k:'eq',a:'🐈',b:'ر',r:'؟؟'}],
+         ['ركّبها وطلّع اسم البلد','قط + ر = قطر',{k:'eq',a:'🐈',b:'ر',r:'قطر'}],
+         ['وضع الجَمعة','المقدّم يكشف الجواب، واللي جاوب صح ياخذ تحدي ممتع',{k:'card',tag:'تحدي الفوز',x:'اللي جاوبت صح تختار الأغنية الجاية 🎵'}],
+         ['وضع التحدي','لحالك: ٤ خيارات و١٥ ثانية — كل ما أسرعت زادت نقاطك',{k:'timer',n:15}]]},
+ memory:{ic:'brain',n:'ذاكرة إيلان',en:'Eilan Memory',sub:'طابق الأزواج بأقل عدد حركات',free:true,
+  steps:[['١٦ بطاقة مقلوبة','فيها ٨ أزواج من رموز المكعبات',{k:'mem',open:[]}],
+         ['اقلب بطاقتين','وتذكّر وين مكان كل رمز',{k:'mem',open:[1,6]}],
+         ['تطابقت؟ تبقى مفتوحة','ما تطابقت؟ تنقلب مرة ثانية',{k:'mem',open:[2,9],match:true}],
+         ['خلّصها بأقل حركات','وتنحفظ أفضل نتيجة لك',{k:'score',rows:[['الحركات','12'],['أفضل نتيجة','10 🏆']]}]]},
+ xo:{ic:'g-xo',n:'إكس أو إيلان',en:'Eilan XO',sub:'✕ و ◯ بالمكعبات',free:true,
+  steps:[['✕ و ◯ بالتناوب','كل لاعب يختار خانة بدوره',{k:'xo',b:'X...O....'}],
+         ['٣ بخط = فوز','أفقي أو عمودي أو مائل',{k:'xo',b:'X.OXO.X..',w:[0,3,6]}],
+         ['ضد Eilan أو صديقك','العب ضد Eilan، أو مع أحد على نفس الجهاز',{k:'vs'}],
+         ['اغلب Eilan واكسب XP','كل فوز يرفع نقاطك',{k:'score',rows:[['أنت','3'],['Eilan','1'],['XP','+9 ✨']]}]]},
+ catch:{ic:'g-catch',n:'اصطد المكعب',en:'Cube Catch',sub:'سرعة يدك ضد الوقت',free:true,
+  steps:[['عندك ٣٠ ثانية','والعداد يبدأ أول ما تضغط ابدأ',{k:'timer',n:30}],
+         ['المكعب يولّع… اضغطه!','قبل لا يطفي ويختفي',{k:'catch',on:[5]}],
+         ['المكعبات تسرع مع الوقت','وكل ما قرب الوقت يخلص صارت أسرع',{k:'catch',on:[1,10,14]}],
+         ['٥ ورا بعض = نقطتين','لكل مكعب بعدها — لا تضيّع ولا واحد',{k:'score',rows:[['سلسلة','5 🔥'],['النقاط','×2']]}]]},
+ snake:{ic:'g-snake',n:'Neon Snake',en:'الثعبان',sub:'اللعبة الكلاسيكية بستايل إيلان',free:true,
+  steps:[['حرّك الثعبان','بالأسهم في الكيبورد أو بالأزرار على الشاشة',{k:'pad'}],
+         ['كل النقطة','كل ما تاكل نقطة يطول الثعبان',{k:'snake'}],
+         ['لا تصطدم!','لا بالجدار ولا بذيلك',{k:'icon',i:'warn'}],
+         ['كل نقطة = 1 XP','عند نهاية الجولة',{k:'score',rows:[['النقاط','14'],['XP','+14 ✨']]}]]},
+ lahad:{ic:'party',n:'لحد يشدها',en:'Party Game',sub:'لعبة الجَمعات — صراحة وتحديات',paid:true,print:true,
+  steps:[['٣ لاعبين أو أكثر','اكتبوا أسماءكم في البداية',{k:'players',p:['سارة','نورة','ريم','هيا']}],
+         ['مرّروا الجهاز','كل واحد يقلب بطاقته لما يجي دوره',{k:'pass'}],
+         ['أسئلة · تحديات · سباقات','وجوكر يقلب الجولة',{k:'card',tag:'تحدي',x:'اتصل على رقم عشوائي واعرض عليه يشتري حمام 😂'}],
+         ['اجمعوا النقاط','والأكثر نقاط هو الفايز',{k:'score',rows:[['نورة','7 🏆'],['سارة','5'],['ريم','4']]}]]},
+ family:{ic:'home',n:'أسئلة عائلية',en:'Family Game',sub:'أسرع واحد يجاوب صح ياخذ النقطة',paid:true,print:true,
+  steps:[['يطلع السؤال للكل','واحد يقرأه بصوت عالي',{k:'card',tag:'سؤال',x:'كم عمرك بالمقلوب؟'}],
+         ['أسرع جواب صح = نقطة','ركّزوا وجاوبوا بسرعة ⚡',{k:'icon',i:'bolt'}],
+         ['محاولة وحدة لكل شخص','غلطت؟ خلاص انتظر السؤال الجاي',{k:'icon',i:'check'}],
+         ['احسبوا النقاط','والفايز… لازم تصفقون له 👏',{k:'score',rows:[['بابا','9 🏆'],['ماما','8'],['عبدالله','6']]}]]},
+ bahar:{ic:'g-chili',n:'كثّر بهارات',en:'Spice It Up',sub:'مين اللي يكذب؟',paid:true,print:true,
+  steps:[['فريقين بعدد متساوي','كل فريق ٣ أشخاص أو أكثر',{k:'teams'}],
+         ['الجوال يمر بالسر','على الفريق الأول — كل واحد يشوف دوره',{k:'pass'}],
+         ['واحد بس يكذب 🌶️','يألّف قصة ويكثّر بهارات… والباقين قصصهم حقيقية',{k:'card',tag:'موضوع القصة',x:'قصة من قوتها محد يصدقها؟'}],
+         ['طلّعوا الكذاب!','كشفتوه؟ النقطة لكم — وبعدها الأدوار تنعكس',{k:'score',rows:[['فريق البهارات','3'],['فريق الملح','4 🏆']]}]]},
+ mashaer:{ic:'love',n:'مشاعر',en:'Feelings',sub:'لعبة لشخصين عزيزين',paid:true,print:true,
+  steps:[['اختار شخص عزيز عليك','وتعرّفوا على بعض أكثر 💞',{k:'players',p:['أنتِ','هي']}],
+         ['أسئلة من القلب','جاوبوا بصراحة وبدون كذب',{k:'card',tag:'سؤال',x:'وش أول انطباع أخذته عني؟'}],
+         ['لحظات مع بعض','بطاقات تسوونها سوا',{k:'card',tag:'لحظة',x:'طالعوا في عيون بعض ٣٠ ثانية… بدون ما تضحكون!'}],
+         ['جواب مختصر = حكم 😏','ولا فيه «ما عندي إجابة»',{k:'card',tag:'حكم',x:'قلّد طريقة كلامه لمدة دقيقة'}]]},
+ nisf:{ic:'night',n:'نص الليل',en:'Midnight Talks',sub:'أسئلة صراحة للسهرة',paid:true,print:true,
+  steps:[['٣ مراحل مع الليل','كل ما تعمّق الليل تعمّقت الأسئلة 🌙',{k:'levels'}],
+         ['جاوب بكل صراحة','السؤال لك… والكل يسمع',{k:'card',tag:'نص الليل',x:'مين ملجأك لا ضاقت الدنيا فيك؟'}],
+         ['تخطّيتين بس لكل لاعب','استخدمها بحكمة',{k:'score',rows:[['تخطّي','2 / 2'],['تخطّي','1 / 2']]}],
+         ['خلّوا السؤال يدور على الكل','وكل واحد يجاوب بدوره',{k:'pass'}]]}};
+
+const G=GAMES[new URLSearchParams(location.search).get('g')||'guess'];
+/* timeline */
+const T_INTRO=4.2,T_STEP=4.8,T_OUT=5.2;
+const SC=[];let at=0;
+SC.push({a:at,b:at+T_INTRO,k:'intro'});at+=T_INTRO;
+G.steps.forEach((s,i)=>{SC.push({a:at,b:at+T_STEP,k:'step',i});at+=T_STEP});
+SC.push({a:at,b:at+T_OUT,k:'outro'});at+=T_OUT;
+window.DURATION=at;
+$('#dots').innerHTML=G.steps.map(()=>'<i><b></b></i>').join('');
+
+/* ---------- illustrations ---------- */
+function illHTML(s){switch(s.k){
+ case 'eq':return `<div style="display:flex;align-items:center;gap:22px;direction:rtl"><div class="tile">${s.a}</div><div class="op">+</div><div class="tile" style="font-size:${s.b.length>2?54:80}px">${s.b}</div></div><div class="pill g" data-r style="position:absolute;bottom:40px;font-size:40px;padding:12px 40px">= ${s.r}</div>`;
+ case 'card':return `<div class="card back" data-cb style="transform:rotate(-8deg) translate(-40px,10px)"><img src="${LOGO}"></div><div class="card" data-cf><span class="ctag">${s.tag}</span><div class="cx">${s.x}</div><div class="cb">EILAN DOLL</div></div>`;
+ case 'timer':return `<div class="ring" data-ring><span data-n>${s.n}</span></div>`;
+ case 'mem':return `<div style="display:grid;grid-template-columns:repeat(4,96px);gap:14px">${Array.from({length:16},(_,i)=>`<div class="cell" data-m="${i}" style="height:96px">${s.open.includes(i)?`<div data-face style="opacity:0">${cubeIcon(s.match?'love':(i===1?'star':'bolt'),70,false)}</div>`:''}</div>`).join('')}</div>`;
+ case 'xo':return `<div style="display:grid;grid-template-columns:repeat(3,122px);gap:14px">${[...s.b].map((c,i)=>`<div class="cell" data-xo="${i}" style="height:122px;${s.w&&s.w.includes(i)?'border-color:#E8B64A;':''}">${c==='.'?'':`<div data-mk="${i}">${cubeIcon(c==='X'?'g-x':'g-o',92,false)}</div>`}</div>`).join('')}</div>`;
+ case 'catch':return `<div style="display:grid;grid-template-columns:repeat(4,96px);gap:14px">${Array.from({length:16},(_,i)=>`<div class="cell" style="height:96px">${s.on.includes(i)?`<i data-c style="position:absolute;inset:14%;border-radius:26%;background:${RAMP[i%5]};box-shadow:0 0 30px ${RAMP[i%5]}"></i>`:''}</div>`).join('')}</div>`;
+ case 'snake':return `<div class="cell" style="width:420px;height:300px;border-radius:26px" data-snk></div>`;
+ case 'pad':return `<div style="display:grid;grid-template-columns:repeat(3,100px);gap:12px;direction:ltr">${['','▲','','◀','▼','▶'].map((c,i)=>c?`<div class="cell" data-pd="${i}" style="height:100px;font-size:40px;color:#E8B64A">${c}</div>`:'<span></span>').join('')}</div>`;
+ case 'icon':return `<div data-ic>${cubeIcon(s.i,300)}</div>`;
+ case 'score':return `<div style="display:flex;flex-direction:column;gap:16px;width:420px">${s.rows.map((r,i)=>`<div class="chip" data-row="${i}" style="justify-content:space-between;font-size:32px;padding:18px 28px"><span>${r[0]}</span><span style="font-family:Poppins,Cairo,'Noto Color Emoji';color:#E8B64A">${r[1]}</span></div>`).join('')}</div>`;
+ case 'players':return `<div style="display:flex;flex-wrap:wrap;gap:16px;justify-content:center;width:440px">${s.p.map((n,i)=>`<div class="chip" data-row="${i}" style="font-size:34px;padding:16px 30px"><span style="width:16px;height:16px;border-radius:5px;background:${RAMP[i%5]};display:inline-block"></span>${n}</div>`).join('')}</div>`;
+ case 'teams':return `<div style="display:flex;gap:30px">${[['فريق البهارات','g-chili'],['فريق الملح','star']].map((t,i)=>`<div class="chip" data-row="${i}" style="flex-direction:column;padding:26px 30px;gap:14px;font-size:28px">${cubeIcon(t[1],120)}<span>${t[0]}</span><span style="display:flex;gap:8px">${[0,1,2].map(()=>`<i style="width:30px;height:30px;border-radius:50%;background:${i?'#7FA98A':'#E8B64A'};display:block"></i>`).join('')}</span></div>`).join('')}</div>`;
+ case 'levels':return `<div style="display:flex;flex-direction:column;gap:18px;width:430px">${[['أول الليل','أسئلة خفيفة','#E8B64A'],['نص الليل','الصراحة الحقيقية','#6DC27A'],['قبل الفجر','أسئلة دافية','#7FA98A']].map((l,i)=>`<div class="chip" data-row="${i}" style="justify-content:space-between;padding:18px 26px;font-size:30px;border-color:${l[2]}"><span>${'🌙'.repeat(i+1)} ${l[0]}</span><span style="font-size:20px;color:#B9B8A8">${l[1]}</span></div>`).join('')}</div>`;
+ case 'pass':return `<div style="position:relative;width:460px;height:380px">${[['#E8B64A',30,150],['#6DC27A',190,10],['#7FA98A',350,150],['#B9CC6A',190,290]].map((p,i)=>`<div class="person" style="background:${p[0]};left:${p[1]}px;top:${p[2]}px">${i+1}</div>`).join('')}<div class="phone" data-ph style="left:155px;top:55px"><div class="scr">${cubeIcon(G.ic,80)}</div></div></div>`;
+ case 'vs':return `<div style="display:flex;align-items:center;gap:30px"><div class="chip" style="flex-direction:column;padding:24px">${cubeIcon('g-x',120,false)}<span>أنت</span></div><div class="op" style="font-family:Poppins">VS</div><div class="chip" style="flex-direction:column;padding:24px"><img src="${LOGO}" style="width:120px;height:120px"><span>Eilan</span></div></div>`;
+ }return ''}
+function illUpdate(root,s,p,lt){
+ const q=back(ramp(lt,.15,.7));
+ if(s.k==='eq'){const r=root.querySelector('[data-r]');if(r){const v=back(ramp(lt,1.2,1.8));r.style.transform=`scale(${.4+.6*v})`;r.style.opacity=cl(v)}
+   root.querySelectorAll('.tile').forEach((x,i)=>{const v=back(ramp(lt,.2+i*.25,.8+i*.25));x.style.transform=`translateY(${(1-v)*60}px) rotate(${(1-v)*(i?12:-12)}deg)`;x.style.opacity=cl(v)})}
+ if(s.k==='card'){const f=root.querySelector('[data-cf]'),b=root.querySelector('[data-cb]');const v=ease(ramp(lt,.5,1.3));
+   f.style.transform=`perspective(900px) rotateY(${(1-v)*180}deg) rotate(${3*v}deg)`;f.style.opacity=v>.5?1:0;b.style.opacity=cl(lt/.3);
+   b.style.transform=`rotate(-8deg) translate(${-40-v*20}px,10px) perspective(900px) rotateY(${v<.5?v*180:0}deg)`}
+ if(s.k==='timer'){const r=root.querySelector('[data-ring]'),n=root.querySelector('[data-n]');const left=Math.max(0,s.n-Math.floor(lt*(s.n>20?4:2)));n.textContent=left;
+   const a=(left/s.n)*360;r.style.background=`conic-gradient(#E8B64A ${a}deg,rgba(239,233,218,.08) 0) border-box`;r.style.boxShadow='inset 0 0 0 22px #1C1E16';r.style.transform=`scale(${.6+.4*q})`}
+ if(s.k==='mem'){root.querySelectorAll('[data-m]').forEach((c,i)=>{const v=back(ramp(lt,.05+i*.025,.5+i*.025));c.style.transform=`scale(${v})`;
+   const f=c.querySelector('[data-face]');if(f){const o=ease(ramp(lt,1.0+(i%3)*.35,1.4+(i%3)*.35));c.style.background=o>.5?'linear-gradient(135deg,rgba(79,132,96,.5),rgba(232,182,74,.25))':'';f.style.opacity=o;
+     if(s.match&&lt>2.2)c.style.boxShadow=`0 0 ${20+10*Math.sin(lt*6)}px #E8B64A`}})}
+ if(s.k==='xo'){root.querySelectorAll('[data-mk]').forEach((m,i)=>{const v=back(ramp(lt,.3+i*.35,.7+i*.35));m.style.transform=`scale(${v}) rotate(${(1-v)*-40}deg)`;m.style.opacity=cl(v)});
+   if(s.w)s.w.forEach(i=>{const c=root.querySelector(`[data-xo="${i}"]`);c.style.boxShadow=lt>2?`0 0 ${18+10*Math.sin(lt*6)}px #E8B64A`:''})}
+ if(s.k==='catch'){root.querySelectorAll('[data-c]').forEach((c,i)=>{const ph=(lt*1.6+i*.37)%1;c.style.transform=`scale(${ph<.7?back(ph/.35):0})`})}
+ if(s.k==='snake'){const b=root.querySelector('[data-snk]');const C=30,step=Math.floor(lt*7);let h='';const path=[];for(let k=0;k<6+Math.min(4,Math.floor(step/6));k++){const s2=step-k;const x=(s2%12+12)%12,y=3+Math.round(Math.sin(s2/4)*2);path.push([x,y])}
+   path.forEach(([x,y],k)=>{h+=`<i style="position:absolute;left:${x*C+30}px;top:${y*C+20}px;width:${C-4}px;height:${C-4}px;border-radius:7px;background:${k?RAMP[3]:RAMP[1]};box-shadow:0 0 14px ${k?RAMP[3]:RAMP[1]}"></i>`});
+   h+=`<i style="position:absolute;left:${((step+4)%12)*C+34}px;top:${(3+Math.round(Math.sin((step+4)/4)*2))*C+24}px;width:18px;height:18px;border-radius:50%;background:#ff835c;box-shadow:0 0 16px #ff835c"></i>`;b.innerHTML=h}
+ if(s.k==='pad'){const seq=[1,5,4,3];const on=seq[Math.floor(lt*2)%4];root.querySelectorAll('[data-pd]').forEach(c=>{const a=+c.dataset.pd===on;c.style.background=a?'linear-gradient(135deg,#E8B64A,#6DC27A)':'';c.style.color=a?'#14150F':'#E8B64A';c.style.transform=a?'scale(.92)':''})}
+ if(s.k==='icon'){const ic=root.querySelector('[data-ic]');assemble(ic,ramp(lt,.1,1.6));shimmer(ic,lt);ic.style.transform=`translateY(${Math.sin(lt*2)*8}px)`}
+ if(['score','players','teams','levels'].includes(s.k))root.querySelectorAll('[data-row]').forEach((r,i)=>{const v=back(ramp(lt,.25+i*.28,.75+i*.28));r.style.transform=`translateX(${(1-v)*-80}px)`;r.style.opacity=cl(v)});
+ if(s.k==='pass'){const ph=root.querySelector('[data-ph]');const pts=[[-60,0],[0,-60],[60,0],[0,60]];const seg=lt*1.1,k=Math.floor(seg)%4,f=ease(seg%1);
+   const A=pts[k],B=pts[(k+1)%4];ph.style.transform=`translate(${A[0]+(B[0]-A[0])*f}px,${A[1]+(B[1]-A[1])*f}px) rotate(${Math.sin(lt*3)*8}deg)`}
+ if(s.k==='vs')root.querySelectorAll('.chip').forEach((c,i)=>{const v=back(ramp(lt,.2+i*.3,.7+i*.3));c.style.transform=`scale(${v}) translateY(${Math.sin(lt*2+i)*6}px)`})
+}
+
+/* ---------- scenes ---------- */
+const stage=$('#stage');
+SC.forEach(sc=>{const d=document.createElement('div');d.className='scene';sc.el=d;
+ if(sc.k==='intro')d.innerHTML=`<div class="center" style="position:absolute;inset:0;gap:16px"><div data-icon>${cubeIcon(G.ic,230)}</div><div class="eb" data-a>EILAN GAMES · ${G.free?'مجانية':'لعبة إيلان'}</div><div class="t1" data-b><span class="grad">${G.n}</span><bdi dir="ltr">${G.en}</bdi></div><div class="t3" data-c>${G.sub}</div></div>`;
+ if(sc.k==='step'){const s=G.steps[sc.i];d.innerHTML=`<div class="step"><div class="txt"><div class="num" data-a>0${sc.i+1}</div><div class="t2" data-b>${s[0]}</div><div class="t3" data-c>${s[1]}</div></div><div class="ill">${illHTML(s[2])}</div></div>`}
+ if(sc.k==='outro'){const tags=G.paid?`<span class="pill g">جرّبها مجاناً · ٣ بطاقات × ٣ مرات</span><span class="pill o">اللعبة كاملة ٢٥ ر.س</span>`:`<span class="pill g">مجانية ١٠٠٪</span>`;
+   d.innerHTML=`<div class="center" style="position:absolute;inset:0;gap:20px"><img src="${LOGO}" data-icon style="width:150px;height:150px"><div class="t2" data-b>العبها الحين في <span class="grad">إيلان دول</span></div><div data-c style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center">${tags}<span class="pill">على الجوال · الآيباد · الكمبيوتر</span>${G.print?'<span class="pill o">🖨️ وفيه ملف PDF للطباعة</span>':''}</div><div class="t3" data-a style="font-family:Poppins;letter-spacing:4px;font-size:20px">منطقة الترفيه · EILAN DOLL</div></div>`}
+ stage.appendChild(d)});
+
+function render(t){
+ $('#o1').style.transform=`translate(${Math.sin(t*.4)*50}px,${Math.cos(t*.3)*40}px)`;$('#o2').style.transform=`translate(${Math.cos(t*.35)*60}px,${Math.sin(t*.45)*30}px)`;
+ $('#grid').style.backgroundPosition=`0 ${(t*20)%56}px,0 0`;
+ SC.forEach(sc=>{const d=sc.el,lt=t-sc.a,dur=sc.b-sc.a;const fin=ease(ramp(lt,0,.45)),fout=1-ease(ramp(lt,dur-.4,dur));const vis=sc===SC[0]?(t<.0001?1:fout):(sc===SC[SC.length-1]?fin:Math.min(fin,fout));
+  const on=lt>-0.01&&lt<dur+.01;d.style.opacity=on?vis:0;d.style.display=on?'block':'none';if(!on)return;
+  d.style.transform=`scale(${1+.04*(1-fin)})`;
+  const A=d.querySelector('[data-a]'),B=d.querySelector('[data-b]'),C=d.querySelector('[data-c]');
+  [[A,.15],[B,.3],[C,.5]].forEach(([e,o])=>{if(!e)return;const v=back(ramp(lt,o,o+.6));e.style.transform=`translateY(${(1-v)*40}px)`;e.style.opacity=cl(v)});
+  if(sc.k==='intro'){const ic=d.querySelector('[data-icon]');assemble(ic,ramp(lt,0,1.5));shimmer(ic,lt);[A,B,C].forEach((e,i)=>{const v=back(ramp(lt,1.2+i*.25,1.9+i*.25));e.style.transform=`translateY(${(1-v)*40}px)`;e.style.opacity=cl(v)})}
+  if(sc.k==='outro'){const ic=d.querySelector('[data-icon]');const v=back(ramp(lt,.1,.8));ic.style.transform=`scale(${v}) translateY(${Math.sin(lt*2)*6}px)`;ic.style.opacity=cl(v)}
+  if(sc.k==='step')illUpdate(d.querySelector('.ill'),G.steps[sc.i][2],0,lt)});
+ const cur=SC.findIndex(s=>t>=s.a&&t<s.b);
+ document.querySelectorAll('#dots b').forEach((b,i)=>{const s=SC[i+1];b.style.transform=`scaleX(${cl((t-s.a)/(s.b-s.a))})`});
+ $('#dots').style.opacity=cur>0&&cur<SC.length-1?1:0;
+}
+render(0);
+</script></body></html>

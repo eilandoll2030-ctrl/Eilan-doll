@@ -185,7 +185,7 @@ const stage=$('#stage');
 SC.forEach(sc=>{const d=document.createElement('div');d.className='scene';sc.el=d;
  if(sc.k==='intro')d.innerHTML=`<div class="center" style="position:absolute;inset:0;gap:16px"><div data-icon>${cubeIcon(G.ic,230)}</div><div class="eb" data-a>EILAN GAMES · ${G.free?'مجانية':'لعبة إيلان'}</div><div class="t1" data-b><span class="grad">${G.n}</span><bdi dir="ltr">${G.en}</bdi></div><div class="t3" data-c>${G.sub}</div></div>`;
  if(sc.k==='step'){const s=G.steps[sc.i];d.innerHTML=`<div class="step"><div class="txt"><div class="num" data-a>0${sc.i+1}</div><div class="t2" data-b>${s[0]}</div><div class="t3" data-c>${s[1]}</div></div><div class="ill">${illHTML(s[2])}</div></div>`}
- if(sc.k==='outro'){const tags=G.paid?`<span class="pill g">جرّبها مجاناً · ٣ بطاقات × ٣ مرات</span><span class="pill o">اللعبة كاملة ٢٥ ر.س</span>`:`<span class="pill g">مجانية ١٠٠٪</span>`;
+ if(sc.k==='outro'){const tags=G.paid?`<span class="pill g">جرّبها مجاناً · ٣ بطاقات × ٣ مرات</span><span class="pill o">اللعبة كاملة ٣٠ ر.س</span>`:`<span class="pill g">مجانية ١٠٠٪</span>`;
    d.innerHTML=`<div class="center" style="position:absolute;inset:0;gap:20px"><img src="${LOGO}" data-icon style="width:150px;height:150px"><div class="t2" data-b>العبها الحين في <span class="grad">إيلان دول</span></div><div data-c style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center">${tags}<span class="pill">على الجوال · الآيباد · الكمبيوتر</span>${G.print?'<span class="pill o">🖨️ وفيه ملف PDF للطباعة</span>':''}</div><div class="t3" data-a style="font-family:Poppins;letter-spacing:4px;font-size:20px">منطقة الترفيه · EILAN DOLL</div></div>`}
  stage.appendChild(d)});
 

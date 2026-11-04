@@ -13785,6 +13785,326 @@ ACT.cchit=d=>{if(!CC.run)return;const i=+d.i,c=$$('#ccB .cc-c')[i];if(!c)return;
  $('#ccS').textContent=CC.sc;$('#ccC').textContent=CC.combo};
 </script>
 <!-- /EILAN GAMES ZONE -->
+<!-- EILAN VISUAL LAB (source: visual/src/visual-lab.html) -->
+<style>
+/* ===== مختبر إيلان البصري — Eilan Visual Lab (.vl-*) ===== */
+@font-face{font-family:"Marhey";src:url(/visual/fonts/marhey.woff2) format("woff2");font-display:swap}
+.vl-hero{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:16px}
+.vl-hero h1{font-size:30px;line-height:1.25;margin:4px 0 6px}
+.vl-hero p{color:var(--mu);max-width:640px}
+.vl-quota{font-size:12.5px;color:var(--mu);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.vl-wrap{display:grid;grid-template-columns:minmax(300px,380px) 1fr;gap:16px;align-items:start}
+.vl-side{padding:14px;display:flex;flex-direction:column;gap:12px;position:sticky;top:8px;max-height:calc(100vh - 220px);overflow:auto}
+.vl-tpls{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.vl-tpl{display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 2px 6px;border-radius:12px;background:rgba(255,255,255,.03);border:1px solid var(--bd);font-size:11px;font-weight:700;color:var(--mu);line-height:1.2;text-align:center;transition:.2s}
+.vl-tpl ei-c.ei{width:30px;height:30px}
+.vl-tpl.on{border-color:var(--g);color:var(--w);background:linear-gradient(160deg,rgba(232,182,74,.16),rgba(79,132,96,.12))}
+.vl-tpl:hover{transform:translateY(-2px)}
+.vl-desc{font-size:12.5px;color:var(--mu);line-height:1.6;padding:8px 10px;border-radius:10px;background:rgba(255,255,255,.03)}
+.vl-desc b{color:var(--w)}
+.vl-f label{display:block;font-size:12.5px;font-weight:800;margin-bottom:4px}
+.vl-f small{display:block;font-size:11px;color:var(--mu2);margin-top:3px;line-height:1.5}
+.vl-f input,.vl-f textarea{width:100%;background:#0d0e0a;border:1px solid var(--bd);border-radius:10px;padding:8px 10px;color:var(--w);font-size:13.5px;line-height:1.55;resize:vertical}
+.vl-f textarea{min-height:86px}
+.vl-f input:focus,.vl-f textarea:focus{outline:none;border-color:var(--g)}
+.vl-row{display:flex;gap:6px;flex-wrap:wrap}
+.vl-row .chip.on{background:var(--grad);color:#14150F;border-color:transparent;font-weight:800}
+.vl-main{display:flex;flex-direction:column;gap:10px;min-width:0}
+.vl-stage{padding:12px;border-radius:20px;display:grid;place-items:center;overflow:hidden}
+.vl-stage svg{stroke:none!important;width:100%!important;height:auto!important;max-height:calc(100vh - 230px);border-radius:12px;box-shadow:0 20px 50px -24px #000;display:block}
+.vl-acts{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-start}
+.vl-acts .btn svg{width:16px;height:16px}
+.vl-promo{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center;padding:18px 20px;margin-bottom:18px;border-color:var(--bd2)}
+.vl-promo h3{font-size:19px;margin:4px 0}
+.vl-pk{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:16px}
+.vl-pk .card{padding:14px;display:flex;flex-direction:column;gap:6px}
+.vl-pk b{font-size:15px}.vl-pk p{font-size:12.5px;color:var(--mu);margin:0;line-height:1.6;flex:1}
+.vl-pk .pr{font-weight:900;color:var(--g)}
+@media (max-width:980px){.vl-wrap{grid-template-columns:1fr}.vl-main{order:-1}.vl-side{position:static;max-height:none}.vl-pk{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.vl-tpls{grid-template-columns:repeat(4,1fr)}.vl-promo{grid-template-columns:1fr}.vl-pk{grid-template-columns:1fr}.vl-hero h1{font-size:24px}}
+html.light .vl-f input,html.light .vl-f textarea{background:#fff}
+</style>
+<script>
+/* ================= 🎨 مختبر إيلان البصري — Eilan Visual Lab =================
+   14 original visual formats. The user fills fields, the lab draws an SVG in Eilan style,
+   exports PNG / PDF. 2 free exports, then unlock with a VIS- code (hashes only). */
+const VL_RAMP=['#F6E3A8','#E8B64A','#4B2A7B','#6FA37C','#2F7A52'];
+const VL_FONT='"Segoe UI","Noto Sans Arabic","Geeza Pro","Tahoma",system-ui,sans-serif';
+const VL_HAND='"Marhey","Noto Sans Arabic","Geeza Pro",sans-serif';
+const VL_THEMES={
+ dark:{n:'داكن إيلان',bg:'#14150F',bg2:'#1C1E16',card:'#22261B',ink:'#EFE9DA',mu:'#B9B8A8',acc:'#E8B64A',p:'#6FA37C',p2:'#2F7A52',pu:'#9B7BDC',bad:'#E8735C',line:'rgba(239,233,218,.16)'},
+ paper:{n:'ورقي فاتح',bg:'#FBF8F0',bg2:'#F2ECDD',card:'#FFFFFF',ink:'#1F3A2B',mu:'#6E6C5A',acc:'#B58A2E',p:'#2F7A52',p2:'#1F5A3B',pu:'#5A2E96',bad:'#C2452F',line:'rgba(31,58,43,.18)'}};
+const VL_CODES=["2e17e0d322024e236d9d65d1","0aa3b40514d5209c7cc322a6","0aa4c174457447bf21524f82","a38bc8985f6d2ddd57f8db88","46071bec42e0917725beb64f","9e3b08055ab1e8654eec22ca","cd853c5913650c4189a3777d","c38d7524392963cd93aa108f","623ead49e2e08c764b590295","677b8ae5e7665d38e9a69bf9","b2b5cc1403bdc9fc7a8e065e","27e7cb951d7047340ee73098","4ab7e2b67faf3c66ef07c0cd","8d4bfd78d961b8bba711819f","4b1df8912132a43c84d5f079","9cca7d5b986b9e1cc860b7dd","8906c03c26cf38ff7fa92c47","7892917ba5f21d4535e9be98","ac77563400960898d1bc5a44","79b2ccacf9d66b1f6db04659","9d6d39341b0573ce493fe570","dd8885ec4d1c5bc2bf4fc3fa","6ea371285e88e404e4a95fa3","3ac66f563448ffacc7f7ff79","1e2c23de7f4e24e466cc1200","79bf32e29ae39519cb4927e6","1be633b3ef013b71576fe897","3ed96704fcd76ef69b33ffcd","09c827c6c8f81b677321174f","b8ecb1b812cd8ec6a90bfc7b","c69e1263ab88c5d63c463989","b9028e89eef4a8c74aff8f7d","95c1ce5f945365cf96251f67","9f3a64e10d7f7cae6ecf0bce","c8b309577792db76a9fdb73a","f924344afb8886430b655ee1","04f4183a31b1fb0103f3e529","6c08c7033eb47b4b1306df62","479a1b12f7812f7f30f5df4f","997e75c5743ff7b3b1713a9f","3aeefa80b1a2df661c31746a","0ff3cd9f29f1b76fd8c623da","707ec9b6fc40409c1b7fa6b1","4484347c4e22e027a38ac3bb","85a6337c764fd8c4f06d4ab5","9467f4373f0d8adebbb97f7f","87709821a8025b83db16d96a","b6da89fa59e17ab778199402","55811295598d1e11e577e853","24d8b5c1983720899480380f","c1d4fb31624c2449da43f0ca","8c15ef52ecc06224817b1703","7b24ff40c41229ffa4300892","1ffbad5807b43a86d010b7ed","c4afd7b2b5934490e0df6318","9de7cab3ec49d0048b6e58de","40b9e65da0ea31a9088a2d9d","edc4cb33b287150b06389fdf","33e5bab7b82cf8b8fe553bf2","8813a69b1699c310cb7b54a9","7511faac3d915a8938995aad","caddf9941453223d20833b40","17498ff4b3690ac551a08f44","8b7b3f49b2a8e3e4bbe3b830","62cb24565d7a4546123483f1","f36aa70fe7872b9479cce39a","17eefab80a64e3d602f52f5d","b555f5d92d9e15dec2a1a72c","7cc2eee825d0f0e7564aa3ef","17f09d89d31a3a75976f6c3d","d0f56e11ca6ff388bdcee9dc","c456b85e0e08c4e5622e1d42","d833bac629c263a4f2d53d7a","aad332a91b46f8c1a1aeb197","22ecdae96be395dc4b845fa3","25d91c02e26c098feb7ddd23","b0b078009dec30d85d10a580","8fbdf1673346181e9fd5169a","580ce401db6ae18c6d256714","bea7a3380dcf8f7bf34bb3a0","4e9570abe394c603da9bc34a","8de3321144483b6609524523","2ae8810feba83e40f099a051","dcd08d71534f8eee4196def7","e02746d22a5ab4db0cd39a78","919d5dd76ed0dc65bb0c6408","a16d15caf8a8c823c567f956","7a6030b59a5efbcafbc31186","4f2f9995eb68a7e768603e84","5a0fa771cd3ab879cad78a1f","9ee3602d75ba11fd8e68b463","e993e4bce2fb34df84143324","a57ab5d04eb5a15bd4cc35a5","8a57383b99552053e03d804e","56cd2c6606ab5f36ba6dc7b0","b413e99fec5f20ee8452dba7","84a8be07cf267b1c2b61fea2","a9df91ef9ae0e1d05df3d21f","d1719c274fa73d27765b1054","37834ce6ab7a80a0462e267c"];
+const VL_FREE=2;
+const VL={tpl:'tree',theme:'dark',data:{},font64:null};
+/* ---------- text helpers (measure with canvas so Arabic wraps correctly) ---------- */
+const vlCv=document.createElement('canvas').getContext('2d');
+const vlE=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function vlWrap(str,size,weight,maxW,fam){vlCv.font=`${weight||700} ${size}px ${fam||VL_FONT}`;const out=[];
+ String(str||'').split('\n').forEach(par=>{const w=par.trim().split(/\s+/).filter(Boolean);let line='';
+  w.forEach(word=>{const t=line?line+' '+word:word;if(vlCv.measureText(t).width>maxW&&line){out.push(line);line=word}else line=t});if(line)out.push(line)});return out}
+/* text block: x is the RIGHT edge for anchor 'r', center for 'm', LEFT edge for 'l' */
+function vlT(x,y,str,o={}){const size=o.size||24,lh=o.lh||1.4,fam=o.fam||VL_FONT,w=o.w||700;let lines=o.maxW?vlWrap(str,size,w,o.maxW,fam):[String(str||'')];
+ if(o.max&&lines.length>o.max){lines=lines.slice(0,o.max);lines[lines.length-1]+='…'}
+ const a=o.a||'r',anchor=a==='m'?'middle':a==='l'?'end':'start';
+ const s=lines.map((l,i)=>`<text x="${x}" y="${(y+i*size*lh).toFixed(1)}" direction="rtl" text-anchor="${anchor}" font-family='${fam}' font-size="${size}" font-weight="${w}" fill="${o.fill||'#000'}"${o.op?` opacity="${o.op}"`:''}>${vlE(l)}</text>`).join('');
+ return {s,h:lines.length*size*lh,n:lines.length}}
+const vlLines=v=>String(v||'').split('\n').map(x=>x.trim()).filter(Boolean);
+const vlParts=l=>l.split('|').map(x=>x.trim());
+const vlStar=s=>{const t=String(s||'');return t.includes('*')?{s:t.replace(/\*/g,'').trim(),star:true}:{s:t,star:false}};
+function vlCubeSvg(key,x,y,size,bg){const P_=(typeof CUBE_PAT!=='undefined'&&CUBE_PAT[key])||'..#..|.###.|#####|.###.|..#..';const rows=P_.split('|'),H=rows.length,W=rows[0].length;
+ const P=Math.min(7.4,60/W,60/H),Z=P*.82,OX=(64-P*W)/2,OY=(64-P*H)/2,k=size/64;let h=`<g transform="translate(${x},${y}) scale(${k.toFixed(4)})">`+(bg?`<rect width="64" height="64" rx="15" fill="${bg}"/>`:'');
+ rows.forEach((r,yy)=>{for(let xx=0;xx<W;xx++)if(r[xx]==='#'){const cx=OX+(xx+.5)*P,cy=OY+(yy+.5)*P;h+=`<rect x="${(cx-Z/2).toFixed(2)}" y="${(cy-Z/2).toFixed(2)}" width="${Z.toFixed(2)}" height="${Z.toFixed(2)}" rx="${(Z*.27).toFixed(2)}" fill="${VL_RAMP[Math.min(4,Math.floor(yy/Math.max(1,H-1)*5))]}"/>`}});return h+'</g>'}
+function vlFoot(W,H,fill){vlCv.font=`800 15px ${VL_FONT}`;const t='EILAN DOLL · مختبر إيلان البصري',tw=vlCv.measureText(t).width,x0=W/2-(tw+38)/2;
+ return `<g opacity=".9"><image href="${typeof LOGO!=='undefined'?LOGO:''}" x="${(x0+tw+8).toFixed(1)}" y="${H-52}" width="30" height="30"/>${vlT(x0+tw,H-30,t,{size:15,w:800,fill}).s}</g>`}
+const vlCubes=(x,y,s=16,g=7)=>VL_RAMP.map((c,i)=>`<rect x="${x+i*(s+g)}" y="${y}" width="${s}" height="${s}" rx="${s*.28}" fill="${c}"/>`).join('');
+function vlFrame(d,T,W,H,inner,o={}){const tt=vlT(W-70,92,d.title||'',{size:o.ts||46,w:900,fill:T.ink,maxW:W*.62,max:2});
+ const st=d.sub?vlT(W-70,92+tt.h+4,d.sub,{size:22,w:700,fill:T.mu,maxW:W*.62,max:2}):{s:''};
+ return `<rect width="${W}" height="${H}" fill="${T.bg}"/>${o.bgx||''}${vlCubes(70,58)}${tt.s}${st.s}${inner}${vlFoot(W,H,T.mu)}`}
+const vlBox=(x,y,w,h,T,o={})=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${o.r||18}" fill="${o.fill||T.card}" stroke="${o.stroke||T.line}" stroke-width="${o.sw||1.5}"${o.dash?` stroke-dasharray="${o.dash}"`:''}/>`;
+const vlArrowDef=T=>`<defs><marker id="vla" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="${T.acc}"/></marker></defs>`;
+function vlCard(x,y,w,T,title,desc,o={}){/* x = right edge */const pad=18,tw=w-pad*2;
+ const a=vlT(x-pad,y+pad+(o.ts||24),title,{size:o.ts||24,w:900,fill:o.tc||T.ink,maxW:tw,max:o.tmax||2});
+ const b=desc?vlT(x-pad,y+pad+(o.ts||24)+a.h-4,desc,{size:o.ds||18,w:700,fill:T.mu,maxW:tw,max:o.dmax||3}):{s:'',h:0};
+ const h=pad*2+a.h+b.h-(desc?4:8);return {s:vlBox(x-w,y,w,h,T,o)+a.s+b.s,h}}
+
+/* ---------- the 14 formats ---------- */
+const VL_T={
+ tree:{n:'الشجرة',en:'Tree',ic:'palm',best:'التصنيفات، المهارات، أي موضوع له جذور وفروع.',desc:'الجذور = الأساسات، الجذع = الفكرة الأساسية، الفروع = الأقسام، الثمرة = النتيجة.',
+  f:[['title','العنوان','text'],['roots','الجذور (٣ أساسات)','lines','سطر لكل أساس'],['trunk','الجذع: الفكرة في سطر','text'],['branches','الفروع','lines','كل سطر: الفرع | أمثلة'],['fruit','الثمرة: النتيجة','text']],
+  ex:{title:'تعلّم البرمجة',roots:'منطق وحل مشكلات\nإنجليزي أساسي\nصبر وتجربة',trunk:'تحويل الأفكار إلى أوامر يفهمها الجهاز',branches:'مواقع | HTML، CSS، JavaScript\nتطبيقات | Swift، Flutter\nبيانات | Python، Excel\nذكاء اصطناعي | نماذج، أوامر\nألعاب | Unity، Godot',fruit:'تبني مشروعك بنفسك'},
+  draw(d,T,W,H){const cx=W/2;let s=`<ellipse cx="${cx}" cy="400" rx="640" ry="250" fill="${T.p}" opacity=".13"/><ellipse cx="${cx-260}" cy="440" rx="300" ry="170" fill="${T.p}" opacity=".1"/><ellipse cx="${cx+260}" cy="440" rx="300" ry="170" fill="${T.p}" opacity=".1"/>`;
+   s+=`<path d="M${cx-48} 790 C${cx-30} 650 ${cx-40} 560 ${cx-26} 470 L${cx+26} 470 C${cx+40} 560 ${cx+30} 650 ${cx+48} 790Z" fill="#7A5A3A"/>`;
+   s+=`<line x1="110" y1="790" x2="${W-110}" y2="790" stroke="${T.line}" stroke-width="3"/>`;
+   const br=vlLines(d.branches).slice(0,5),P=br.length<=4?[[330,560],[520,330],[1080,330],[1270,560]].slice(0,br.length):[[300,590],[460,360],[cx,255],[1140,360],[1300,590]];
+   const pos=br.length===5?P:(br.length===3?[[360,520],[cx,250],[1240,520]]:P);
+   br.forEach((l,i)=>{const [t,dd]=vlParts(l),[x,y]=pos[i];s+=`<path d="M${cx} 480 Q${(cx+x)/2} ${Math.min(y,480)-40} ${x} ${y+40}" stroke="#7A5A3A" stroke-width="14" fill="none" stroke-linecap="round"/>`;
+    const c=vlCard(x+150,y-10,300,T,t,dd,{ts:24,ds:17,dmax:2,stroke:T.p});s+=c.s;s+=`<circle cx="${x+150}" cy="${y-10}" r="9" fill="${VL_RAMP[i%5]}"/>`});
+   if(d.fruit){const f=vlT(cx,215,'🍎 '+d.fruit,{size:24,w:900,fill:'#14150F',a:'m'});vlCv.font=`900 24px ${VL_FONT}`;const fw=Math.min(560,vlCv.measureText(d.fruit).width+90);
+    if(br.length!==5)s+=vlBox(cx-fw/2,180,fw,52,T,{fill:T.acc,stroke:T.acc,r:26})+f.s}
+   if(d.trunk){const tw=vlT(cx,640,d.trunk,{size:20,w:900,fill:'#FBF8F0',a:'m',maxW:300,max:3});s+=vlBox(cx-170,610,340,tw.h+26,T,{fill:'#5B4229',stroke:'#5B4229',r:14})+vlT(cx,640,d.trunk,{size:20,w:900,fill:'#FBF8F0',a:'m',maxW:300,max:3}).s}
+   const rt=vlLines(d.roots).slice(0,3),rx=[cx+420,cx,cx-420];
+   rt.forEach((r,i)=>{s+=`<path d="M${cx+(i-1)*-20} 790 Q${(cx+rx[i])/2} 850 ${rx[i]} 860" stroke="#7A5A3A" stroke-width="7" fill="none" opacity=".75"/>`;
+    vlCv.font=`800 20px ${VL_FONT}`;const w=Math.min(380,vlCv.measureText(r).width+44);s+=vlBox(rx[i]-w/2,838,w,46,T,{r:23,stroke:T.acc})+vlT(rx[i],868,r,{size:20,w:800,fill:T.ink,a:'m'}).s});
+   s+=vlT(110,825,'الجذور',{size:16,w:800,fill:T.mu,a:'l'}).s;return vlFrame(d,T,W,H,s)}},
+ iceberg:{n:'جبل الجليد',en:'Iceberg',ic:'wave',best:'الأسباب الخفية، قصص النجاح، أي موضوع له ظاهر وباطن.',desc:'فوق الماء اللي يشوفه الكل، تحته اللي ينتبه له القليل، وفي القاع الأسباب الحقيقية.',
+  f:[['title','العنوان','text'],['top','فوق الماء (٣)','lines','اللي يشوفه الكل'],['mid','تحت السطح (٣)','lines','اللي ينتبه له القليل'],['deep','القاع (٣-٤)','lines','الأسباب الحقيقية'],['insight','الخلاصة','text']],
+  ex:{title:'نجاح المشروع الصغير',top:'منتج حلو\nحساب انستقرام نشيط\nطلبات كثير',mid:'خدمة عملاء سريعة\nتسعير مدروس\nتجربة شراء سهلة',deep:'سنين تعلّم وتجربة\nفشل تعلّمت منه\nفهم عميق للعميل\nانضباط يومي',insight:'اللي تشوفه نتيجة… والسبب تحت الماء'},
+  draw(d,T,W,H){const sea=360,cx=W/2-60;let s=`<defs><linearGradient id="vls" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1F5C7A"/><stop offset="1" stop-color="#071A24"/></linearGradient><linearGradient id="vli" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#CFEAF2"/><stop offset=".45" stop-color="#5E9BB4"/><stop offset="1" stop-color="#1D4A60"/></linearGradient></defs>`;
+   s+=`<rect x="0" y="${sea}" width="${W}" height="${H-sea}" fill="url(#vls)"/><path d="M0 ${sea} Q200 ${sea-10} 400 ${sea} T800 ${sea} T1200 ${sea} T1600 ${sea}" stroke="#BFE3EE" stroke-width="3" fill="none"/>`;
+   s+=`<path d="M${cx-150} ${sea} L${cx-60} 200 L${cx+10} 230 L${cx+70} 170 L${cx+160} ${sea}Z" fill="#EAF6FA"/>`;
+   s+=`<path d="M${cx-150} ${sea} L${cx-420} 560 L${cx-330} 760 L${cx-120} 900 L${cx+220} 890 L${cx+430} 720 L${cx+360} 520 L${cx+160} ${sea}Z" fill="url(#vli)" opacity=".92"/>`;
+   const top=vlLines(d.top).slice(0,3),mid=vlLines(d.mid).slice(0,3),deep=vlLines(d.deep).slice(0,4);
+   top.forEach((t,i)=>{const x=i%2?cx+300:cx-300,y=200+Math.floor(i/2)*90+(i===2?40:0);const xx=i===2?cx+520:x;vlCv.font=`800 20px ${VL_FONT}`;const w=Math.min(360,vlCv.measureText(t).width+44);
+    s+=vlBox(xx-w/2,y-30,w,46,T,{r:23,stroke:T.acc})+vlT(xx,y,t,{size:20,w:800,fill:T.ink,a:'m'}).s});
+   mid.forEach((t,i)=>{s+=vlT(cx+5,450+i*44,'• '+t,{size:22,w:800,fill:'#0E2A36',a:'m',maxW:560,max:1}).s});
+   deep.forEach((t,i)=>{s+=vlT(cx+5,640+i*48,'◆ '+t,{size:24,w:900,fill:'#F2FAFC',a:'m',maxW:560,max:1}).s});
+   const lab=(y,a)=>vlT(W-60,y,a,{size:17,w:800,fill:'#BFE3EE'}).s;s+=vlT(W-60,sea-14,'اللي يشوفه الكل ▲',{size:17,w:800,fill:T.mu}).s+lab(sea+40,'اللي ينتبه له القليل')+lab(620,'الأسباب الحقيقية ▼');
+   if(d.insight)s+=vlT(W-60,860,'💡 '+d.insight,{size:22,w:900,fill:'#FFE6A6',maxW:430,max:3}).s;return vlFrame(d,T,W,H,s)}},
+ timeline:{n:'الخط الزمني',en:'Timeline',ic:'timer',best:'التاريخ، قصة شركة، خطة مشروع.',desc:'الأحداث بالترتيب. حط * بعد الحدث المهم عشان يكبر.',
+  f:[['title','العنوان','text'],['events','الأحداث (٦-١٠)','lines','كل سطر: التاريخ | الحدث | الأثر — وحط * للأهم'],['next','وش بعدها؟','text']],
+  ex:{title:'محطات من تاريخ السعودية',events:'1727 | قيام الدولة السعودية الأولى | بداية الدولة في الدرعية *\n1824 | الدولة السعودية الثانية | عودة الدولة بالرياض\n1902 | استعادة الرياض | بداية التوحيد\n1932 | توحيد المملكة | اسم المملكة العربية السعودية *\n1938 | اكتشاف النفط | تغيّر الاقتصاد\n1957 | جامعة الملك سعود | أول جامعة في المملكة',next:'رحلة مستمرة نحو المستقبل'},
+  draw(d,T,W,H){const ev=vlLines(d.events).slice(0,10).map(vlParts),n=Math.max(1,ev.length),y=560,x0=W-130,x1=150,st=(x0-x1)/Math.max(1,n-1);
+   let s=vlArrowDef(T)+`<line x1="${x0+40}" y1="${y}" x2="${x1-60}" y2="${y}" stroke="${T.acc}" stroke-width="5" marker-end="url(#vla)"/>`;
+   ev.forEach((e,i)=>{const x=n===1?W/2:x0-i*st,up=i%2===0,big=(e.join(' ')).includes('*'),cw=Math.min(250,st*1.75),c=[0,1,2].map(k=>vlStar(e[k]).s);
+    s+=`<circle cx="${x}" cy="${y}" r="${big?20:12}" fill="${big?T.acc:T.p}" stroke="${T.bg}" stroke-width="4"/><line x1="${x}" y1="${y+(up?-22:22)}" x2="${x}" y2="${y+(up?-62:62)}" stroke="${T.line}" stroke-width="2"/>`;
+    const card=vlCard(x+cw/2,0,cw,T,c[1],c[2],{ts:big?24:21,ds:16,dmax:3,stroke:big?T.acc:T.line,fill:big?'rgba(232,182,74,.12)':T.card});
+    const cy=up?y-62-card.h-38:y+62+38;const dt=vlT(x,up?cy-10:cy-10,c[0],{size:big?30:24,w:900,fill:T.acc,a:'m'});
+    s+=`<g transform="translate(0,${cy})">${card.s}</g>`+vlT(x,up?y-62-card.h-48:y+62+30,c[0],{size:big?30:24,w:900,fill:T.acc,a:'m'}).s});
+   if(d.next)s+=vlT(x1-70,y-24,'⟵ '+d.next,{size:20,w:900,fill:T.mu,a:'l',maxW:260,max:2}).s;return vlFrame(d,T,W,H,s)}},
+ roadmap:{n:'خريطة الطريق',en:'Roadmap',ic:'compass',best:'الأهداف، مسار تعلّم، إطلاق منتج.',desc:'طريق من البداية للهدف، عليه محطات وعقبات.',
+  f:[['title','العنوان','text'],['steps','المحطات (٥-٧)','lines','كل سطر: المحطة | كيف تعرف إنك خلّصتها'],['blocks','العقبات (١-٢)','lines','كل سطر: العقبة | كيف تتجاوزها'],['goal','الهدف في النهاية','text']],
+  ex:{title:'إطلاق متجري الرقمي في ٩٠ يوم',steps:'الفكرة | كتبت مشكلة واضحة لعميل محدد\nأول منتج | نسخة بسيطة جاهزة للبيع\nالمتجر | صفحة دفع شغالة\nأول ١٠ عملاء | تقييمات حقيقية\nالتسويق | محتوى أسبوعي ثابت\nالتوسّع | منتج ثاني',blocks:'الخوف من النشر | انشر نسخة صغيرة وتعلّم\nقلّة الوقت | ساعة ثابتة يومياً',goal:'متجر يبيع وأنت نايم 🌙'},
+  draw(d,T,W,H){const pt=t=>[W-150-(W-300)*t,560+120*Math.sin(t*Math.PI*2)];let path='';for(let i=0;i<=90;i++){const [x,y]=pt(i/90);path+=(i?'L':'M')+x.toFixed(1)+' '+y.toFixed(1)}
+   let s=`<path d="${path}" stroke="${T.bg2}" stroke-width="74" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="${path}" stroke="#3A3D33" stroke-width="60" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="${path}" stroke="${T.acc}" stroke-width="4" stroke-dasharray="22 18" fill="none"/>`;
+   const st=vlLines(d.steps).slice(0,7).map(vlParts),n=st.length,bl=vlLines(d.blocks).slice(0,2).map(vlParts);
+   st.forEach((p,i)=>{const t=(i+1)/(n+1),[x,y]=pt(t),up=i%2===0,cw=Math.min(250,(W-300)/(n+1)*1.85);s+=`<circle cx="${x}" cy="${y}" r="26" fill="${VL_RAMP[i%5]}" stroke="${T.bg}" stroke-width="5"/>`+vlT(x,y+9,String(i+1),{size:24,w:900,fill:i%5===2?'#fff':'#14150F',a:'m'}).s;
+    const c=vlCard(x+cw/2,0,cw,T,p[0],p[1],{ts:21,ds:15,dmax:2});let ext=y;for(let q=-.09;q<=.09;q+=.01){const yy=pt(Math.min(1,Math.max(0,t+q)))[1];ext=up?Math.min(ext,yy):Math.max(ext,yy)}const cy=up?ext-58-c.h:ext+58;s+=`<line x1="${x}" y1="${up?y-28:y+28}" x2="${x}" y2="${up?cy+c.h:cy}" stroke="${T.line}" stroke-width="2"/><g transform="translate(0,${cy})">${c.s}</g>`});
+   bl.forEach((b,i)=>{const t=(i+1.5)/(n+1),[x,y]=pt(t);s+=`<path d="M${x-14} ${y+14} L${x} ${y-20} L${x+14} ${y+14}Z" fill="${T.bad}" stroke="${T.bg}" stroke-width="2"/>`});
+   if(bl.length){let yy=850;s+=vlT(W-80,yy,'⚠ العقبات',{size:20,w:900,fill:T.bad}).s;bl.forEach((b,i)=>{s+=vlT(W-80-i*560-130,yy,b[0]+(b[1]?' ← '+b[1]:''),{size:17,w:700,fill:T.mu,maxW:520,max:1}).s})}
+   const [sx,sy]=pt(0),[gx,gy]=pt(1);s+=vlT(sx,sy+70,'البداية',{size:20,w:900,fill:T.mu,a:'m'}).s;
+   s+=`<line x1="${gx}" y1="${gy}" x2="${gx}" y2="${gy-100}" stroke="${T.ink}" stroke-width="5"/><path d="M${gx} ${gy-100} L${gx+60} ${gy-82} L${gx} ${gy-64}Z" fill="${T.acc}"/>`;
+   if(d.goal)s+=vlT(gx-10,gy-120,'🏁 '+d.goal,{size:22,w:900,fill:T.acc,a:'l',maxW:330,max:2}).s;return vlFrame(d,T,W,H,s)}},
+ cycle:{n:'الدورة',en:'Cycle',ic:'recycle',best:'العادات، دورات الحياة، أي شيء يتكرر.',desc:'مراحل تدور على بعض. حط * عند المرحلة اللي ينكسر عندها أغلب الناس.',
+  f:[['title','العنوان','text'],['stages','المراحل (٤-٦)','lines','كل سطر: المرحلة | شرحها — وحط * للمرحلة الصعبة'],['center','وش تنتج الدورة؟','text']],
+  ex:{title:'دورة العادة',stages:'الإشارة | شي يذكّرك تبدأ\nالرغبة | شعور يدفعك\nالفعل | العادة نفسها *\nالمكافأة | إحساس حلو يثبّتها',center:'عادة ثابتة'},
+  draw(d,T,W,H){const cx=W/2,cy=530,R=235,st=vlLines(d.stages).slice(0,6).map(vlParts),n=Math.max(1,st.length);let s=vlArrowDef(T)+`<circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="${T.line}" stroke-width="3" stroke-dasharray="6 10"/>`;
+   const ang=i=>-Math.PI/2+i*2*Math.PI/n;
+   for(let i=0;i<n;i++){const a1=ang(i)+.32,a2=ang(i+1)-.32;s+=`<path d="M${cx+R*Math.cos(a1)} ${cy+R*Math.sin(a1)} A${R} ${R} 0 0 1 ${cx+R*Math.cos(a2)} ${cy+R*Math.sin(a2)}" stroke="${T.acc}" stroke-width="5" fill="none" marker-end="url(#vla)"/>`}
+   st.forEach((p,i)=>{const a=ang(i),x=cx+R*Math.cos(a),y=cy+R*Math.sin(a),k=vlStar(p.join('|')),sp=vlParts(k.s);
+    s+=`<circle cx="${x}" cy="${y}" r="52" fill="${k.star?T.bad:VL_RAMP[i%5]}" stroke="${T.bg}" stroke-width="6"/>`+vlT(x,y+12,String(i+1),{size:34,w:900,fill:k.star||i%5===2?'#fff':'#14150F',a:'m'}).s;
+    const right=Math.cos(a)>.2,left=Math.cos(a)<-.2,cw=300;const lx=right?x+70+cw:left?x-70:x+cw/2;const c=vlCard(lx,0,cw,T,sp[0],sp[1],{ts:22,ds:16,dmax:2,stroke:k.star?T.bad:T.line});
+    const ly=(right||left)?y-c.h/2:(Math.sin(a)<0?y-62-c.h:y+62);s+=`<g transform="translate(0,${ly})">${c.s}</g>`;if(k.star)s+=vlT(cx+(x-cx)*.5,cy+(y-cy)*.5+(Math.sin(a)>0?-6:20),'⚠ هنا ينكسر أغلب الناس',{size:16,w:900,fill:T.bad,a:'m'}).s});
+   s+=`<circle cx="${cx}" cy="${cy}" r="92" fill="${T.card}" stroke="${T.acc}" stroke-width="3"/>`+vlT(cx,cy+8,d.center||'',{size:24,w:900,fill:T.acc,a:'m',maxW:160,max:3}).s;return vlFrame(d,T,W,H,s)}},
+ layers:{n:'الطبقات',en:'Layers',ic:'library',best:'المهارات، الأنظمة، أي شيء مبني فوق بعضه.',desc:'الأساس تحت، وكل طبقة تعتمد على اللي تحتها.',
+  f:[['title','العنوان','text'],['layers','الطبقات من تحت لفوق (٤-٧)','lines','كل سطر: الطبقة | وش تسوي']],
+  ex:{title:'بناء موقع إلكتروني',layers:'الاستضافة | مكان يعيش فيه الموقع\nقاعدة البيانات | تحفظ البيانات\nالخادم | المنطق والحسابات\nالواجهة | اللي يشوفه الزائر\nالتصميم | الألوان والخطوط\nالمحتوى | الكلام والصور'},
+  draw(d,T,W,H){const L=vlLines(d.layers).slice(0,7).map(vlParts),n=Math.max(1,L.length),top=190,bot=900,gap=10,h=(bot-top-gap*(n-1))/n,cx=W/2;let s=vlArrowDef(T);
+   const cols=['#2F7A52','#3E6F57','#4B2A7B','#6A4A9E','#6FA37C','#B98F3E','#E8B64A'];
+   L.forEach((l,i)=>{const y=bot-(i+1)*h-i*gap,wb=1200-i*(560/n),wt=1200-(i+1)*(560/n),c=cols[Math.round(i*(cols.length-1)/Math.max(1,n-1))];
+    s+=`<path d="M${cx-wb/2} ${y+h} L${cx+wb/2} ${y+h} L${cx+wt/2} ${y} L${cx-wt/2} ${y}Z" fill="${c}"/>`+vlT(cx+wt/2-30,y+h/2+10,l[0],{size:Math.min(30,h*.42),w:900,fill:i>=5?'#14150F':'#FBF8F0'}).s+vlT(cx-wt/2+30,y+h/2+8,l[1]||'',{size:Math.min(19,h*.3),w:700,fill:i>=5?'#3a3320':'#E6E1D0',a:'l',maxW:wt/2-60,max:1}).s;
+    if(i<n-1)s+=`<line x1="${cx+wb/2+60}" y1="${y+h/2}" x2="${cx+wb/2+60}" y2="${y-h/2+10}" stroke="${T.acc}" stroke-width="3" marker-end="url(#vla)"/>`});
+   s+=vlT(W-80,bot-6,'الأساس',{size:16,w:800,fill:T.mu}).s;return vlFrame(d,T,W,H,s)}},
+ matrix:{n:'مصفوفة القرار',en:'Decision',ic:'chart',best:'تختار بين أدوات، وظائف، موردين، خطط.',desc:'الخيارات ضد المعايير بأوزان، والمختبر يحسب الفايز لحاله.',
+  f:[['title','القرار','text'],['opts','الخيارات (٢-٤)','text','افصل بينها بفاصلة ،'],['crit','المعايير (٣-٦)','lines','كل سطر: المعيار | الوزن ١-٥ | الدرجات من ١٠ بنفس ترتيب الخيارات'],['why','ليش الفايز فاز؟','text']],
+  ex:{title:'وين أبيع منتجاتي الرقمية؟',opts:'سلة، متجر خاص، انستقرام',crit:'سهولة البداية | 5 | 9، 5، 8\nالتكلفة | 4 | 7، 4، 9\nالثقة عند العميل | 5 | 9، 7، 5\nالتحكم بالتصميم | 3 | 6، 10، 3\nالدفع الآمن | 5 | 10، 8، 4',why:'سلة أسهل وأوثق للعميل في البداية'},
+  draw(d,T,W,H){const O=String(d.opts||'').split(/[،,]/).map(x=>x.trim()).filter(Boolean).slice(0,4),C=vlLines(d.crit).slice(0,6).map(vlParts);
+   const num=v=>{const x=parseFloat(String(v).replace(/[٠-٩]/g,c=>'٠١٢٣٤٥٦٧٨٩'.indexOf(c)));return isNaN(x)?0:x};
+   const sc=C.map(c=>String(c[2]||'').split(/[،,\s]+/).filter(Boolean).map(num)),wt=C.map(c=>num(c[1])||1),tot=O.map((_,j)=>C.reduce((a,c,i)=>a+wt[i]*(sc[i][j]||0),0));
+   const best=tot.indexOf(Math.max(...tot));let mn=Infinity,mi=-1,mj=-1;sc.forEach((r,i)=>O.forEach((_,j)=>{if((r[j]||0)<mn){mn=r[j]||0;mi=i;mj=j}}));
+   const x0=W-90,cw0=380,cw1=110,cwo=Math.min(240,(W-180-cw0-cw1)/Math.max(1,O.length)),rh=Math.min(80,560/(C.length+2)),y0=210;let s='';
+   const cell=(xr,y,w,h,txt,o={})=>vlBox(xr-w,y,w,h,T,{r:10,fill:o.fill||T.card,stroke:o.stroke||T.line})+vlT(o.a==='r'?xr-16:xr-w/2,y+h/2+(o.size||22)*.36,txt,{size:o.size||22,w:o.w||800,fill:o.fc||T.ink,a:o.a||'m',maxW:w-24,max:1}).s;
+   s+=cell(x0,y0,cw0,rh,'المعيار',{fill:T.bg2,fc:T.mu,a:'r'})+cell(x0-cw0-6,y0,cw1,rh,'الوزن',{fill:T.bg2,fc:T.mu});
+   O.forEach((o,j)=>{s+=cell(x0-cw0-cw1-12-j*(cwo+6),y0,cwo,rh,o,{fill:j===best?'rgba(111,163,124,.3)':T.bg2,fc:j===best?T.p:T.ink,w:900})});
+   C.forEach((c,i)=>{const y=y0+(i+1)*(rh+6);s+=cell(x0,y,cw0,rh,c[0],{a:'r'})+cell(x0-cw0-6,y,cw1,rh,'×'+wt[i],{fc:T.acc});
+    O.forEach((o,j)=>{const bad=i===mi&&j===mj;s+=cell(x0-cw0-cw1-12-j*(cwo+6),y,cwo,rh,String(sc[i][j]??'—'),{fill:bad?'rgba(232,115,92,.25)':j===best?'rgba(111,163,124,.14)':T.card,fc:bad?T.bad:T.ink})})});
+   const yt=y0+(C.length+1)*(rh+6);s+=cell(x0,yt,cw0+cw1+6,rh,'المجموع الموزون',{fill:T.bg2,a:'r',w:900});
+   O.forEach((o,j)=>{s+=cell(x0-cw0-cw1-12-j*(cwo+6),yt,cwo,rh,String(Math.round(tot[j]*10)/10),{fill:j===best?T.p:T.bg2,fc:j===best?'#fff':T.ink,w:900,size:26})});
+   if(O.length&&Math.max(...tot)>0)s+=vlT(x0,yt+rh+70,'🏆 الفايز: '+O[best],{size:34,w:900,fill:T.p}).s+(d.why?vlT(x0,yt+rh+116,d.why,{size:22,w:700,fill:T.mu,maxW:1300,max:2}).s:'');return vlFrame(d,T,W,H,s)}},
+ canvas:{n:'لوحة المشروع',en:'Canvas',ic:'templates',best:'أفكار المشاريع، خطط المنتجات، الشركات الناشئة.',desc:'فكرتك كاملة في صفحة وحدة: ٩ مربعات.',
+  f:[['title','اسم الفكرة','text'],['b1','المشكلة','area'],['b2','العميل','area'],['b3','الحل','area'],['b4','القيمة الفريدة','area'],['b5','القنوات','area'],['b6','الدخل','area'],['b7','التكاليف','area'],['b8','المؤشرات','area'],['b9','الميزة اللي ما تنسرق','area'],['risk','أخطر افتراض','text']],
+  ex:{title:'إيلان دول — العالم الرقمي',b1:'المحتوى مشتّت بين تطبيقات كثيرة\nمنتجات رقمية بدون تجربة',b2:'طلاب ومعلمين\nعوائل وأصحاب مشاريع',b3:'عالم واحد: متجر، تعلّم، ألعاب',b4:'تجربة سعودية ممتعة بهوية مميزة',b5:'انستقرام وتيك توك\nديسكورد',b6:'منتجات رقمية\nألعاب واشتراكات',b7:'استضافة وأدوات\nتصميم وتسويق',b8:'زوار يومياً\nمبيعات شهرية',b9:'هوية إيلان والمجتمع',risk:'الناس تدفع على المنتجات الرقمية؟'},
+  draw(d,T,W,H){const L=['المشكلة','العميل','الحل','القيمة الفريدة','القنوات','الدخل','التكاليف','المؤشرات','الميزة اللي ما تنسرق'],x0=W-70,gw=(W-140-24)/3,gh=(860-180-24)/3;let s='';
+   L.forEach((lab,i)=>{const c=i%3,r=Math.floor(i/3),x=x0-c*(gw+12),y=180+r*(gh+12);s+=vlBox(x-gw,y,gw,gh,T,{r:16,stroke:i===3?T.acc:T.line});
+    s+=`<rect x="${x-gw+14}" y="${y+16}" width="10" height="10" rx="3" fill="${VL_RAMP[i%5]}"/>`+vlT(x-20,y+38,lab,{size:21,w:900,fill:T.acc}).s;
+    vlLines(d['b'+(i+1)]).slice(0,4).forEach((t,k)=>{s+=vlT(x-20,y+78+k*34,'• '+t,{size:18,w:700,fill:T.ink,maxW:gw-40,max:1}).s})});
+   if(d.risk)s+=vlT(x0,898,'🚩 أخطر افتراض: '+d.risk,{size:20,w:900,fill:T.bad,maxW:W-160,max:1}).s;return vlFrame(d,T,W,H,s,{ts:40})}},
+ info:{n:'إنفوجرافيك',en:'Infographic',ic:'chart',portrait:true,best:'شرح أرقام، منشورات السوشال، العروض.',desc:'بوستر طولي: رقم كبير وأقسام قصيرة وخلاصة.',
+  f:[['title','العنوان','text'],['sub','سطر تحت العنوان','text'],['big','الرقم الأبرز','text'],['bigl','وش يعني الرقم؟','text'],['secs','الأقسام (٤-٦)','lines','كل سطر: رقم أو حقيقة | سطر قصير'],['take','الخلاصة','text']],
+  ex:{title:'النوم والمذاكرة',sub:'ليش النوم جزء من المذاكرة؟',big:'٨',bigl:'ساعات نوم تقريباً يحتاجها أغلب الشباب',secs:'٢٠ دقيقة | قيلولة قصيرة تنعش التركيز\nقبل الامتحان | السهر يضعف الحفظ\nالصباح | أفضل وقت لمراجعة الصعب\n٣٠ دقيقة | بدون شاشة قبل النوم\nكل يوم | نفس وقت النوم يثبّت الساعة',take:'نم زين… تذاكر أحسن 🌙'},
+  draw(d,T,W,H){let s='';const cx=W/2;s+=`<circle cx="${cx}" cy="420" r="150" fill="${T.card}" stroke="${T.acc}" stroke-width="6"/>`+vlT(cx,470,d.big||'',{size:120,w:900,fill:T.acc,a:'m'}).s+vlT(cx,620,d.bigl||'',{size:24,w:800,fill:T.mu,a:'m',maxW:760,max:2}).s;
+   const S_=vlLines(d.secs).slice(0,6).map(vlParts),keys=['bolt','star','rocket','brain','check','spark'];
+   S_.forEach((p,i)=>{const c=i%2,r=Math.floor(i/2),bw=(W-160-24)/2,x=W-80-c*(bw+24),y=700+r*170;s+=vlBox(x-bw,y,bw,150,T,{r:20});
+    s+=vlCubeSvg(keys[i],x-bw+20,y+38,74,T.bg2)+vlT(x-24,y+60,p[0],{size:30,w:900,fill:T.acc,maxW:bw-140,max:1}).s+vlT(x-24,y+100,p[1]||'',{size:19,w:700,fill:T.ink,maxW:bw-140,max:2}).s});
+   const yy=700+Math.ceil(S_.length/2)*170+20;if(d.take)s+=vlBox(80,yy,W-160,80,T,{fill:T.p,stroke:T.p,r:40})+vlT(cx,yy+52,d.take,{size:28,w:900,fill:'#fff',a:'m',maxW:W-220,max:1}).s;
+   return vlFrame(d,T,W,H,s,{ts:52})}},
+ notes:{n:'ورقة ملاحظات',en:'Notes',ic:'note',best:'المراجعة، تلخيص درس، مذاكرة.',desc:'صفحة دفتر بخط اليد: ٥ نقاط، والكلمة الأهم بدائرة، وورقة لاصقة.',
+  f:[['title','العنوان','text'],['pts','النقاط (٥)','lines','نقطة بكل سطر'],['key','الكلمة الأهم','text','تنرسم عليها دائرة'],['sticky','الورقة اللاصقة','text']],
+  ex:{title:'التمثيل الضوئي',pts:'النبات يصنع غذاه بنفسه\nيحتاج ضوء الشمس + ماء + ثاني أكسيد الكربون\nيصير في البلاستيدات الخضراء\nالناتج: سكر جلوكوز + أكسجين\nبدونه ما فيه أكسجين نتنفسه',key:'الكلوروفيل',sticky:'الضوء ← طاقة ← غذاء'},
+  draw(d,T,W,H){const P='#FBF6E6',ink='#20409A',red='#C2452F';let s=`<rect width="${W}" height="${H}" fill="${P}"/>`;for(let y=210;y<H-60;y+=56)s+=`<line x1="60" y1="${y}" x2="${W-60}" y2="${y}" stroke="#B9CBE0" stroke-width="2"/>`;
+   s+=`<line x1="${W-150}" y1="40" x2="${W-150}" y2="${H-40}" stroke="#E7A0A0" stroke-width="3"/>`;
+   s+=vlT(W-190,140,d.title||'',{size:64,w:700,fill:'#1A1A1A',fam:VL_HAND,maxW:900,max:1}).s+`<path d="M${W-190} 162 Q${W-500} 176 ${W-820} 160" stroke="${VL_RAMP[1]}" stroke-width="7" fill="none" stroke-linecap="round" opacity=".8"/>`;
+   vlLines(d.pts).slice(0,6).forEach((t,i)=>{s+=vlT(W-190,250+i*112,(i+1)+'. '+t,{size:34,w:700,fill:ink,fam:VL_HAND,maxW:880,max:2,lh:1.6}).s});
+   if(d.key){vlCv.font=`700 44px ${VL_HAND}`;const kw=vlCv.measureText(d.key).width;s+=vlT(500,320,d.key,{size:44,w:700,fill:red,fam:VL_HAND,a:'m'}).s+`<ellipse cx="500" cy="306" rx="${kw/2+46}" ry="52" fill="none" stroke="${red}" stroke-width="4" transform="rotate(-4 500 306)"/>`+vlT(500,390,'← أهم كلمة',{size:22,w:700,fill:red,fam:VL_HAND,a:'m'}).s}
+   if(d.sticky)s+=`<g transform="rotate(4 360 640)"><rect x="210" y="520" width="320" height="250" fill="#FFE28A"/><rect x="300" y="505" width="140" height="34" fill="rgba(255,255,255,.55)"/>`+vlT(500,590,'النقطة الأهم:',{size:24,w:700,fill:'#5b4500',fam:VL_HAND}).s+vlT(505,640,d.sticky,{size:28,w:700,fill:'#2b2100',fam:VL_HAND,maxW:290,max:3,lh:1.5}).s+`</g>`;
+   s+=vlCubeSvg('brain',90,800,120,null);
+   s+=vlFoot(W,H,'#7a7460');return s}},
+ blueprint:{n:'المخطط الهندسي',en:'Blueprint',ic:'code',best:'الأنظمة، خطط البناء، العمليات.',desc:'مخطط أبيض على شبكة زرقاء مع مواصفات وكتلة عنوان.',
+  f:[['title','اسم النظام / الخطة','text'],['parts','المكوّنات (٣-٦)','lines','كل سطر: المكوّن | مواصفة (وقت، تكلفة، أداة)'],['notes','ملاحظات مرقّمة','lines','ملاحظة بكل سطر'],['ver','الإصدار','text']],
+  ex:{title:'مطبخ تحضير الطلبات',parts:'الاستلام | ٥ دقائق · جوال الطلبات\nالتحضير | ١٥ دقيقة · محطتين\nالتغليف | ٣ دقائق · علب حرارية\nالجودة | دقيقة · قائمة فحص\nالتوصيل | ٢٥ دقيقة · مندوبين',notes:'كل طلب يمر على الجودة قبل التغليف\nالذروة ٧-١٠ مساءً\nالهدف: الطلب عند العميل خلال ٥٠ دقيقة',ver:'v1.0'},
+  draw(d,T,W,H){const B='#123A6B',L='rgba(255,255,255,.12)',Wt='#EAF3FF';let s=`<rect width="${W}" height="${H}" fill="${B}"/>`;for(let x=0;x<W;x+=40)s+=`<line x1="${x}" y1="0" x2="${x}" y2="${H}" stroke="${L}" stroke-width="${x%200?1:2}"/>`;for(let y=0;y<H;y+=40)s+=`<line x1="0" y1="${y}" x2="${W}" y2="${y}" stroke="${L}" stroke-width="${y%200?1:2}"/>`;
+   s+=`<rect x="30" y="30" width="${W-60}" height="${H-60}" fill="none" stroke="${Wt}" stroke-width="3"/>`+vlT(W-70,100,d.title||'',{size:44,w:900,fill:Wt,maxW:900,max:1}).s;
+   const P_=vlLines(d.parts).slice(0,6).map(vlParts),n=Math.max(1,P_.length),bw=Math.min(230,(1080-(n-1)*30)/n),x0=W-90;s+=`<defs><marker id="vlb" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="${Wt}"/></marker></defs>`;
+   P_.forEach((p,i)=>{const x=x0-i*(bw+30),y=300;s+=`<rect x="${x-bw}" y="${y}" width="${bw}" height="160" fill="none" stroke="${Wt}" stroke-width="3"/>`+vlT(x-bw/2,y+70,p[0],{size:24,w:900,fill:Wt,a:'m',maxW:bw-20,max:2}).s+vlT(x-bw/2,y+140,'('+(i+1)+')',{size:18,w:800,fill:'#9CC3F5',a:'m'}).s;
+    s+=`<line x1="${x-bw}" y1="${y+200}" x2="${x}" y2="${y+200}" stroke="${Wt}" stroke-width="1.5" marker-start="url(#vlb)" marker-end="url(#vlb)"/>`+vlT(x-bw/2,y+232,p[1]||'',{size:16,w:700,fill:'#BFD9FB',a:'m',maxW:bw,max:2}).s;
+    if(i<n-1)s+=`<line x1="${x-bw-4}" y1="${y+80}" x2="${x-bw-26}" y2="${y+80}" stroke="${Wt}" stroke-width="3" marker-end="url(#vlb)"/>`});
+   vlLines(d.notes).slice(0,4).forEach((t,i)=>{s+=vlT(W-90,640+i*44,(i+1)+') '+t,{size:20,w:700,fill:Wt,maxW:900,max:1}).s});
+   s+=`<rect x="60" y="${H-210}" width="420" height="150" fill="${B}" stroke="${Wt}" stroke-width="3"/><line x1="60" y1="${H-160}" x2="480" y2="${H-160}" stroke="${Wt}"/><line x1="60" y1="${H-110}" x2="480" y2="${H-110}" stroke="${Wt}"/>`;
+   s+=vlT(460,H-176,d.title||'',{size:18,w:900,fill:Wt,maxW:390,max:1}).s+vlT(460,H-126,'الإصدار: '+(d.ver||'v1.0'),{size:16,w:800,fill:Wt}).s+vlT(460,H-76,'التاريخ: '+new Date().toLocaleDateString('ar-SA'),{size:16,w:800,fill:Wt}).s;
+   s+=vlFoot(W,H-40,'#9CC3F5');return s}},
+ exploded:{n:'التفكيك',en:'Exploded',ic:'products',best:'المنتجات، الأطر، الوصفات، الأجهزة.',desc:'نفك الشيء لقطع، كل قطعة برقمها ووظيفتها. حط * للقطعة اللي يعتمد عليها الكل.',
+  f:[['title','وش نفكّك؟','text'],['parts','القطع بالترتيب (٤-٧)','lines','كل سطر: القطعة | وظيفتها — وحط * للأهم']],
+  ex:{title:'برجر بيتي مثالي',parts:'خبز علوي | يمسك كل شي\nصوص | النكهة الأساسية\nخس وطماطم | انتعاش\nجبن | يذوب ويربط\nلحم مشوي | قلب البرجر *\nخبز سفلي | قاعدة ما تتشرب'},
+  draw(d,T,W,H){const P_=vlLines(d.parts).slice(0,7).map(l=>vlStar(l)).map(o=>Object.assign(o,{p:vlParts(o.s)})),n=Math.max(1,P_.length),cx=560,y0=230,gap=(820-y0)/n;let s=`<line x1="${cx}" y1="200" x2="${cx}" y2="860" stroke="${T.mu}" stroke-width="2" stroke-dasharray="6 9"/>`;
+   P_.forEach((o,i)=>{const y=y0+i*gap,w=420-Math.abs(i-(n-1)/2)*30,c=o.star?T.acc:VL_RAMP[(i+3)%5];
+    s+=`<ellipse cx="${cx}" cy="${y+gap*.62}" rx="${w/2}" ry="16" fill="rgba(0,0,0,.25)"/><rect x="${cx-w/2}" y="${y+10}" width="${w}" height="${gap*.5}" rx="${gap*.22}" fill="${c}" stroke="${o.star?'#fff':'none'}" stroke-width="3"/>`;
+    s+=`<line x1="${cx+w/2+10}" y1="${y+10+gap*.25}" x2="980" y2="${y+10+gap*.25}" stroke="${T.line}" stroke-width="2" stroke-dasharray="4 6"/><circle cx="1000" cy="${y+10+gap*.25}" r="20" fill="${o.star?T.acc:T.card}" stroke="${T.acc}" stroke-width="2"/>`+vlT(1000,y+18+gap*.25,String(i+1),{size:20,w:900,fill:o.star?'#14150F':T.ink,a:'m'}).s;
+    s+=vlT(W-80,y+gap*.25+6,o.p[0],{size:24,w:900,fill:o.star?T.acc:T.ink,maxW:500,max:1}).s+vlT(W-80,y+gap*.25+36,o.p[1]||'',{size:17,w:700,fill:T.mu,maxW:500,max:1}).s});
+   const st=P_.findIndex(o=>o.star);if(st>-1)s+=vlT(W-80,890,'⭐ كل شي يعتمد على: '+P_[st].p[0],{size:22,w:900,fill:T.acc}).s;return vlFrame(d,T,W,H,s)}},
+ diagram:{n:'المخطط الموضّح',en:'Diagram',ic:'ai',best:'العلوم، كيف تشتغل الأشياء، الأنظمة.',desc:'الشيء في النص وكل جزء موضّح بخط وشرح قصير، مع سهم للتدفق.',
+  f:[['title','العنوان','text'],['center','الشيء الأساسي','text'],['parts','الأجزاء (٤-٨)','lines','كل سطر: الجزء | شرح قصير'],['flow','وش اللي يتدفق؟','text','مثل: الدم، البيانات، الفلوس']],
+  ex:{title:'كيف يشتغل المتجر الإلكتروني',center:'المتجر',parts:'العميل | يتصفح ويختار\nالسلة | يجمع المنتجات\nبوابة الدفع | تحوّل الفلوس بأمان\nالمخزون | ينقص تلقائياً\nالشحن | يوصل الطلب\nالتقييم | يرجع رأي العميل',flow:'الطلب والفلوس'},
+  draw(d,T,W,H){const cx=W/2,cy=540,P_=vlLines(d.parts).slice(0,8).map(vlParts),n=Math.max(1,P_.length);let s=vlArrowDef(T);
+   const pos=P_.map((_,i)=>{const a=-Math.PI/2+i*2*Math.PI/n;return [cx+520*Math.cos(a),cy+300*Math.sin(a),a]});
+   pos.forEach(([x,y],i)=>{const [x2,y2]=pos[(i+1)%n];if(n>1)s+=`<path d="M${x} ${y} Q${cx+(x+x2-2*cx)*.62} ${cy+(y+y2-2*cy)*.62} ${x2} ${y2}" stroke="${T.acc}" stroke-width="2.5" fill="none" stroke-dasharray="8 8" marker-end="url(#vla)" opacity=".7"/>`;
+    s+=`<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="${T.line}" stroke-width="2"/>`});
+   s+=`<circle cx="${cx}" cy="${cy}" r="120" fill="${T.p}"/>`+vlCubeSvg('spark',cx-36,cy-90,72,null)+vlT(cx,cy+46,d.center||'',{size:28,w:900,fill:'#fff',a:'m',maxW:200,max:2}).s;
+   P_.forEach((p,i)=>{const [x,y]=pos[i];const c=vlCard(x+140,0,280,T,p[0],p[1],{ts:21,ds:16,dmax:2,stroke:VL_RAMP[i%5]});s+=`<g transform="translate(0,${y-c.h/2})">${c.s}</g>`});
+   s+=vlBox(70,860,330,60,T,{r:14})+`<line x1="370" y1="890" x2="320" y2="890" stroke="${T.acc}" stroke-width="3" stroke-dasharray="8 6" marker-end="url(#vla)"/>`+vlT(300,898,'التدفق: '+(d.flow||''),{size:17,w:800,fill:T.ink,maxW:220,max:1}).s;return vlFrame(d,T,W,H,s)}},
+ sketch:{n:'رسم الأفكار',en:'Sketchnotes',ic:'studio',best:'الكتب، البودكاست، المحاضرات، الاجتماعات.',desc:'ملاحظات مرسومة: بانر للعنوان، أفكار برسمات، أسهم، واقتباس.',
+  f:[['title','العنوان','text'],['ideas','الأفكار (٦-٨)','lines','كل سطر: الفكرة | تفصيل قصير'],['quote','اقتباس مهم','text'],['terms','مصطلحات','text','افصل بفاصلة ،']],
+  ex:{title:'ملخص كتاب: العادات الذرية',ideas:'١٪ يومياً | تحسن صغير يتراكم\nالهوية أولاً | صر الشخص اللي تبيه\nخلّها واضحة | الإشارة قدام عينك\nخلّها سهلة | دقيقتين بس للبداية\nخلّها ممتعة | كافئ نفسك\nلا تكسر السلسلة | تابع يومك',quote:'ما توصل لمستوى أهدافك… تنزل لمستوى أنظمتك',terms:'العادة، النظام، الهوية'},
+  draw(d,T,W,H){const ink=T.ink,hl=T.acc;let s=`<path d="M${W/2-460} 70 L${W/2+460} 70 L${W/2+420} 110 L${W/2+460} 150 L${W/2-460} 150 L${W/2-420} 110Z" fill="${hl}"/>`+vlT(W/2,128,d.title||'',{size:40,w:700,fill:'#14150F',fam:VL_HAND,a:'m',maxW:820,max:1}).s;
+   const I_=vlLines(d.ideas).slice(0,8).map(vlParts),keys=['rocket','star','bolt','brain','check','love','crown','spark'],cols=4,bw=330,bh=230;
+   I_.forEach((p,i)=>{const c=i%cols,r=Math.floor(i/cols),x=W-80-c*(bw+30),y=200+r*(bh+40),j=(i*7)%5-2;
+    s+=`<path d="M${x-bw+6} ${y+4+j} Q${x-bw/2} ${y-6} ${x-6} ${y+2} Q${x+4} ${y+bh/2} ${x-4} ${y+bh-4} Q${x-bw/2} ${y+bh+6} ${x-bw+4} ${y+bh-2} Q${x-bw-6} ${y+bh/2} ${x-bw+6} ${y+4+j}Z" fill="none" stroke="${ink}" stroke-width="2.5"/>`;
+    s+=vlCubeSvg(keys[i],x-bw/2-34,y+18,68,null)+vlT(x-bw/2,y+125,p[0],{size:28,w:700,fill:hl,fam:VL_HAND,a:'m',maxW:bw-30,max:1}).s+vlT(x-bw/2,y+168,p[1]||'',{size:19,w:700,fill:ink,fam:VL_HAND,a:'m',maxW:bw-34,max:2}).s;
+    if(i<I_.length-1&&c<cols-1)s+=`<path d="M${x-bw-4} ${y+bh/2} q-12 -14 -24 0" stroke="${hl}" stroke-width="3" fill="none"/><path d="M${x-bw-24} ${y+bh/2} l8 -8 M${x-bw-24} ${y+bh/2} l9 6" stroke="${hl}" stroke-width="3"/>`});
+   if(d.quote){s+=`<path d="M${W-80} 790 L${W-80} 900 L${W-640} 900 L${W-680} 940 L${W-670} 900 L${W-760} 900 L${W-760} 790Z" fill="none" stroke="${ink}" stroke-width="2.5"/>`+vlT(W-100,836,'« '+d.quote+' »',{size:22,w:700,fill:ink,fam:VL_HAND,maxW:640,max:2}).s}
+   String(d.terms||'').split(/[،,]/).map(x=>x.trim()).filter(Boolean).slice(0,4).forEach((t,i)=>{vlCv.font=`700 22px ${VL_HAND}`;const w=vlCv.measureText(t).width+40,x=640-i*0;s+=vlBox(150+i*150,812,140,56,T,{r:6,stroke:hl,sw:2.5,fill:'none'})+vlT(220+i*150,848,t,{size:20,w:700,fill:hl,fam:VL_HAND,a:'m',maxW:126,max:1}).s});
+   return vlFrame({title:''},T,W,H,s)}}
+};
+const VL_ORDER=['tree','iceberg','timeline','roadmap','cycle','layers','matrix','canvas','info','notes','blueprint','exploded','diagram','sketch'];
+
+/* ---------- render ---------- */
+function vlSize(k){return VL_T[k].portrait?[1000,1500]:[1600,1000]}
+function vlSvg(k,d,themeKey,forExport){const t=VL_T[k],T=VL_THEMES[themeKey]||VL_THEMES.dark,[W,H]=vlSize(k);let inner='';try{inner=t.draw(d||{},T,W,H)}catch(e){console.warn('vl',e);inner=`<rect width="${W}" height="${H}" fill="${T.bg}"/>`+vlT(W/2,H/2,'تأكد من البيانات',{size:30,fill:T.ink,a:'m'}).s}
+ const font=(forExport&&VL.font64&&/Marhey/.test(inner))?`<style>@font-face{font-family:"Marhey";src:url(data:font/woff2;base64,${VL.font64}) format("woff2")}</style>`:'';
+ return `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" style="stroke:none;stroke-width:0;fill:none;flex-shrink:0">${font}${inner}</svg>`}
+function vlLoadFont(){if(VL.font64)return Promise.resolve();return fetch('/visual/fonts/marhey.woff2').then(r=>r.arrayBuffer()).then(b=>{let s='';const u=new Uint8Array(b);for(let i=0;i<u.length;i+=8192)s+=String.fromCharCode.apply(null,u.subarray(i,i+8192));VL.font64=btoa(s)}).catch(()=>{})}
+function vlDraw(){const st=$('#vlStage');if(!st)return;st.innerHTML=vlSvg(VL.tpl,VL.data[VL.tpl],VL.theme)}
+/* ---------- access: 2 free exports, then VIS code ---------- */
+const vlUnlocked=()=>!!(S.unlk&&S.unlk.visual==='vis1');
+const vlUsed=()=>{let n=(S.gtrial&&S.gtrial.visual)||0;try{n=Math.max(n,+localStorage.getItem('eilanTrial_visual')||0)}catch(e){}return n};
+const vlLeft=()=>Math.max(0,VL_FREE-vlUsed());
+function vlSpend(){const n=vlUsed()+1;S.gtrial=Object.assign({},S.gtrial,{visual:n});save();try{localStorage.setItem('eilanTrial_visual',n)}catch(e){}}
+function vlGate(){if(vlUnlocked())return true;if(vlLeft()>0){vlSpend();return true}vlPaywall();return false}
+function vlPaywall(){const p=S.products.find(x=>x.id==='v-lab')||{},u=(typeof extUrl==='function'&&extUrl(p))||'';
+ openModal(`<div class="mh"><h3>🎨 ${gzL('تبغى تكمّل تصمّم؟','Want to keep creating?')}</h3><button class="icon-btn" data-act="closemodal">${I.x}</button></div>
+ <p class="mu" style="line-height:1.8;margin-bottom:12px">${gzL(`خلصت رسماتك المجانية (${VL_FREE}). افتح «مختبر إيلان البصري» كامل: ١٤ شكل، تحميل بلا حدود صورة و PDF.`,`Your ${VL_FREE} free exports are used. Unlock the full Eilan Visual Lab: 14 formats, unlimited PNG & PDF.`)}</p>
+ <div style="display:flex;gap:8px;flex-wrap:wrap" class="no-ei">${u?`<a class="btn g" href="${esc(u)}" target="_blank" rel="noopener">${GZI.bag}${gzL('اشترِ','Buy')} — ${+p.price||30} ${gzL('ر.س','SAR')}</a>`:`<button class="btn g" data-act="gzgo" data-u="eilan://product/v-lab">${GZI.bag}${gzL('اشترِ','Buy')} — ${+p.price||30} ${gzL('ر.س','SAR')}</button>`}
+ <button class="btn p" data-act="gzgo" data-u="eilan://product/v-bundle">${gzL('الباقة كاملة','Full bundle')}</button></div>
+ <form class="lh-code" style="margin-top:12px" onsubmit="vlCode(event)"><input class="input" name="c" dir="ltr" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="VIS-XXXX-XXXX-XXXX" maxlength="24"><button class="btn">🔑 ${gzL('فعّل','Unlock')}</button><div class="lh-msg" id="vlMsg"></div></form>`)}
+async function vlCode(e){e.preventDefault();const f=e.target,m=$('#vlMsg');const n=String(f.c.value).toUpperCase().replace(/[^A-Z0-9]/g,''),body=n.startsWith('VIS')?n:'VIS'+n;
+ if(body.length<15){m.className='lh-msg bad';m.textContent=gzL('الكود ناقص — شكله: VIS-XXXX-XXXX-XXXX','Code too short');return}
+ const dg=new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode('eilan-arc-v1:'+body))),hx=Array.from(dg,b=>b.toString(16).padStart(2,'0')).join('').slice(0,24);
+ if(!VL_CODES.includes(hx)){m.className='lh-msg bad';m.textContent='❌ '+gzL('الكود غير صحيح','Wrong code');f.classList.remove('shake');void f.offsetWidth;f.classList.add('shake');return}
+ S.unlk=Object.assign({},S.unlk,{visual:'vis1'});if(!S.owned)S.owned={};S.owned['v-lab']=S.owned['v-lab']||Date.now();save();m.className='lh-msg ok';m.textContent='✅ '+gzL('تم التفعيل!','Unlocked!');setTimeout(()=>{closeModal();rerender()},700)}
+/* ---------- export ---------- */
+async function vlPng(){if(!vlGate())return;await vlLoadFont();const svg=vlSvg(VL.tpl,VL.data[VL.tpl],VL.theme,true),[W,H]=vlSize(VL.tpl),img=new Image();
+ img.onload=()=>{const c=document.createElement('canvas');c.width=W*2;c.height=H*2;const x=c.getContext('2d');x.scale(2,2);x.drawImage(img,0,0,W,H);
+  c.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`Eilan-${VL_T[VL.tpl].en}-${Date.now()}.png`;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},4000);toast('🖼️ '+gzL('انحفظت الصورة','Image saved'));rerenderQuota()},'image/png')};
+ img.onerror=()=>toast(gzL('ما قدرنا نجهّز الصورة — جرّب PDF','Could not build the image — try PDF'),'err');img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg)}
+async function vlPdf(){if(!vlGate())return;await vlLoadFont();const svg=vlSvg(VL.tpl,VL.data[VL.tpl],VL.theme,true),port=VL_T[VL.tpl].portrait,w=window.open('','_blank');
+ if(!w){toast(gzL('اسمح بالنوافذ المنبثقة عشان يطلع الـ PDF','Allow pop-ups for PDF'),'err');return}
+ w.document.write(`<!doctype html><html dir="rtl"><head><meta charset="utf-8"><title>Eilan — ${VL_T[VL.tpl].n}</title><style>@page{size:A4 ${port?'portrait':'landscape'};margin:0}html,body{margin:0;background:#fff}svg{width:100vw;height:100vh;display:block}</style></head><body>${svg}<script>setTimeout(()=>print(),400)<\/script></body></html>`);w.document.close();rerenderQuota()}
+function rerenderQuota(){const q=$('#vlQuota');if(q)q.innerHTML=vlQuotaHTML()}
+function vlQuotaHTML(){return vlUnlocked()?`<span class="gzc-tag dv">✓ ${gzL('مفعّل — تحميل بلا حدود','Unlocked — unlimited')}</span>`:`<span class="gzc-tag pr">🎁 ${gzL(`باقي لك ${vlLeft()} من ${VL_FREE} تحميل مجاني`,`${vlLeft()} of ${VL_FREE} free exports left`)}</span><button class="btn xs" data-act="vlpay">🔑 ${gzL('عندي كود','I have a code')}</button>`}
+/* ---------- page ---------- */
+function vlFields(){const t=VL_T[VL.tpl],d=VL.data[VL.tpl]||(VL.data[VL.tpl]=Object.assign({},t.ex));
+ return t.f.map(([k,l,ty,h])=>`<div class="vl-f"><label>${l}</label>${ty==='text'?`<input data-vl="${k}" value="${vlE(d[k]||'')}">`:`<textarea data-vl="${k}" rows="${ty==='area'?3:5}">${vlE(d[k]||'')}</textarea>`}${h?`<small>${h}</small>`:''}</div>`).join('')}
+P.visual={icon:'🎨',title:()=>gzL('مختبر إيلان البصري','Eilan Visual Lab'),html:()=>{const t=VL_T[VL.tpl];return `
+ <div class="vl-hero"><div><div class="eyebrow">EILAN VISUAL LAB</div><h1>${gzL('مختبر','')} <span class="grad-t">${gzL('إيلان البصري','Eilan Visual Lab')}</span></h1>
+  <p>${gzL('حوّل أي درس أو فكرة أو مشروع إلى رسمة تنحفظ بالذاكرة. اختر الشكل، اكتب، وحمّل صورة أو PDF بستايل إيلان.','Turn any lesson, idea or project into a visual you remember. Pick a format, type, and download a PNG or PDF in Eilan style.')}</p></div>
+  <div class="vl-quota no-ei" id="vlQuota">${vlQuotaHTML()}</div></div>
+ <div class="vl-wrap"><aside class="vl-side card no-ei">
+  <div class="vl-tpls">${VL_ORDER.map(k=>`<button class="vl-tpl ${k===VL.tpl?'on':''}" data-act="vltpl" data-k="${k}">${gzCube(VL_T[k].ic)}<span>${VL_T[k].n}</span></button>`).join('')}</div>
+  <div class="vl-desc"><b>${t.n}</b> · ${t.desc}<br><span style="opacity:.8">✦ ${gzL('ينفع لـ','Best for')}: ${t.best}</span></div>
+  <div class="vl-row"><span style="font-size:12.5px;font-weight:800;align-self:center">${gzL('الستايل','Style')}:</span>${Object.entries(VL_THEMES).map(([k,v])=>`<button class="chip ${VL.theme===k?'on':''}" data-act="vltheme" data-k="${k}">${v.n}</button>`).join('')}</div>
+  ${vlFields()}
+  <div class="vl-row"><button class="btn xs" data-act="vlex">↺ ${gzL('رجّع المثال','Reset example')}</button><button class="btn xs" data-act="vlclear">✕ ${gzL('ابدأ من الصفر','Clear')}</button></div></aside>
+ <div class="vl-main"><div class="vl-stage card" id="vlStage">${vlSvg(VL.tpl,VL.data[VL.tpl],VL.theme)}</div>
+  <div class="vl-acts no-ei"><button class="btn g" data-act="vlpng">${GZI.dl}${gzL('حمّل صورة','Download PNG')}</button><button class="btn p" data-act="vlpdf">${GZI.print}${gzL('PDF / طباعة','PDF / Print')}</button><button class="btn" data-go="eilan://product/v-bundle">${GZI.bag}${gzL('الباقة: المختبر + الدفتر + الأوامر','Bundle: Lab + Workbook + Prompts')}</button></div></div></div>`},
+ mount(){const s=$('.vl-side');if(s)s.addEventListener('input',e=>{const k=e.target.dataset.vl;if(!k)return;(VL.data[VL.tpl]=VL.data[VL.tpl]||{})[k]=e.target.value;clearTimeout(VL._t);VL._t=setTimeout(vlDraw,120)});
+  if(document.fonts&&document.fonts.load)document.fonts.load('700 30px "Marhey"').then(vlDraw).catch(()=>{})}};
+ACT.vltpl=d=>{VL.tpl=d.k;rerender()};ACT.vltheme=d=>{VL.theme=d.k;rerender()};
+ACT.vlex=()=>{VL.data[VL.tpl]=Object.assign({},VL_T[VL.tpl].ex);rerender()};ACT.vlclear=()=>{VL.data[VL.tpl]={};rerender()};
+ACT.vlpng=vlPng;ACT.vlpdf=vlPdf;ACT.vlpay=vlPaywall;
+/* ---------- products: the lab, the workbook, the prompts, the bundle ---------- */
+const VL_PRODUCTS=[
+ {id:'v-lab',name:'مختبر إيلان البصري',en:'Eilan Visual Lab',price:30,icon:'🎨',note:'🎨 أداة داخل عالم إيلان: ١٤ شكل بصري، تحميل صورة و PDF بلا حدود — تتفعّل بكود بعد الشراء.',desc:'حوّل أي درس أو فكرة أو مشروع إلى رسمة بستايل إيلان: شجرة، جبل جليد، خط زمني، خريطة طريق، دورة، طبقات، مصفوفة قرار، لوحة مشروع، إنفوجرافيك، ورقة ملاحظات، مخطط هندسي، تفكيك، مخطط موضّح، ورسم أفكار. جرّب تحميلتين مجاناً.'},
+ {id:'v-book',name:'دفتر إيلان البصري — ١٤ قالب',en:'Eilan Visual Workbook',price:30,icon:'📒',note:'📄 ملف PDF بالعرض للآيباد (GoodNotes / Notability) بروابط تنقّل، وينطبع.',desc:'١٤ قالب فاضي مصمّم تعبّيه بيدك: للطلاب والمعلمين وأصحاب المشاريع. فهرس بروابط تضغط عليها وتنتقل للقالب، وكل قالب فيه مثال صغير يوضّح طريقة تعبئته.'},
+ {id:'v-prompts',name:'أوامر إيلان البصرية — بالعربي',en:'Eilan Visual Prompts (Arabic)',price:30,icon:'✨',note:'📄 ملف PDF فيه أمر رئيسي + ١٤ أمر جاهز للنسخ في Claude أو ChatGPT.',desc:'أوامر عربية مكتوبة بأسلوب إيلان تحوّل أي موضوع إلى رسمة بالذكاء الاصطناعي: أمر رئيسي تلصقه مرة وحدة، و١٤ أمر لكل شكل مع أمثلة للطلاب والمعلمين وأصحاب المشاريع.'},
+ {id:'v-bundle',name:'الباقة البصرية الكاملة',en:'Eilan Visual Bundle',price:60,icon:'🎁',note:'🎁 المختبر + الدفتر + الأوامر — توفّر ٣٠ ر.س.',desc:'كل أدوات إيلان البصرية في باقة وحدة: مختبر إيلان البصري داخل الموقع (كود تفعيل) + دفتر القوالب PDF + ملف الأوامر العربية. بدل ٩٠ ر.س.'}];
+VL_PRODUCTS.forEach(p=>{if(!S.products.some(x=>x.id===p.id)&&!(S.custom&&S.custom['no_'+p.id]))S.products.push(Object.assign({cat:'products',c:['#4B2A7B','#14150F'],kind:'digital',badge:'جديد',rating:5,sales:0,tags:['رسم','بصري','تعلم','مذاكرة','إنفوجرافيك','قوالب','أوامر','ذكاء اصطناعي','visual','prompts']},p))});
+{const _pp=P.product.html;P.product.html=r=>{let h=_pp(r);if(!/^v-/.test(r.id||''))return h;const lab=r.id==='v-lab'||r.id==='v-bundle';
+ const v=`<div class="card no-ei" style="padding:14px;margin:14px 0;display:flex;gap:10px;flex-wrap:wrap;align-items:center"><b style="flex:1;min-width:200px">${lab?gzL('🎨 جرّب المختبر الحين — أول تحميلتين مجاناً','🎨 Try the lab now — 2 free exports'):gzL('📄 الملف يوصلك بعد الشراء من سلة، للآيباد وللطباعة.','📄 The PDF is delivered after purchase.')}</b>${lab?`<button class="btn g" data-go="eilan://visual">${gzL('افتح المختبر','Open the lab')}</button><button class="btn" data-act="vlpay">🔑 ${gzL('عندي كود','I have a code')}</button>`:`<button class="btn" data-go="eilan://visual">${gzL('شوف الأشكال في المختبر','See the formats in the lab')}</button>`}</div>`;
+ const i=h.indexOf('<div class="acts">');return i>-1?h.slice(0,i)+v+h.slice(i):h+v}}
+/* promo on learning page + search entry */
+{const _l=P.learn&&P.learn.html;if(_l)P.learn.html=r=>{const h=_l(r);const promo=`<div class="vl-promo card no-ei"><div><div class="eyebrow">NEW · EILAN VISUAL LAB</div><h3>🎨 ${gzL('مختبر إيلان البصري','Eilan Visual Lab')}</h3><p class="mu" style="margin:0">${gzL('١٤ شكل يحوّل أي درس لرسمة تنحفظ: شجرة، جبل جليد، خط زمني، خريطة طريق… جرّب تحميلتين مجاناً.','14 formats that turn any lesson into a visual. Try 2 free exports.')}</p></div><button class="btn g" data-go="eilan://visual">${gzL('افتح المختبر','Open the lab')}</button></div>`;
+ const i=h.indexOf('<div class="level-card');return i>-1?h.slice(0,i)+promo+h.slice(i):promo+h}}
+</script>
+<!-- /EILAN VISUAL LAB -->
 <script>
 /* ================= INIT ================= */
 (function init(){

@@ -3,3 +3,4 @@ coloring/fonts/*.tgz
 __pycache__/
 *.pyc
 games/video-src/.build/
+visual/pdf-out/

@@ -113,7 +113,7 @@ const GZI={
  x:'<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>'};
 const gzCube=k=>`<ei-c class="ei ei-${k}">${eiSvgCube(k)}</ei-c>`;
 /* the catalog — every game plays inside the site; card games also have a print PDF (front/back, landscape) */
-/* ---------- free trials: 3 cards, 3 times per paid game ---------- */
+/* ---------- free trials: card games = first 3 cards (built into each game); arcade games = first 3 rounds ---------- */
 const GZ_TRIALS=3;
 function gzTrialUsed(k){let n=(S.gtrial&&S.gtrial[k])||0;try{n=Math.max(n,+localStorage.getItem('eilanTrial_'+k)||0)}catch(e){}return n}
 const gzTrialLeft=k=>Math.max(0,GZ_TRIALS-gzTrialUsed(k));
@@ -150,15 +150,11 @@ async function arcSubmit(e,k){e.preventDefault();const f=e.target,m=$('#arcMsg')
  m.className='lh-msg bad';m.textContent=r==='short'?gzL(`الكود ناقص — شكله: ${ARC[k].pre}-XXXX-XXXX-XXXX`,`Code too short — format: ${ARC[k].pre}-XXXX-XXXX-XXXX`):'❌ '+gzL('الكود غير صحيح — تأكد منه وحاول مرة ثانية','Wrong code — check it and try again');
  f.classList.remove('shake');void f.offsetWidth;f.classList.add('shake')}
 function gzTrialOver(k){const m=GZ_PAID[k];
- openModal(`<div class="mh"><h3>${gzL('خلصت التجارب المجانية','Free trials used up')} · ${gzL(m[2],m[3])}</h3><button class="icon-btn" data-act="closemodal">${I.x}</button></div>
-  <p class="mu" style="margin-bottom:12px;line-height:1.8">${ARC[k]?gzL(`لعبت «${m[2]}» ${GZ_TRIALS} مرات مجاناً. عشان تكمّل تلعبها بدون حدود، اشترِ اللعبة أو فعّلها بالكود اللي وصلك.`,`You've played "${m[3]}" ${GZ_TRIALS} free times. Buy it or enter your code to keep playing.`):gzL(`جرّبت «${m[2]}» ${GZ_TRIALS} مرات (٣ بطاقات كل مرة). عشان تكمّل وتفتح كل البطاقات، اشترِ اللعبة أو فعّلها بالكود اللي وصلك.`,`You've tried "${m[3]}" ${GZ_TRIALS} times (3 cards each). Buy the game or enter your code to unlock every card.`)}</p>
+ openModal(`<div class="mh"><h3>${gzL('تبغى تكمّل اللعب؟','Want to keep playing?')} · ${gzL(m[2],m[3])}</h3><button class="icon-btn" data-act="closemodal">${I.x}</button></div>
+  <p class="mu" style="margin-bottom:12px;line-height:1.8">${ARC[k]?gzL(`خلصت الـ${GZ_TRIALS} جولات المجانية في «${m[2]}». تبغى تكمّل اللعب؟ اشترِ اللعبة أو فعّلها بالكود اللي وصلك.`,`You've played "${m[3]}" ${GZ_TRIALS} free times. Buy it or enter your code to keep playing.`):gzL(`جرّبت «${m[2]}» ${GZ_TRIALS} مرات (٣ بطاقات كل مرة). عشان تكمّل وتفتح كل البطاقات، اشترِ اللعبة أو فعّلها بالكود اللي وصلك.`,`You've tried "${m[3]}" ${GZ_TRIALS} times (3 cards each). Buy the game or enter your code to unlock every card.`)}</p>
   <video class="gzv-v" src="/games/video/${k}.mp4" controls playsinline preload="metadata" style="width:100%;border-radius:14px;background:#000;margin-bottom:14px"></video>
   <div style="display:flex;gap:8px;flex-wrap:wrap" class="no-ei">${gzBuyBtn(k)}<button class="btn" data-act="${m[0]}code">${GZI.key}${gzL('عندي كود','I have a code')}</button></div>
   ${ARC[k]?'':`<p class="mu" style="font-size:12.5px;margin-top:10px">${gzL('🖨️ مع الشراء يوصلك ملف PDF للطباعة (وجه وقفا) أو للعرض على الآيباد.','🖨️ Your purchase includes a print PDF (front & back) you can also show on an iPad.')}</p>`}`,true)}
-Object.keys(GZ_PAID).forEach(k=>{const pre=GZ_PAID[k][0],sn=pre+'Start',cn=pre+'Close';const f=window[sn];if(typeof f!=='function')return;
- window[sn]=function(full){if(!full){if(gzTrialLeft(k)<=0){try{window[cn]()}catch(e){}setTimeout(()=>gzTrialOver(k),260);return}gzTrialUse(k);
-   if(gzTrialLeft(k)===0)toast(gzL('هذي آخر تجربة مجانية لك 🎁','This is your last free trial 🎁'))}return f.apply(this,arguments)};
- try{eval(sn+'=window[sn]')}catch(e){}});
 /* explainer video */
 ACT.gzvid=d=>{const k=d.v,t=d.t||'';openModal(`<div class="mh"><h3>${GZI.play} ${gzL('شرح اللعبة','How to play')}${t?' · '+esc(t):''}</h3><button class="icon-btn" data-act="closemodal">${I.x}</button></div>
  <video class="gzv-v" src="/games/video/${k}.mp4" controls autoplay playsinline style="width:100%;border-radius:14px;background:#000"></video>`,true)};
@@ -188,12 +184,12 @@ function gzcCard(g){
  let btns=g.btns||'';
  if(g.local&&!g.paid)btns=`<button class="btn g" data-act="gzplay" data-g="${g.local}">${GZI.play}${gzL('العب هنا','Play here')}</button>`;
  if(g.paid)btns=g.un?`<button class="btn g" data-act="${g.open}" data-m="play"${g.arc?` data-g="${g.local}"`:''}>${GZI.play}${gzL('العب الآن','Play now')}</button>`
-   :(g.left>0?`<button class="btn g" data-act="${g.open}" data-m="trial"${g.arc?` data-g="${g.local}"`:''}>${GZI.gift}${gzL('جرّب مجاناً','Free trial')} <small style="opacity:.75">${g.left}/${GZ_TRIALS}</small></button>`:`<button class="btn g" data-act="gztrialover" data-k="${g.tk}">${GZI.bag}${gzL('افتح اللعبة كاملة','Unlock full game')}</button>`)
+   :(!g.arc?`<button class="btn g" data-act="${g.open}" data-m="trial">${GZI.gift}${gzL('جرّب ٣ بطاقات مجاناً','Try 3 cards free')}</button>`:g.left>0?`<button class="btn g" data-act="${g.open}" data-m="trial" data-g="${g.local}">${GZI.gift}${gzL('جولة مجانية','Free round')} <small style="opacity:.75">${g.left}/${GZ_TRIALS}</small></button>`:`<button class="btn g" data-act="gztrialover" data-k="${g.tk}">${GZI.bag}${gzL('افتح اللعبة كاملة','Unlock full game')}</button>`)
    +(g.ext?`<a class="btn p" href="${esc(g.ext)}" target="_blank" rel="noopener">${GZI.bag}${gzL('اشترِ','Buy')}</a>`:`<button class="btn p" data-go="eilan://product/${g.pid}">${GZI.bag}${gzL('اشترِ','Buy')}</button>`)
    +`<button class="btn" data-act="${g.code}" title="${gzL('عندي كود','I have a code')}">${GZI.key}</button>`;
  if(g.pdf)btns+=`<a class="btn" href="${g.pdf}" target="_blank" rel="noopener" title="${gzL('PDF للطباعة — وجه وقفا','Print PDF — front & back')}">${GZI.print}PDF</a>`;
  if(g.vid)btns+=`<button class="btn" data-act="gzvid" data-v="${g.vid}" data-t="${esc(g.n)}" title="${gzL('شرح اللعبة بالفيديو','Video: how to play')}">${GZI.play}${gzL('الشرح','How to')}</button>`;
- const artAct=g.local&&(!g.paid||g.un||g.left>0)?`data-act="gzplay" data-g="${g.local}"`:g.paid?(g.un||g.left>0?`data-act="${g.open}" data-m="${g.un?'play':'trial'}"`:`data-act="gztrialover" data-k="${g.tk}"`):`data-act="guessopen" data-m="party"`;
+ const artAct=g.local&&(!g.paid||g.un||g.left>0)?`data-act="gzplay" data-g="${g.local}"`:g.paid?(g.un||!g.arc||g.left>0?`data-act="${g.open}" data-m="${g.un?'play':'trial'}"`:`data-act="gztrialover" data-k="${g.tk}"`):`data-act="guessopen" data-m="party"`;
  return `<article class="gzc card" data-print="${pr?1:0}">
   <div class="gzc-art" ${artAct} role="button" aria-label="${esc(g.n)}">${price}${gzCube(g.k)}</div>
   <div class="gzc-b"><h3>${esc(g.n)} <bdi dir="ltr">${esc(g.en)}</bdi></h3><p>${esc(g.d)}</p>
@@ -206,7 +202,7 @@ P.play={icon:'🎮',title:()=>gzL('منطقة الترفيه','Entertainment Zon
  <div class="gzc-hero">
   <div class="gzc-intro card"><div class="gzc-float" aria-hidden="true">${CUBE_RAMP.map(c=>`<i style="background:${c}"></i>`).join('')}</div>
    <div class="eyebrow">ENTERTAINMENT ZONE</div><h1>${gzL('منطقة','The')} <span class="grad-t">${gzL('الترفيه','Fun Zone')}</span></h1>
-   <p>${gzL('ألعاب للجَمعات والكشتات والسهرات — كلها تنلعب هنا داخل الموقع، و«خمّن؟» مجانية بالكامل، وباقي الألعاب تجرّبها ٣ مرات مجاناً. ولكل لعبة فيديو يشرحها.','Games for gatherings, trips and late nights — all playable right here; card games also come as a front-and-back print PDF. Every game has a short how-to video.')}</p></div>
+   <p>${gzL('ألعاب للجَمعات والكشتات والسهرات — كلها تنلعب هنا داخل الموقع، و«خمّن؟» مجانية بالكامل، وباقي الألعاب تجرّب أول ٣ بطاقات (أو ٣ جولات) مجاناً. ولكل لعبة فيديو يشرحها.','Games for gatherings, trips and late nights — all playable right here; card games also come as a front-and-back print PDF. Every game has a short how-to video.')}</p></div>
   <div class="gzc-legend card no-ei">
    <div class="lg"><span class="gzc-tag dv">${GZI.web}${gzL('داخل الموقع','In the site')}</span><div><b>${gzL('بدون تحميل','No download')}</b>${gzL('اضغط على المكعب وتبدأ اللعبة فوراً.','Tap the cube and the game starts.')}</div></div>
    <div class="lg"><span class="gzc-tag pr">${GZI.print}${gzL('تنطبع','Printable')}</span><div><b>${gzL('PDF وجه وقفا · بالعرض','Front & back PDF · landscape')}</b>${gzL('٤ بطاقات بالورقة وقصّتين بس — أو اعرضه على الآيباد.','4 cards a sheet, just 2 cuts — or show it on an iPad.')}</div></div>
@@ -217,7 +213,7 @@ P.play={icon:'🎮',title:()=>gzL('منطقة الترفيه','Entertainment Zon
   ${(()=>{const ex=S.products.filter(p=>(p.cat==='entertainment'||p.cat==='experiences')&&!/^g-/.test(p.id));return ex.length?`<section class="sec"><div class="sec-h"><h2>🎟️ ${gzL('تجارب ترفيهية من المتجر','Fun experiences from the store')}</h2></div><div class="pgrid">${ex.map(pcard).join('')}</div></section>`:''})()}`},
  mount(){CLEAN.push(gzwClose)}};
 {const _pp=P.product.html;P.product.html=r=>{let h=_pp(r);const p=S.products.find(x=>x.id===r.id);const k=p&&p.game&&GZ_PAID[p.game]?p.game:null;
- if(k){const v=`<div class="card no-ei" style="padding:14px;margin:14px 0"><b style="display:flex;align-items:center;gap:6px;margin-bottom:8px">${GZI.play}${gzL('شرح اللعبة بالفيديو','How to play — video')}</b><video src="/games/video/${k}.mp4" controls playsinline preload="metadata" style="width:100%;border-radius:12px;background:#000"></video><p class="mu" style="font-size:12.5px;margin-top:8px">${ARC[k]?gzL(`🎁 ${gzTrialLeft(k)} من ${GZ_TRIALS} تجارب مجانية باقية · تتفعّل بكود بعد الشراء`,`🎁 ${gzTrialLeft(k)} of ${GZ_TRIALS} free plays left · unlock with a code after buying`)+(arcUnlocked(k)?'':` <button class="btn xs" data-act="arc_${k}code">${GZI.key}${gzL('عندي كود','I have a code')}</button>`)+` <button class="btn xs g" data-act="gzplay" data-g="${k}">${GZI.play}${arcUnlocked(k)?gzL('العب الآن','Play now'):gzL('جرّب','Try')}</button>`:gzL(`🎁 تجربة مجانية: ٣ بطاقات · ${gzTrialLeft(k)} من ${GZ_TRIALS} تجارب باقية · 🖨️ PDF للطباعة مع الشراء`,`🎁 Free trial: 3 cards · ${gzTrialLeft(k)} of ${GZ_TRIALS} left · 🖨️ print PDF with purchase`)}</p></div>`;
+ if(k){const v=`<div class="card no-ei" style="padding:14px;margin:14px 0"><b style="display:flex;align-items:center;gap:6px;margin-bottom:8px">${GZI.play}${gzL('شرح اللعبة بالفيديو','How to play — video')}</b><video src="/games/video/${k}.mp4" controls playsinline preload="metadata" style="width:100%;border-radius:12px;background:#000"></video><p class="mu" style="font-size:12.5px;margin-top:8px">${ARC[k]?gzL(`🎁 أول ٣ جولات مجانية (باقي ${gzTrialLeft(k)}) — وبعدها تكمّل اللعب بشراء اللعبة`,`🎁 The first 3 rounds are free (${gzTrialLeft(k)} left) — buy the game to keep playing`)+(arcUnlocked(k)?'':` <button class="btn xs" data-act="arc_${k}code">${GZI.key}${gzL('عندي كود','I have a code')}</button>`)+` <button class="btn xs g" data-act="gzplay" data-g="${k}">${GZI.play}${arcUnlocked(k)?gzL('العب الآن','Play now'):gzL('جرّب','Try')}</button>`:gzL('🎁 أول ٣ بطاقات مجانية — وبعدها تكمّل اللعب بشراء اللعبة · 🖨️ PDF للطباعة مع الشراء','🎁 The first 3 cards are free — buy the game to keep playing · 🖨️ print PDF with purchase')}</p></div>`;
   const i=h.indexOf('<div class="acts">');h=i>-1?h.slice(0,i)+v+h.slice(i):h+v}return h}}
 ACT.gzf=d=>{GZS.f=d.f;const g=$('#gzcGrid');if(g)g.dataset.f=d.f;$$('.gzc-bar .chip').forEach(b=>b.classList.toggle('on',b.dataset.f===d.f))};
 
@@ -230,7 +226,7 @@ function gzwOpen(k,title,sub,body){gzwClose();const w=document.createElement('di
 ACT.gzwclose=gzwClose;
 const gzGrab=fn=>{const n=CLEAN.length;fn();GZS.clean.push(...CLEAN.splice(n))};
 ACT.gzplay=d=>{const g=d.g;
- if(ARC[g]&&!arcUnlocked(g)){if(gzTrialLeft(g)<=0)return gzTrialOver(g);gzTrialUse(g);toast(gzTrialLeft(g)?gzL(`🎁 تجربة مجانية — باقي لك ${gzTrialLeft(g)}`,`🎁 Free play — ${gzTrialLeft(g)} left`):gzL('هذي آخر تجربة مجانية لك 🎁','This is your last free play 🎁'))}
+ if(ARC[g]&&!arcUnlocked(g)){if(gzTrialLeft(g)<=0)return gzTrialOver(g);gzTrialUse(g);toast(gzTrialLeft(g)?gzL(`🎁 جولة مجانية — باقي لك ${gzTrialLeft(g)}`,`🎁 Free round — ${gzTrialLeft(g)} left`):gzL('هذي آخر تجربة مجانية لك 🎁','This is your last free play 🎁'))}
  if(g==='snake'){gzwOpen('g-snake','Neon Snake','EILAN ARCADE',`<div class="game-stage"><canvas id="snake" width="400" height="400"></canvas><div class="snake-ov" id="snOv"><div><button class="btn g" data-act="snakestart">${gzL('ابدأ اللعب','Start')}</button></div></div></div>
    <div class="scorebar"><span>${gzL('النقاط','Score')}: <b id="snS">0</b></span><span>${gzL('الأعلى','Best')}: <b id="snH">${S.hi.snake||0}</b></span></div><br>
    <div class="pad"><span></span><button data-act="dir" data-d="u">▲</button><span></span><button data-act="dir" data-d="r">▶</button><button data-act="dir" data-d="d">▼</button><button data-act="dir" data-d="l">◀</button></div>`);gzGrab(snakeInit)}

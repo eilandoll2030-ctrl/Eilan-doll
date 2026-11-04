@@ -1428,6 +1428,34 @@ body.lang-en #bBack svg,body.lang-en #bFwd svg{transform:scaleX(-1)}
 .hero-art .fl{display:flex;align-items:center;gap:7px;background:rgba(12,26,17,.90);border-color:rgba(216,180,92,.25)}
 .hero-art .fl .fl-brand{width:19px;height:19px;object-fit:contain;flex-shrink:0}
 .hero-art .f2{color:var(--emerald)}
+
+/* ===== Home cube constellation · calm horizontal motion, touch-friendly destinations ===== */
+.cube-scene{--cube-size:clamp(52px,5.2vw,68px);--cube-gap:12px;position:relative;width:min(300px,100%);height:310px;margin:auto;direction:ltr;isolation:isolate;animation:cubeSceneDrift 7s ease-in-out infinite;will-change:transform}
+.cube-scene::before{content:"";position:absolute;inset:12% -4% 4%;z-index:-1;border-radius:50%;background:radial-gradient(ellipse,rgba(85,184,124,.18),rgba(216,180,92,.07) 42%,transparent 70%);filter:blur(18px);pointer-events:none}
+.cube-stack{position:absolute;top:49%;left:50%;z-index:1;display:grid;gap:var(--cube-gap);transform:translate(-50%,-42%) rotate(-4deg)}
+.cube-row{display:flex;gap:var(--cube-gap);animation:cubeRowDrift 5.8s ease-in-out infinite;will-change:transform}
+.cube-row:nth-child(2){animation-direction:reverse;animation-duration:6.6s}.cube-row:nth-child(3){animation-duration:7.2s;animation-delay:-2.1s}
+.hero-cube{display:block;flex:0 0 var(--cube-size);width:var(--cube-size);height:var(--cube-size);padding:0;border:0;border-radius:22px;background:none;cursor:pointer;animation:cubeBob 4.8s ease-in-out var(--d,0s) infinite;will-change:transform;-webkit-tap-highlight-color:transparent}
+.hero-cube.cube-float{position:absolute;top:0;left:32px;z-index:2;width:max(44px,calc(var(--cube-size)*.82));height:max(44px,calc(var(--cube-size)*.82));flex-basis:auto}
+.cube-face{position:relative;display:block;width:100%;height:100%;overflow:hidden;border-radius:22px;background:linear-gradient(145deg,rgba(255,255,255,.34),transparent 42%),linear-gradient(145deg,var(--cube),var(--cube-deep));box-shadow:inset 1px 1px 0 rgba(255,255,255,.38),inset -6px -8px 14px rgba(0,0,0,.13),0 8px 0 var(--cube-shadow),0 16px 24px -12px rgba(0,0,0,.58);transition:transform .25s cubic-bezier(.2,.8,.2,1),filter .25s,box-shadow .25s}
+.cube-face::before{content:"";position:absolute;top:9%;left:12%;width:42%;height:20%;border-radius:999px;background:rgba(255,255,255,.19);filter:blur(3px);transform:rotate(-24deg)}
+.cube-face::after{content:"";position:absolute;inset:1px;border:1px solid rgba(255,255,255,.17);border-radius:inherit;pointer-events:none}
+.tone-emerald{--cube:#65c78e;--cube-deep:#34865b;--cube-shadow:#1d5138}.tone-mint{--cube:#b2ddc4;--cube-deep:#78b695;--cube-shadow:#39664f}.tone-deep{--cube:#2f7354;--cube-deep:#17442f;--cube-shadow:#0a291c}.tone-ivory{--cube:#f4f1e5;--cube-deep:#d6dbb9;--cube-shadow:#747b5c}.tone-champ{--cube:#ecd28a;--cube-deep:#d0a64b;--cube-shadow:#745421}
+.hero-cube:hover .cube-face,.hero-cube:focus-visible .cube-face{transform:translateY(-6px) scale(1.06);filter:brightness(1.08);box-shadow:inset 1px 1px 0 rgba(255,255,255,.42),inset -6px -8px 14px rgba(0,0,0,.11),0 10px 0 var(--cube-shadow),0 22px 30px -12px rgba(0,0,0,.64)}
+.hero-cube:active .cube-face{transform:translateY(2px) scale(.97)}.hero-cube:focus-visible{outline:2px solid var(--champ2);outline-offset:5px}
+.cube-caption{position:absolute;right:0;bottom:0;left:0;z-index:2;color:var(--mu);font-size:12px;font-weight:700;text-align:center;direction:rtl;pointer-events:none}.cube-cap-en{display:none}body.lang-en .cube-cap-ar{display:none}body.lang-en .cube-cap-en{display:inline}body.lang-en .cube-caption{direction:ltr}
+.cube-art .fl{z-index:3}.cube-art .f1{top:4%;right:-3%}.cube-art .f2{bottom:5%;left:-3%}
+@keyframes cubeSceneDrift{0%,100%{transform:translateX(-10px)}50%{transform:translateX(10px)}}
+@keyframes cubeRowDrift{0%,100%{transform:translateX(-7px)}50%{transform:translateX(7px)}}
+@keyframes cubeBob{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-5px) rotate(1.5deg)}}
+body.no-motion .cube-scene,body.no-motion .cube-row,body.no-motion .hero-cube{animation:none!important}body.no-motion .cube-face{transition:none}
+@media(prefers-reduced-motion:reduce){.cube-scene,.cube-row,.hero-cube{animation:none!important}.cube-face{transition:none}}
+@media(max-width:860px){
+  .hero .hero-copy{display:contents}.hero .kicker{order:1}.hero .brand-wordmark{order:2}.hero .hero-sub{order:3}.hero .hero-art{display:grid;order:4;min-height:275px;width:100%;margin:2px auto 4px;translate:none;rotate:none;scale:none}.hero .lead{order:5}.hero .mega{order:6}.hero .hero-chips{order:7}
+  .hero .kicker,.hero .brand-wordmark,.hero .hero-sub,.hero .lead,.hero .mega,.hero .hero-chips{position:relative;z-index:1;min-width:0;max-width:100%}
+  .cube-scene{--cube-size:60px;width:280px;height:250px}.cube-art .fl{display:none}.cube-caption{bottom:-22px}
+}
+@media(max-width:560px){.hero .hero-art{min-height:245px;margin-top:0}.cube-scene{--cube-size:50px;--cube-gap:10px;width:230px;height:215px}.hero-cube.cube-float{left:26px}.cube-face,.hero-cube{border-radius:16px}.cube-caption{font-size:11px}}
 .announce{direction:ltr;border-color:rgba(85,184,124,.25);background:linear-gradient(90deg,rgba(47,128,84,.28),rgba(85,184,124,.10),rgba(216,180,92,.08))}
 .announce .mq{direction:rtl;text-align:right}
 .announce b{background:var(--champ);color:#172014}
@@ -3072,6 +3100,16 @@ const DEF = {
    The exact black circle-and-trapezoid figure is part of the artwork, not a separate doll. */
 const EIL_FACE="/assets/brand-portal-vivid.png";
 function eilFaceHTML(){return `<div class="eil-bob"><div class="eil-face portal-face"><img src="${EIL_FACE}" alt="بوابة EILAN DOLL" draggable="false"></div></div>`}
+function cubeWorldHTML(feat){
+  const cubes=[
+    ['متجر إيلان','EILAN Store','eilan://store','ivory'],['أكاديمية التعلّم','Learning Academy','eilan://books','mint'],['منطقة الترفيه','Entertainment','eilan://play','deep'],
+    ['Eilan AI','Eilan AI','eilan://ai','deep'],['القوالب الجاهزة','Templates','eilan://templates','emerald'],['وجهاتي','Destinations','eilan://places','mint'],
+    ['مجتمع Westred','Community','eilan://community','emerald'],['مكتبتي','My Library','eilan://library','deep'],['المكافآت','Rewards','eilan://rewards','ivory']
+  ];
+  const rows=[0,1,2].map(r=>`<div class="cube-row">${cubes.slice(r*3,r*3+3).map((c,i)=>{const n=r*3+i;return `<button type="button" class="hero-cube tone-${c[3]}" style="--d:${(-n*.31).toFixed(2)}s" data-go="${c[2]}" aria-label="${c[1]} · ${c[0]}" title="${c[0]}"><span class="cube-face" aria-hidden="true"></span></button>`}).join('')}</div>`).join('');
+  const featureUrl=feat?.id?`eilan://product/${feat.id}`:'eilan://store',featureName=esc(feat?.name||'المنتج المميز');
+  return `<div class="cube-scene" role="group" aria-label="Explore EILAN · استكشف أقسام إيلان"><button type="button" class="hero-cube cube-float tone-champ" style="--d:-1.2s" data-go="${featureUrl}" aria-label="المنتج المميز: ${featureName}" title="${featureName}"><span class="cube-face" aria-hidden="true"></span></button><div class="cube-stack">${rows}</div><div class="cube-caption"><span class="cube-cap-ar">اضغط أي مكعب وادخل العالم</span><span class="cube-cap-en">Choose a cube and enter the world</span></div></div>`;
+}
 (function(){
   let el=null,eyes=[],tx=0,ty=0,cx=0,cy=0,last=-1e9,t0=0,nextBlink=0,blinkAt=-1;
   function aim(x,y){if(!el)return;const r=el.getBoundingClientRect();if(!r.width)return;
@@ -3528,7 +3566,7 @@ P.home={icon:`<img class="tab-brand" src="${LOGO}" alt="">`,title:()=>'الرئ�
   return `
   ${S.custom.announce?`<div class="announce"><b>جديد</b><div class="mq"><span>${esc(S.custom.announce)}</span></div><img class="announce-brand" src="${LOGO}" alt=""></div>`:''}
   <section class="hero">
-   <div>
+   <div class="hero-copy">
     <div class="kicker"><span class="dot"></span> ${esc(S.settings.sub)} · عالم رقمي</div>
     <h1 class="glitch brand-wordmark" data-t="EILAN DOLL" aria-label="EILAN DOLL"><img class="wm-dark wm-base" src="/assets/brand-wordmark-vivid.png" alt="" aria-hidden="true" draggable="false"><img class="wm-light wm-base" src="/assets/brand-wordmark-darktext.png" alt="" aria-hidden="true" draggable="false"><span class="wordmark-motion" aria-hidden="true"><i class="wm-letter" style="--l:1.342%;--r:90.604%;--d:0.00s"></i><i class="wm-letter" style="--l:11.074%;--r:86.913%;--d:0.09s"></i><i class="wm-letter" style="--l:14.765%;--r:77.265%;--d:0.18s"></i><i class="wm-letter" style="--l:24.413%;--r:65.101%;--d:0.27s"></i><i class="wm-letter" style="--l:36.577%;--r:54.362%;--d:0.36s"></i><i class="wm-letter" style="--l:52.433%;--r:38.003%;--d:0.45s"></i><i class="wm-letter" style="--l:64.094%;--r:20.805%;--d:0.54s"></i><i class="wm-letter" style="--l:80.956%;--r:11.074%;--d:0.63s"></i><i class="wm-letter" style="--l:90.604%;--r:1.342%;--d:0.72s"></i></span></h1>
     <div class="hero-sub">PRODUCTS · EXPERIENCES · ENTERTAINMENT · LEARNING</div>
@@ -3536,8 +3574,8 @@ P.home={icon:`<img class="tab-brand" src="${LOGO}" alt="">`,title:()=>'الرئ�
     <form class="mega" onsubmit="event.preventDefault();go(this.q.value)">${I.search}<input name="q" placeholder="ابحث عن منتج، تصميم، مكان، معلومة… أو اسأل Eilan AI" autocomplete="off"><button class="btn g">استكشف</button></form>
     <div class="hero-chips">${['مخطط دراسي','خلفيات نيون','فكرة تصميم ملصق','أين تقع العلا؟','سيرفر Westred','دورة UI'].map(t=>`<button class="chip" data-go="eilan://search?q=${enc(t)}">${t}</button>`).join('')}</div>
    </div>
-   <div class="hero-art"><div class="ring"></div><div class="ring r2"></div><div class="orbit" style="--n:4">${Array.from({length:4},(_,i)=>`<span style="--i:${i}"><i><img src="${LOGO}" alt=""></i></span>`).join('')}</div><div class="orbit o-b" style="--n:3">${Array.from({length:3},(_,i)=>`<span style="--i:${i}"><i><img src="${LOGO}" alt=""></i></span>`).join('')}</div>${eilFaceHTML()}
-    <div class="fl f1"><img class="fl-brand" src="${LOGO}" alt=""> ${S.products.length} منتج رقمي</div><div class="fl f2"><img class="fl-brand" src="${LOGO}" alt=""> ${S.servers.length} سيرفرات نشطة</div><div class="fl f3" data-go="eilan://product/${feat?.id}" style="cursor:pointer"><img class="fl-brand" src="${LOGO}" alt=""> ${esc(feat?.name||'')}</div></div>
+   <div class="hero-art cube-art">${cubeWorldHTML(feat)}
+    <div class="fl f1"><img class="fl-brand" src="${LOGO}" alt=""> ${S.products.length} منتج رقمي</div><div class="fl f2"><img class="fl-brand" src="${LOGO}" alt=""> ${S.servers.length} سيرفرات نشطة</div></div>
   </section>
   <section class="pillars">
    ${[['products','product','Products','منتجات','مخططات، قوالب، خطوط، خلفيات وملصقات رقمية.','#c9a54e','eilan://store?cat=products'],

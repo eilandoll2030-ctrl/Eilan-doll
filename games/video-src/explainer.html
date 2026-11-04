@@ -80,22 +80,22 @@ const GAMES={
          ['ركّبها وطلّع اسم البلد','قط + ر = قطر',{k:'eq',a:'🐈',b:'ر',r:'قطر'}],
          ['وضع الجَمعة','المقدّم يكشف الجواب، واللي جاوب صح ياخذ تحدي ممتع',{k:'card',tag:'تحدي الفوز',x:'اللي جاوبت صح تختار الأغنية الجاية 🎵'}],
          ['وضع التحدي','لحالك: ٤ خيارات و١٥ ثانية — كل ما أسرعت زادت نقاطك',{k:'timer',n:15}]]},
- memory:{ic:'brain',n:'ذاكرة إيلان',en:'Eilan Memory',sub:'طابق الأزواج بأقل عدد حركات',free:true,
+ memory:{ic:'brain',n:'ذاكرة إيلان',en:'Eilan Memory',sub:'طابق الأزواج بأقل عدد حركات',paid:true,arc:true,
   steps:[['١٦ بطاقة مقلوبة','فيها ٨ أزواج من رموز المكعبات',{k:'mem',open:[]}],
          ['اقلب بطاقتين','وتذكّر وين مكان كل رمز',{k:'mem',open:[1,6]}],
          ['تطابقت؟ تبقى مفتوحة','ما تطابقت؟ تنقلب مرة ثانية',{k:'mem',open:[2,9],match:true}],
          ['خلّصها بأقل حركات','وتنحفظ أفضل نتيجة لك',{k:'score',rows:[['الحركات','12'],['أفضل نتيجة','10 🏆']]}]]},
- xo:{ic:'g-xo',n:'إكس أو إيلان',en:'Eilan XO',sub:'✕ و ◯ بالمكعبات',free:true,
+ xo:{ic:'g-xo',n:'إكس أو إيلان',en:'Eilan XO',sub:'✕ و ◯ بالمكعبات',paid:true,arc:true,
   steps:[['✕ و ◯ بالتناوب','كل لاعب يختار خانة بدوره',{k:'xo',b:'X...O....'}],
          ['٣ بخط = فوز','أفقي أو عمودي أو مائل',{k:'xo',b:'X.OXO.X..',w:[0,3,6]}],
          ['ضد Eilan أو صديقك','العب ضد Eilan، أو مع أحد على نفس الجهاز',{k:'vs'}],
          ['اغلب Eilan واكسب XP','كل فوز يرفع نقاطك',{k:'score',rows:[['أنت','3'],['Eilan','1'],['XP','+9 ✨']]}]]},
- catch:{ic:'g-catch',n:'اصطد المكعب',en:'Cube Catch',sub:'سرعة يدك ضد الوقت',free:true,
+ catch:{ic:'g-catch',n:'اصطد المكعب',en:'Cube Catch',sub:'سرعة يدك ضد الوقت',paid:true,arc:true,
   steps:[['عندك ٣٠ ثانية','والعداد يبدأ أول ما تضغط ابدأ',{k:'timer',n:30}],
          ['المكعب يولّع… اضغطه!','قبل لا يطفي ويختفي',{k:'catch',on:[5]}],
          ['المكعبات تسرع مع الوقت','وكل ما قرب الوقت يخلص صارت أسرع',{k:'catch',on:[1,10,14]}],
          ['٥ ورا بعض = نقطتين','لكل مكعب بعدها — لا تضيّع ولا واحد',{k:'score',rows:[['سلسلة','5 🔥'],['النقاط','×2']]}]]},
- snake:{ic:'g-snake',n:'Neon Snake',en:'الثعبان',sub:'اللعبة الكلاسيكية بستايل إيلان',free:true,
+ snake:{ic:'g-snake',n:'Neon Snake',en:'الثعبان',sub:'اللعبة الكلاسيكية بستايل إيلان',paid:true,arc:true,
   steps:[['حرّك الثعبان','بالأسهم في الكيبورد أو بالأزرار على الشاشة',{k:'pad'}],
          ['كل النقطة','كل ما تاكل نقطة يطول الثعبان',{k:'snake'}],
          ['لا تصطدم!','لا بالجدار ولا بذيلك',{k:'icon',i:'warn'}],
@@ -185,7 +185,7 @@ const stage=$('#stage');
 SC.forEach(sc=>{const d=document.createElement('div');d.className='scene';sc.el=d;
  if(sc.k==='intro')d.innerHTML=`<div class="center" style="position:absolute;inset:0;gap:16px"><div data-icon>${cubeIcon(G.ic,230)}</div><div class="eb" data-a>EILAN GAMES · ${G.free?'مجانية':'لعبة إيلان'}</div><div class="t1" data-b><span class="grad">${G.n}</span><bdi dir="ltr">${G.en}</bdi></div><div class="t3" data-c>${G.sub}</div></div>`;
  if(sc.k==='step'){const s=G.steps[sc.i];d.innerHTML=`<div class="step"><div class="txt"><div class="num" data-a>0${sc.i+1}</div><div class="t2" data-b>${s[0]}</div><div class="t3" data-c>${s[1]}</div></div><div class="ill">${illHTML(s[2])}</div></div>`}
- if(sc.k==='outro'){const tags=G.paid?`<span class="pill g">جرّبها مجاناً · ٣ بطاقات × ٣ مرات</span><span class="pill o">اللعبة كاملة ٣٠ ر.س</span>`:`<span class="pill g">مجانية ١٠٠٪</span>`;
+ if(sc.k==='outro'){const tags=G.paid?`<span class="pill g">${G.arc?'جرّبها مجاناً ٣ مرات':'جرّبها مجاناً · ٣ بطاقات × ٣ مرات'}</span><span class="pill o">اللعبة كاملة ٣٠ ر.س</span>`:`<span class="pill g">مجانية ١٠٠٪</span>`;
    d.innerHTML=`<div class="center" style="position:absolute;inset:0;gap:20px"><img src="${LOGO}" data-icon style="width:150px;height:150px"><div class="t2" data-b>العبها الحين في <span class="grad">إيلان دول</span></div><div data-c style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center">${tags}<span class="pill">على الجوال · الآيباد · الكمبيوتر</span>${G.print?'<span class="pill o">🖨️ وفيه ملف PDF للطباعة</span>':''}</div><div class="t3" data-a style="font-family:Poppins;letter-spacing:4px;font-size:20px">منطقة الترفيه · EILAN DOLL</div></div>`}
  stage.appendChild(d)});
 

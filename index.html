@@ -2184,6 +2184,7 @@ html:not(.light) .mp-osm{filter:invert(1) hue-rotate(200deg) saturate(.6) bright
 .mp-ours{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}.mp-our{padding:12px;cursor:pointer;display:flex;flex-direction:column;gap:2px}.mp-our span{font-size:22px}.mp-our small{color:var(--g)}
 .mp-spin{width:34px;height:34px;margin:0 auto 10px;border-radius:50%;border:3px solid var(--bd);border-top-color:var(--g);animation:spin 1s linear infinite}
 .w-hero{padding:26px;margin-bottom:18px}.w-hero h1{font-size:32px;font-weight:900;margin:6px 0}.w-cats{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}.w-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}.w-ch{padding:18px;display:flex;flex-direction:column;gap:10px}.w-ch h4{margin:0 0 4px;font-size:17px}.w-ch p{margin:0;font-size:14px;opacity:.85;flex:1}.w-top{display:flex;gap:12px;align-items:center}.w-ico{font-size:34px;line-height:1}.w-acts{display:flex;flex-wrap:wrap;gap:8px}.w-ch[data-go]{cursor:pointer}.w-th{aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#1C1E16;display:grid;place-items:center;margin:-4px -4px 4px}.w-th .w-ico{font-size:46px}.w-th img{width:100%;height:100%;object-fit:cover;display:block}.w-vids{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}.w-v{all:unset;cursor:pointer;display:flex;flex-direction:column;gap:6px;border-radius:12px;padding:6px;transition:background .2s}.w-v:hover,.w-v.on{background:rgba(232,182,74,.12)}.w-v img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:9px}.w-v span{font-size:13px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.w-v.on img{outline:2px solid var(--g)}.w-ch.on{outline:2px solid var(--g)}.w-play{padding:18px}.w-ph{display:flex;align-items:center;gap:12px;margin-bottom:12px}.w-ph h2{margin:0;font-size:22px}
+.ex-wrap{padding:18px}.ex-row{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}.ex-map{height:360px;border-radius:14px;overflow:hidden;margin:12px 0;background:#1C1E16}.ex-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px}.ex-item{padding:12px;border:1px solid var(--bd);border-radius:12px;cursor:pointer;font-size:14px}.ex-item:hover{border-color:var(--g)}.ex-item .mu{font-size:12.5px}.ex-attr{font-size:12px;margin-top:10px}.ex-cta{margin-top:16px;padding:14px;border:1px dashed var(--bd);border-radius:12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .mp-yt{position:relative;padding-top:56.25%;border-radius:14px;overflow:hidden;background:#000}.mp-yt iframe,.mp-yt video{position:absolute;inset:0;width:100%;height:100%;border:0}
 @media(max-width:860px){.mp-grid{grid-template-columns:1fr}.mp-grid .pl-list{max-height:300px;order:2}.mp-map{height:440px}.mp-plans{grid-template-columns:1fr;min-width:0}}
 /* ---------- 360 viewer overlay ---------- */
@@ -3717,6 +3718,7 @@ setInterval(()=>{if(!S.settings.adsOn)return;const ads=S.ads.filter(a=>a.on&&!(s
 
 /* ---------- GLOBAL EVENTS ---------- */
 const ACT={
+ excity:d=>{exCity=d.v;rerender()},excat:d=>{exCat=d.v;rerender()},exsrc:d=>{exSrc=d.v;rerender()},exfocus:d=>{const m=window.__exMap;if(m)m.setView([+d.lat,+d.lng],16)},
  newchannel:channelForm,delchannel:d=>{S.channels=S.channels.filter(c=>c.id!==d.id);save();rerender()},wcat:d=>{WCAT=d.cat;rerender()},
  tab:d=>{act=+d.i;render()},closetab:d=>closeTab(+d.i),add:d=>addCart(d.id),opencart:openCart,checkout,coupon:applyCoupon,pay,closemodal:closeModal,
  buynow:d=>{addCart(d.id);openCart()},qty:d=>{const c=S.cart.find(x=>x.id===d.id);c.q+=+d.d;if(c.q<=0)S.cart=S.cart.filter(x=>x!==c);save();renderCart();updateChrome()},
@@ -10464,6 +10466,34 @@ function plMapOnlyHTML() {
   </div>`;
 }
 
+
+/* ================= EXPLORE: OpenStreetMap (+ official Google Places when enabled) ================= */
+const EX_CITIES=[['riyadh','الرياض',24.71,46.68],['jeddah','جدة',21.54,39.17],['makkah','مكة',21.42,39.83],['madinah','المدينة',24.47,39.61],['dammam','الدمام',26.43,50.10],['khobar','الخبر',26.28,50.21],['abha','أبها',18.22,42.50],['taif','الطائف',21.27,40.42],['alula','العلا',26.61,37.92],['tabuk','تبوك',28.39,36.57]];
+const EX_CATS=[['cafe','☕ كافيهات'],['restaurant','🍽️ مطاعم'],['park','🌳 حدائق'],['mall','🛍️ مولات'],['hotel','🏨 فنادق']];
+let exCity='riyadh',exCat='cafe',exSrc='osm',exGoogleOn=null;const EXP={};
+const exLoad=(src,city,cat)=>{const k=src+':'+city+':'+cat;if(EXP[k])return EXP[k];const pr=fetch(`/api/${src==='google'?'gplaces':'osm'}?city=${city}&cat=${cat}`).then(r=>r.ok?r.json():null).catch(()=>null);if(src==='osm')EXP[k]=pr;return pr};
+function exHTML(){return `<div class="ex-wrap card">
+  <div style="margin-bottom:10px"><button class="btn sm" data-act="pltoggleview" data-v="spots">← عودة لدليل الأماكن</button></div>
+  <h2 style="margin:0 0 4px">اكتشف أماكن أكثر</h2><p class="mu" style="margin:0 0 12px">اختاري المدينة والنوع، وتطلع لك الأماكن هنا داخل إيلان.</p>
+  <div class="ex-row">${EX_CITIES.map(c=>`<button class="chip ${exCity===c[0]?'on':''}" data-act="excity" data-v="${c[0]}">${c[1]}</button>`).join('')}</div>
+  <div class="ex-row">${EX_CATS.map(c=>`<button class="chip ${exCat===c[0]?'on':''}" data-act="excat" data-v="${c[0]}">${c[1]}</button>`).join('')}</div>
+  <div class="ex-row" id="exSrcRow" style="${exGoogleOn?'':'display:none'}"><button class="chip ${exSrc==='osm'?'on':''}" data-act="exsrc" data-v="osm">الخريطة المفتوحة</button><button class="chip ${exSrc==='google'?'on':''}" data-act="exsrc" data-v="google">Google</button></div>
+  <div class="ex-map" id="exMap" dir="ltr"></div>
+  <div class="ex-list" id="exList"><p class="mu">جاري تحميل الأماكن…</p></div>
+  <p class="mu ex-attr" id="exAttr"></p>
+  <div class="ex-cta"><b>عندك مشروع؟</b> <span class="mu">سجّل كافيهك أو مطعمك أو فندقك على خريطة إيلان.</span> <button class="btn sm g" data-act="mpbizreq">➕ أضف مشروعك</button></div></div>`}
+function exFill(){
+  if(exGoogleOn===null)fetch('/api/gplaces?city=riyadh&cat=cafe&probe=1').then(r=>r.ok?r.json():{}).then(j=>{exGoogleOn=!!(j&&!j.off&&!j.error);const row=$('#exSrcRow');if(row&&exGoogleOn)row.style.display=''}).catch(()=>{exGoogleOn=false});
+  const list=$('#exList'),attr=$('#exAttr');if(!list)return;
+  const c=EX_CITIES.find(x=>x[0]===exCity);
+  attr.innerHTML=exSrc==='google'?'البيانات من Google Maps':'البيانات من © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a>';
+  exLoad(exSrc,exCity,exCat).then(j=>{if(!list.isConnected)return;const P=(j&&j.places)||[];
+    list.innerHTML=P.length?P.slice(0,60).map(x=>`<div class="ex-item" data-act="exfocus" data-lat="${x.lat}" data-lng="${x.lng}"><b>${esc(x.name)}</b>${x.en&&x.en!==x.name?`<span class="mu"> · ${esc(x.en)}</span>`:''}${x.addr?`<div class="mu">${esc(x.addr)}</div>`:''}${x.hours?`<div class="mu" dir="ltr" style="text-align:right">${esc(x.hours)}</div>`:''}</div>`).join('')
+      :`<p class="mu">${j?'ما لقينا أماكن من هذا النوع هنا بعد.':'ما قدرنا نحمّل الأماكن الآن، جرّبي بعد شوي.'}</p>`;
+    const box=$('#exMap');if(!box||!P.length)return;
+    mpLeaflet().then(L=>{if(!box.isConnected)return;box.innerHTML='';const m=L.map(box,{zoomControl:true}).setView([c[2],c[3]],12);mpTiles(L,m);window.__exMap=m;
+      P.slice(0,60).forEach(x=>L.marker([x.lat,x.lng]).addTo(m).bindPopup(`<b>${esc(x.name)}</b>${x.addr?'<br>'+esc(x.addr):''}`));}).catch(()=>{});
+  })}
 function initPlacesMap(focusSpotId){
   const box = $('#plLeafletMap');
   if(!box) return;
@@ -11168,7 +11198,7 @@ return `<div style="max-width:980px;margin:0 auto;padding:8px 4px"><h1 style="fo
 <section style="border:1px solid var(--bd);border-radius:18px;padding:18px"><h2 style="margin:0 0 4px">🏙️ المدن والمعالم</h2><p class="mu" style="margin:0">السعودية والعالم، جولات وجداول وميزانيات</p>
 ${L('eilan://cities','مدن ومعالم','تصفحي المدن وأشهر معالمها')}${L('eilan://cities/tours','جولات 360°','شوفي المعالم كأنك هناك')}${L('eilan://cities/discover','اكتشف السعودية','مناطق وتراث وأماكن مميزة')}${L('eilan://cities/schedule','خطط رحلتك والميزانية','جدول رحلة وتقدير تكلفة')}${L('eilan://cities/passport','جوازي','سجل المدن اللي زرتيها')}</section>
 <section style="border:1px solid var(--bd);border-radius:18px;padding:18px"><h2 style="margin:0 0 4px">📍 الأماكن والفنادق</h2><p class="mu" style="margin:0">مطاعم ومقاهي ومنتجعات وفنادق وغيرها</p>
-${L('eilan://places/all','كل الأماكن','دليل مع روابط Google Maps')}</section></div></div>`}};
+${L('eilan://places/all','كل الأماكن','دليل مع روابط Google Maps')}${L('eilan://places/explore','اكتشف أماكن أكثر','آلاف الأماكن حسب مدينتك، داخل إيلان')}${L('eilan://places/add','أضف مشروعك','صاحب كافيه أو مطعم أو فندق؟ سجّل مكانك على خريطة إيلان')}</section></div></div>`}};
 
 /* ================= PAGE REGISTRATION FOR P.places ================= */
 P.places = {
@@ -11186,6 +11216,7 @@ P.places = {
       else if (routeKey === 'map') plTab = 'map';
       else if (routeKey === 'near') { plTab = 'spots'; plSort = 'dist'; plLocateGPS(); }
       else if (routeKey === 'add') plTab = 'add';
+      else if (routeKey === 'explore') plTab = 'osm';
       else if (routeKey === 'cafes') { plTab = 'spots'; plFilterCat = 'cafe'; plFilterCity = 'all'; plBrand = 'all'; plQuery = ''; plMaxDist = null; }
       else if (routeKey === 'restaurants') { plTab = 'spots'; plFilterCat = 'restaurant'; plFilterCity = 'all'; plBrand = 'all'; plQuery = ''; plMaxDist = null; }
       else if (routeKey === 'parks') { plTab = 'spots'; plFilterCat = 'park'; plFilterCity = 'all'; plBrand = 'all'; plQuery = ''; plMaxDist = null; }
@@ -11205,6 +11236,8 @@ P.places = {
           <div id="plLeafletMap" class="mp-map" style="height:100%" dir="ltr"></div>
         </div>
       `;
+    } else if (plTab === 'osm') {
+      bodyHTML = exHTML();
     } else if (plTab === 'add') {
       bodyHTML = `
         <div style="margin-bottom:14px">
@@ -11246,6 +11279,7 @@ P.places = {
     `;
   },
     post: () => {
+    if (plTab === 'osm') exFill();
     const inp = $('#plSearchInput');
     if (inp) {
       inp.oninput = () => {
@@ -11859,7 +11893,7 @@ function mpBizReq(){if(typeof userOK==='function'&&!userOK())return requireLogin
 async function mpBizReqSend(e){e.preventDefault();const f=e.target,d=Object.fromEntries(new FormData(f));if(!/^[\d+\s()-]{8,}$/.test(d.whatsapp||'')){toast('اكتب رقم واتساب صحيح','err');return}
   const no='EP-'+new Date().toISOString().slice(2,10).replace(/-/g,'')+'-'+Math.random().toString(36).slice(2,6).toUpperCase();const fd=new FormData();
   Object.entries({'form-name':'place-request','bot-field':'',order:no,name:d.name,cat:d.cat,city:d.city,location:d.location||'',whatsapp:d.whatsapp,ig:d.ig||'',desc:d.desc||'',plan:d.plan,account:(typeof USER!=='undefined'&&USER&&USER.email)||''}).forEach(([k,v])=>fd.append(k,v));
-  const b=$('.mp-send',f);b.disabled=true;b.textContent='⏳ جارِ الإرسال…';let ok=false;try{const r=await fetch('/',{method:'POST',body:fd});ok=r.ok}catch(x){}
+  const b=$('.mp-send',f);b.disabled=true;b.textContent='⏳ جارِ الإرسال…';let ok=false;try{const r=await fetch('/api/request',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.fromEntries(fd))});ok=r.ok&&!!(await r.json().catch(()=>({}))).ok}catch(x){}if(!ok){try{const r=await fetch('/',{method:'POST',body:fd});const t=r.ok?await r.text():'';ok=r.ok&&!t.includes('id="bookmarks"')}catch(x){}}
   if(!ok){b.disabled=false;b.textContent='📩 أعد المحاولة';toast('تعذّر الإرسال — تحقق من الاتصال','err');return}
   addXP(10,'طلب إضافة مشروع');openModal(`<div class="mh"><h3>✅ وصلنا طلبك!</h3><button class="icon-btn" data-act="closemodal">${I.x}</button></div><div class="tp-done"><div class="tp-dno">رقم الطلب<b dir="ltr">${no}</b></div><p><b>${esc(d.name)}</b> · ${esc(d.plan)}</p><ol class="tp-how"><li>نراجع مشروعك خلال 24–48 ساعة.</li><li>نتواصل معك على واتساب <bdi>${esc(d.whatsapp)}</bdi>${/ر\.س/.test(d.plan)?' ونرسل رابط الدفع':''}.</li><li>بعد الموافقة يظهر مشروعك على خريطة إيلان ✨</li></ol><button class="btn g" style="width:100%" data-act="closemodal">تم</button></div>`)}
 function mpBizVid(id){const p=mpBizList().find(x=>x.id===id);if(!p||!p.video)return;const y=String(p.video).match(/(?:youtu\.be\/|v=|shorts\/|embed\/)([\w-]{11})/);

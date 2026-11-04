@@ -1,10 +1,11 @@
 // "Add your business" requests on Vercel. Forwards to the owner's email through Web3Forms (free).
-// OFF until the owner adds WEB3FORMS_KEY in Vercel. Accepts only the known form fields.
+// Accepts only the known form fields.
 const FIELDS = ['order', 'name', 'cat', 'city', 'location', 'whatsapp', 'ig', 'desc', 'plan', 'account'];
 module.exports = async (req, res) => {
   res.setHeader('Cache-Control', 'no-store');
   if (req.method !== 'POST') { res.status(405).json({ error: 'POST only' }); return; }
-  const key = process.env.WEB3FORMS_KEY;
+  // Web3Forms access keys are public by design (they only send to the owner's email).
+  const key = process.env.WEB3FORMS_KEY || '9931f90d-22da-4d79-a61f-ac5a98f52717';
   if (!key) { res.status(503).json({ off: true }); return; }
   const b = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});
   const data = { access_key: key, subject: 'طلب إضافة مشروع — إيلان دول ' + String(b.order || '').slice(0, 40), from_name: 'EILAN DOLL' };

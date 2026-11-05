@@ -1,0 +1,8 @@
+# source & build files that the live site does not need (keeps paid content private)
+visual/packs/
+visual/print-src/
+visual/src/
+games/src/
+games/print-src/
+games/video-src/
+coloring/src/

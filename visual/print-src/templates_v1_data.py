@@ -14,19 +14,19 @@ UI = {
   'product': 'قوالب إيلان البصرية', 'product_sub': 'الأربعة الأساسية',
   'example': 'مثال جاهز', 'blank': 'صفحة للكتابة', 'topic': 'الموضوع:', 'index': 'الفهرس',
   'page': 'ص', 'sign': 'إيلان دول — EILAN DOLL',
-  'cover_lead': 'أربعة قوالب تحوّل أي درس أو فكرة أو مشروع إلى رسمة واضحة تنحفظ: مثال جاهز لكل قالب، وصفحة فارغة للكتابة باليد أو بقلم الآيباد.',
-  'chips': ['٤ قوالب', 'مثال + صفحة فارغة لكل قالب', 'للآيباد: GoodNotes · Notability', 'A4 بالعرض للطباعة'],
+  'cover_lead': 'أربعة قوالب تحوّل أي درس أو فكرة أو مشروع إلى رسمة واضحة تُحفَظ بسهولة: مثال جاهز لكل قالب، وصفحة فارغة للكتابة باليد أو بقلم الآيباد.',
+  'chips': ['4 قوالب', 'مثال + صفحة فارغة لكل قالب', 'للآيباد: فهرس بروابط تنقّل', 'A4 بالعرض للطباعة'],
   'howto_t': 'طريقة الاستخدام',
   'howto': ['اختيار القالب المناسب من القائمة (الضغط على اسمه يفتح صفحته).',
             'قراءة المثال الجاهز لفهم فكرة القالب.',
             'الانتقال للصفحة التالية وكتابة الموضوع في الخانات.',
             'على الآيباد: تكرار الصفحة الفارغة من «تكرار الصفحة» لاستخدامها أكثر من مرة.',
-            'للطباعة: نسخة الطباعة مرفقة — A4 بالعرض وبالحجم الفعلي ١٠٠٪.'],
+            'للطباعة: نسخة الطباعة مرفقة — A4 بالعرض وبالحجم الفعلي 100%.'],
   'which_t': 'أي قالب يناسب الموضوع؟',
   'end_t': 'القراءة تُفهِم… والرسم يُثبِّت',
-  'end_s': 'موضوع واحد على قالبين مختلفين يثبت أكثر. ولرسم القوالب بالكمبيوتر: «مختبر إيلان البصري» داخل الموقع، وأوامر «شجرة» و«جليد» و«طريق» و«دورة» جاهزة في ملف «أوامر إيلان البصرية».',
-  'print_how': ['الطباعة على A4 بالعرض، بالحجم الفعلي ١٠٠٪ (بدون «ملاءمة الصفحة»).', 'لكل قالب صفحتان: المثال ثم الصفحة الفارغة، فتصلح للطباعة وجه وظهر.', 'تُطبع الصفحة الفارغة وحدها لعمل نسخ كثيرة للصف أو للبيت.'],
-  'print_t': 'نسخة الطباعة', 'print_s': 'A4 بالعرض · الحجم الفعلي ١٠٠٪ · ألوان خفيفة توفّر الحبر · كل قالب: مثال ثم صفحة فارغة (تصلح للطباعة وجه وظهر).',
+  'end_s': 'موضوع واحد على قالبين مختلفين يثبت أكثر. ولرسم القوالب بالكمبيوتر: «مختبر إيلان البصري» في موقع إيلان دول (منتج منفصل في المتجر).',
+  'print_how': ['الطباعة على A4 بالعرض، بالحجم الفعلي 100% (بدون «ملاءمة الصفحة»).', 'عند الطباعة وجه وظهر: كل قالب في ورقة واحدة، المثال على الوجه والصفحة الفارغة على الظهر.', 'تُطبع الصفحة الفارغة وحدها لعمل نسخ كثيرة للصف أو للبيت.'],
+  'notes_t': 'ملاحظات', 'print_t': 'نسخة الطباعة', 'print_s': 'A4 بالعرض · الحجم الفعلي 100% · ألوان خفيفة توفّر الحبر · كل قالب: مثال ثم صفحة فارغة (تصلح للطباعة وجه وظهر: ورقة لكل قالب).',
  },
  'en': {
   'dir': 'ltr', 'lang': 'en',
@@ -34,7 +34,7 @@ UI = {
   'example': 'Worked example', 'blank': 'Your page', 'topic': 'Topic:', 'index': 'Contents',
   'page': 'p.', 'sign': 'EILAN DOLL — إيلان دول',
   'cover_lead': 'Four templates that turn any lesson, idea or project into a clear picture you remember: a worked example for each one, and a blank page to fill by hand or with an iPad pencil.',
-  'chips': ['4 templates', 'Example + blank page each', 'iPad: GoodNotes · Notability', 'Prints on A4 landscape'],
+  'chips': ['4 templates', 'Example + blank page each', 'iPad: tappable contents', 'Prints on A4 landscape'],
   'howto_t': 'How to use',
   'howto': ['Pick the template that fits your topic (tap its name to jump to it).',
             'Look at the worked example to see the idea.',
@@ -43,9 +43,9 @@ UI = {
             'To print: use the print edition — A4 landscape, actual size 100%.'],
   'which_t': 'Which template fits?',
   'end_t': 'Reading helps it make sense. Drawing helps it stay.',
-  'print_how': ['Print on A4 landscape at actual size 100% (no "fit to page").', 'Each template has two pages, example then blank, so it works double-sided.', 'Print the blank page on its own to make copies for a class or at home.'],
-  'end_s': 'Try one topic on two different templates. To draw a template on a computer, open the «Eilan Visual Lab» on the website.',
-  'print_t': 'Print edition', 'print_s': 'A4 landscape · actual size 100% · light colours to save ink · each template: example, then blank page (works double-sided).',
+  'print_how': ['Print on A4 landscape at actual size 100% (no "fit to page").', 'Printed double-sided: one sheet per template, example on the front and blank page on the back.', 'Print the blank page on its own to make copies for a class or at home.'],
+  'end_s': 'Try one topic on two different templates. To draw the templates on a computer: the «Eilan Visual Lab» on the Eilan Doll website (a separate product in the store).',
+  'notes_t': 'Notes', 'print_t': 'Print edition', 'print_s': 'A4 landscape · actual size 100% · light colours to save ink · each template: example, then blank page (works double-sided: one sheet per template).',
  },
 }
 
@@ -96,7 +96,7 @@ T = {
  'roadmap': {
   'ar': {'n': 'خارطة الطريق', 'en': 'ROADMAP', 'best': 'هدف له مراحل: مشروع، مسار تعلّم، خطة اختبار.',
    'tips': 'الهدف يُكتب أولًا عند العلم · لكل محطة علامة إنجاز واضحة · العقبة تُكتب مع طريقة تجاوزها.',
-   'lab': {'stage': 'المحطة', 'hint': 'ماذا نفعل؟ · كيف نعرف أنها اكتملت؟', 'block': 'عقبة ← وطريقة تجاوزها', 'goal': 'الهدف', 'start': 'البداية'},
+   'lab': {'stage': 'المحطة', 'hint': 'ماذا نفعل؟ · كيف نعرف أنها اكتملت؟', 'block': 'عقبة ← طريقة تجاوزها', 'goal': 'الهدف', 'start': 'البداية'},
    'ex': {'title': 'خطة مشروع العلوم المدرسي',
           'stages': [['السؤال', 'سؤال واحد يمكن اختباره'], ['البحث', 'ثلاثة مصادر موثوقة'], ['الفرضية', 'توقّع مكتوب في جملة'],
                      ['التجربة', 'خطوات واضحة وتسجيل النتائج'], ['العرض', 'لوحة وشرح قصير']],
@@ -114,7 +114,7 @@ T = {
  # ---------------------------------------------------------------- CYCLE
  'cycle': {
   'ar': {'n': 'الدورة', 'en': 'CYCLE', 'best': 'كل ما يتكرر: دورات الطبيعة، العادات، مراحل العمل.',
-   'tips': 'آخر مرحلة تعود إلى الأولى · في الوسط: ما الذي تنتجه الدورة؟ · نجمة عند المرحلة الأصعب.',
+   'tips': 'آخر مرحلة تعود إلى الأولى · في الوسط: ما الذي تنتجه الدورة؟ · وضع نجمة عند المرحلة الأصعب.',
    'lab': {'stage': 'المرحلة', 'center': 'ما الذي يتجدد؟'},
    'ex': {'title': 'دورة حياة النبات',
           'stages': [['البذرة', 'تحمل نبتة صغيرة وغذاءها'], ['الإنبات', 'الماء والدفء يوقظان البذرة'], ['البادرة', 'أول جذر وأول أوراق'],
@@ -133,10 +133,10 @@ T = {
 STORE = {
  'ar': {'name': 'قوالب إيلان البصرية — الأربعة الأساسية',
         'desc': 'أربعة قوالب للتعلّم البصري: الشجرة، جبل الجليد، خارطة الطريق، والدورة. لكل قالب مثال جاهز يوضّح الفكرة وصفحة فارغة للكتابة. '
-                'ملف للآيباد بروابط تنقّل (يعمل مع GoodNotes وNotability) ونسخة طباعة A4 بالعرض بألوان خفيفة. بالعربي، ومعه نسخة إنجليزية. '
-                'مناسب للطلاب والمعلمين والأهالي وأصحاب المشاريع.'},
+                'ملف للآيباد بفهرس وروابط تنقّل، ونسخة طباعة A4 بالعرض بألوان خفيفة. بالعربي، ومعه نسخة إنجليزية. '
+                'لكل من يتعلّم أو يعلّم، ولأصحاب المشاريع.'},
  'en': {'name': 'Eilan Visual Templates — The Core Four',
         'desc': 'Four visual-learning templates: Tree, Iceberg, Roadmap and Cycle. Each comes with a worked example and a blank page to fill in. '
-                'An iPad edition with tappable navigation (works in GoodNotes and Notability) plus a light-ink A4 landscape print edition. '
-                'Arabic and English editions included. For students, teachers, parents and project owners.'},
+                'An iPad edition with tappable contents plus a light-ink A4 landscape print edition. '
+                'Arabic and English editions included. For anyone who learns or teaches, and for project owners.'},
 }

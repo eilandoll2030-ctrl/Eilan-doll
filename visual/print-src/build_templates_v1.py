@@ -35,12 +35,12 @@ def logo(size='9mm', tile=None):
     return f'<svg viewBox="0 0 100 100" style="width:{size};height:{size};flex:none">{bg}{inner}</svg>'
 
 THEMES = {
- 'screen': dict(bg='#F7F1E3', card='#FFFBF1', ink='#1F3A2B', mu='#6E6C5A', gold='#B58A2E', gold2='#E0B454', g1='#1F5A3B', g2='#2F7A52', g3='#6FA37C',
+ 'screen': dict(print=False, bottom=196, bg='#F7F1E3', card='#FFFBF1', ink='#1F3A2B', mu='#6E6C5A', gold='#B58A2E', gold2='#E0B454', g1='#1F5A3B', g2='#2F7A52', g3='#6FA37C',
                 pu='#4A2682', line='#D9CFB4', rule='#CDBF9C', canopy='#6FA37C', canopy_op=.16, trunk='#1F3A2B',
                 water1='#2F6B4A', water2='#173826', water3='#0F1A12', ice='#F6EFDD', ice2='#E7DCC0', zone='#F6E3A8', road='#24261D', roadedge='#E7DCC0'),
- 'print': dict(bg='#FFFDF8', card='#FFFDF8', ink='#1F3A2B', mu='#6E6C5A', gold='#B58A2E', gold2='#E0B454', g1='#1F5A3B', g2='#2F7A52', g3='#6FA37C',
+ 'print': dict(bg='#F7F1E3', card='#FBF7EC', print=True, bottom=190, ink='#1F3A2B', mu='#6E6C5A', gold='#B58A2E', gold2='#E0B454', g1='#1F5A3B', g2='#2F7A52', g3='#6FA37C',
                pu='#4A2682', line='#C9BE9F', rule='#C9BE9F', canopy='#6FA37C', canopy_op=.10, trunk='#2F5E42',
-               water1='#E6EFE3', water2='#D3E2CF', water3='#C2D6BE', ice='#FFFDF8', ice2='#FFFDF8', zone='#1F5A3B', road='#FFFDF8', roadedge='#2F5E42'),
+               water1='#E6EFE3', water2='#D3E2CF', water3='#C2D6BE', ice='#FBF7EC', ice2='#FBF7EC', zone='#1F5A3B', road='#FBF7EC', roadedge='#2F5E42'),
 }
 
 
@@ -48,9 +48,15 @@ THEMES = {
 PRINT_CSS = """
 .bx.gold{background:#FDF6E3;border:.6mm solid #E0B454}.bx.gold .lb{color:#8A6516}
 .bx.gold .ln{background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 6.2mm,#C9BE9F 6.2mm,#C9BE9F 6.5mm)}
-.bx.center{background:#FFFDF8;border:.6mm solid #1F5A3B;color:#1F3A2B}.bx.center .lb{color:#B58A2E}
+.bx.center{background:#FBF7EC;border:.6mm solid #1F5A3B;color:#1F3A2B}.bx.center .lb{color:#B58A2E}
 .bx.center .ln{background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 6.2mm,#C9BE9F 6.2mm,#C9BE9F 6.5mm)}
-.tag.ex{background:#FFFDF8;color:#1F5A3B;border-color:#2F7A52}
+.tag.ex{background:#FBF7EC;color:#1F5A3B;border-color:#2F7A52}
+.pg{background:#FFFFFF}
+.pg:before{content:'';position:absolute;inset:6mm;border-radius:3mm;background:#F7F1E3;z-index:0}
+.art{clip-path:inset(6mm round 3mm)}
+.hd{top:10mm;left:14mm;right:14mm}
+.ft{bottom:9mm;left:14mm;right:14mm}
+.tip{bottom:15.6mm}
 """
 
 
@@ -68,7 +74,7 @@ html[lang=en] body{{font-family:Cairo,Poppins,sans-serif}}
 .pg{{width:297mm;height:210mm;position:relative;overflow:hidden;page-break-after:always;background:{th['bg']}}}
 .pg:last-child{{page-break-after:auto}}
 .art{{position:absolute;left:0;top:0;width:297mm;height:210mm}}
-.eb{{font-family:Poppins;font-weight:800;letter-spacing:.9mm;font-size:8pt;color:{th['gold']}}}
+.eb{{font-family:Poppins;font-weight:800;letter-spacing:.9mm;font-size:8.5pt;color:{th['gold']}}}
 .hd{{position:absolute;top:7mm;left:12mm;right:12mm;display:flex;align-items:flex-start;gap:6mm;z-index:3}}
 .hd .t{{flex:1;min-width:0}}
 .hd h1{{font-weight:900;font-size:21pt;line-height:1.25}}
@@ -78,14 +84,14 @@ html[lang=en] body{{font-family:Cairo,Poppins,sans-serif}}
 .hd .side{{display:flex;align-items:center;gap:2.4mm}}
 .tag{{font-size:8.5pt;font-weight:900;padding:.8mm 3.2mm;border-radius:10mm;border:.3mm solid {th['g3']};color:{th['g1']};background:{th['card']}}}
 .tag.ex{{background:{th['g2']};color:#FBF8F0;border-color:{th['g2']}}}
-.ft{{position:absolute;left:12mm;right:12mm;bottom:3.6mm;height:6mm;display:flex;align-items:center;justify-content:space-between;font-size:7.5pt;color:{th['mu']};z-index:3}}
-.ft .sg{{position:absolute;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:1.6mm;font-family:Poppins,Cairo;font-weight:800;letter-spacing:.35mm;font-size:7.6pt;color:{th['ink']};white-space:nowrap}}
+.ft{{position:absolute;left:12mm;right:12mm;bottom:3.6mm;height:6mm;display:flex;align-items:center;justify-content:space-between;font-size:8.5pt;color:{th['mu']};z-index:3}}
+.ft .sg{{position:absolute;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:1.6mm;font-family:Poppins,Cairo;font-weight:800;letter-spacing:.35mm;font-size:8.5pt;color:{th['ink']};white-space:nowrap}}
 .ft a{{color:{th['g2']};text-decoration:none;font-weight:900;border:.3mm solid {th['g3']};border-radius:10mm;padding:.3mm 3mm;background:{th['card']}}}
 .ft.dk,.ft.dk .sg{{color:#EFE9DA}}
-.tip{{position:absolute;left:14mm;right:14mm;bottom:10.6mm;text-align:center;font-size:8pt;color:{th['mu']};z-index:3}}
+.tip{{position:absolute;left:14mm;right:14mm;bottom:10.6mm;text-align:center;font-size:8.5pt;color:{th['mu']};z-index:3}}
 .bx{{position:absolute;background:{th['card']};border:.35mm solid {th['line']};border-radius:3mm;padding:1.8mm 2.6mm 1.6mm;display:flex;flex-direction:column;z-index:2;overflow:hidden}}
-.bx .lb{{font-size:7pt;font-weight:900;color:{th['gold']};line-height:1.3;display:flex;align-items:center;gap:1.4mm;white-space:nowrap}}
-.bx .lb b{{display:inline-grid;place-items:center;min-width:4.2mm;height:4.2mm;border-radius:1.2mm;background:{th['g2']};color:#FBF8F0;font-family:Poppins;font-size:6.6pt;padding:0 .8mm}}
+.bx .lb{{font-size:8.5pt;font-weight:900;color:{th['gold']};line-height:1.3;display:flex;align-items:center;gap:1.4mm;white-space:nowrap}}
+.bx .lb b{{display:inline-grid;place-items:center;min-width:4.8mm;height:4.8mm;border-radius:1.2mm;background:{th['g2']};color:#FBF8F0;font-family:Poppins;font-size:8.5pt;padding:0 .8mm}}
 .fc{{flex:1;display:flex;flex-direction:column;justify-content:center;padding-bottom:1.5mm}}
 .bx .tt{{font-size:12.5pt;font-weight:900;line-height:1.35;margin-top:.4mm}}
 .bx .ds{{font-size:9.8pt;color:{th['mu']};line-height:1.4}}
@@ -93,23 +99,25 @@ html[lang=en] body{{font-family:Cairo,Poppins,sans-serif}}
 .bx li{{font-size:10.6pt;font-weight:900;line-height:1.55;display:flex;gap:1.6mm;align-items:baseline}}
 .bx li:before{{content:'';flex:none;width:1.6mm;height:1.6mm;border-radius:.4mm;background:{th['gold2']};transform:translateY(-.3mm)}}
 .bx .ln{{flex:1;margin-top:.6mm;background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 6.2mm,{th['rule']} 6.2mm,{th['rule']} 6.5mm)}}
-.bx .hint{{font-size:6.8pt;color:{th['mu']};opacity:.8;line-height:1.3}}
+.bx .hint{{font-size:8.5pt;color:{th['mu']};opacity:.8;line-height:1.3}}
 .bx.gold{{background:{th['gold2']};border-color:{th['gold2']}}}.bx.gold .lb{{color:#3B2A06}}.bx.gold .tt{{color:#14150F}}
 .bx.gold .ln{{background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 6.2mm,rgba(20,21,15,.35) 6.2mm,rgba(20,21,15,.35) 6.5mm)}}
 .bx.core{{border-color:{th['pu']};border-width:.5mm}}.bx.core .lb{{color:{th['pu']}}}
 .bx.ice{{background:transparent;border:none;padding:2mm 3mm}}
 .bx.center{{text-align:center;align-items:center;justify-content:center;background:{th['g1']};border-color:{th['g1']};color:#FBF8F0;border-radius:50%}}
-.bx.center .lb{{color:{th['gold2']}}}.bx.center .tt{{font-size:10.5pt}}.bx.center .fc{{padding-bottom:0}}
+.bx.center .lb{{color:{th['gold2']}}}
+.bx.center.open{{background:{th['card']};border:.6mm solid {th['g1']};color:{th['ink']}}}.bx.center.open .lb{{color:{th['gold']}}}
+.bx.center.open .ln{{background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 6.2mm,{th['rule']} 6.2mm,{th['rule']} 6.5mm)}}.bx.center .tt{{font-size:10.5pt}}.bx.center .fc{{padding-bottom:0}}
 .bx.center .ln{{width:100%;background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 6.2mm,rgba(246,227,168,.55) 6.2mm,rgba(246,227,168,.55) 6.5mm)}}
 .zone{{position:absolute;z-index:2;font-size:9.5pt;font-weight:900;color:{th['zone']};line-height:1.3}}
-.zone small{{display:block;font-size:7.4pt;opacity:.85;font-weight:700}}
+.zone small{{display:block;font-size:8.5pt;opacity:.85;font-weight:700}}
 .badge{{position:absolute;z-index:3;width:8mm;height:8mm;margin:-4mm 0 0 -4mm;border-radius:50%;display:grid;place-items:center;font-family:Poppins;font-weight:800;font-size:9.5pt;border:.6mm solid {th['bg']}}}
 .pill{{position:absolute;z-index:3;font-size:8.5pt;font-weight:900;padding:.6mm 3mm;border-radius:10mm;background:{th['card']};border:.3mm solid {th['line']};color:{th['mu']};transform:translate(-50%,-50%);white-space:nowrap}}
 .dark{{background:radial-gradient(120% 100% at 50% 120%,#2E5C43 0,#1A2A20 50%,#14150F 100%);color:#EFE9DA}}
 .chips{{display:flex;gap:2.2mm;flex-wrap:wrap;font-size:10pt;font-weight:900}}
 .chips span{{padding:1.2mm 4mm;border-radius:20mm;border:.3mm solid rgba(232,182,74,.6)}}
 .card{{background:{th['card']};border:.35mm solid {th['line']};border-radius:4mm}}
-""" + (PRINT_CSS if th is THEMES['print'] else '')
+""" + (PRINT_CSS if th['print'] else '')
 
 
 # ------------------------------------------------------------------ helpers
@@ -164,7 +172,7 @@ def draw_tree(p, th, c, ex):
         p.svg.append(f'<path d="M{cx} 152 Q{(cx + x + 35) / 2:.1f} 158 {x + 35:.1f} {y:.1f}" stroke="{th["trunk"]}" stroke-width="1.6" fill="none" opacity=".75"/>')
     p.svg.append(f'<circle cx="{cx}" cy="45" r="3" fill="{th["gold2"]}"/>')
     # boxes
-    p.box(110, 28, 77, 20, L['fruit'], filled(ex['fruit']) if ex else lines(), 'gold')
+    p.box(104.5, 27, 88, 22, L['fruit'], filled(ex['fruit']) if ex else lines(), 'gold')
     for i, (x, y) in enumerate(bpos):
         bw, bh = (59, 30) if i == 2 else (72, 34)
         p.box(x, y, bw, bh, L['branch'], filled(*ex['branches'][i]) if ex else lines(), num=i + 1)
@@ -178,11 +186,12 @@ def draw_iceberg(p, th, c, ex):
     p.svg.append(f'<defs><linearGradient id="wt" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="{th["water1"]}"/><stop offset=".55" stop-color="{th["water2"]}"/>'
                  f'<stop offset="1" stop-color="{th["water3"]}"/></linearGradient>'
                  f'<linearGradient id="ic" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="{th["ice"]}"/><stop offset="1" stop-color="{th["ice2"]}"/></linearGradient></defs>')
-    p.svg.append(f'<rect x="0" y="{sea}" width="{W}" height="{196 - sea}" fill="url(#wt)"/>')
+    bt = th['bottom']; dy = bt - 196
+    p.svg.append(f'<rect x="0" y="{sea}" width="{W}" height="{bt - sea}" fill="url(#wt)"/>')
     p.svg.append(f'<path d="M0 {sea} Q20 {sea - 2.4} 40 {sea} T80 {sea} T120 {sea} T160 {sea} T200 {sea} T240 {sea} T280 {sea} T320 {sea}" stroke="{th["gold2"]}" stroke-width=".8" fill="none"/>')
-    st = f'stroke="{th["g1"]}" stroke-width=".6"' if th is THEMES['print'] else 'stroke="#CFC3A2" stroke-width=".5"'
+    st = f'stroke="{th["g1"]}" stroke-width=".6"' if th['print'] else 'stroke="#CFC3A2" stroke-width=".5"'
     p.svg.append(f'<path d="M106 {sea} L124 54 L136 60 L150 33 L170 56 L178 50 L192 {sea}Z" fill="{th["ice"]}" {st}/>')
-    p.svg.append(f'<path d="M106 {sea} L80 108 L70 148 L90 184 L150 192 L208 182 L228 146 L216 106 L192 {sea}Z" fill="url(#ic)" opacity=".94" {st}/>')
+    p.svg.append(f'<path d="M106 {sea} L80 108 L70 148 L90 {184 + dy} L150 {192 + dy} L208 {182 + dy} L228 146 L216 106 L192 {sea}Z" fill="url(#ic)" opacity=".94" {st}/>')
     p.svg.append(f'<line x1="106" y1="{sea}" x2="192" y2="{sea}" stroke="{th["gold2"]}" stroke-width=".5" opacity=".7"/>')
     p.box(200, 30, 82, 44, L['top'], filled(items=ex['top']) if ex else lines())
     p.box(15, 30, 82, 44, L['insight'], filled(ex['insight']) if ex else lines(), 'gold')
@@ -209,13 +218,17 @@ def draw_roadmap(p, th, c, ex):
         p.badge(x, y, k + 1, *ramp[k])
     # obstacle marker on the road between stage 3 and 4
     ox, oy = pt(0.585)
-    p.svg.append(f'<path d="M{ox - 3.6:.1f} {oy + 3:.1f} L{ox:.1f} {oy - 3.6:.1f} L{ox + 3.6:.1f} {oy + 3:.1f}Z" fill="#C2452F" stroke="{th["bg"]}" stroke-width=".5"/>')
+    p.svg.append(f'<path d="M{ox - 3.6:.1f} {oy + 3:.1f} L{ox:.1f} {oy - 3.6:.1f} L{ox + 3.6:.1f} {oy + 3:.1f}Z" fill="{th["gold2"]}" stroke="#14150F" stroke-width=".6" stroke-linejoin="round"/>'
+                 f'<text x="{ox:.1f}" y="{oy + 2.1:.1f}" text-anchor="middle" font-family="Poppins" font-weight="800" font-size="3.6" fill="#14150F">!</text>')
+    ly = 86  # leader: triangle → up to a lane between the boxes and the road → across → up into the obstacle box
+    p.svg.append(f'<path d="M{ox:.1f} {oy - 4.4:.1f} L{ox:.1f} {ly} L36 {ly} L36 76.5" stroke="#14150F" stroke-width=".55" stroke-dasharray="1.6 1.1" fill="none"/>'
+                 f'<circle cx="36" cy="76.5" r=".9" fill="#14150F"/>')
     p.box(12, 38, 48, 38, '⚠ ' + L['block'], filled(*ex['block']) if ex else lines(), 'core')
     # goal flag
     gx, gy = pt(1)
-    p.svg.append(f'<line x1="{gx:.1f}" y1="{gy:.1f}" x2="{gx:.1f}" y2="{gy + 22:.1f}" stroke="{th["ink"]}" stroke-width="1"/>'
-                 f'<path d="M{gx:.1f} {gy + 22:.1f} L{gx - 11:.1f} {gy + 26:.1f} L{gx:.1f} {gy + 30:.1f}Z" fill="{th["gold2"]}"/>'
-                 f'<line x1="{gx:.1f}" y1="{gy + 22:.1f}" x2="{gx:.1f}" y2="{gy + 40:.1f}" stroke="{th["ink"]}" stroke-width="1"/>')
+    p.svg.append(f'<line x1="{gx:.1f}" y1="{gy + 1:.1f}" x2="{gx:.1f}" y2="{gy - 20:.1f}" stroke="#14150F" stroke-width="1" stroke-linecap="round"/>'
+                 f'<path d="M{gx:.1f} {gy - 20:.1f} L{gx - 11:.1f} {gy - 16:.1f} L{gx:.1f} {gy - 12:.1f}Z" fill="{th["gold2"]}" stroke="#14150F" stroke-width=".4" stroke-linejoin="round"/>'
+                 f'<line x1="{gx:.1f}" y1="{gy + 7:.1f}" x2="{gx:.1f}" y2="158" stroke="{th["g3"]}" stroke-width=".5" stroke-dasharray="1.2 1"/>')
     p.box(12, 158, 84, 28, L['goal'], filled(ex['goal']) if ex else lines(), 'gold')
     sx, sy = pt(0); p.pill(sx - 3, sy + 14, L['start'])
 
@@ -234,7 +247,7 @@ def draw_cycle(p, th, c, ex):
         p.svg.append(f'<path d="M{x0:.1f} {y0:.1f} A{rx} {ry} 0 0 0 {x1:.1f} {y1:.1f}" stroke="{th["gold"]}" stroke-width="1.6" fill="none" marker-end="url(#ar)"/>')
     for k, (x, y) in enumerate(pts):
         p.box(x - 31, y - 15, 62, 30, L['stage'], filled(*ex['stages'][k]) if ex else lines(), num=k + 1)
-    p.box(cx - 36, cy - 17, 72, 34, L['center'], filled(ex['center']) if ex else lines(), 'center')
+    p.box(cx - 36, cy - 17, 72, 34, L['center'], filled(ex['center']) if ex else lines(), 'center' if ex else 'center open')
 
 
 DRAW = {'tree': draw_tree, 'iceberg': draw_iceberg, 'roadmap': draw_roadmap, 'cycle': draw_cycle}
@@ -330,11 +343,19 @@ def screen_sections(lang, thumbs):
 
 
 def print_sections(lang):
-    S = [print_cover(lang)]
+    S = [print_cover(lang), notes_page(lang)]
     for i, k in enumerate(ORDER):
-        S += [template_page(lang, 'print', k, i, 'ex', 2 + 2 * i, anchor=False, link=False),
-              template_page(lang, 'print', k, i, 'blank', 3 + 2 * i, anchor=False, link=False)]
+        S += [template_page(lang, 'print', k, i, 'ex', 3 + 2 * i, anchor=False, link=False),
+              template_page(lang, 'print', k, i, 'blank', 4 + 2 * i, anchor=False, link=False)]
     return S
+
+
+def notes_page(lang):
+    """Page 2 of the print file (back of the cover): signed notes page, keeps every template on one sheet when printed double-sided."""
+    u = UI[lang]; th = THEMES['print']
+    return f'''<section class="pg" dir="{u["dir"]}"><div class="hd"><div class="t"><div class="eb">{u["product"]} · {u["product_sub"]}</div><h1>{u["notes_t"]}</h1></div><div class="side">{logo("11mm")}</div></div>
+<div class="card" style="position:absolute;top:34mm;left:16mm;right:16mm;bottom:22mm;padding:4mm 7mm"><div style="height:100%;background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 9.2mm,{th["rule"]} 9.2mm,{th["rule"]} 9.5mm)"></div></div>
+{footer(u, 2, " · " + u["print_t"], link=False)}</section>'''
 
 
 def print_doc(lang, sections):

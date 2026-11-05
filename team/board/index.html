@@ -1,0 +1,245 @@
+<title>مكتب إيلان دول</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@500;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: an office floor plan — «ينتظرك» desk first, then staff row, task lanes, and the event log. Cube grid motif from the Eilan logo. */
+:root{
+  --bg:#f3eee3; --surface:#fbf8f1; --line:#ddd4c2; --fg:#1d211c; --muted:#6b6a5c;
+  --green:#1f4a35; --green-2:#3d7452; --purple:#3e2350; --gold:#b98a2e; --cream:#efe6d2;
+  --ok:#2f6b45; --warn:#a2701a; --bad:#9b3b2f;
+  --f-display:"Reem Kufi","IBM Plex Sans Arabic",system-ui,sans-serif;
+  --f-body:"IBM Plex Sans Arabic",system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;
+  --f-num:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#141613; --surface:#1c1f1b; --line:#2e332c; --fg:#ede5d3; --muted:#9d9a88;
+  --green:#5f9a74; --green-2:#87b893; --purple:#a98cc2; --gold:#d8ac52; --cream:#2a2b24;
+  --ok:#7cb98d; --warn:#dcaa4d; --bad:#e07f6e; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141613; --surface:#1c1f1b; --line:#2e332c; --fg:#ede5d3; --muted:#9d9a88;
+  --green:#5f9a74; --green-2:#87b893; --purple:#a98cc2; --gold:#d8ac52; --cream:#2a2b24;
+  --ok:#7cb98d; --warn:#dcaa4d; --bad:#e07f6e; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.6;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 48px}
+.wrap{max-width:1120px;margin:0 auto;display:flex;flex-direction:column;gap:28px}
+h1,h2{font-family:var(--f-display);font-weight:700;text-wrap:balance;margin:0}
+h1{font-size:1.75rem;color:var(--green)}
+h2{font-size:1.15rem;display:flex;align-items:center;gap:10px}
+.num{font-family:var(--f-num);font-variant-numeric:tabular-nums}
+.muted{color:var(--muted)}
+button{font:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+
+/* header */
+header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px}
+.brand{display:flex;align-items:center;gap:14px}
+.cubes{display:grid;grid-template-columns:repeat(3,12px);gap:3px;position:relative}
+.cubes i{width:12px;height:12px;border-radius:3px;background:var(--green)}
+.cubes i:nth-child(2),.cubes i:nth-child(4){background:var(--green-2)}
+.cubes i:nth-child(5){background:var(--purple)}
+.cubes i:nth-child(7),.cubes i:nth-child(9){background:var(--cream);box-shadow:inset 0 0 0 1px var(--line)}
+.cubes i:nth-child(3){background:transparent;outline:1px dashed var(--line);outline-offset:-1px}
+.cubes b{position:absolute;width:12px;height:12px;border-radius:3px;background:var(--gold);top:-8px;left:-8px}
+.sub{font-size:.85rem;color:var(--muted)}
+.countdown{display:flex;align-items:baseline;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 16px}
+.countdown .num{font-size:1.6rem;color:var(--gold)}
+
+/* waiting desk */
+.desk{background:var(--surface);border:1px solid var(--line);border-inline-start:4px solid var(--gold);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:14px}
+.badge{font-family:var(--f-num);font-size:.8rem;background:var(--gold);color:#1d1a12;border-radius:999px;padding:1px 9px}
+.needs{display:grid;gap:12px}
+.need{border:1px solid var(--line);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:8px;background:var(--bg)}
+.need-top{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.need h3{margin:0;font-size:1rem;font-weight:600;flex:1 1 220px;min-width:0}
+.kind{font-size:.78rem;border-radius:999px;padding:1px 10px;border:1px solid var(--purple);color:var(--purple)}
+.kind.money{border-color:var(--bad);color:var(--bad)}
+.need p{margin:0;color:var(--muted);font-size:.92rem;white-space:pre-line}
+.need a{color:var(--green);word-break:break-all}
+.actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.actions textarea{flex:1 1 100%;min-height:44px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--fg);padding:8px;font:inherit;resize:vertical}
+.btn{border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:8px;padding:6px 14px}
+.btn.yes{background:var(--green);border-color:var(--green);color:var(--bg)}
+.btn.no{color:var(--bad);border-color:var(--bad)}
+.btn[disabled]{opacity:.5;cursor:default}
+.decided{font-size:.85rem}
+.empty{color:var(--muted);font-size:.92rem;padding:6px 0}
+
+/* staff */
+.staff{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.person{border:1px solid var(--line);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:6px;background:var(--surface);min-width:0}
+.person strong{font-size:.95rem}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--muted);margin-inline-end:6px}
+.dot.on{background:var(--ok)} .dot.stop{background:var(--bad)} .dot.idle{background:var(--gold)}
+.lv{display:flex;justify-content:space-between;font-size:.8rem;color:var(--muted)}
+.bar{height:5px;border-radius:3px;background:var(--line);overflow:hidden}
+.bar span{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--green-2))}
+.cur{font-size:.82rem;color:var(--muted);overflow-wrap:anywhere}
+
+/* tasks */
+.lanes{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.lane{display:flex;flex-direction:column;gap:8px;min-width:0}
+.lane h4{margin:0;font-size:.85rem;font-weight:600;color:var(--muted);letter-spacing:.02em;display:flex;justify-content:space-between}
+.task{border:1px solid var(--line);border-radius:8px;padding:10px;background:var(--surface);display:flex;flex-direction:column;gap:4px}
+.task .t{font-size:.92rem;font-weight:500;overflow-wrap:anywhere}
+.task .m{font-size:.78rem;color:var(--muted);display:flex;flex-wrap:wrap;gap:8px}
+.pri-عالية{border-inline-start:3px solid var(--bad)}
+.dept{font-family:var(--f-num);font-size:.75rem;color:var(--purple)}
+
+/* events */
+.log{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.log li{display:grid;grid-template-columns:88px 70px 1fr;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:.9rem;align-items:baseline}
+.log li > *{min-width:0}
+.log time{font-size:.78rem;color:var(--muted)}
+.etype{font-size:.75rem;color:var(--green)}
+.status{font-size:.8rem;color:var(--muted)}
+.status.warn{color:var(--warn)}
+@media (max-width:520px){.log li{grid-template-columns:1fr;gap:2px}}
+@media (prefers-reduced-motion:no-preference){.need{transition:opacity .2s}}
+</style>
+
+<div class="wrap" dir="rtl" lang="ar">
+  <header>
+    <div class="brand">
+      <div class="cubes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><b></b></div>
+      <div>
+        <h1>مكتب إيلان دول</h1>
+        <div class="sub" id="today"></div>
+      </div>
+    </div>
+    <div class="countdown"><span class="num" id="days">–</span><span>يوم على افتتاح عالم إيلان<br><span class="sub">الجمعة 1 يناير 2027</span></span></div>
+  </header>
+
+  <div class="status" id="conn" role="status">جارٍ تحميل اللوحة…</div>
+
+  <section class="desk" aria-labelledby="h-needs">
+    <h2 id="h-needs">ينتظرك <span class="badge" id="needCount">0</span></h2>
+    <div class="needs" id="needs"><div class="empty">ما فيه طلبات تنتظرك الحين. أي نشر أو إرسال أو صرف أو تغيير إعدادات بيظهر هنا قبل التنفيذ.</div></div>
+    <details id="pastWrap" hidden><summary class="muted">قرارات سابقة</summary><div class="needs" id="past" style="margin-top:10px"></div></details>
+  </section>
+
+  <section aria-labelledby="h-staff">
+    <h2 id="h-staff" style="margin-bottom:12px">الفريق</h2>
+    <div class="staff" id="staff"><div class="empty">الأقسام بتظهر هنا أول ما تتسجل.</div></div>
+  </section>
+
+  <section aria-labelledby="h-tasks">
+    <h2 id="h-tasks" style="margin-bottom:12px">المهام</h2>
+    <div class="lanes" id="lanes"></div>
+  </section>
+
+  <section aria-labelledby="h-log">
+    <h2 id="h-log" style="margin-bottom:8px">سجل الأحداث</h2>
+    <ul class="log" id="log"><li><span></span><span></span><span class="muted">ما فيه أحداث بعد.</span></li></ul>
+  </section>
+</div>
+
+<script>
+const LANES=["جديدة","فهم","شغل","فحص","ينتظر المالكة","متوقفة","خلصت"];
+const LEVELS=[0,50,120,220,350,520,730,1000,1350,1800];
+const TITLES=["متدرب","مبتدئ","موظف","موظف أول","متخصص","خبير","قائد فريق","مشرف","رئيس قسم","شريك"];
+const ORDER=["ceo","web","products","studio","marketing","support","qa"];
+const MONEY=new Set(["صرف","كلمة سر","إعدادات"]);
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+// Riyadh time, 12-hour, Gregorian
+function riyadh(d){const x=new Date(d);return new Date(x.getTime()+(x.getTimezoneOffset()+180)*60000)}
+function t12(iso){if(!iso)return"";const d=riyadh(iso);let h=d.getHours(),m=String(d.getMinutes()).padStart(2,"0");const s=h<12?"ص":"م";h=h%12||12;return `${h}:${m} ${s}`}
+const MON=["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"];
+const DAY=["الأحد","الاثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"];
+function dshort(iso){const d=riyadh(iso);return `${d.getDate()} ${MON[d.getMonth()]}`}
+function stamp(iso){return `${dshort(iso)} · ${t12(iso)}`}
+function levelOf(xp){let l=1;LEVELS.forEach((v,i)=>{if(xp>=v)l=i+1});return l}
+
+(function header(){
+  const n=riyadh(Date.now());
+  $("today").textContent=`${DAY[n.getDay()]} ${n.getDate()} ${MON[n.getMonth()]} ${n.getFullYear()}`;
+  const open=Date.UTC(2026,11,31,21,0,0); // 1 Jan 2027 12:00 ص الرياض
+  $("days").textContent=Math.max(0,Math.ceil((open-Date.now())/86400000));
+})();
+
+let state={staff:[],tasks:[],events:[],needs:[]},isOwner=false,db=null;
+
+function renderNeeds(){
+  const open=state.needs.filter(n=>n.status==="ينتظر"||!n.status);
+  const done=state.needs.filter(n=>n.status&&n.status!=="ينتظر").sort((a,b)=>String(b.decided).localeCompare(String(a.decided)));
+  $("needCount").textContent=open.length;
+  $("needs").innerHTML=open.length?open.sort((a,b)=>String(a.created).localeCompare(String(b.created))).map(n=>`
+    <article class="need" data-id="${esc(n.id)}">
+      <div class="need-top"><h3>${esc(n.title)}</h3><span class="kind ${MONEY.has(n.kind)?"money":""}">${esc(n.kind||"قرار")}</span><span class="dept">${esc(n.dept)}</span></div>
+      <p>${esc(n.detail)}</p>
+      ${n.link?`<a href="${esc(n.link)}" target="_blank" rel="noopener">${esc(n.link)}</a>`:""}
+      <span class="sub">${n.created?stamp(n.created):""}</span>
+      ${isOwner?`<div class="actions">
+        <textarea id="note-${esc(n.id)}" placeholder="ملاحظة (اختياري، ومطلوبة مع «تعديل»)"></textarea>
+        <button class="btn yes" data-act="موافقة">موافقة</button>
+        <button class="btn" data-act="تعديل">تعديل</button>
+        <button class="btn no" data-act="رفض">رفض</button>
+        <span class="sub" data-msg></span></div>`:`<span class="sub">الرد للمالكة فقط.</span>`}
+    </article>`).join(""):`<div class="empty">ما فيه طلبات تنتظرك الحين. أي نشر أو إرسال أو صرف أو تغيير إعدادات بيظهر هنا قبل التنفيذ.</div>`;
+  $("pastWrap").hidden=!done.length;
+  $("past").innerHTML=done.slice(0,20).map(n=>`<article class="need"><div class="need-top"><h3>${esc(n.title)}</h3><span class="kind">${esc(n.status)}</span></div>
+    ${n.reply?`<p>${esc(n.reply)}</p>`:""}<span class="decided muted">${n.decided?stamp(n.decided):""}</span></article>`).join("");
+}
+function renderStaff(){
+  if(!state.staff.length)return;
+  const s=[...state.staff].sort((a,b)=>ORDER.indexOf(a.code)-ORDER.indexOf(b.code));
+  $("staff").innerHTML=s.map(p=>{
+    const xp=+p.xp||0,l=levelOf(xp),lo=LEVELS[l-1],hi=LEVELS[l]??lo,pct=hi>lo?Math.round((xp-lo)/(hi-lo)*100):100;
+    const dc=p.status==="يشتغل"?"on":p.status==="متوقف"?"stop":p.status==="متاح"?"idle":"";
+    return `<div class="person"><strong><span class="dot ${dc}"></span>${esc(p.name)}</strong>
+      <span class="sub">${esc(p.status||"غير متصل")}</span>
+      <div class="lv"><span>م${l} · ${TITLES[l-1]}</span><span class="num">${xp} XP</span></div>
+      <div class="bar"><span style="width:${pct}%"></span></div>
+      <span class="cur">${esc(p.current||"—")}</span></div>`}).join("");
+}
+function renderTasks(){
+  $("lanes").innerHTML=LANES.map(st=>{
+    let ts=state.tasks.filter(t=>(t.status||"جديدة")===st);
+    if(st==="خلصت")ts=ts.sort((a,b)=>String(b.updated).localeCompare(String(a.updated))).slice(0,8);
+    else ts=ts.sort((a,b)=>String(a.due||"z").localeCompare(String(b.due||"z")));
+    if(!ts.length&&(st==="متوقفة"||st==="فهم"||st==="فحص"))return"";
+    return `<div class="lane"><h4><span>${st}</span><span class="num">${ts.length}</span></h4>
+      ${ts.map(t=>`<div class="task pri-${esc(t.priority)}"><span class="t">${esc(t.title)}</span>
+        <span class="m"><span class="dept">${esc(t.dept)}</span>${t.due?`<span>التسليم: ${stamp(t.due)}</span>`:""}</span>
+        ${t.note?`<span class="m">${esc(t.note)}</span>`:""}</div>`).join("")||`<div class="empty">—</div>`}</div>`}).join("");
+}
+function renderLog(){
+  const ev=[...state.events].sort((a,b)=>String(b.at).localeCompare(String(a.at))).slice(0,40);
+  if(!ev.length)return;
+  $("log").innerHTML=ev.map(e=>`<li><time>${e.at?stamp(e.at):""}</time><span class="etype">${esc(e.type)} · ${esc(e.dept)}</span><span>${esc(e.text)}${e.xp?` <span class="num" style="color:var(--gold)">+${esc(e.xp)} XP</span>`:""}</span></li>`).join("");
+}
+const R={staff:renderStaff,tasks:renderTasks,events:renderLog,needs:renderNeeds};
+renderTasks();
+
+$("needs").addEventListener("click",async e=>{
+  const b=e.target.closest("button[data-act]");if(!b||!db)return;
+  const card=b.closest(".need"),id=card.dataset.id,act=b.dataset.act;
+  const note=(document.getElementById("note-"+id)?.value||"").trim(),msg=card.querySelector("[data-msg]");
+  if(act==="تعديل"&&!note){msg.textContent="اكتبي وش التعديل المطلوب في الملاحظة.";return}
+  card.querySelectorAll("button").forEach(x=>x.disabled=true);msg.textContent="جارٍ الحفظ…";
+  const now=new Date().toISOString(),n=state.needs.find(x=>x.id===id)||{};
+  try{
+    await db.collection("needs").doc(id).update({status:act,reply:note,decided:now});
+    await db.collection("events").add({dept:"owner",type:"قرار",text:`${act}: ${n.title||id}${note?` — ${note}`:""}`,at:now});
+  }catch(err){msg.textContent="ما انحفظ الرد. تأكدي من الاتصال وجربي مرة ثانية.";card.querySelectorAll("button").forEach(x=>x.disabled=false)}
+});
+
+(async()=>{
+  if(!window.claude?.use){$("conn").textContent="اللوحة تحتاج تنفتح من Claude عشان تشوفين البيانات الحية.";return}
+  const [d,u]=await Promise.all([claude.use("db"),claude.use("user")]);
+  isOwner=u?(await u.isOwner()):false;
+  if(!d){$("conn").textContent="ما قدرت أوصل لقاعدة البيانات. سجّلي دخول في Claude وافتحي اللوحة مرة ثانية.";return}
+  db=d;let fresh=new Set();
+  const timer=setTimeout(()=>{$("conn").textContent="البيانات تأخرت، وممكن اللي ظاهر قديم.";$("conn").classList.add("warn")},10000);
+  for(const c of ["staff","tasks","events","needs"]){
+    db.collection(c).onSnapshot(s=>{
+      state[c]=s.docs.map(x=>({id:x.id,...x.data()}));R[c]();
+      if(!s.metadata.fromCache){fresh.add(c);if(fresh.size===4){clearTimeout(timer);$("conn").textContent=`محدّث · ${t12(new Date().toISOString())}`;$("conn").classList.remove("warn")}}
+    },()=>{clearTimeout(timer);$("conn").textContent="انقطع الاتصال باللوحة. افتحيها من جديد.";$("conn").classList.add("warn")});
+  }
+})();
+</script>

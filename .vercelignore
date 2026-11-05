@@ -10,3 +10,10 @@ coloring/src/
 # internal company handbook for the AI team (never published on the live site)
 team/
 CLAUDE.md
+
+# paid coloring book: PDF, full-size page PNGs, line art and web-build template
+# (the interactive book coloring-book.html has its pages built in, so it keeps working)
+coloring/book/
+coloring/pages/
+coloring/assets/
+coloring/web/

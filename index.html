@@ -550,6 +550,7 @@ label.f{display:block;font-size:12.5px;color:var(--mu);margin-bottom:6px;font-we
 
 /* ============ TEAM ============ */
 .team-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-bottom:22px}
+.hq-cubes{position:relative;display:grid;grid-template-columns:repeat(3,14px);gap:4px;padding-top:8px}.hq-cubes i{width:14px;height:14px;border-radius:3px;background:#2f6b45}.hq-cubes i:nth-child(2),.hq-cubes i:nth-child(4){background:#4f9467}.hq-cubes i:nth-child(5){background:#4b2a63}.hq-cubes i:nth-child(7),.hq-cubes i:nth-child(8){background:#efe6d2}.hq-cubes i:nth-child(3){background:transparent;outline:1px dashed rgba(239,230,210,.25)}.hq-cubes b{position:absolute;top:0;left:-6px;width:14px;height:14px;border-radius:3px;background:#d8ac52;box-shadow:0 0 12px #d8ac52}
 .agent{padding:16px 12px;text-align:center;position:relative;transition:.3s}
 .agent .aav{width:58px;height:58px;margin:0 auto 10px;border-radius:18px;display:grid;place-items:center;font-size:28px;position:relative;background:linear-gradient(135deg,var(--ac),#12130f)}
 .agent .aav::after{content:"";position:absolute;bottom:-3px;left:-3px;width:14px;height:14px;border-radius:50%;background:var(--g);border:3px solid #12130f}
@@ -6494,6 +6495,15 @@ function gtOpen(d){const j=gtJob(d.id);if(!j)return;const ag=k=>`${gtAg(k).e} ${
   return h};
  P.team.mount=r=>{m0&&m0(r);gtRender();gtRecover()}}
 {const r0=teamRefresh;teamRefresh=function(){r0();gtRender()}}
+/* ---------- live AI company HQ (real Claude team) — owner-only page ---------- */
+const HQ_URL='https://claude.ai/artifact/X3KQJJs22r24BbAUrGNVRo';
+function hqCardHTML(){return `<div class="card hq-card" style="padding:20px;margin-bottom:18px;display:flex;flex-wrap:wrap;gap:18px;align-items:center;border-color:rgba(216,172,82,.45)">
+  <div class="hq-cubes" aria-hidden="true">${'<i></i>'.repeat(9)}<b></b></div>
+  <div style="flex:1 1 260px;min-width:0"><div class="eyebrow">EILAN HQ · LIVE OFFICE</div>
+   <h3 style="margin:2px 0 6px">مقر إيلان الحي — فريقك الحقيقي</h3>
+   <p class="mu" style="font-size:13.5px;margin:0">شوفي الموظفين وهم يشتغلون، وأعطي أوامرك للمدير التنفيذي، ووافقي على اللي ينتظرك. أي نشر أو إرسال أو صرف ما يصير إلا بموافقتك.</p></div>
+  <a class="btn g" href="${HQ_URL}" target="_blank" rel="noopener" style="height:46px;display:inline-flex;align-items:center">ادخلي المقر الحي</a></div>`}
+{const h1=P.team.html;P.team.html=r=>{const h=h1(r);return h.replace('<div class="team-grid" id="tAgents">',hqCardHTML()+'<div class="team-grid" id="tAgents">')}}
 Object.assign(window.ACT2,{gtcommit:gtCommit,gtaccept:gtAccept,gtreject:gtReject,gtedit:gtEdit,gtcancel:gtCancel,gtstart:gtStart,gtidea:gtIdea,gtopen:gtOpen,
   gttab:d=>{gtTab=d.k;gtRender()}});
 

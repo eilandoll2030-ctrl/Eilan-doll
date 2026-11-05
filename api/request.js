@@ -7,7 +7,9 @@ module.exports = async (req, res) => {
   // Web3Forms access keys are public by design (they only send to the owner's email).
   const key = process.env.WEB3FORMS_KEY || '9931f90d-22da-4d79-a61f-ac5a98f52717';
   if (!key) { res.status(503).json({ off: true }); return; }
-  const b = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});
+  let b;
+  try { b = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {}); }
+  catch (e) { res.status(400).json({ ok: false, error: 'bad request body' }); return; }
   const data = { access_key: key, subject: 'طلب إضافة مشروع — إيلان دول ' + String(b.order || '').slice(0, 40), from_name: 'EILAN DOLL' };
   for (const f of FIELDS) data[f] = String(b[f] || '').slice(0, 1000);
   try {

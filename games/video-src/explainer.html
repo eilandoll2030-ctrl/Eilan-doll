@@ -31,7 +31,7 @@ body{font-family:Cairo,"Noto Color Emoji",sans-serif;color:#EFE9DA;position:rela
 .num{font-family:Poppins;font-weight:800;font-size:120px;line-height:.9;color:transparent;-webkit-text-stroke:2.4px #E8B64A;letter-spacing:2px}
 .ill{position:relative;height:460px;display:grid;place-items:center}
 .pill{display:inline-flex;align-items:center;gap:10px;padding:10px 22px;border-radius:999px;font-weight:900;font-size:24px;background:rgba(239,233,218,.06);border:1.5px solid rgba(79,132,96,.4)}
-.pill.g{background:linear-gradient(135deg,#E8B64A,#6DC27A);color:#14150F;border:0}
+.pill.g{background:linear-gradient(135deg,#E8B64A,#6FA37C);color:#14150F;border:0}
 .pill.o{border-color:rgba(232,182,74,.55);color:#E8B64A}
 .card{width:330px;height:430px;border-radius:30px;background:linear-gradient(160deg,#F6F1E3,#E9E1CB);color:#1F3A2B;padding:30px 28px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:18px;box-shadow:0 30px 70px -20px #000,0 0 0 1px rgba(232,182,74,.25);position:absolute}
 .card .ctag{font-family:Cairo;font-weight:900;font-size:17px;padding:5px 14px;border-radius:999px;background:#2F5A3D;color:#F6F1E3}
@@ -46,6 +46,11 @@ body{font-family:Cairo,"Noto Color Emoji",sans-serif;color:#EFE9DA;position:rela
 .ring{width:240px;height:240px;border-radius:50%;display:grid;place-items:center;font-family:Poppins;font-weight:800;font-size:90px}
 .phone{width:150px;height:270px;border-radius:30px;background:#0e0f0b;border:5px solid #3a3f2e;display:grid;place-items:center;position:absolute;box-shadow:0 30px 60px -20px #000}
 .phone .scr{width:118px;height:220px;border-radius:18px;background:linear-gradient(160deg,#F6F1E3,#E2D7B8);display:grid;place-items:center}
+body.en{font-family:Poppins,Cairo,"Noto Color Emoji",sans-serif}
+body.en .t1{font-weight:800;font-size:76px}body.en .t1 bdi{font-family:Cairo;font-weight:900}
+body.en .t2{font-weight:800;font-size:44px;line-height:1.2}body.en .t3{font-size:25px;line-height:1.5}
+body.en .card .cx{font-weight:800;font-size:28px;line-height:1.35}body.en .card .ctag{font-family:Poppins;font-weight:800}
+body.en .pill,body.en .chip{font-weight:800}
 .person{position:absolute;width:96px;height:96px;border-radius:50%;display:grid;place-items:center;font-weight:900;font-size:36px;color:#14150F}
 </style></head><body>
 <div id="bg"><div class="orb" style="width:620px;height:620px;background:#4F8460;opacity:.34;top:-220px;right:-140px" id="o1"></div><div class="orb" style="width:520px;height:520px;background:#E8B64A;opacity:.14;bottom:-240px;left:-160px" id="o2"></div><div class="grid" id="grid"></div></div>
@@ -53,12 +58,16 @@ body{font-family:Cairo,"Noto Color Emoji",sans-serif;color:#EFE9DA;position:rela
 <div id="stage"></div><div id="dots"></div>
 <script>
 const CUBE_PAT=/*CUBE_PAT*/{};const LOGO=/*LOGO*/"";
-const RAMP=['#F6E3A8','#E8B64A','#B9CC6A','#6DC27A','#1FB36B'];
+/* same sunrise ramp as the site icons (CUBE_RAMP in index.html): cream · gold · dark purple (touch) · green · dark green */
+const RAMP=/*CUBE_RAMP*/['#F6E3A8','#E8B64A','#4B2A7B','#6FA37C','#2F7A52'];
+const LANG=new URLSearchParams(location.search).get('l')==='en'?'en':'ar',EN=LANG==='en';
+if(EN){document.documentElement.lang='en';document.documentElement.dir='ltr';document.body.classList.add('en')}
+const L=(a,e)=>EN?e:a;
 document.getElementById('logo').src=LOGO;
 const $=s=>document.querySelector(s);
 const cl=(x,a=0,b=1)=>Math.max(a,Math.min(b,x));
 const ease=x=>{x=cl(x);return x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2};
-const back=x=>{x=cl(x);const c=1.6;return 1+(c+1)*Math.pow(x-1,3)+c*Math.pow(x-1,2)};
+const back=x=>{x=cl(x);const c=1.15;return 1+(c+1)*Math.pow(x-1,3)+c*Math.pow(x-1,2)};
 const ramp=(t,a,b)=>cl((t-a)/(b-a));
 /* cube icon with per-cube elements so they can fly in */
 function cubeIcon(key,size,bg=true){const rows=(CUBE_PAT[key]||CUBE_PAT.spark).split('|'),H=rows.length,W=rows[0].length;
@@ -78,7 +87,7 @@ const GAMES={
  guess:{ic:'g-guess',n:'خمّن؟',en:'Guess?',sub:'طلّع اسم البلد من الإيموجي والحروف',free:true,print:true,
   steps:[['يطلع لك إيموجي وحروف','ركّز في الصورة والحرف اللي جنبها',{k:'eq',a:'🐈',b:'ر',r:'؟؟'}],
          ['ركّبها وطلّع اسم البلد','قط + ر = قطر',{k:'eq',a:'🐈',b:'ر',r:'قطر'}],
-         ['وضع الجَمعة','المقدّم يكشف الجواب، واللي جاوب صح ياخذ تحدي ممتع',{k:'card',tag:'تحدي الفوز',x:'اللي جاوبت صح تختار الأغنية الجاية 🎵'}],
+         ['وضع الجَمعة','المقدّم يكشف الجواب، واللي جاوب صح ياخذ تحدي ممتع',{k:'card',tag:'تحدي الفوز',x:'صاحب الجواب الصح يختار الأغنية الجاية 🎵'}],
          ['وضع التحدي','لحالك: ٤ خيارات و١٥ ثانية — كل ما أسرعت زادت نقاطك',{k:'timer',n:15}]]},
  memory:{ic:'brain',n:'ذاكرة إيلان',en:'Eilan Memory',sub:'طابق الأزواج بأقل عدد حركات',paid:true,arc:true,
   steps:[['١٦ بطاقة مقلوبة','فيها ٨ أزواج من رموز المكعبات',{k:'mem',open:[]}],
@@ -95,7 +104,7 @@ const GAMES={
          ['المكعب يولّع… اضغطه!','قبل لا يطفي ويختفي',{k:'catch',on:[5]}],
          ['المكعبات تسرع مع الوقت','وكل ما قرب الوقت يخلص صارت أسرع',{k:'catch',on:[1,10,14]}],
          ['٥ ورا بعض = نقطتين','لكل مكعب بعدها — لا تضيّع ولا واحد',{k:'score',rows:[['سلسلة','5 🔥'],['النقاط','×2']]}]]},
- snake:{ic:'g-snake',n:'Neon Snake',en:'الثعبان',sub:'اللعبة الكلاسيكية بستايل إيلان',paid:true,arc:true,
+ snake:{ic:'g-snake',n:'الثعبان',en:'Neon Snake',sub:'اللعبة الكلاسيكية بستايل إيلان',paid:true,arc:true,
   steps:[['حرّك الثعبان','بالأسهم في الكيبورد أو بالأزرار على الشاشة',{k:'pad'}],
          ['كل النقطة','كل ما تاكل نقطة يطول الثعبان',{k:'snake'}],
          ['لا تصطدم!','لا بالجدار ولا بذيلك',{k:'icon',i:'warn'}],
@@ -116,7 +125,7 @@ const GAMES={
          ['واحد بس يكذب 🌶️','يألّف قصة ويكثّر بهارات… والباقين قصصهم حقيقية',{k:'card',tag:'موضوع القصة',x:'قصة من قوتها محد يصدقها؟'}],
          ['طلّعوا الكذاب!','كشفتوه؟ النقطة لكم — وبعدها الأدوار تنعكس',{k:'score',rows:[['فريق البهارات','3'],['فريق الملح','4 🏆']]}]]},
  mashaer:{ic:'love',n:'مشاعر',en:'Feelings',sub:'لعبة لشخصين عزيزين',paid:true,print:true,
-  steps:[['اختار شخص عزيز عليك','وتعرّفوا على بعض أكثر 💞',{k:'players',p:['أنتِ','هي']}],
+  steps:[['العبها مع شخص عزيز عليك','وتعرّفوا على بعض أكثر 💞',{k:'players',p:['أنا','أنت']}],
          ['أسئلة من القلب','جاوبوا بصراحة وبدون كذب',{k:'card',tag:'سؤال',x:'وش أول انطباع أخذته عني؟'}],
          ['لحظات مع بعض','بطاقات تسوونها سوا',{k:'card',tag:'لحظة',x:'طالعوا في عيون بعض ٣٠ ثانية… بدون ما تضحكون!'}],
          ['جواب مختصر = حكم 😏','ولا فيه «ما عندي إجابة»',{k:'card',tag:'حكم',x:'قلّد طريقة كلامه لمدة دقيقة'}]]},
@@ -126,7 +135,61 @@ const GAMES={
          ['تخطّيتين بس لكل لاعب','استخدمها بحكمة',{k:'score',rows:[['تخطّي','2 / 2'],['تخطّي','1 / 2']]}],
          ['خلّوا السؤال يدور على الكل','وكل واحد يجاوب بدوره',{k:'pass'}]]}};
 
-const G=GAMES[new URLSearchParams(location.search).get('g')||'guess'];
+/* ------------------------------------------------------------------ English versions (?l=en) — same scenes, English text */
+const GAMES_EN={
+ guess:{sub:'Find the country from emojis & letters',steps:[
+  ['You get an emoji and letters','Look at the picture and the letters next to it',{a:'👁️',b:'ran',r:'??'}],
+  ['Put them together','Eye + ran = Iran',{a:'👁️',b:'ran',r:'Iran'}],
+  ['Party mode','The host reveals the answer — whoever gets it right wins a fun challenge',{tag:"Winner's challenge",x:'You pick the next song 🎵'}],
+  ['Challenge mode','On your own: 4 choices and 15 seconds — the faster you are, the more points']]},
+ memory:{sub:'Match the pairs in the fewest moves',steps:[
+  ['16 face-down cards','with 8 pairs of cube symbols'],
+  ['Flip two cards','and remember where each symbol is'],
+  ['A match stays open','No match? They flip back over'],
+  ['Finish in the fewest moves','and your best score is saved',{rows:[['Moves','12'],['Best score','10 🏆']]}]]},
+ xo:{sub:'✕ and ◯ made of cubes',steps:[
+  ['Take turns with ✕ and ◯','Each player picks a square in turn'],
+  ['3 in a row wins','Across, down or diagonal'],
+  ['Play Eilan or a friend','Take on Eilan, or play someone on the same device',{you:'You'}],
+  ['Beat Eilan, earn XP','Every win raises your points',{rows:[['You','3'],['Eilan','1'],['XP','+9 ✨']]}]]},
+ catch:{sub:'Quick hands against the clock',steps:[
+  ['You have 30 seconds','The timer starts when you press Start'],
+  ['A cube lights up… tap it!','before it fades away'],
+  ['The cubes speed up','the closer you get to the end'],
+  ['5 in a row = double points','for every cube after that — don’t miss one',{rows:[['Streak','5 🔥'],['Points','×2']]}]]},
+ snake:{sub:'The classic game in Eilan style',steps:[
+  ['Steer the snake','with the keyboard arrows or the on-screen buttons'],
+  ['Eat the dot','every dot makes the snake longer'],
+  ['Don’t crash!','not into the wall, not into your tail'],
+  ['Every point = 1 XP','at the end of the round',{rows:[['Points','14'],['XP','+14 ✨']]}]]},
+ lahad:{sub:'The gathering game — truths and dares',steps:[
+  ['3 or more players','Type your names to start',{p:['Sarah','Noura','Reem','Haya']}],
+  ['Pass the device','Each player flips a card on their turn'],
+  ['Questions · dares · races','plus a joker that flips the round',{tag:'Dare',x:'Call a random number and offer to sell them pigeons 😂'}],
+  ['Add up the points','most points wins',{rows:[['Noura','7 🏆'],['Sarah','5'],['Reem','4']]}]]},
+ family:{sub:'Fastest correct answer takes the point',steps:[
+  ['Everyone gets the question','One person reads it out loud',{tag:'Question',x:'How old are you backwards?'}],
+  ['Fastest right answer = 1 point','Focus and answer fast ⚡'],
+  ['One try per person','Wrong? Wait for the next question'],
+  ['Count the points','and the winner gets a round of applause 👏',{rows:[['Dad','9 🏆'],['Mom','8'],['Abdullah','6']]}]]},
+ bahar:{sub:'Who’s making it up?',steps:[
+  ['Two equal teams','3 or more people on each',{teams:['Team Spice','Team Salt']}],
+  ['The phone goes round in secret','to the first team — each player sees their role'],
+  ['Only one is lying 🌶️','They make up a story and spice it up… the rest are true',{tag:'Story topic',x:'A story so wild nobody believes it?'}],
+  ['Spot the liar!','Caught them? Your point — then the teams swap roles',{rows:[['Team Spice','3'],['Team Salt','4 🏆']]}]]},
+ mashaer:{sub:'A game for two close people',steps:[
+  ['Play with someone close to you','and get to know each other more 💞',{p:['Me','You']}],
+  ['Questions from the heart','Answer honestly — no fibbing',{tag:'Question',x:'What was your first impression of me?'}],
+  ['Moments together','Cards you do together',{tag:'Moment',x:'Look into each other’s eyes for 30 seconds… without laughing!'}],
+  ['Short answer = a forfeit 😏','and no “I don’t know”',{tag:'Forfeit',x:'Imitate the way the other person talks for a minute'}]]},
+ nisf:{sub:'Honest questions for late nights',steps:[
+  ['3 stages through the night','The later it gets, the deeper the questions 🌙',{lv:[['Early night','Light questions'],['Midnight','Real honesty'],['Before dawn','Warm questions']]}],
+  ['Answer with total honesty','The question is yours… and everyone listens',{tag:'Midnight',x:'Who do you turn to when life gets hard?'}],
+  ['Only two skips per player','use them wisely',{rows:[['Skip','2 / 2'],['Skip','1 / 2']]}],
+  ['Let the question go round','everyone answers in turn']]}};
+
+const G0=GAMES[new URLSearchParams(location.search).get('g')||'guess'],GE=GAMES_EN[new URLSearchParams(location.search).get('g')||'guess'];
+const G=EN?Object.assign({},G0,{n:G0.en,en:G0.n,sub:GE.sub,steps:G0.steps.map((s,i)=>[GE.steps[i][0],GE.steps[i][1],Object.assign({},s[2],GE.steps[i][2]||{})])}):G0;
 /* timeline */
 const T_INTRO=4.2,T_STEP=4.8,T_OUT=5.2;
 const SC=[];let at=0;
@@ -138,21 +201,21 @@ $('#dots').innerHTML=G.steps.map(()=>'<i><b></b></i>').join('');
 
 /* ---------- illustrations ---------- */
 function illHTML(s){switch(s.k){
- case 'eq':return `<div style="display:flex;align-items:center;gap:22px;direction:rtl"><div class="tile">${s.a}</div><div class="op">+</div><div class="tile" style="font-size:${s.b.length>2?54:80}px">${s.b}</div></div><div class="pill g" data-r style="position:absolute;bottom:40px;font-size:40px;padding:12px 40px">= ${s.r}</div>`;
+ case 'eq':return `<div style="display:flex;align-items:center;gap:22px;direction:${EN?'ltr':'rtl'}"><div class="tile">${s.a}</div><div class="op">+</div><div class="tile" style="font-size:${s.b.length>2?54:80}px">${s.b}</div></div><div class="pill g" data-r style="position:absolute;bottom:40px;font-size:40px;padding:12px 40px">= ${s.r}</div>`;
  case 'card':return `<div class="card back" data-cb style="transform:rotate(-8deg) translate(-40px,10px)"><img src="${LOGO}"></div><div class="card" data-cf><span class="ctag">${s.tag}</span><div class="cx">${s.x}</div><div class="cb">EILAN DOLL</div></div>`;
  case 'timer':return `<div class="ring" data-ring><span data-n>${s.n}</span></div>`;
  case 'mem':return `<div style="display:grid;grid-template-columns:repeat(4,96px);gap:14px">${Array.from({length:16},(_,i)=>`<div class="cell" data-m="${i}" style="height:96px">${s.open.includes(i)?`<div data-face style="opacity:0">${cubeIcon(s.match?'love':(i===1?'star':'bolt'),70,false)}</div>`:''}</div>`).join('')}</div>`;
  case 'xo':return `<div style="display:grid;grid-template-columns:repeat(3,122px);gap:14px">${[...s.b].map((c,i)=>`<div class="cell" data-xo="${i}" style="height:122px;${s.w&&s.w.includes(i)?'border-color:#E8B64A;':''}">${c==='.'?'':`<div data-mk="${i}">${cubeIcon(c==='X'?'g-x':'g-o',92,false)}</div>`}</div>`).join('')}</div>`;
  case 'catch':return `<div style="display:grid;grid-template-columns:repeat(4,96px);gap:14px">${Array.from({length:16},(_,i)=>`<div class="cell" style="height:96px">${s.on.includes(i)?`<i data-c style="position:absolute;inset:14%;border-radius:26%;background:${RAMP[i%5]};box-shadow:0 0 30px ${RAMP[i%5]}"></i>`:''}</div>`).join('')}</div>`;
  case 'snake':return `<div class="cell" style="width:420px;height:300px;border-radius:26px" data-snk></div>`;
- case 'pad':return `<div style="display:grid;grid-template-columns:repeat(3,100px);gap:12px;direction:ltr">${['','▲','','◀','▼','▶'].map((c,i)=>c?`<div class="cell" data-pd="${i}" style="height:100px;font-size:40px;color:#E8B64A">${c}</div>`:'<span></span>').join('')}</div>`;
+ case 'pad':return `<div style="display:grid;grid-template-columns:repeat(3,100px);gap:12px;direction:ltr">${['',0,'',270,180,90].map((c,i)=>c!==''?`<div class="cell" data-pd="${i}" style="height:100px;color:#E8B64A"><svg viewBox="0 0 24 24" width="38" height="38" style="transform:rotate(${c}deg)"><path d="M12 5 L20 18 H4 Z" fill="currentColor"/></svg></div>`:'<span></span>').join('')}</div>`;
  case 'icon':return `<div data-ic>${cubeIcon(s.i,300)}</div>`;
- case 'score':return `<div style="display:flex;flex-direction:column;gap:16px;width:420px">${s.rows.map((r,i)=>`<div class="chip" data-row="${i}" style="justify-content:space-between;font-size:32px;padding:18px 28px"><span>${r[0]}</span><span style="font-family:Poppins,Cairo,'Noto Color Emoji';color:#E8B64A">${r[1]}</span></div>`).join('')}</div>`;
+ case 'score':return `<div style="display:flex;flex-direction:column;gap:16px;width:420px">${s.rows.map((r,i)=>`<div class="chip" data-row="${i}" style="justify-content:space-between;font-size:32px;padding:18px 28px"><span>${r[0]}</span><span dir="ltr" style="font-family:Poppins,Cairo,'Noto Color Emoji';color:#E8B64A">${r[1]}</span></div>`).join('')}</div>`;
  case 'players':return `<div style="display:flex;flex-wrap:wrap;gap:16px;justify-content:center;width:440px">${s.p.map((n,i)=>`<div class="chip" data-row="${i}" style="font-size:34px;padding:16px 30px"><span style="width:16px;height:16px;border-radius:5px;background:${RAMP[i%5]};display:inline-block"></span>${n}</div>`).join('')}</div>`;
- case 'teams':return `<div style="display:flex;gap:30px">${[['فريق البهارات','g-chili'],['فريق الملح','star']].map((t,i)=>`<div class="chip" data-row="${i}" style="flex-direction:column;padding:26px 30px;gap:14px;font-size:28px">${cubeIcon(t[1],120)}<span>${t[0]}</span><span style="display:flex;gap:8px">${[0,1,2].map(()=>`<i style="width:30px;height:30px;border-radius:50%;background:${i?'#7FA98A':'#E8B64A'};display:block"></i>`).join('')}</span></div>`).join('')}</div>`;
- case 'levels':return `<div style="display:flex;flex-direction:column;gap:18px;width:430px">${[['أول الليل','أسئلة خفيفة','#E8B64A'],['نص الليل','الصراحة الحقيقية','#6DC27A'],['قبل الفجر','أسئلة دافية','#7FA98A']].map((l,i)=>`<div class="chip" data-row="${i}" style="justify-content:space-between;padding:18px 26px;font-size:30px;border-color:${l[2]}"><span>${'🌙'.repeat(i+1)} ${l[0]}</span><span style="font-size:20px;color:#B9B8A8">${l[1]}</span></div>`).join('')}</div>`;
- case 'pass':return `<div style="position:relative;width:460px;height:380px">${[['#E8B64A',30,150],['#6DC27A',190,10],['#7FA98A',350,150],['#B9CC6A',190,290]].map((p,i)=>`<div class="person" style="background:${p[0]};left:${p[1]}px;top:${p[2]}px">${i+1}</div>`).join('')}<div class="phone" data-ph style="left:155px;top:55px"><div class="scr">${cubeIcon(G.ic,80)}</div></div></div>`;
- case 'vs':return `<div style="display:flex;align-items:center;gap:30px"><div class="chip" style="flex-direction:column;padding:24px">${cubeIcon('g-x',120,false)}<span>أنت</span></div><div class="op" style="font-family:Poppins">VS</div><div class="chip" style="flex-direction:column;padding:24px"><img src="${LOGO}" style="width:120px;height:120px"><span>Eilan</span></div></div>`;
+ case 'teams':return `<div style="display:flex;gap:30px">${[[(s.teams||[])[0]||'فريق البهارات','g-chili'],[(s.teams||[])[1]||'فريق الملح','star']].map((t,i)=>`<div class="chip" data-row="${i}" style="flex-direction:column;padding:26px 30px;gap:14px;font-size:28px">${cubeIcon(t[1],120)}<span>${t[0]}</span><span style="display:flex;gap:8px">${[0,1,2].map(()=>`<i style="width:30px;height:30px;border-radius:50%;background:${i?'#7FA98A':'#E8B64A'};display:block"></i>`).join('')}</span></div>`).join('')}</div>`;
+ case 'levels':return `<div style="display:flex;flex-direction:column;gap:18px;width:${EN?510:430}px">${(s.lv||[['أول الليل','أسئلة خفيفة'],['نص الليل','الصراحة الحقيقية'],['قبل الفجر','أسئلة دافية']]).map((l,i)=>[l[0],l[1],['#E8B64A','#6FA37C','#7FA98A'][i]]).map((l,i)=>`<div class="chip" data-row="${i}" style="justify-content:space-between;padding:18px 26px;font-size:30px;border-color:${l[2]}"><span style="white-space:nowrap">${'🌙'.repeat(i+1)} ${l[0]}</span><span style="font-size:${EN?17:20}px;color:#B9B8A8;white-space:nowrap">${l[1]}</span></div>`).join('')}</div>`;
+ case 'pass':return `<div style="position:relative;width:460px;height:380px">${[['#E8B64A',30,150],['#6FA37C',190,10],['#7FA98A',350,150],['#D9CFAF',190,290]].map((p,i)=>`<div class="person" style="background:${p[0]};left:${p[1]}px;top:${p[2]}px">${i+1}</div>`).join('')}<div class="phone" data-ph style="left:155px;top:55px"><div class="scr">${cubeIcon(G.ic,80)}</div></div></div>`;
+ case 'vs':return `<div style="display:flex;align-items:center;gap:30px"><div class="chip" style="flex-direction:column;padding:24px">${cubeIcon('g-x',120,false)}<span>${s.you||'أنت'}</span></div><div class="op" style="font-family:Poppins">VS</div><div class="chip" style="flex-direction:column;padding:24px"><img src="${LOGO}" style="width:120px;height:120px"><span>Eilan</span></div></div>`;
  }return ''}
 function illUpdate(root,s,p,lt){
  const q=back(ramp(lt,.15,.7));
@@ -172,7 +235,7 @@ function illUpdate(root,s,p,lt){
  if(s.k==='snake'){const b=root.querySelector('[data-snk]');const C=30,step=Math.floor(lt*7);let h='';const path=[];for(let k=0;k<6+Math.min(4,Math.floor(step/6));k++){const s2=step-k;const x=(s2%12+12)%12,y=3+Math.round(Math.sin(s2/4)*2);path.push([x,y])}
    path.forEach(([x,y],k)=>{h+=`<i style="position:absolute;left:${x*C+30}px;top:${y*C+20}px;width:${C-4}px;height:${C-4}px;border-radius:7px;background:${k?RAMP[3]:RAMP[1]};box-shadow:0 0 14px ${k?RAMP[3]:RAMP[1]}"></i>`});
    h+=`<i style="position:absolute;left:${((step+4)%12)*C+34}px;top:${(3+Math.round(Math.sin((step+4)/4)*2))*C+24}px;width:18px;height:18px;border-radius:50%;background:#ff835c;box-shadow:0 0 16px #ff835c"></i>`;b.innerHTML=h}
- if(s.k==='pad'){const seq=[1,5,4,3];const on=seq[Math.floor(lt*2)%4];root.querySelectorAll('[data-pd]').forEach(c=>{const a=+c.dataset.pd===on;c.style.background=a?'linear-gradient(135deg,#E8B64A,#6DC27A)':'';c.style.color=a?'#14150F':'#E8B64A';c.style.transform=a?'scale(.92)':''})}
+ if(s.k==='pad'){const seq=[1,5,4,3];const on=seq[Math.floor(lt*2)%4];root.querySelectorAll('[data-pd]').forEach(c=>{const a=+c.dataset.pd===on;c.style.background=a?'linear-gradient(135deg,#E8B64A,#6FA37C)':'';c.style.color=a?'#14150F':'#E8B64A';c.style.transform=a?'scale(.92)':''})}
  if(s.k==='icon'){const ic=root.querySelector('[data-ic]');assemble(ic,ramp(lt,.1,1.6));shimmer(ic,lt);ic.style.transform=`translateY(${Math.sin(lt*2)*8}px)`}
  if(['score','players','teams','levels'].includes(s.k))root.querySelectorAll('[data-row]').forEach((r,i)=>{const v=back(ramp(lt,.25+i*.28,.75+i*.28));r.style.transform=`translateX(${(1-v)*-80}px)`;r.style.opacity=cl(v)});
  if(s.k==='pass'){const ph=root.querySelector('[data-ph]');const pts=[[-60,0],[0,-60],[60,0],[0,60]];const seg=lt*1.1,k=Math.floor(seg)%4,f=ease(seg%1);
@@ -183,10 +246,10 @@ function illUpdate(root,s,p,lt){
 /* ---------- scenes ---------- */
 const stage=$('#stage');
 SC.forEach(sc=>{const d=document.createElement('div');d.className='scene';sc.el=d;
- if(sc.k==='intro')d.innerHTML=`<div class="center" style="position:absolute;inset:0;gap:16px"><div data-icon>${cubeIcon(G.ic,230)}</div><div class="eb" data-a>EILAN GAMES · ${G.free?'مجانية':'لعبة إيلان'}</div><div class="t1" data-b><span class="grad">${G.n}</span><bdi dir="ltr">${G.en}</bdi></div><div class="t3" data-c>${G.sub}</div></div>`;
+ if(sc.k==='intro')d.innerHTML=`<div class="center" style="position:absolute;inset:0;gap:16px"><div data-icon>${cubeIcon(G.ic,230)}</div><div class="eb" data-a>EILAN GAMES · ${G.free?L('مجانية','FREE'):L('لعبة إيلان','HOW TO PLAY')}</div><div class="t1" data-b><span class="grad">${G.n}</span><bdi dir="${EN?'rtl':'ltr'}">${G.en}</bdi></div><div class="t3" data-c>${G.sub}</div></div>`;
  if(sc.k==='step'){const s=G.steps[sc.i];d.innerHTML=`<div class="step"><div class="txt"><div class="num" data-a>0${sc.i+1}</div><div class="t2" data-b>${s[0]}</div><div class="t3" data-c>${s[1]}</div></div><div class="ill">${illHTML(s[2])}</div></div>`}
- if(sc.k==='outro'){const tags=G.paid?`<span class="pill g">${G.arc?'أول ٣ جولات مجاناً':'أول ٣ بطاقات مجاناً'}</span><span class="pill o">اللعبة كاملة ٣٠ ر.س</span>`:`<span class="pill g">مجانية ١٠٠٪</span>`;
-   d.innerHTML=`<div class="center" style="position:absolute;inset:0;gap:20px"><img src="${LOGO}" data-icon style="width:150px;height:150px"><div class="t2" data-b>العبها الحين في <span class="grad">إيلان دول</span></div><div data-c style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;max-width:1000px">${tags}<span class="pill">على الجوال · الآيباد · الكمبيوتر</span>${G.print?'<span class="pill o">🖨️ وفيه ملف PDF للطباعة</span>':''}</div><div class="t3" data-a style="font-family:Poppins;letter-spacing:4px;font-size:20px">منطقة الترفيه · EILAN DOLL</div></div>`}
+ if(sc.k==='outro'){const tags=G.paid?`<span class="pill g">${G.arc?L('أول ٣ جولات مجاناً','First 3 rounds free'):L('أول ٣ بطاقات مجاناً','First 3 cards free')}</span><span class="pill o">${L('اللعبة كاملة ٣٠ ر.س','Full game 30 SAR')}</span>`:`<span class="pill g">${L('مجانية ١٠٠٪','100% free')}</span>`;
+   d.innerHTML=`<div class="center" style="position:absolute;inset:0;gap:20px"><img src="${LOGO}" data-icon style="width:150px;height:150px"><div class="t2" data-b>${L('العبها الحين في','Play it now on')} <span class="grad">${L('إيلان دول','Eilan Doll')}</span></div><div data-c style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;max-width:1000px">${tags}<span class="pill">${L('على الجوال · الآيباد · الكمبيوتر','Phone · iPad · Computer')}</span>${G.print?`<span class="pill o">🖨️ ${L('وفيه ملف PDF للطباعة',G.free?'Free print PDF':'Includes a print PDF')}</span>`:''}</div><div class="t3" data-a style="font-family:Poppins;letter-spacing:4px;font-size:20px">${L('منطقة الترفيه','ENTERTAINMENT ZONE')} · EILAN DOLL</div></div>`}
  stage.appendChild(d)});
 
 function render(t){

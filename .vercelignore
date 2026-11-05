@@ -6,3 +6,7 @@ games/src/
 games/print-src/
 games/video-src/
 coloring/src/
+
+# internal company handbook for the AI team (never published on the live site)
+team/
+CLAUDE.md

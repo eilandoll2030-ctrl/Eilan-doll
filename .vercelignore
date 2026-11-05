@@ -5,6 +5,7 @@ visual/src/
 games/src/
 games/print-src/
 games/video-src/
+games/pdf-out/
 coloring/src/
 
 # internal company handbook for the AI team (never published on the live site)

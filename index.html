@@ -3026,6 +3026,8 @@ if(S && Array.isArray(S.products)){
     if(defP && defP.img) p.img = defP.img;
   });
 }
+/* one-time: browsers that kept the old purple/mint theme switch to the approved green→gold identity */
+if(!S.themeFix1){S.theme=clone(DEF.theme);S.themeFix1=1}
 delete S.__lite;if(!S.owned)S.owned={};
 let saveT,storageFull=false,lastSaveSize=0;
 const STORE_LIMIT=5e6; /* ≈ 5MB browser quota (characters) */

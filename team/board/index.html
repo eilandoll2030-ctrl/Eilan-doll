@@ -150,7 +150,7 @@ h1 span{color:var(--gold)}
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:14px}
 .panel.wait{border-inline-start:4px solid var(--gold)}
 .badge{font-family:var(--f-pixel);font-size:.78rem;background:var(--gold);color:#1a1408;border-radius:999px;padding:0 9px}
-.two{display:grid;grid-template-columns:1.25fr 1fr;gap:18px;align-items:start}
+.two{display:grid;grid-template-columns:1.3fr 1fr;gap:18px;align-items:start}
 @media (max-width:860px){.two{grid-template-columns:1fr}}
 .two>*{min-width:0}
 .needs{display:grid;gap:12px}
@@ -172,6 +172,23 @@ textarea{width:100%;min-height:46px;border:1px solid var(--line);border-radius:8
 .empty{color:var(--muted);font-size:.92rem}
 details summary{cursor:pointer;color:var(--muted)}
 
+.mini-bot{display:inline-block;width:20px;height:27px}
+.chat{display:flex;flex-direction:column;gap:10px;max-height:480px;min-height:160px;overflow-y:auto;padding:4px 2px;overscroll-behavior:contain}
+.msg{max-width:88%;display:flex;flex-direction:column;gap:6px;padding:10px 12px;border-radius:12px;border:1px solid var(--line)}
+.msg.me{align-self:flex-start;background:#2a2316;border-color:#5e4c27;border-start-start-radius:3px}
+.msg.ceo{align-self:flex-end;background:var(--panel-2);border-start-end-radius:3px}
+.msg .who{font-size:.72rem;color:var(--muted);display:flex;gap:8px;flex-wrap:wrap}
+.msg .who b{color:var(--gold);font-weight:600}
+.msg .txt{white-space:pre-wrap;overflow-wrap:anywhere;font-size:.93rem}
+.msg .files{display:flex;flex-wrap:wrap;gap:8px}
+.msg .files img,.msg .files video{max-width:100%;width:220px;max-height:260px;object-fit:cover;border-radius:8px;border:1px solid var(--line);background:#000}
+.msg .files a{color:var(--gold);font-size:.86rem;border:1px solid var(--line);border-radius:8px;padding:6px 10px;text-decoration:none}
+.msg.typing .txt{color:var(--muted)}
+.composer{display:flex;flex-direction:column;gap:8px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:.78rem;background:var(--panel-2);border:1px solid var(--line);border-radius:999px;padding:2px 10px;display:flex;gap:6px;align-items:center}
+.chip button{background:none;border:0;color:var(--bad);padding:0;font-size:.9rem}
+.attach{cursor:pointer}
 .cmd-list{display:flex;flex-direction:column;gap:8px}
 .cmd{display:grid;grid-template-columns:1fr auto;gap:4px 10px;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--panel-2)}
 .cmd span{min-width:0;overflow-wrap:anywhere}
@@ -252,20 +269,25 @@ details summary{cursor:pointer;color:var(--muted)}
   <div class="conn" id="conn" role="status">جارٍ الاتصال بالمقر…</div>
 
   <div class="two">
+    <section class="panel chatp" aria-labelledby="h-cmd">
+      <h2 id="h-cmd"><span class="mini-bot" aria-hidden="true" id="chatBot"></span>محادثة المدير التنفيذي</h2>
+      <div class="chat" id="chat" aria-live="polite"><div class="empty">اكتبي للمدير أو أرسلي له صور ومقاطع وملفات. يرد عليك هنا، ويوزّع الشغل على الفريق.</div></div>
+      <form id="cmdForm" class="composer">
+        <div class="chips" id="chips" hidden></div>
+        <textarea id="cmdText" maxlength="2000" placeholder="مثال: صمموا لعبة PDF للكشتة بنفس ستايل الصورة اللي أرفقتها"></textarea>
+        <div class="actions">
+          <label class="btn attach" for="cmdFiles" id="attachLbl">إرفاق صور أو مقاطع أو ملفات</label>
+          <input type="file" id="cmdFiles" multiple accept="image/*,video/*,application/pdf" hidden>
+          <button class="btn gold" type="submit" id="cmdSend">أرسل للمدير</button>
+          <span class="sub" id="cmdMsg"></span>
+        </div>
+      </form>
+      <p class="sub" style="margin:0">الملف الواحد لين 20 ميجا. الفريق يبدأ الشغل في جولة الموزّع الجاية (كل ساعة من 5:07 ص إلى 11:07 م)، وأي نشر أو إرسال أو صرف يرجع لك في «ينتظرك» قبل التنفيذ.</p>
+    </section>
     <section class="panel wait" aria-labelledby="h-needs">
       <h2 id="h-needs">ينتظرك <span class="badge num" id="needCount">0</span></h2>
       <div class="needs" id="needs"><div class="empty">ما فيه شي ينتظرك. أي نشر أو إرسال أو صرف أو تغيير إعدادات بيوصل هنا قبل التنفيذ.</div></div>
       <details id="pastWrap" hidden><summary>قرارات سابقة</summary><div class="needs" id="past" style="margin-top:10px"></div></details>
-    </section>
-    <section class="panel" aria-labelledby="h-cmd">
-      <h2 id="h-cmd">أمر للمدير التنفيذي</h2>
-      <form id="cmdForm" class="actions">
-        <textarea id="cmdText" maxlength="1000" placeholder="مثال: جهّزوا لعبة «الكشتة المجنونة» وفيديو شرحها"></textarea>
-        <button class="btn gold" type="submit" id="cmdSend">أرسل للمدير</button>
-        <span class="sub" id="cmdMsg"></span>
-      </form>
-      <p class="sub" style="margin:0">المدير يوزّع الأمر على القسم المناسب. وأي شي فيه نشر أو إرسال أو صرف يرجع لك هنا في «ينتظرك» قبل التنفيذ.</p>
-      <div class="cmd-list" id="cmds"></div>
     </section>
   </div>
 
@@ -321,7 +343,7 @@ function botSVG(c,a){return `<svg viewBox="0 0 15 20" aria-hidden="true" shape-r
   $("sDays").textContent=Math.max(0,Math.ceil((Date.UTC(2026,11,31,21)-Date.now())/864e5))})();
 Object.keys(DEPTS).forEach(k=>{const r=$("r-"+k);if(r)r.querySelector("[data-bot]").innerHTML=botSVG(DEPTS[k].body,DEPTS[k].acc)});
 
-let S={staff:[],tasks:[],events:[],needs:[],commands:[]},db=null,isOwner=false,first={tasks:true};
+let S={staff:[],tasks:[],events:[],needs:[],chat:[]},db=null,isOwner=false,first={tasks:true};
 const prevStatus=new Map();
 
 function deptEvents(code){return S.events.filter(e=>e.dept===code).sort((a,b)=>String(b.at).localeCompare(String(a.at)))}
@@ -349,7 +371,7 @@ function renderMap(){
   // meeting room: weekly meeting Sunday 7:51 م; lit while a meeting event is under 2 hours old
   const meetEv=S.events.find(e=>e.type==="روتين"&&/اجتماع/.test(e.text||"")&&Date.now()-new Date(e.at)<72e5);
   $("r-meeting").classList.toggle("on",!!meetEv);
-  document.querySelector("[data-meetnote]").textContent=meetEv?"الاجتماع شغّال الحين":"اجتماع الأسبوع: الأحد 7:51 م";
+  document.querySelector("[data-meetnote]").textContent=meetEv?"الاجتماع شغّال الحين":"اجتماع الأسبوع: الجمعة 7:51 م";
   const ev=[...S.events].sort((a,b)=>String(b.at).localeCompare(String(a.at))).slice(0,5);
   document.querySelector("[data-archive]").innerHTML=ev.length?ev.map(e=>`<span>${esc(e.text)}</span>`).join(""):"<span>السجل بيظهر هنا</span>";
 }
@@ -384,10 +406,57 @@ function renderNeeds(){
   $("past").innerHTML=done.slice(0,20).map(n=>`<article class="need"><div class="need-top"><h3>${esc(n.title)}</h3><span class="kind">${esc(n.status)}</span></div>${n.reply?`<p>${esc(n.reply)}</p>`:""}<span class="sub">${n.decided?stamp(n.decided):""}</span></article>`).join("");
   renderMap();
 }
-function renderCmds(){
-  const c=[...S.commands].sort((a,b)=>String(b.at).localeCompare(String(a.at))).slice(0,8);
+/* ===== chat with the CEO ===== */
+const blobUrl=id=>"/_blob/"+encodeURIComponent(id);
+function fileHTML(f){
+  if(!f||!f.id)return"";const u=blobUrl(f.id),t=String(f.type||"");
+  if(t.startsWith("image/"))return `<a href="${u}" target="_blank" rel="noopener" style="padding:0;border:0"><img src="${u}" alt="${esc(f.name||"صورة")}" loading="lazy"></a>`;
+  if(t.startsWith("video/"))return `<video src="${u}" controls playsinline preload="metadata"></video>`;
+  return `<a href="${u}" target="_blank" rel="noopener">افتحي ${esc(f.name||"الملف")}</a>`;
+}
+let typing=null;
+function renderChat(){
+  const box=$("chat"),atBottom=box.scrollHeight-box.scrollTop-box.clientHeight<40;
+  const msgs=[...S.chat].sort((a,b)=>String(a.at).localeCompare(String(b.at))).slice(-60);
   const lab={"جديد":"new","استلمه المدير":"got","تم":"done"};
-  $("cmds").innerHTML=c.length?c.map(x=>`<div class="cmd"><span>${esc(x.text)}</span><span class="pill ${lab[x.status]||"new"}">${esc(x.status||"جديد")}</span><span class="sub">${x.at?stamp(x.at):""}${x.reply?` · ${esc(x.reply)}`:""}</span></div>`).join(""):`<div class="empty">أوامرك بتظهر هنا مع حالتها.</div>`;
+  let h=msgs.map(m=>{const me=m.from==="owner";
+    return `<div class="msg ${me?"me":"ceo"}"><span class="who"><b>${me?"أنتِ":"المدير التنفيذي"}</b>${m.at?`<span>${t12(m.at)} · ${dshortA(m.at)}</span>`:""}${!me&&m.kind==="auto"?"<span>رد فوري</span>":""}${!me&&m.kind==="team"?"<span>من الفريق</span>":""}${me&&m.status?`<span class="pill ${lab[m.status]||"new"}">${esc(m.status)}</span>`:""}</span>
+      ${m.text?`<div class="txt">${esc(m.text)}</div>`:""}${Array.isArray(m.files)&&m.files.length?`<div class="files">${m.files.map(fileHTML).join("")}</div>`:""}</div>`}).join("");
+  if(typing!==null)h+=`<div class="msg ceo typing"><span class="who"><b>المدير التنفيذي</b></span><div class="txt" id="typingTxt">${esc(typing||"يقرأ رسالتك…")}</div></div>`;
+  box.innerHTML=h||`<div class="empty">اكتبي للمدير أو أرسلي له صور ومقاطع وملفات. يرد عليك هنا، ويوزّع الشغل على الفريق.</div>`;
+  if(atBottom||typing!==null)box.scrollTop=box.scrollHeight;
+}
+function dshortA(iso){const d=riyadh(iso);return `${d.getDate()} ${MON[d.getMonth()]}`}
+function boardSummary(){
+  const open=S.tasks.filter(t=>t.status!=="خلصت").slice(0,15).map(t=>`- ${t.title} (${DEPTS[t.dept]?.name||t.dept}، ${t.status})`).join("\n")||"- ما فيه";
+  const nd=S.needs.filter(n=>!n.status||n.status==="ينتظر").map(n=>`- ${n.title}`).join("\n")||"- ما فيه";
+  return `مهام مفتوحة:\n${open}\nطلبات تنتظر المالكة:\n${nd}`;
+}
+const CEO_BRIEF=`أنت «المدير التنفيذي» لشركة إيلان دول (EILAN DOLL — العالم الرقمي)، شركة موظفين ذكاء اصطناعي. تكلّم المالكة بلهجة سعودية بسيطة ومحترمة، وبدون مصطلحات تقنية (هي تستخدم iPad ومبتدئة).
+الأقسام: قسم الموقع، المنتجات الرقمية (قوالب، ألعاب PDF، مخططات، تعلم بصري)، استوديو إيلان (موشن، فيديوهات AI، شروحات الألعاب)، التسويق والسوشال (مسودات فقط)، خدمة العملاء (مسودات ردود فقط)، الجودة والافتتاح (افتتاح الجمعة 1 يناير 2027).
+هذا رد فوري داخل المقر. اكتب 2 إلى 5 جمل:
+1) قل باختصار وش فهمت من طلبها، ولو فيه صور صف بسطر وش لاحظت فيها اللي يهم الطلب.
+2) قل أي قسم بيشتغل عليه.
+3) إذا ناقص شي ضروري عشان يبدأ الفريق، اسأل سؤال واحد بس.
+4) قل إن الفريق يبدأ في جولة الموزّع الجاية (كل ساعة من 5:07 ص إلى 11:07 م) وبيجيها إشعار لما يجهز شي.
+ممنوع: تقول إن الشغل خلص أو انرسل أو انتشر؛ تعد بنشر أو إرسال أو صرف أو دفع أو تغيير إعدادات (هذي كلها تحتاج موافقتها في «ينتظرك»)؛ تخترع أرقام أو أسعار ما قررتها. الأوقات دائمًا بنظام 12 ساعة.
+إذا سألت عن حالة الشغل، جاوب من هذي اللوحة بس:`;
+let sampleFn=null,assetsNS=null,picked=[];
+function renderChips(){const c=$("chips");c.hidden=!picked.length;c.innerHTML=picked.map((f,i)=>`<span class="chip">${esc(f.name)} · ${(f.size/1048576).toFixed(1)} م.ب<button type="button" data-rm="${i}" aria-label="شيل ${esc(f.name)}">✕</button></span>`).join("")}
+$("cmdFiles").addEventListener("change",e=>{const big=[];for(const f of e.target.files){if(f.size>20*1048576)big.push(f.name);else picked.push(f)}
+  e.target.value="";renderChips();$("cmdMsg").textContent=big.length?`أكبر من 20 ميجا وما ينرفع هنا: ${big.join("، ")}. أرسليه في محادثة Claude.`:""});
+$("chips").addEventListener("click",e=>{const b=e.target.closest("[data-rm]");if(b){picked.splice(+b.dataset.rm,1);renderChips()}});
+async function instantReply(text,imgs){
+  if(!sampleFn){return}
+  const hist=[...S.chat].sort((a,b)=>String(a.at).localeCompare(String(b.at))).slice(-10);
+  const turns=[{role:"user",content:CEO_BRIEF+"\n"+boardSummary()}];
+  for(const m of hist){const c=(m.text||"")+(m.files?.length?`\n[مرفقات: ${m.files.map(f=>f.name||f.type).join("، ")}]`:"");if(c.trim())turns.push({role:m.from==="owner"?"user":"assistant",content:c})}
+  if(turns[turns.length-1].role!=="user")turns.push({role:"user",content:text||"أرسلت مرفقات."});
+  typing="";renderChat();
+  let images=[];try{const lim=await sampleFn.limits();if(lim?.images){const okT=new Set(lim.images.mediaTypes||[]);images=imgs.filter(f=>okT.has(f.type)&&(!lim.images.maxBytes||f.size<=lim.images.maxBytes)).slice(0,lim.images.maxCount||4)}}catch(e){}
+  try{const r=await sampleFn(turns,{cache:false,images:images.length?images:undefined,onText:({text})=>{typing=text;const el=$("typingTxt");if(el)el.textContent=text;else renderChat()}});
+    typing=null;await db.collection("chat").add({from:"ceo",kind:"auto",text:r.text.trim(),at:new Date().toISOString()});
+  }catch(e){typing=null;renderChat();if(e?.code!=="not_granted")$("cmdMsg").textContent="الرد الفوري ما وصل، بس رسالتك وصلت والفريق بيستلمها في الجولة الجاية."}
 }
 function renderTasks(){
   $("lanes").innerHTML=LANES.map(st=>{let ts=S.tasks.filter(t=>(t.status||"جديدة")===st);
@@ -401,15 +470,15 @@ function renderLog(){
   $("log").innerHTML=ev.map(e=>`<li><time>${e.at?stamp(e.at):""}</time><span><span class="dept">${esc(DEPTS[e.dept]?.name||(e.dept==="owner"?"المالكة":e.dept))} · ${esc(e.type)}</span> — ${esc(e.text)}${e.xp?` <b style="color:var(--gold)" class="num">+${esc(e.xp)} XP</b>`:""}</span></li>`).join("");
   renderMap();
 }
-const R={staff:renderMap,tasks:()=>{trackTasks();renderTasks()},events:renderLog,needs:renderNeeds,commands:renderCmds};
-renderTasks();renderCmds();
+const R={staff:renderMap,tasks:()=>{trackTasks();renderTasks()},events:renderLog,needs:renderNeeds,chat:renderChat};
+renderTasks();renderChat();$("chatBot").innerHTML=botSVG(DEPTS.ceo.body,DEPTS.ceo.acc);
 
 /* room drawer */
 function openRoom(code){
   const sh=$("sheet");
   if(code==="meeting"){sh.innerHTML=`<button class="x" data-close>إغلاق</button><h2 id="dTitle">قاعة الاجتماع</h2>
     <p class="muted" style="margin:0">الروتين الثابت للشركة. كل اجتماع يرفع لك تقرير، والقرارات تجيك في «ينتظرك».</p>
-    <ul class="log">${[["ملخص الصباح","يوميًا 7:27 ص"],["ختام اليوم","يوميًا 8:56 م"],["اجتماع الأسبوع","الأحد 7:51 م"],["المراجعة الشهرية","أول جمعة 9:52 ص"],["فحص الليل","يوميًا 1:53 ص"]].map(r=>`<li><time>${r[1]}</time><span>${r[0]}</span></li>`).join("")}</ul>`}
+    <ul class="log">${[["ملخص الصباح","يوميًا 7:27 ص"],["ختام اليوم","يوميًا 8:56 م"],["موزّع المهام","كل ساعة من 5:07 ص إلى 11:07 م"],["اجتماع الأسبوع","الجمعة 7:51 م"],["المراجعة الشهرية","أول جمعة 9:52 ص"],["فحص الليل","يوميًا 1:53 ص"]].map(r=>`<li><time>${r[1]}</time><span>${r[0]}</span></li>`).join("")}</ul>`}
   else if(code==="archive"){const ev=[...S.events].sort((a,b)=>String(b.at).localeCompare(String(a.at)));
     sh.innerHTML=`<button class="x" data-close>إغلاق</button><h2 id="dTitle">الأرشيف</h2><ul class="log">${ev.map(e=>`<li><time>${stamp(e.at)}</time><span>${esc(e.text)}</span></li>`).join("")||"<li><span></span><span class='muted'>فاضي.</span></li>"}</ul>`}
   else{const d=DEPTS[code],p=S.staff.find(x=>x.id===code||x.code===code)||{},xp=+p.xp||0,l=levelOf(xp),lo=LEVELS[l-1],hi=LEVELS[l]??lo,pct=hi>lo?Math.round((xp-lo)/(hi-lo)*100):100;
@@ -441,22 +510,34 @@ $("needs").addEventListener("click",async e=>{
     await db.collection("events").add({dept:"owner",type:"قرار",text:`${act}: ${n.title||id}${note?` — ${note}`:""}`,at:now});
   }catch(err){msg.textContent="ما انحفظ الرد. تأكدي من الاتصال وجربي مرة ثانية.";card.querySelectorAll("button").forEach(x=>x.disabled=false)}
 });
-/* owner commands */
+/* owner → CEO messages (text + files) */
 $("cmdForm").addEventListener("submit",async e=>{
-  e.preventDefault();const t=$("cmdText").value.trim();if(!t)return;
-  if(!db||!isOwner){$("cmdMsg").textContent="الأوامر للمالكة فقط.";return}
-  $("cmdSend").disabled=true;$("cmdMsg").textContent="جارٍ الإرسال…";const now=new Date().toISOString();
-  try{await db.collection("commands").add({text:t,status:"جديد",at:now});
-    await db.collection("events").add({dept:"owner",type:"طلب",text:"أمر للمدير: "+t.slice(0,120),at:now});
-    $("cmdText").value="";$("cmdMsg").textContent="وصل للمدير ✓";
-  }catch(err){$("cmdMsg").textContent="ما انرسل. تأكدي من الاتصال وجربي مرة ثانية."}
-  $("cmdSend").disabled=false;
+  e.preventDefault();const t=$("cmdText").value.trim();if(!t&&!picked.length)return;
+  if(!db||!isOwner){$("cmdMsg").textContent="المحادثة للمالكة فقط.";return}
+  $("cmdSend").disabled=true;const files=[],imgs=[];
+  try{
+    for(const [i,f] of picked.entries()){
+      if(!assetsNS)throw {code:"no_assets"};
+      $("cmdMsg").textContent=`أرفع الملف ${i+1} من ${picked.length}…`;
+      const r=await assetsNS.upload(f);files.push({id:r.id,name:f.name,type:r.contentType||f.type,size:r.sizeBytes||f.size});
+      if(String(f.type).startsWith("image/"))imgs.push(f);
+    }
+    const now=new Date().toISOString();
+    await db.collection("chat").add({from:"owner",text:t,files,status:"جديد",at:now});
+    await db.collection("events").add({dept:"owner",type:"طلب",text:"رسالة للمدير: "+(t||"مرفقات").slice(0,120)+(files.length?` (+${files.length} مرفق)`:""),at:now});
+    $("cmdText").value="";picked=[];renderChips();$("cmdMsg").textContent="وصلت للمدير ✓";
+    $("cmdSend").disabled=false;instantReply(t,imgs);
+  }catch(err){
+    const c=err?.code;$("cmdMsg").textContent=c==="too_large"?"الملف أكبر من المسموح (20 ميجا).":c==="unsupported_type"?"نوع الملف هذا ما ينرفع هنا. جربي صورة أو فيديو أو PDF.":c==="no_assets"?"رفع الملفات ما اشتغل في هذا العرض. افتحي المقر من حسابك في Claude.":"ما انرسلت. تأكدي من الاتصال وجربي مرة ثانية.";
+    $("cmdSend").disabled=false;
+  }
 });
 
 (async()=>{
   if(!window.claude?.use){$("conn").textContent="المقر يحتاج ينفتح من Claude عشان يظهر الفريق الحي.";return}
-  const [d,u]=await Promise.all([claude.use("db"),claude.use("user")]);
-  isOwner=u?await u.isOwner():false;
+  const [d,u,a,sm]=await Promise.all([claude.use("db"),claude.use("user"),claude.use("assets"),claude.use("sample")]);
+  isOwner=u?await u.isOwner():false;assetsNS=a;sampleFn=sm;
+  if(!a){$("attachLbl").hidden=true}
   if(!d){$("conn").textContent="ما قدرت أوصل لبيانات الفريق. سجّلي دخول في Claude وافتحي المقر مرة ثانية.";return}
   db=d;const fresh=new Set(),cols=Object.keys(R);
   const timer=setTimeout(()=>{$("conn").textContent="البيانات تأخرت، وممكن اللي ظاهر قديم.";$("conn").classList.add("warn")},10000);

@@ -13451,8 +13451,6 @@ const I18N_RULES=[
   [/^هل أنهيت «(.+)»؟\s*تذكّر تحميل شهادتك من موقع (.+)\.$/,m=>`Did you finish «${trP(m[1])}»?\nRemember to download your certificate from ${trP(m[2])}.`],
   [/^(\d+) — (.+)$/,m=>{const t=trLookup(m[2]);return t==null?null:`${m[1]} — ${t}`}],
 ];
-/* وجهتي: honest ratings strings */
-Object.assign(I18N_EN,{"لا توجد تقييمات بعد":"No ratings yet","(# تقييم من زوار إيلان)":"(# ratings from Eilan visitors)","لا توجد مراجعات بعد.":"No reviews yet.","اختر عدد النجوم من # إلى #":"Choose # to # stars","تقييمك للمكان (اختياري):":"Your rating (optional):","تمت إضافة المكان — التقييمات تبدأ من الزوار":"Place added — ratings come from visitors","رابط صورة الواجهة (اختياري — صورة من تصويرك أو لك حق استخدامها):":"Cover image link (optional — a photo you took or have the right to use):"});
 function trLookup(s){const k=trKey(s);if(!k||!AR_RE.test(k))return null;
   let v=I18N_EN[k];if(v!=null)return v;
   const nums=k.match(NUM_RE);if(nums){const t=I18N_EN[k.replace(NUM_RE,'#')];if(t!=null){let i=0;return t.replace(/#/g,()=>String(nums[i++]??'').replace(/[\u0660-\u0669]/g,d=>d.charCodeAt(0)-1632))}}
@@ -13462,6 +13460,8 @@ function trLookup(s){const k=trKey(s);if(!k||!AR_RE.test(k))return null;
     const b=k.match(/^(.+?)([^\u0600-\u06FFA-Za-z0-9»)%]+)$/);if(b){const t=trLookup(b[1]);if(t!=null)return t+fl(b[2])}
   }finally{trLookup.d=0}}
   return null}
+/* وجهتي: honest ratings strings */
+Object.assign(I18N_EN,{"لا توجد تقييمات بعد":"No ratings yet","(# تقييم من زوار إيلان)":"(# ratings from Eilan visitors)","لا توجد مراجعات بعد.":"No reviews yet.","اختر عدد النجوم من # إلى #":"Choose # to # stars","تقييمك للمكان (اختياري):":"Your rating (optional):","تمت إضافة المكان — التقييمات تبدأ من الزوار":"Place added — ratings come from visitors","رابط صورة الواجهة (اختياري — صورة من تصويرك أو لك حق استخدامها):":"Cover image link (optional — a photo you took or have the right to use):"});
 function trText(n){const p=n.parentElement;if(!p||p.closest(TR_SKIP))return;
   const hp=p.closest('h1,h2');if(hp&&hp.querySelector(':scope>.grad-t')){trHead(hp);if(!AR_RE.test(n.data))return}
   const cur=n.data;if(!AR_RE.test(cur))return;const t=trLookup(cur);if(t==null)return;

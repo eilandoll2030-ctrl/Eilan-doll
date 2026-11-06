@@ -52,6 +52,33 @@ body.en .t2{font-weight:800;font-size:44px;line-height:1.2}body.en .t3{font-size
 body.en .card .cx{font-weight:800;font-size:28px;line-height:1.35}body.en .card .ctag{font-family:Poppins;font-weight:800}
 body.en .pill,body.en .chip{font-weight:800}
 .person{position:absolute;width:96px;height:96px;border-radius:50%;display:grid;place-items:center;font-weight:900;font-size:36px;color:#14150F}
+/* Crazy Kashta cards — same look as the game's own cards (games/print-src/build_kashta.py, 128×88 ratio) */
+.kc{position:absolute;width:470px;height:323px;border-radius:22px;background:#F6F1E3;color:#1F3A2B;overflow:hidden;box-shadow:0 30px 70px -22px #000,0 0 0 1px rgba(224,180,84,.28)}
+.kc .kb{position:absolute;top:0;left:0;right:0;height:62px;display:flex;align-items:center;gap:10px;padding:0 20px}
+.kc .kn{font-weight:900;font-size:24px}
+.kc .kp{margin-inline-start:auto;display:flex;align-items:center;gap:7px;font-weight:900;font-size:17px}
+.kc .kp b{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;font-size:21px;background:#F6F1E3;color:#14150F}
+.kc .kno{font-family:Poppins,Cairo;font-weight:800;font-size:14px;opacity:.75;margin-inline-start:10px}
+.kc .kt{position:absolute;top:76px;bottom:50px;left:30px;right:30px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px}
+.kc .kt h3{font-weight:900;font-size:27px;color:#14150F}
+.kc .kt p{font-weight:700;font-size:24px;line-height:1.6}
+.kc .ka{position:absolute;bottom:36px;left:60px;right:60px;text-align:center;font-size:17px;font-weight:700;color:#5E5A44;border-top:1.5px dashed #B9AE8E;padding-top:4px}
+.kc .ka b{color:#B58A2E}
+.kc .ks{position:absolute;bottom:12px;left:0;right:0;display:flex;align-items:center;justify-content:center;gap:6px;font-family:Poppins,Cairo;font-weight:800;font-size:11px;letter-spacing:2px;color:#8E8A70}
+.kc .ks img{width:16px;height:16px}
+body.en .kc .kn{font-family:Poppins;font-weight:800;font-size:21px}body.en .kc .kp{font-family:Poppins;font-weight:800;font-size:15px}
+body.en .kc .kt h3{font-family:Poppins;font-weight:800;font-size:23px}body.en .kc .kt p{font-size:21px;line-height:1.45}
+.kind{display:flex;align-items:center;gap:18px;padding:10px 18px 10px 10px;border-radius:18px;background:rgba(28,30,22,.9);border:1.5px solid rgba(79,132,96,.35)}
+.kind .mb{width:96px;height:66px;border-radius:12px;display:grid;place-items:center;flex:none}
+.kind .nm{font-weight:900;font-size:27px}
+.kind .pt{margin-inline-start:auto;font-weight:900;font-size:20px;color:#E0B454;white-space:nowrap}
+body.en .kind .nm{font-weight:800;font-size:24px}body.en .kind .pt{font-weight:800;font-size:17px}
+.note{font-weight:700;font-size:19px;line-height:1.55;color:#C9C3AE;border-inline-start:4px solid #E0B454;padding-inline-start:14px;margin-top:6px}
+body.en .note{font-size:17px}
+.bar{height:58px;border-radius:16px;background:rgba(28,30,22,.9);border:1.5px solid rgba(79,132,96,.35);position:relative;overflow:hidden;display:flex;align-items:center;padding:0 22px;font-weight:900;font-size:27px}
+.bar i{position:absolute;inset:0;transform-origin:var(--o) center;background:linear-gradient(90deg,rgba(47,90,61,.85),rgba(79,132,96,.7))}
+.bar span{position:relative}.bar .v{margin-inline-start:auto;color:#E0B454}
+body.en .bar{font-weight:800;font-size:23px}
 </style></head><body>
 <div id="bg"><div class="orb" style="width:620px;height:620px;background:#4F8460;opacity:.34;top:-220px;right:-140px" id="o1"></div><div class="orb" style="width:520px;height:520px;background:#E8B64A;opacity:.14;bottom:-240px;left:-160px" id="o2"></div><div class="grid" id="grid"></div></div>
 <div id="wm"><img id="logo" alt=""><div>EILAN DOLL<small>THE DIGITAL WORLD</small></div></div>
@@ -70,12 +97,28 @@ const ease=x=>{x=cl(x);return x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2};
 const back=x=>{x=cl(x);const c=1.15;return 1+(c+1)*Math.pow(x-1,3)+c*Math.pow(x-1,2)};
 const ramp=(t,a,b)=>cl((t-a)/(b-a));
 /* cube icon with per-cube elements so they can fly in */
-function cubeIcon(key,size,bg=true){const rows=(CUBE_PAT[key]||CUBE_PAT.spark).split('|'),H=rows.length,W=rows[0].length;
+/* Crazy Kashta: the cube campfire of its cover and the 5 card-kind icons (same patterns as games/print-src/build_kashta.py) */
+const XPAT={
+ kashta:{rows:'.....o.....|....oo.....|....ooo..o.|...oooo..o.|..ooooooo..|..oooiooo..|.oooiiiooo.|.ooiiiiioo.|.ooiiiiioo.|..ooiiioo..|...ooooo...|ll.lllll.ll|.lllllllll.',col:(c,y)=>c==='o'?(y<4?'#EBC66A':'#E0B454'):c==='i'?'#F6E3A8':'#2F5E42'},
+ 'k-fire':{rows:'....#....|...##..#.|..####.#.|..######.|.########|.########|..######.|...####..',cols:['#F6E3A8','#E0B454','#E0B454','#B58A2E']},
+ 'k-talk':{rows:'.#######.|#########|##.#.#.##|#########|.#######.|...##....|..#......'},
+ 'k-riddle':{rows:'..###..|.##.##.|....##.|...##..|..##...|.......|..##...',cols:['#F6E3A8','#E0B454']},
+ 'k-team':{rows:'.........|.###.....|.#.##.##.|.#######.|..##..#..|.#######.|#...##.##|#....#..#'},
+ 'k-star':{rows:'...#...|...#...|#######|.#####.|..###..|.##.##.|##...##',cols:['#E0B454','#EBDDB0']}};
+function xColor(X,c,y,H,cols){if(X.col)return X.col(c,y);cols=cols||X.cols;return cols[Math.min(cols.length-1,Math.floor(y/Math.max(1,H-1)*cols.length))]}
+function cubeIcon(key,size,bg=true,cols){if(XPAT[key])return xIcon(key,size,bg,cols);const rows=(CUBE_PAT[key]||CUBE_PAT.spark).split('|'),H=rows.length,W=rows[0].length;
   const P=Math.min(7.4,60/W,60/H),Z=P*.82,OX=(64-P*W)/2,OY=(64-P*H)/2;let seed=7;for(const c of key)seed=(seed*31+c.charCodeAt(0))|0;
   const rnd=()=>{seed=(seed*1103515245+12345)&0x7fffffff;return seed/0x7fffffff};
   let h=`<svg viewBox="0 0 64 64" width="${size}" height="${size}" style="overflow:visible">${bg?'<rect width="64" height="64" rx="15" fill="#1C1E16" class="ib"/>':''}`;
   rows.forEach((r,y)=>{for(let x=0;x<W;x++)if(r[x]==='#'){const cx=OX+(x+.5)*P,cy=OY+(y+.5)*P,a=rnd()*6.283,m=40+rnd()*60;
     h+=`<rect class="cq" data-dx="${(Math.cos(a)*m).toFixed(1)}" data-dy="${(Math.sin(a)*m).toFixed(1)}" data-d="${rnd().toFixed(3)}" x="${(cx-Z/2).toFixed(2)}" y="${(cy-Z/2).toFixed(2)}" width="${Z.toFixed(2)}" height="${Z.toFixed(2)}" rx="${(Z*.27).toFixed(2)}" fill="${RAMP[Math.min(4,Math.floor(y/Math.max(1,H-1)*5))]}" style="transform-box:fill-box;transform-origin:center"/>`}});
+  return h+'</svg>'}
+function xIcon(key,size,bg,cols){const X=XPAT[key],rows=X.rows.split('|'),H=rows.length,W=rows[0].length;
+  const P=Math.min(X.col?64/Math.max(W,H):7.4,X.col?99:60/W,X.col?99:60/H),Z=P*.84,OX=(64-P*W)/2,OY=(64-P*H)/2;let seed=11;for(const c of key)seed=(seed*31+c.charCodeAt(0))|0;
+  const rnd=()=>{seed=(seed*1103515245+12345)&0x7fffffff;return seed/0x7fffffff};
+  let h=`<svg viewBox="0 0 64 64" width="${size}" height="${size}" style="overflow:visible;display:block">${bg?'<rect width="64" height="64" rx="15" fill="#1C1E16" class="ib"/>':''}`;
+  rows.forEach((r,y)=>{for(let x=0;x<W;x++)if(r[x]!=='.'){const cx=OX+(x+.5)*P,cy=OY+(y+.5)*P,a=rnd()*6.283,m=30+rnd()*40;
+    h+=`<rect class="cq" data-dx="${(Math.cos(a)*m).toFixed(1)}" data-dy="${(Math.sin(a)*m).toFixed(1)}" data-d="${rnd().toFixed(3)}" x="${(cx-Z/2).toFixed(2)}" y="${(cy-Z/2).toFixed(2)}" width="${Z.toFixed(2)}" height="${Z.toFixed(2)}" rx="${(Z*.27).toFixed(2)}" fill="${xColor(X,r[x],y,H,cols)}" style="transform-box:fill-box;transform-origin:center"/>`}});
   return h+'</svg>'}
 function assemble(root,p){root.querySelectorAll('.cq').forEach(r=>{const d=+r.dataset.d,q=back(ramp(p,d*.45,d*.45+.55));
   r.style.transform=`translate(${(1-q)*r.dataset.dx}px,${(1-q)*r.dataset.dy}px) rotate(${(1-q)*140}deg) scale(${.3+.7*q})`;r.style.opacity=cl(q*1.4)});
@@ -133,7 +176,32 @@ const GAMES={
   steps:[['٣ مراحل مع الليل','كل ما تعمّق الليل تعمّقت الأسئلة 🌙',{k:'levels'}],
          ['جاوب بكل صراحة','السؤال لك… والكل يسمع',{k:'card',tag:'نص الليل',x:'مين ملجأك لا ضاقت الدنيا فيك؟'}],
          ['تخطّيتين بس لكل لاعب','استخدمها بحكمة',{k:'score',rows:[['تخطّي','2 / 2'],['تخطّي','1 / 2']]}],
-         ['خلّوا السؤال يدور على الكل','وكل واحد يجاوب بدوره',{k:'pass'}]]}};
+         ['خلّوا السؤال يدور على الكل','وكل واحد يجاوب بدوره',{k:'pass'}]]},
+ kashta:{ic:'kashta',icBg:false,n:'الكشتة المجنونة',en:'Crazy Kashta',sub:'لعبة بطاقات للطلعات والكشتات حول النار',paid:true,print:true,
+  calm:true,ardig:true,tIntro:4.6,tStep:5.8,tOut:6,eb:'EILAN GAMES · CARD GAME',
+  steps:[['٥٢ بطاقة في ٥ أنواع','كل نوع له لونه ونقاطه — من ٣ أشخاص وفوق، أفراد أو فرق',{k:'kinds'}],
+         ['بالدور: سحب بطاقة وقراءتها بصوت عالي','تحدّي النار: التنفيذ على من سحبها، والمجموعة تحكم — نجح؟ نقطتين',
+          {k:'kcard',c:[{k:'fire',n:1}]},'السلامة أول: أي حركة بعيد عن النار، وإذا قرّب الصغار من النار يكون معهم شخص كبير'],
+         ['سوالف وألغاز','جواب صادق = نقطة، وأول جواب صح للغز = نقطتين',{k:'kcard',c:[{k:'talk',n:2},{k:'riddle',n:3}]}],
+         ['جولة جماعية وجوكر','في الجولة الكل يلعب والفوز = ٣ نقاط، والجوكر بطاقة قوة تنحفظ أو تنستخدم فورًا',{k:'kcard',c:[{k:'group',n:16},{k:'wild',n:50}]}],
+         ['أول من يوصل ٢٠ نقطة يفوز','أو الأعلى نقاط لما يخلص الشاي',{k:'kwin',rows:[['فريق الدلّة',20],['فريق الحطب',17],['فريق النجوم',14]]}]]}};
+
+/* Crazy Kashta — card kinds and the real cards shown in the video (word for word from games/print-src/kashta_data.py) */
+const KIND={fire:['تحدّي النار','Fire Challenge',2,'#2F5A3D','#F6F1E3','k-fire'],talk:['سالفة','Campfire Talk',1,'#7FAA8A','#14150F','k-talk'],
+ riddle:['لغز البر','Desert Riddle',2,'#14150F','#E0B454','k-riddle'],group:['جولة جماعية','Group Round',3,'#E0B454','#14150F','k-team'],wild:['جوكر','Joker',0,'#0E0E0A','#EBDDB0','k-star']};
+const KCARD={
+ 1:['','تقليد صوت جمل زعلان لمدة ٥ ثوانٍ، والمجموعة تعطي درجة من ١٠.','',"Do an angry camel's voice for 5 seconds. The group scores it out of 10."],
+ 2:['','وش أحلى ذكرى عندك من طلعة بر؟','',"What's your best memory from a trip to the desert?"],
+ 3:['','أطلع كل ليلة بدون ما أحد يناديني، وأختفي بالنهار وأنا في مكاني. من أنا؟','','I come out every night without being called, and vanish by day without moving. What am I?','النجوم','The stars'],
+ 16:['الصمت الذهبي','من هذي اللحظة ممنوع الكلام. آخر من يصمد بدون كلام يفوز.','Golden silence','From this moment, no talking. The last one to stay silent wins.'],
+ 50:['نقاط مضاعفة!','البطاقة الجاية بنقاط مضاعفة ×٢.','Double!','Your next card is worth double points ×2.']};
+const AD=n=>EN||!G.ardig?String(n):String(n).replace(/[0-9]/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
+const KICOL=k=>k==='talk'?['#1F3A2B','#2F5A3D']:k==='group'?['#14150F','#1F3A2B','#2F5A3D']:null;
+function kcardHTML(c){const K=KIND[c.k],d=KCARD[c.n],title=EN?d[2]:d[0],text=EN?d[3]:d[1],p=K[2];
+ const pw=EN?(p===1?'point':'points'):({1:'نقطة',2:'نقطتين',3:'نقاط'})[p];
+ return `<div class="kc" data-kc><div class="kb" style="background:${K[3]};color:${K[4]}">${cubeIcon(K[5],42,false,KICOL(c.k))}<span class="kn">${EN?K[1]:K[0]}</span>${p?`<span class="kp"><b style="${c.k==='group'?'background:#14150F;color:#E0B454':''}">${AD(p)}</b>${pw}</span>`:`<span class="kp" style="color:#E0B454">${L('بطاقة قوة','power card')}</span>`}<bdi class="kno" dir="ltr">#${AD(c.n)}</bdi></div>${c.k==='wild'?'<div style="position:absolute;top:62px;left:0;right:0;height:5px;background:#4A2682"></div>':''}
+ <div class="kt" style="${d[4]?'bottom:70px':''}">${title?`<h3>${title}</h3>`:''}<p>${text}</p></div>${d[4]?`<div class="ka" data-ans><b>${L('الحل','Answer')}:</b> ${EN?d[5]:d[4]}</div>`:''}
+ <div class="ks"><img src="${LOGO}"><span>EILAN DOLL | ${L('الكشتة المجنونة','CRAZY KASHTA')}</span></div></div>`}
 
 /* ------------------------------------------------------------------ English versions (?l=en) — same scenes, English text */
 const GAMES_EN={
@@ -186,12 +254,19 @@ const GAMES_EN={
   ['3 stages through the night','The later it gets, the deeper the questions 🌙',{lv:[['Early night','Light questions'],['Midnight','Real honesty'],['Before dawn','Warm questions']]}],
   ['Answer with total honesty','The question is yours… and everyone listens',{tag:'Midnight',x:'Who do you turn to when life gets hard?'}],
   ['Only two skips per player','use them wisely',{rows:[['Skip','2 / 2'],['Skip','1 / 2']]}],
-  ['Let the question go round','everyone answers in turn']]}};
+  ['Let the question go round','everyone answers in turn']]},
+ kashta:{sub:'A card game for desert trips and campfire nights',steps:[
+  ['52 cards, 5 kinds','Each kind has its own colour and points — for 3 or more players, solo or in teams'],
+  ['Take turns: draw a card, read it out loud','Fire Challenge: do it, and the group judges — pass = 2 points'],
+  ['Talk and riddles','An honest answer = 1 point; the first right answer to a riddle = 2 points'],
+  ['Group rounds and jokers','In a round everyone plays and the winner gets 3 points; a joker is a power card to keep or use now'],
+  ['First to 20 points wins','or the highest score when the tea runs out',{rows:[['Team Coffee Pot',20],['Team Firewood',17],['Team Stars',14]]}]],
+  notes:{1:'Safety first: any moving around stays away from the fire, and little ones near the fire stay with an adult.'}}};
 
 const G0=GAMES[new URLSearchParams(location.search).get('g')||'guess'],GE=GAMES_EN[new URLSearchParams(location.search).get('g')||'guess'];
-const G=EN?Object.assign({},G0,{n:G0.en,en:G0.n,sub:GE.sub,steps:G0.steps.map((s,i)=>[GE.steps[i][0],GE.steps[i][1],Object.assign({},s[2],GE.steps[i][2]||{})])}):G0;
+const G=EN?Object.assign({},G0,{n:G0.en,en:G0.n,sub:GE.sub,steps:G0.steps.map((s,i)=>[GE.steps[i][0],GE.steps[i][1],Object.assign({},s[2],GE.steps[i][2]||{}),s[3]?(GE.notes||{})[i]:undefined])}):G0;
 /* timeline */
-const T_INTRO=4.2,T_STEP=4.8,T_OUT=5.2;
+const T_INTRO=G.tIntro||4.2,T_STEP=G.tStep||4.8,T_OUT=G.tOut||5.2;
 const SC=[];let at=0;
 SC.push({a:at,b:at+T_INTRO,k:'intro'});at+=T_INTRO;
 G.steps.forEach((s,i)=>{SC.push({a:at,b:at+T_STEP,k:'step',i});at+=T_STEP});
@@ -215,6 +290,10 @@ function illHTML(s){switch(s.k){
  case 'teams':return `<div style="display:flex;gap:30px">${[[(s.teams||[])[0]||'فريق البهارات','g-chili'],[(s.teams||[])[1]||'فريق الملح','star']].map((t,i)=>`<div class="chip" data-row="${i}" style="flex-direction:column;padding:26px 30px;gap:14px;font-size:28px">${cubeIcon(t[1],120)}<span>${t[0]}</span><span style="display:flex;gap:8px">${[0,1,2].map(()=>`<i style="width:30px;height:30px;border-radius:50%;background:${i?'#7FA98A':'#E8B64A'};display:block"></i>`).join('')}</span></div>`).join('')}</div>`;
  case 'levels':return `<div style="display:flex;flex-direction:column;gap:18px;width:${EN?510:430}px">${(s.lv||[['أول الليل','أسئلة خفيفة'],['نص الليل','الصراحة الحقيقية'],['قبل الفجر','أسئلة دافية']]).map((l,i)=>[l[0],l[1],['#E8B64A','#6FA37C','#7FA98A'][i]]).map((l,i)=>`<div class="chip" data-row="${i}" style="justify-content:space-between;padding:18px 26px;font-size:30px;border-color:${l[2]}"><span style="white-space:nowrap">${'🌙'.repeat(i+1)} ${l[0]}</span><span style="font-size:${EN?17:20}px;color:#B9B8A8;white-space:nowrap">${l[1]}</span></div>`).join('')}</div>`;
  case 'pass':return `<div style="position:relative;width:460px;height:380px">${[['#E8B64A',30,150],['#6FA37C',190,10],['#7FA98A',350,150],['#D9CFAF',190,290]].map((p,i)=>`<div class="person" style="background:${p[0]};left:${p[1]}px;top:${p[2]}px">${i+1}</div>`).join('')}<div class="phone" data-ph style="left:155px;top:55px"><div class="scr">${cubeIcon(G.ic,80)}</div></div></div>`;
+ case 'kinds':return `<div style="display:flex;flex-direction:column;gap:12px;width:${EN?500:470}px">${Object.keys(KIND).map((k,i)=>{const K=KIND[k];return `<div class="kind" data-row="${i}"><div class="mb" style="background:${K[3]};${k==='wild'?'box-shadow:inset 0 0 0 4px #4A2682':k==='riddle'?'box-shadow:inset 0 0 0 2px #E0B454':''}">${cubeIcon(K[5],46,false,KICOL(k))}</div><span class="nm">${EN?K[1]:K[0]}</span><span class="pt">${K[2]?AD(K[2])+' '+(EN?(K[2]===1?'point':'points'):({1:'نقطة',2:'نقطتين',3:'نقاط'})[K[2]]):L('بطاقة قوة','power card')}</span></div>`}).join('')}</div>`;
+ case 'kcard':return s.c.length===1?`<div style="position:relative;width:470px;height:323px">${kcardHTML(s.c[0])}</div>`:
+   `<div style="position:relative;width:540px;height:460px"><div data-kw style="position:absolute;width:470px;height:323px;top:0;${EN?'left':'right'}:0;transform-origin:${EN?'top left':'top right'}">${kcardHTML(s.c[0])}</div><div data-kw style="position:absolute;width:470px;height:323px;bottom:0;${EN?'right':'left'}:0;transform-origin:${EN?'bottom right':'bottom left'}">${kcardHTML(s.c[1])}</div></div>`;
+ case 'kwin':return `<div style="display:flex;flex-direction:column;gap:16px;width:470px"><div data-row="0" style="display:flex;align-items:center;gap:14px;font-weight:900;font-size:24px;color:#E0B454">${cubeIcon('k-star',44,false)}<span>${L('الهدف: '+AD(20)+' نقطة','Goal: 20 points')}</span></div>${s.rows.map((r,i)=>`<div class="bar" data-row="${i+1}" style="--o:${EN?'left':'right'};${i?'':'border-color:#E0B454'}"><i data-fill="${r[1]/20}"></i><span>${r[0]}</span><span class="v">${AD(r[1])}</span></div>`).join('')}</div>`;
  case 'vs':return `<div style="display:flex;align-items:center;gap:30px"><div class="chip" style="flex-direction:column;padding:24px">${cubeIcon('g-x',120,false)}<span>${s.you||'أنت'}</span></div><div class="op" style="font-family:Poppins">VS</div><div class="chip" style="flex-direction:column;padding:24px"><img src="${LOGO}" style="width:120px;height:120px"><span>Eilan</span></div></div>`;
  }return ''}
 function illUpdate(root,s,p,lt){
@@ -240,15 +319,24 @@ function illUpdate(root,s,p,lt){
  if(['score','players','teams','levels'].includes(s.k))root.querySelectorAll('[data-row]').forEach((r,i)=>{const v=back(ramp(lt,.25+i*.28,.75+i*.28));r.style.transform=`translateX(${(1-v)*-80}px)`;r.style.opacity=cl(v)});
  if(s.k==='pass'){const ph=root.querySelector('[data-ph]');const pts=[[-60,0],[0,-60],[60,0],[0,60]];const seg=lt*1.1,k=Math.floor(seg)%4,f=ease(seg%1);
    const A=pts[k],B=pts[(k+1)%4];ph.style.transform=`translate(${A[0]+(B[0]-A[0])*f}px,${A[1]+(B[1]-A[1])*f}px) rotate(${Math.sin(lt*3)*8}deg)`}
+ if(s.k==='kinds')root.querySelectorAll('[data-row]').forEach((r,i)=>{const v=ease(ramp(lt,.3+i*.32,1.0+i*.32));r.style.transform=`translateY(${(1-v)*24}px)`;r.style.opacity=cl(v)});
+ if(s.k==='kcard'){root.querySelectorAll('[data-kc]').forEach((c,i)=>{const v=ease(ramp(lt,.35+i*1.1,1.25+i*1.1)),sc=s.c.length>1?.78:1;
+     (s.c.length>1?c.parentElement:c).style.transform=`translateY(${(1-v)*30+Math.sin(lt*1.2+i*1.7)*3}px) rotate(${(i?2.5:-2.5)*(s.c.length>1)+(1-v)*(i?4:-4)}deg) scale(${sc})`;c.style.opacity=cl(v)});
+   const a=root.querySelector('[data-ans]');if(a){const v=ease(ramp(lt,3.2,3.9));a.style.opacity=v;if(v>.99&&lt<4.6)a.style.background=`rgba(224,180,84,${.18+.08*Math.sin((lt-3.9)*4)})`;else a.style.background=''}}
+ if(s.k==='kwin'){root.querySelectorAll('[data-row]').forEach((r,i)=>{const v=ease(ramp(lt,.3+i*.3,1.0+i*.3));r.style.transform=`translateY(${(1-v)*24}px)`;r.style.opacity=cl(v);
+     const f=r.querySelector('[data-fill]');if(f)f.style.transform=`scaleX(${f.dataset.fill*ease(ramp(lt,.9+i*.3,2.6+i*.3))})`});
+   const w=root.querySelector('[data-row="1"]');if(w)w.style.boxShadow=lt>3?`0 0 ${14+6*Math.sin((lt-3)*2.4)}px rgba(224,180,84,.55)`:''}
  if(s.k==='vs')root.querySelectorAll('.chip').forEach((c,i)=>{const v=back(ramp(lt,.2+i*.3,.7+i*.3));c.style.transform=`scale(${v}) translateY(${Math.sin(lt*2+i)*6}px)`})
 }
 
 /* ---------- scenes ---------- */
 const stage=$('#stage');
 SC.forEach(sc=>{const d=document.createElement('div');d.className='scene';sc.el=d;
- if(sc.k==='intro')d.innerHTML=`<div class="center" style="position:absolute;inset:0;gap:16px"><div data-icon>${cubeIcon(G.ic,230)}</div><div class="eb" data-a>EILAN GAMES · ${G.free?L('مجانية','FREE'):L('لعبة إيلان','HOW TO PLAY')}</div><div class="t1" data-b><span class="grad">${G.n}</span><bdi dir="${EN?'rtl':'ltr'}">${G.en}</bdi></div><div class="t3" data-c>${G.sub}</div></div>`;
- if(sc.k==='step'){const s=G.steps[sc.i];d.innerHTML=`<div class="step"><div class="txt"><div class="num" data-a>0${sc.i+1}</div><div class="t2" data-b>${s[0]}</div><div class="t3" data-c>${s[1]}</div></div><div class="ill">${illHTML(s[2])}</div></div>`}
- if(sc.k==='outro'){const tags=G.paid?`<span class="pill g">${G.arc?L('أول ٣ جولات مجاناً','First 3 rounds free'):L('أول ٣ بطاقات مجاناً','First 3 cards free')}</span><span class="pill o">${L('اللعبة كاملة ٣٠ ر.س','Full game 30 SAR')}</span>`:`<span class="pill g">${L('مجانية ١٠٠٪','100% free')}</span>`;
+ if(sc.k==='intro')d.innerHTML=`<div class="center" style="position:absolute;inset:0;gap:16px"><div data-icon>${cubeIcon(G.ic,230,G.icBg!==false)}</div><div class="eb" data-a>${G.eb||`EILAN GAMES · ${G.free?L('مجانية','FREE'):L('لعبة إيلان','HOW TO PLAY')}`}</div><div class="t1" data-b><span class="grad">${G.n}</span><bdi dir="${EN?'rtl':'ltr'}">${G.en}</bdi></div><div class="t3" data-c>${G.sub}</div></div>`;
+ if(sc.k==='step'){const s=G.steps[sc.i];d.innerHTML=`<div class="step"><div class="txt">${G.ardig&&!EN?`<div data-a style="width:92px;height:92px;border-radius:26px;border:2.4px solid #E8B64A;display:grid;place-items:center;font-weight:900;font-size:54px;line-height:1;color:#E8B64A">${AD(sc.i+1)}</div>`:`<div class="num" data-a>0${sc.i+1}</div>`}<div class="t2" data-b${G.calm?' style="font-size:'+(EN?40:46)+'px"':''}>${s[0]}</div><div class="t3" data-c>${s[1]}</div>${s[3]?`<div class="note" data-d>${s[3]}</div>`:''}</div><div class="ill">${illHTML(s[2])}</div></div>`}
+ if(sc.k==='outro'&&G.ic==='kashta'){
+   d.innerHTML=`<div class="center" style="position:absolute;inset:0;gap:20px"><img src="${LOGO}" data-icon style="width:140px;height:140px"><div class="t2" data-b>${L('الكشتة المجنونة في متجر','Crazy Kashta at the')} <span class="grad">${L('إيلان دول','Eilan Doll store')}</span></div><div data-c style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;max-width:1040px"><span class="pill g">${L('أول ٣ بطاقات مجانًا','First 3 cards free')}</span><span class="pill o">${L('تبي تكمل؟ اشترِ اللعبة — ٣٠ ريال','Want more? Get the game — 30 SAR')}</span><span class="pill">${L('نسخة للشاشة | iPad والكمبيوتر','Screen edition | iPad & computer')}</span><span class="pill o">${L('ونسخة طباعة وجه وقفا','Print-ready, double-sided')}</span></div><div class="t3" data-a style="font-family:Poppins,Cairo;letter-spacing:${EN?4:1}px;font-size:20px">${L('منطقة الترفيه | EILAN DOLL','ENTERTAINMENT ZONE · EILAN DOLL')}</div></div>`}
+ else if(sc.k==='outro'){const tags=G.paid?`<span class="pill g">${G.arc?L('أول ٣ جولات مجاناً','First 3 rounds free'):L('أول ٣ بطاقات مجاناً','First 3 cards free')}</span><span class="pill o">${L('اللعبة كاملة ٣٠ ر.س','Full game 30 SAR')}</span>`:`<span class="pill g">${L('مجانية ١٠٠٪','100% free')}</span>`;
    d.innerHTML=`<div class="center" style="position:absolute;inset:0;gap:20px"><img src="${LOGO}" data-icon style="width:150px;height:150px"><div class="t2" data-b>${L('العبها الحين في','Play it now on')} <span class="grad">${L('إيلان دول','Eilan Doll')}</span></div><div data-c style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;max-width:1000px">${tags}<span class="pill">${L('على الجوال · الآيباد · الكمبيوتر','Phone · iPad · Computer')}</span>${G.print?`<span class="pill o">🖨️ ${L('وفيه ملف PDF للطباعة',G.free?'Free print PDF':'Includes a print PDF')}</span>`:''}</div><div class="t3" data-a style="font-family:Poppins;letter-spacing:4px;font-size:20px">${L('منطقة الترفيه','ENTERTAINMENT ZONE')} · EILAN DOLL</div></div>`}
  stage.appendChild(d)});
 
@@ -258,8 +346,8 @@ function render(t){
  SC.forEach(sc=>{const d=sc.el,lt=t-sc.a,dur=sc.b-sc.a;const fin=ease(ramp(lt,0,.45)),fout=1-ease(ramp(lt,dur-.4,dur));const vis=sc===SC[0]?(t<.0001?1:fout):(sc===SC[SC.length-1]?fin:Math.min(fin,fout));
   const on=lt>-0.01&&lt<dur+.01;d.style.opacity=on?vis:0;d.style.display=on?'block':'none';if(!on)return;
   d.style.transform=`scale(${1+.04*(1-fin)})`;
-  const A=d.querySelector('[data-a]'),B=d.querySelector('[data-b]'),C=d.querySelector('[data-c]');
-  [[A,.15],[B,.3],[C,.5]].forEach(([e,o])=>{if(!e)return;const v=back(ramp(lt,o,o+.6));e.style.transform=`translateY(${(1-v)*40}px)`;e.style.opacity=cl(v)});
+  const A=d.querySelector('[data-a]'),B=d.querySelector('[data-b]'),C=d.querySelector('[data-c]'),D=d.querySelector('[data-d]');
+  [[A,.15],[B,.3],[C,.5],[D,.9]].forEach(([e,o])=>{if(!e)return;const v=G.calm?ease(ramp(lt,o,o+.8)):back(ramp(lt,o,o+.6));e.style.transform=`translateY(${(1-v)*40}px)`;e.style.opacity=cl(v)});
   if(sc.k==='intro'){const ic=d.querySelector('[data-icon]');assemble(ic,ramp(lt,0,1.5));shimmer(ic,lt);[A,B,C].forEach((e,i)=>{const v=back(ramp(lt,1.2+i*.25,1.9+i*.25));e.style.transform=`translateY(${(1-v)*40}px)`;e.style.opacity=cl(v)})}
   if(sc.k==='outro'){const ic=d.querySelector('[data-icon]');const v=back(ramp(lt,.1,.8));ic.style.transform=`scale(${v}) translateY(${Math.sin(lt*2)*6}px)`;ic.style.opacity=cl(v)}
   if(sc.k==='step')illUpdate(d.querySelector('.ill'),G.steps[sc.i][2],0,lt)});

@@ -4,3 +4,4 @@ __pycache__/
 *.pyc
 games/video-src/.build/
 visual/pdf-out/
+games/pdf-out/

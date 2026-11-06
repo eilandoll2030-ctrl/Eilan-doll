@@ -45,7 +45,7 @@ TALK = [
     ("", "وش الأكلة اللي ما تكتمل الكشتة بدونها؟", "", "Which food makes a kashta complete?"),
     ("", "لو ضعت في البر ومعك ٣ أغراض بس، وش تكون؟", "", "Lost in the desert with only 3 things — what are they?"),
     ("", "وش أغرب موقف صار لك في طلعة؟", "", "What's the strangest thing that happened to you on a trip?"),
-    ("", "مين في المجموعة يصلح «قائد الكشتة»؟ وليش؟", "", "Who here would make the best \"camp leader\" — and why?"),
+    ("", "مين في المجموعة ينفع يقود الكشتة؟ وليش؟", "", "Who here would be best at leading the kashta — and why?"),
     ("", "وش أكثر شي تعلمته هالسنة وصار مصدر فخر لك؟", "", "What did you learn this year that makes you proud?"),
     ("", "لو نجمة بتنسمّى باسم من اختيارك، وش يكون اسمها؟", "", "If a star were named by you, what would its name be?"),
     ("", "وصف الكشتة هذي بثلاث كلمات بس.", "", "Describe this kashta in exactly three words."),
@@ -100,15 +100,15 @@ GROUP = [
      "The \"No\" ban", "Two minutes of quick-fire questions. Saying \"no\" means you're out. Last one in wins."),
     ("قصة الخيمة", "بالدور، جملة جملة، تكمل المجموعة قصة تبدأ بـ: «في ليلة باردة سمعنا صوت غريب ورا الخيمة…». أحلى جملة تفوز.",
      "Tent tale", "One sentence each, continue the story: \"On a cold night we heard a strange sound behind the tent…\" The best sentence wins."),
-    ("الصمت الذهبي", "من هذي اللحظة ممنوع الكلام. آخر من يبقى ساكت يفوز.",
+    ("الصمت الذهبي", "من هذي اللحظة ممنوع الكلام. آخر من يصمد بدون كلام يفوز.",
      "Golden silence", "From this moment, no talking. The last one to stay silent wins."),
-    ("خمّن الصوت", "عيون مغمّضة لواحد من المجموعة، والبقية يطلعون صوت من أغراض الكشتة: دلّة، كيس، حطب… ٣ تخمينات صح = فوز.",
-     "Guess the sound", "One person closes their eyes; the others make sounds with camp things: coffee pot, bag, firewood… 3 right guesses wins."),
-    ("أسرع جمع", "فريقين: كل فريق يجمع ٥ أشياء بخمس ألوان مختلفة من المخيم خلال دقيقة — بعيد عن النار.",
-     "Speed hunt", "Two teams: collect 5 things in 5 different colours from the camp in one minute — away from the fire."),
+    ("أذن البر", "عيون مغمّضة لواحد من المجموعة، والبقية يطلعون صوت من أغراض الكشتة: دلّة، كيس، حطب… معرفة ٣ أصوات صح = فوز.",
+     "Desert ears", "One person closes their eyes; the others make sounds with camp things: coffee pot, bag, firewood… Naming 3 sounds right wins."),
+    ("أسرع جمع", "فريقين: كل فريق يجمع ٥ أغراض بخمس ألوان مختلفة من أغراض الكشتة بس، خلال دقيقة. بدون ابتعاد عن المجموعة، وبدون رفع حجارة، وبعيد عن النار.",
+     "Speed hunt", "Two teams: each team gathers 5 camp items in 5 different colours, in one minute. Camp gear only: stay with the group, no lifting stones, and keep away from the fire."),
     ("السبعة الممنوعة", "عدّ بالدور من ١. أي رقم فيه ٧ أو يقبل القسمة على ٧ ينقال بدله «كشتة!». الغلط = خروج.",
      "Forbidden seven", "Count in turns from 1. Any number with a 7 in it, or divisible by 7, is replaced by \"Kashta!\". A mistake = out."),
-    ("مين قالها؟", "بالدور، همسة للمقدّم بمعلومة غريبة ومحد يعرفها. المقدّم يقولها بصوت، والكل يخمّن صاحبها. أكثر تخمينات صح تفوز.",
+    ("مين قالها؟", "بالدور، همسة للمقدّم بمعلومة غريبة عن نفسك ومحد يعرفها. المقدّم يقولها بصوت، والكل يخمّن صاحبها. أكثر تخمينات صح تفوز.",
      "Who said it?", "In turns, whisper an unknown fun fact about yourself to the host. The host reads them out and everyone guesses who. Most right guesses wins."),
     ("ذاكرة الكشتة", "المقدّم يعدّد ١٠ أغراض بسرعة، والكل يحاول يعيدها بالترتيب. أطول قائمة صحيحة تفوز.",
      "Camp memory", "The host lists 10 items fast; everyone tries to repeat them in order. The longest correct list wins."),
@@ -121,13 +121,13 @@ GROUP = [
 ]
 
 WILD = [
-    ("حارس الدلّة", "هذي البطاقة تعطي حق اختيار مين يصب القهوة في الجولة الجاية.",
+    ("حراسة الدلّة", "هذي البطاقة تعطي حق اختيار مين يصب القهوة في الجولة الجاية.",
      "Keeper of the pot", "This card lets you choose who pours the coffee next round."),
-    ("دبّل!", "البطاقة الجاية بنقاط مضاعفة ×٢.",
+    ("نقاط مضاعفة!", "البطاقة الجاية بنقاط مضاعفة ×٢.",
      "Double!", "Your next card is worth double points ×2."),
     ("الهدنة", "إعفاء من أي بطاقة بدون خسارة نقاط. تنحفظ لوقت الحاجة.",
      "Truce", "Skip any one card without losing points. Keep it until you need it."),
-    ("مرّرها", "سحب بطاقة ثانية وإعطاؤها لأي أحد في المجموعة ينفّذها.",
+    ("تمرير البطاقة", "سحب بطاقة ثانية وإعطاؤها لأي أحد في المجموعة ينفّذها.",
      "Pass it on", "Draw another card and hand it to anyone in the group to play."),
 ]
 
@@ -146,14 +146,30 @@ RULES = {
     "ar": ["من ٣ أشخاص وفوق — أفراد أو فرق، ولكل الأعمار.",
            "فرزوا البطاقات ٥ أكوام حسب لون القفا.",
            "بالدور: اختيار كومة، سحب بطاقة، وقراءتها بصوت عالي.",
-           "النقاط على كل بطاقة: سالفة ١ · تحدّي ٢ · لغز ٢ · جولة ٣.",
+           "النقاط على كل بطاقة: سالفة ١، تحدّي ٢، لغز ٢، جولة ٣.",
            "الفوز: أول من يوصل ٢٠ نقطة، أو الأعلى نقاط لما يخلص الشاي."],
     "en": ["3 or more players — solo or in teams, all ages.",
            "Sort the cards into 5 piles by the colour of the back.",
            "Take turns: pick a pile, draw a card, read it out loud.",
-           "Points are on every card: Talk 1 · Challenge 2 · Riddle 2 · Round 3.",
+           "Points are on every card: Talk 1, Challenge 2, Riddle 2, Round 3.",
            "Win: first to 20 points, or the highest score when the tea runs out."],
 }
+# screen edition: no physical piles, so steps 2–3 say how to pick a card on screen (with_nav = full game, else sample)
+RULES_SCREEN = {
+    "ar": {True: ["اختيار نوع من القائمة الجانبية أو رقم من الفهرس — كل نوع له لونه الثابت.", "بالدور: فتح بطاقة وقراءتها بصوت عالي."],
+           False: ["البطاقات بالترتيب، وكل نوع له لونه الثابت.", "بالدور: فتح بطاقة وقراءتها بصوت عالي."]},
+    "en": {True: ["Pick a kind from the side menu, or a number from the index — each kind keeps its own colour.", "Take turns: open a card and read it out loud."],
+           False: ["The cards come in order, and each kind keeps its own colour.", "Take turns: open a card and read it out loud."]},
+}
+
+
+def rules_for(lang, screen=False, with_nav=True):
+    r = list(RULES[lang])
+    if screen:
+        r[1:3] = RULES_SCREEN[lang][with_nav]
+    return r
+
+
 HOWTO = {  # what each kind means
     "fire": ("التنفيذ على من سحب البطاقة، والمجموعة تحكم: نجح؟ تنحسب نقطتين.", "Do it; the group judges. Pass = 2 points."),
     "talk": ("جواب صادق = نقطة. ما فيه جواب غلط.", "An honest answer = 1 point. There's no wrong answer."),
@@ -161,9 +177,11 @@ HOWTO = {  # what each kind means
     "group": ("الكل يلعب، والفوز = ٣ نقاط.", "Everyone plays; the winner gets 3 points."),
     "wild": ("بطاقة قوة: تنحفظ أو تنستخدم فورًا.", "A power card: keep it or use it now."),
 }
+HOWTO_RIDDLE_SCREEN = ("المقدّم يقرأ اللغز (الحل في الصفحة اللي بعده)، وأول جواب صح = نقطتين.",
+                       "The host reads it (the answer is on the next page); the first right answer gets 2 points.")
 SAFETY = {
-    "ar": "السلامة أول: أي حركة تكون بعيد عن النار ٥ خطوات على الأقل، وأي بطاقة غير مريحة تنترك بدون خسارة نقاط. «المقدّم» = أي أحد من المجموعة يقرأ البطاقة.",
-    "en": "Safety first: any moving around happens at least 5 steps from the fire, and any card that feels uncomfortable can be skipped with no penalty. \"Host\" = whoever reads the card.",
+    "ar": "السلامة أول: أي حركة تكون بعيد عن النار ٥ خطوات على الأقل، والصغار مع شخص كبير قريب من النار، وأي بطاقة غير مريحة تنترك بدون خسارة نقاط. «المقدّم» = أي أحد من المجموعة يقرأ البطاقة.",
+    "en": "Safety first: any moving around happens at least 5 steps from the fire, little ones stay with an adult near the fire, and any card that feels uncomfortable can be skipped with no penalty. \"Host\" = whoever reads the card.",
 }
 
 STORE = {

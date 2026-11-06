@@ -12,7 +12,7 @@ Print setting: both sides · flip on short edge · actual size 100%.  Backs mirr
 import pathlib, re, subprocess, tempfile, sys
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
-from kashta_data import CATS, deck, RULES, HOWTO, SAFETY, PRICE  # noqa: E402
+from kashta_data import CATS, deck, RULES, rules_for, HOWTO, HOWTO_RIDDLE_SCREEN, SAFETY, PRICE  # noqa: E402
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 PAID = ROOT / "games" / "pdf-out"; PAID.mkdir(parents=True, exist_ok=True)
@@ -21,6 +21,31 @@ FONTS = ROOT / "coloring" / "fonts"
 LOGO_SVG = (ROOT / "assets" / "logo" / "eilan-icon.svg").read_text(encoding="utf-8")
 LOGO = "data:image/svg+xml;utf8," + LOGO_SVG.replace("#", "%23").replace('"', "'").replace("\n", "")
 AR_DIG = str.maketrans("0123456789", "٠١٢٣٤٥٦٧٨٩")
+STORE_URL = "https://eilan-doll.vercel.app/store/"   # real route: index.html SEO_PAGES "store" → eilan://store
+CREAM = "#EFE9DA"   # approved cream token --w in index.html
+# font stacks: Poppins/Cairo first, then the system's DejaVu Sans for any glyph they lack (Arabic digits in Poppins, arrows)
+FE = "Poppins,Cairo,'DejaVu Sans',sans-serif"
+FA = "Cairo,Poppins,'DejaVu Sans',sans-serif"
+# «·» reads like the Arabic zero «٠» in Cairo, so Arabic text uses «|» (or «،» inside sentences)
+SEP = " | "
+
+
+def fam(ar):
+    return FA if ar else FE
+
+
+def arrow(ar, size="3.2mm"):
+    """Drawn arrow (no font glyph needed), pointing in the reading direction."""
+    d = "M14 5 7 12l7 7M7 12h13" if ar else "M10 5l7 7-7 7M17 12H4"
+    return (f'<svg viewBox="0 0 24 24" width="{size}" height="{size}" style="display:inline-block;vertical-align:-.12em" '
+            f'fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="{d}"/></svg>')
+
+
+def swatch(k, size="3.4mm"):
+    """One colour chip per kind, the same as its card back (bg + edge), used in nav, index legend and cover."""
+    bg = CATS[k][3]
+    edge = {"riddle": "inset 0 0 0 .45mm #E0B454", "wild": "inset 0 0 0 .7mm #4A2682"}.get(k, "none")
+    return f'<i style="width:{size};height:{size};border-radius:1mm;flex:none;display:block;background:{bg};box-shadow:{edge}"></i>'
 
 # original cube icons, drawn in the site's one icon style (rounded cubes on a grid)
 ICON = {
@@ -65,14 +90,14 @@ ICOLS = {"fire": ["#F6E3A8", "#E0B454", "#E0B454", "#B58A2E"], "talk": ["#1F3A2B
 CSS_BASE = f"""
 @font-face{{font-family:Cairo;src:url('file://{FONTS}/Cairo_700Bold.ttf');font-weight:700}}
 @font-face{{font-family:Cairo;src:url('file://{FONTS}/Cairo_900Black.ttf');font-weight:900}}
-@font-face{{font-family:Poppins;src:url('file://{FONTS}/Poppins_700Bold.ttf');font-weight:700}}
-@font-face{{font-family:Poppins;src:url('file://{FONTS}/Poppins_800ExtraBold.ttf');font-weight:800}}
+@font-face{{font-family:{FE};src:url('file://{FONTS}/Poppins_700Bold.ttf');font-weight:700}}
+@font-face{{font-family:{FE};src:url('file://{FONTS}/Poppins_800ExtraBold.ttf');font-weight:800}}
 *{{box-sizing:border-box;margin:0;padding:0}}
 html{{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
-body{{font-family:Cairo,Poppins,sans-serif;color:#1F3A2B;background:#F6F1E3}}
+body{{font-family:{FA};color:#1F3A2B;background:#F6F1E3}}
 a{{color:inherit;text-decoration:none}}
 [dir=rtl] ol{{list-style:arabic-indic}}
-.en{{font-family:Poppins,Cairo,sans-serif}}
+.en{{font-family:{FE}}}
 /* card = bleed box (128×88 trim + b on every side) */
 .card{{position:relative;overflow:hidden}}
 .trim{{position:absolute;width:128mm;height:88mm}}
@@ -82,7 +107,7 @@ a{{color:inherit;text-decoration:none}}
 .en .band .nm{{font-weight:800;font-size:11.5pt;letter-spacing:.3px}}
 .pts{{margin-inline-start:auto;display:flex;align-items:center;gap:1.6mm;font-weight:900;font-size:8.5pt}}
 .pts b{{width:9mm;height:9mm;border-radius:2.6mm;display:grid;place-items:center;font-size:13pt;background:#F6F1E3;color:#14150F}}
-.no{{font-family:Poppins;font-weight:800;font-size:7pt;opacity:.75}}
+.no{{font-family:{FE};font-weight:800;font-size:7pt;opacity:.75}}
 .body{{position:absolute;top:21mm;bottom:15mm;left:9mm;right:9mm;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}}
 .body h3{{font-weight:900;font-size:16pt;margin-bottom:2mm;color:#14150F}}
 .en .body h3{{font-weight:800;font-size:14pt}}
@@ -90,7 +115,7 @@ a{{color:inherit;text-decoration:none}}
 .en .body p{{font-size:12.5pt;line-height:1.5}}
 .ans{{position:absolute;bottom:8.6mm;left:20mm;right:20mm;transform:rotate(180deg);text-align:center;font-size:8.5pt;font-weight:700;color:#5E5A44;border-top:.5pt dashed #B9AE8E;padding-top:.6mm}}
 .ans b{{color:#B58A2E}}
-.sig{{position:absolute;bottom:3.4mm;left:0;right:0;display:flex;align-items:center;justify-content:center;gap:1.4mm;font-family:Poppins;font-weight:800;font-size:5.8pt;letter-spacing:1.6px;color:#8E8A70}}
+.sig{{position:absolute;bottom:3.4mm;left:0;right:0;display:flex;align-items:center;justify-content:center;gap:1.4mm;font-family:{FE};font-weight:800;font-size:5.8pt;letter-spacing:1.6px;color:#8E8A70}}
 .sig img{{width:4.2mm;height:4.2mm}}
 .cubes{{display:flex;gap:1mm}}.cubes i{{width:2.2mm;height:2.2mm;border-radius:.7mm;display:block}}
 """
@@ -102,7 +127,7 @@ def num(n, lang):
 
 def sig(lang, color=None):
     st = f' style="color:{color}"' if color else ""
-    return f'<div class="sig"{st}><img src="{LOGO}"><span>EILAN DOLL · {"الكشتة المجنونة" if lang == "ar" else "CRAZY KASHTA"}</span></div>'
+    return f'<div class="sig"{st}><img src="{LOGO}"><span>EILAN DOLL | {"الكشتة المجنونة" if lang == "ar" else "CRAZY KASHTA"}</span></div>'
 
 
 def pts_word(p, lang):
@@ -111,8 +136,8 @@ def pts_word(p, lang):
     return {1: "نقطة", 2: "نقطتين", 3: "نقاط"}[p]
 
 
-def card_front(n, key, c, lang, b=0):
-    """Front of card n. b = bleed in mm (3 for print, 0 for screen)."""
+def card_front(n, key, c, lang, b=0, upside_ans=True):
+    """Front of card n. b = bleed in mm (3 for print, 0 for screen). upside_ans: riddle answer upside-down (print only)."""
     nm_ar, nm_en, p, bg, fg, ac, ic = CATS[key]
     ar = lang == "ar"
     title, text = (c[0], c[1]) if ar else (c[2], c[3])
@@ -129,7 +154,7 @@ def card_front(n, key, c, lang, b=0):
         h += f'<span class="pts" style="color:#E0B454">{"بطاقة قوة" if ar else "power card"}</span>'
     h += f'<span class="no" style="margin-inline-start:3mm">#{num(n, lang)}</span></div>'
     h += '<div class="body">' + (f"<h3>{title}</h3>" if title else "") + f"<p>{text}</p></div>"
-    if key == "riddle":
+    if key == "riddle" and upside_ans:
         h += f'<div class="ans"><b>{"الحل" if ar else "Answer"}:</b> {c[4] if ar else c[5]}</div>'
     h += sig(lang) + "</div></div>"
     return h
@@ -152,8 +177,8 @@ def card_back(key, lang, b=0):
     if key == "wild":
         h += f'<div style="position:absolute;inset:{b+3}mm;border:1.2mm solid #4A2682;border-radius:5mm"></div>'
     h += f'<div style="position:absolute;top:{b}mm;left:{b}mm;width:128mm;height:88mm;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2mm">'
-    h += icon + f'<div style="font-weight:900;font-size:{"20pt" if ar else "17pt"};font-family:{"Cairo" if ar else "Poppins"}">{name}</div>'
-    h += f'<div style="font-family:Poppins;font-weight:800;font-size:7pt;letter-spacing:2.4px;opacity:.8">{"الكشتة المجنونة · CRAZY KASHTA" if True else ""}</div></div>'
+    h += icon + f'<div style="font-weight:900;font-size:{"20pt" if ar else "17pt"};font-family:{fam(ar)}">{name}</div>'
+    h += f'<div style="font-family:{FE};font-weight:800;font-size:7pt;letter-spacing:2.4px;opacity:.8">{"الكشتة المجنونة | CRAZY KASHTA" if True else ""}</div></div>'
     h += sig(lang, fg) + "</div>"
     return h
 
@@ -210,7 +235,7 @@ Y0 = (210 - 2 * CH - GY) / 2               # 7
 COLS = [X0, X0 + CW + GX]; ROWS = [Y0, Y0 + CH + GY]
 PCSS = """.pg{width:297mm;height:210mm;position:relative;overflow:hidden;page-break-after:always;background:#FFFFFF}
 .pg:last-child{page-break-after:auto}.slot{position:absolute}
-.cm{position:absolute;background:#14150F}.plbl{position:absolute;top:1.4mm;left:0;right:0;text-align:center;font-family:Poppins;font-weight:700;font-size:5.6pt;color:#8E8A70}"""
+.cm{position:absolute;background:#14150F}.plbl{position:absolute;top:1.4mm;left:0;right:0;text-align:center;font-family:Poppins,Cairo,'DejaVu Sans',sans-serif;font-weight:700;font-size:5.6pt;color:#8E8A70}"""
 
 
 def crop_marks():
@@ -245,25 +270,25 @@ def print_cover(lang):
     return f'''<section class="pg" dir="{d}" style="background:#0E0E0A;color:#F6F1E3">
 <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:16mm">
 <div>{fire_art("80mm")}</div>
-<div style="max-width:140mm"><div style="font-family:Poppins;font-weight:800;letter-spacing:4px;font-size:9pt;color:#E0B454">EILAN DOLL — {"PRINT EDITION" if not ar else "نسخة الطباعة"}</div>
-<div style="font-weight:900;font-size:{"44pt" if ar else "40pt"};line-height:1.15;margin:2mm 0;font-family:{"Cairo" if ar else "Poppins"}">{"الكشتة المجنونة" if ar else "Crazy Kashta"}</div>
-<div style="font-size:13pt;color:#C9D8C3;font-family:{"Cairo" if ar else "Poppins"}">{"لعبة بطاقات للطلعات والكشتات حول النار" if ar else "A card game for desert trips and campfire nights"}</div>
-<div style="display:flex;flex-wrap:wrap;gap:2.4mm;margin-top:6mm;font-family:{"Cairo" if ar else "Poppins"}">{"".join(f'<span style="border:.6pt solid #E0B454;border-radius:3mm;padding:1mm 3.4mm;font-size:10pt">{x}</span>' for x in t)}</div></div></div>
-<div style="position:absolute;bottom:9mm;left:0;right:0;display:flex;justify-content:center;align-items:center;gap:2.4mm;font-family:Poppins;font-weight:800;letter-spacing:3px;font-size:9pt;color:#A9BFA9"><img src="{LOGO}" style="width:9mm;height:9mm">EILAN DOLL — THE DIGITAL WORLD</div></section>'''
+<div style="max-width:140mm"><div style="font-family:{FE};font-weight:800;letter-spacing:4px;font-size:9pt;color:#E0B454">EILAN DOLL — {"PRINT EDITION" if not ar else "نسخة الطباعة"}</div>
+<div style="font-weight:900;font-size:{"44pt" if ar else "40pt"};line-height:1.15;margin:2mm 0;font-family:{fam(ar)}">{"الكشتة المجنونة" if ar else "Crazy Kashta"}</div>
+<div style="font-size:13pt;color:#C9D8C3;font-family:{fam(ar)}">{"لعبة بطاقات للطلعات والكشتات حول النار" if ar else "A card game for desert trips and campfire nights"}</div>
+<div style="display:flex;flex-wrap:wrap;gap:2.4mm;margin-top:6mm;font-family:{fam(ar)}">{"".join(f'<span style="border:.6pt solid #E0B454;border-radius:3mm;padding:1mm 3.4mm;font-size:10pt">{x}</span>' for x in t)}</div></div></div>
+<div style="position:absolute;bottom:9mm;left:0;right:0;display:flex;justify-content:center;align-items:center;gap:2.4mm;font-family:{FE};font-weight:800;letter-spacing:3px;font-size:9pt;color:#A9BFA9"><img src="{LOGO}" style="width:9mm;height:9mm">EILAN DOLL — THE DIGITAL WORLD</div></section>'''
 
 
 def print_guide(lang):
-    ar = lang == "ar"; fam = "Cairo" if ar else "Poppins"
-    p1 = (["ورق A4 مقوّى (٢٠٠–٣٠٠ جرام) يعطي أحلى نتيجة.", "اختيار: <b>الطباعة على الوجهين</b> · <b>القلب من الحافة القصيرة</b> (Flip on short edge).",
+    ar = lang == "ar"; ff = fam(ar)
+    p1 = (["ورق A4 مقوّى (٢٠٠–٣٠٠ جرام) يعطي أحلى نتيجة.", "اختيار: <b>الطباعة على الوجهين</b>، و<b>القلب من الحافة القصيرة</b> <bdi dir=\"ltr\" style=\"font-family:Poppins,Cairo,sans-serif;font-size:.9em;white-space:nowrap\">(Flip on short edge)</bdi>.",
            "الحجم الفعلي ١٠٠٪ — بدون «ملاءمة للصفحة».", "في المطبعة: «وجهين، قلب من الحافة القصيرة، قص على علامات القص»."]
-          if ar else ["Thick A4 card (200–300 gsm) gives the best result.", "Choose <b>Print on both sides</b> · <b>Flip on short edge</b>.",
+          if ar else ["Thick A4 card (200–300 gsm) gives the best result.", "Choose <b>Print on both sides</b> and <b>Flip on short edge</b>.",
                       "Actual size 100% — no \"fit to page\".", "At a print shop: \"double-sided, flip on short edge, cut on the crop marks\"."])
     p2 = (["كل ورقة فيها ٤ بطاقات، مقاس البطاقة ١٢٨×٨٨ مم.", "القص على الخطوط السوداء الصغيرة في الأطراف (علامات القص). اللون زايد ٣ مم عشان ما يطلع حد أبيض.",
-           "رقم كل بطاقة مكتوب على وجهها — والقفا لونه حسب النوع.", "أول ورقتين (الغلاف وهذي) ما تنقص."]
+           "رقم كل بطاقة مكتوب على وجهها — والقفا لونه حسب النوع.", "أول ورقتين (الغلاف وهذي) ما تحتاج قص."]
           if ar else ["Each sheet holds 4 cards, 128 × 88 mm each.", "Cut on the small black lines at the edges (crop marks). Colour runs 3 mm past the cut, so no white edges.",
                       "Every card shows its number on the front — the back colour shows its kind.", "The first two pages (cover and this one) are not cut."])
     return f'''<section class="pg" dir="{"rtl" if ar else "ltr"}" style="background:#F6F1E3">
-<div style="position:absolute;inset:14mm 18mm 22mm;display:grid;grid-template-columns:1fr 1fr;gap:12mm;font-family:{fam}">
+<div style="position:absolute;inset:14mm 18mm 22mm;display:grid;grid-template-columns:1fr 1fr;gap:12mm;font-family:{ff}">
 <div><div style="font-weight:900;font-size:19pt;margin-bottom:3mm;color:#14150F">{"طريقة الطباعة" if ar else "How to print"}</div>
 <ol style="font-size:10.5pt;line-height:1.9;padding-inline-start:6mm">{"".join(f"<li>{x}</li>" for x in p1)}</ol></div>
 <div><div style="font-weight:900;font-size:19pt;margin-bottom:3mm;color:#14150F">{"القص" if ar else "Cutting"}</div>
@@ -279,7 +304,7 @@ def build_print(lang):
     pages = [print_cover(lang), print_guide(lang)]
     for s in range(0, len(fronts), 4):
         n = s // 4 + 1
-        lab = (f"ورقة {num(n, lang)} · الوجه" if ar else f"Sheet {n} · FRONT"), (f"ورقة {num(n, lang)} · القفا" if ar else f"Sheet {n} · BACK")
+        lab = (f"ورقة {num(n, lang)} | الوجه" if ar else f"Sheet {n} | FRONT"), (f"ورقة {num(n, lang)} | القفا" if ar else f"Sheet {n} | BACK")
         pages.append(print_sheet(fronts[s:s + 4], lab[0], False, ar))
         pages.append(print_sheet(backs[s:s + 4], lab[1], True, ar))
     to_pdf("".join(pages), PCSS, PAID / f"Eilan-Kashta-Print-{lang.upper()}.pdf", 297, 210, lang)
@@ -301,7 +326,7 @@ SCSS = f""".sp{{width:{SW}mm;height:{SH}mm;position:relative;overflow:hidden;pag
 .cardwrap>.card{{position:absolute;left:0;top:0;transform:scale({SCALE});transform-origin:0 0}}
 .meta{{margin-top:5mm;font-size:9.5pt;color:#6E6C5A;font-weight:700;display:flex;gap:6mm;align-items:center}}
 .meta a{{color:#2F5A3D;border-bottom:.5pt solid #B58A2E}}
-.ssig{{position:absolute;bottom:4mm;display:flex;align-items:center;gap:1.6mm;font-family:Poppins;font-weight:800;font-size:6.4pt;letter-spacing:1.8px;color:#8E8A70}}
+.ssig{{position:absolute;bottom:4mm;display:flex;align-items:center;gap:1.6mm;font-family:{FE};font-weight:800;font-size:6.4pt;letter-spacing:1.8px;color:#8E8A70}}
 .ssig img{{width:5mm;height:5mm}}"""
 
 
@@ -313,12 +338,14 @@ def nav(lang, active):
         first.setdefault(k, i + 1)
     items = [("index", "الفهرس" if ar else "Index", "#E0B454", "#index"), ("rules", "طريقة اللعب" if ar else "How to play", "#EBDDB0", "#rules")]
     for k in ("fire", "talk", "riddle", "group", "wild"):
-        items.append((k, CATS[k][0] if ar else CATS[k][1], CATS[k][3] if k not in ("riddle", "wild") else ("#E0B454" if k == "riddle" else "#4A2682"), f"#c{first[k]}"))
+        items.append((k, CATS[k][0] if ar else CATS[k][1], k, f"#c{first[k]}"))
     items.append(("score", "لوحة النقاط" if ar else "Scoreboard", "#7FAA8A", "#score"))
     h = f'<nav class="nav" style="{side}:0"><div class="lg"><img src="{LOGO}" style="width:9mm;height:9mm"><span>{"الكشتة المجنونة" if ar else "Crazy Kashta"}</span></div>'
     for key, label, col, href in items:
-        h += f'<a href="{href}" class="{"on" if key == active else ""}"><i class="dot" style="background:{col};{"border:.4pt solid #EBDDB0" if col in ("#14150F",) else ""}"></i>{label}</a>'
-    h += f'<div style="margin-top:auto;font-family:Poppins;font-weight:800;font-size:6pt;letter-spacing:1.6px;color:#8E8A70">EILAN DOLL<br>THE DIGITAL WORLD</div></nav>'
+        # kinds: the same swatch as their back; other pages: a small round cream dot so no kind colour is reused
+        dot = swatch(col, "3.2mm") if col in CATS else '<i class="dot" style="border-radius:50%;transform:scale(.7);background:#EBDDB0"></i>'
+        h += f'<a href="{href}" class="{"on" if key == active else ""}">{dot}{label}</a>'
+    h += f'<div style="margin-top:auto;font-family:{FE};font-weight:800;font-size:6pt;letter-spacing:1.6px;color:#8E8A70">EILAN DOLL<br>THE DIGITAL WORLD</div></nav>'
     return h
 
 
@@ -328,35 +355,35 @@ def main_box(lang):
 
 
 def ssig(lang):
-    return f'<div class="ssig"><img src="{LOGO}">EILAN DOLL · {"الكشتة المجنونة" if lang == "ar" else "CRAZY KASHTA"}</div>'
+    return f'<div class="ssig"><img src="{LOGO}">EILAN DOLL | {"الكشتة المجنونة" if lang == "ar" else "CRAZY KASHTA"}</div>'
 
 
 def screen_cover(lang, sample=False):
-    ar = lang == "ar"; fam = "Cairo" if ar else "Poppins"
-    tag = ("نسخة تجربة مجانية — أول ٣ بطاقات" if ar else "Free sample — first 3 cards") if sample else ("نسخة الشاشة · iPad والكمبيوتر" if ar else "Screen edition · iPad & computer")
+    ar = lang == "ar"; ff = fam(ar)
+    tag = ("نسخة تجربة مجانية — أول ٣ بطاقات" if ar else "Free sample — first 3 cards") if sample else ("نسخة الشاشة | iPad والكمبيوتر" if ar else "Screen edition | iPad & computer")
     return f'''<section class="sp" id="cover" dir="{"rtl" if ar else "ltr"}" style="background:#0E0E0A;color:#F6F1E3">
 <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:14mm;padding:0 16mm">
 <div>{fire_art("78mm")}</div>
-<div style="max-width:130mm;font-family:{fam}"><div style="font-family:Poppins;font-weight:800;letter-spacing:4px;font-size:9pt;color:#E0B454">EILAN DOLL</div>
+<div style="max-width:130mm;font-family:{ff}"><div style="font-family:{FE};font-weight:800;letter-spacing:4px;font-size:9pt;color:#E0B454">EILAN DOLL</div>
 <div style="font-weight:900;font-size:{"42pt" if ar else "38pt"};line-height:1.15;margin:2mm 0">{"الكشتة المجنونة" if ar else "Crazy Kashta"}</div>
 <div style="font-size:13pt;color:#C9D8C3">{"لعبة بطاقات للطلعات والكشتات حول النار" if ar else "A card game for desert trips and campfire nights"}</div>
 <div style="margin-top:6mm;display:inline-block;border:.6pt solid #E0B454;border-radius:3mm;padding:1.2mm 4mm;font-size:10.5pt">{tag}</div>
-<div style="margin-top:5mm;display:flex;gap:2mm">{"".join(f'<i style="width:5mm;height:5mm;border-radius:1.4mm;background:{c}"></i>' for c in ["#2F5A3D","#7FAA8A","#14150F;border:.5pt solid #E0B454","#E0B454","#4A2682"])}</div>
-{'' if sample else f'<a href="#index" style="display:inline-block;margin-top:6mm;background:#E0B454;color:#14150F;font-weight:900;border-radius:3mm;padding:2mm 6mm;font-size:12pt">{"ابدأوا ←" if ar else "Start →"}</a>'}</div></div>
-<div style="position:absolute;bottom:8mm;left:0;right:0;display:flex;justify-content:center;align-items:center;gap:2.4mm;font-family:Poppins;font-weight:800;letter-spacing:3px;font-size:8.5pt;color:#A9BFA9"><img src="{LOGO}" style="width:8mm;height:8mm">EILAN DOLL — THE DIGITAL WORLD</div></section>'''
+<div style="margin-top:5mm;display:flex;gap:2mm">{"".join(swatch(k, "5mm") for k in ("fire", "talk", "riddle", "group", "wild"))}</div>
+{'' if sample else f'<a href="#index" style="display:inline-block;margin-top:6mm;background:#E0B454;color:#14150F;font-weight:900;border-radius:3mm;padding:2mm 6mm;font-size:12pt">{"ابدأوا" if ar else "Start"} {arrow(ar)}</a>'}</div></div>
+<div style="position:absolute;bottom:8mm;left:0;right:0;display:flex;justify-content:center;align-items:center;gap:2.4mm;font-family:{FE};font-weight:800;letter-spacing:3px;font-size:8.5pt;color:#A9BFA9"><img src="{LOGO}" style="width:8mm;height:8mm">EILAN DOLL — THE DIGITAL WORLD</div></section>'''
 
 
 def screen_rules(lang, with_nav=True):
-    ar = lang == "ar"; fam = "Cairo" if ar else "Poppins"
+    ar = lang == "ar"; ff = fam(ar)
     kinds = "".join(
-        f'<div style="display:flex;gap:3mm;align-items:center;background:#FFFDF6;border:.5pt solid #D9CFB4;border-radius:3mm;padding:2mm 3mm">'
-        f'<div style="background:{CATS[k][3]};border-radius:2.4mm;padding:1.2mm;flex:none">{cube(CATS[k][6], "9mm", ICOLS[CATS[k][6]])}</div>'
-        f'<div><b style="font-size:10pt;color:#14150F">{CATS[k][0] if ar else CATS[k][1]}</b><div style="font-size:8.6pt;color:#5E5A44;line-height:1.45">{HOWTO[k][0 if ar else 1]}</div></div></div>'
+        f'<div style="display:flex;gap:3mm;align-items:center;background:{CREAM};border:.5pt solid #D9CFB4;border-radius:3mm;padding:2mm 3mm">'
+        f'<div style="background:{CATS[k][3]};border-radius:2.4mm;padding:1.2mm;flex:none;box-shadow:{ {"riddle": "inset 0 0 0 .45mm #E0B454", "wild": "inset 0 0 0 .7mm #4A2682"}.get(k, "none") }">{cube(CATS[k][6], "9mm", ICOLS[CATS[k][6]])}</div>'
+        f'<div><b style="font-size:10pt;color:#14150F">{CATS[k][0] if ar else CATS[k][1]}</b><div style="font-size:8.6pt;color:#5E5A44;line-height:1.45">{(HOWTO_RIDDLE_SCREEN if k == "riddle" else HOWTO[k])[0 if ar else 1]}</div></div></div>'
         for k in ("fire", "talk", "riddle", "group", "wild"))
-    inner = f'''<div style="width:{(SW-44-24) if with_nav else SW-40}mm;font-family:{fam}">
+    inner = f'''<div style="width:{(SW-44-24) if with_nav else SW-40}mm;font-family:{ff}">
 <div style="font-weight:900;font-size:20pt;color:#14150F;margin-bottom:2mm">{"طريقة اللعب" if ar else "How to play"}</div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:7mm">
-<div><ol style="font-size:10.5pt;line-height:1.85;padding-inline-start:5mm">{"".join(f"<li>{x}</li>" for x in RULES[lang])}</ol>
+<div><ol style="font-size:10.5pt;line-height:1.85;padding-inline-start:5mm">{"".join(f"<li>{x}</li>" for x in rules_for(lang, True, with_nav))}</ol>
 <div style="font-size:9pt;line-height:1.6;margin-top:3mm;color:#5E5A44;border-inline-start:1.2mm solid #E0B454;padding-inline-start:3mm">{SAFETY[lang]}</div></div>
 <div style="display:flex;flex-direction:column;gap:2mm">{kinds}</div></div></div>'''
     if with_nav:
@@ -369,16 +396,16 @@ def screen_index(lang):
     chips = ""
     for i, (k, _) in enumerate(D):
         bg, fg = CATS[k][3], CATS[k][4]
-        extra = "box-shadow:inset 0 -1.2mm 0 #4A2682;" if k == "wild" else ""
-        chips += f'<a href="#c{i+1}" style="display:grid;place-items:center;height:12mm;border-radius:2.6mm;background:{bg};color:{fg};font-family:Poppins;font-weight:800;font-size:11pt;{extra}">{num(i+1, lang)}</a>'
-    legend = "".join(f'<span style="display:flex;align-items:center;gap:1.4mm"><i style="width:3.4mm;height:3.4mm;border-radius:1mm;background:{CATS[k][3]};display:block"></i>{CATS[k][0] if ar else CATS[k][1]}</span>' for k in CATS)
+        extra = {"riddle": "box-shadow:inset 0 0 0 .45mm #E0B454;", "wild": "box-shadow:inset 0 0 0 .7mm #4A2682;"}.get(k, "")
+        chips += f'<a href="#c{i+1}" style="display:grid;place-items:center;height:12mm;border-radius:2.6mm;background:{bg};color:{fg};font-family:{FE};font-weight:800;font-size:11pt;{extra}">{num(i+1, lang)}</a>'
+    legend = "".join(f'<span style="display:flex;align-items:center;gap:1.4mm">{swatch(k)}{CATS[k][0] if ar else CATS[k][1]}</span>' for k in CATS)
     return f'''<section class="sp" id="index" dir="{"rtl" if ar else "ltr"}">{nav(lang, "index")}<div {main_box(lang)}>
-<div style="width:{SW-44-24}mm;font-family:{"Cairo" if ar else "Poppins"}">
+<div style="width:{SW-44-24}mm;font-family:{fam(ar)}">
 <div style="display:flex;align-items:baseline;gap:4mm;margin-bottom:3mm"><div style="font-weight:900;font-size:20pt;color:#14150F">{"الفهرس" if ar else "Index"}</div>
 <div style="font-size:9.5pt;color:#6E6C5A">{"اضغطوا على أي رقم للانتقال للبطاقة" if ar else "Tap any number to jump to that card"}</div></div>
 <div style="display:grid;grid-template-columns:repeat(13,1fr);gap:1.8mm">{chips}</div>
 <div style="display:flex;flex-wrap:wrap;gap:5mm;margin-top:5mm;font-size:9.5pt;font-weight:700">{legend}</div>
-<div style="margin-top:4mm;font-size:9.5pt;color:#6E6C5A"><a href="#rules" style="color:#2F5A3D;border-bottom:.5pt solid #B58A2E">{"طريقة اللعب" if ar else "How to play"}</a> · <a href="#score" style="color:#2F5A3D;border-bottom:.5pt solid #B58A2E">{"لوحة النقاط" if ar else "Scoreboard"}</a></div>
+<div style="margin-top:4mm;font-size:9.5pt;color:#6E6C5A"><a href="#rules" style="color:#2F5A3D;border-bottom:.5pt solid #B58A2E">{"طريقة اللعب" if ar else "How to play"}</a> | <a href="#score" style="color:#2F5A3D;border-bottom:.5pt solid #B58A2E">{"لوحة النقاط" if ar else "Scoreboard"}</a></div>
 </div>{ssig(lang)}</div></section>'''
 
 
@@ -387,20 +414,20 @@ def screen_card(n, k, c, lang, total, with_nav=True):
     meta = f'{"بطاقة" if ar else "Card"} {num(n, lang)} {"من" if ar else "of"} {num(total, lang)}'
     links = ""
     if with_nav:
-        links = f' · <a href="#index">{"الفهرس" if ar else "Index"}</a>'
+        links = f' | <a href="#index">{"الفهرس" if ar else "Index"}</a>'
     if k == "riddle":
-        links += f' · <span>{"الحل مقلوب تحت البطاقة — أو في الصفحة الجاية" if ar else "Answer is upside-down on the card — or on the next page"}</span>'
-    inner = f'<div class="cardwrap">{card_front(n, k, c, lang, 0)}</div><div class="meta"><span>{meta}{links}</span></div>'
+        links += f' | <span>{"الحل في الصفحة الجاية" if ar else "The answer is on the next page"}</span>'
+    inner = f'<div class="cardwrap">{card_front(n, k, c, lang, 0, upside_ans=False)}</div><div class="meta"><span>{meta}{links}</span></div>'
     if with_nav:
         h = f'<section class="sp" id="c{n}" dir="{"rtl" if ar else "ltr"}">{nav(lang, k)}<div {main_box(lang)}>{inner}{ssig(lang)}</div></section>'
     else:
         h = f'<section class="sp" id="c{n}" dir="{"rtl" if ar else "ltr"}"><div class="main" style="left:0;right:0">{inner}{ssig(lang)}</div></section>'
     if k == "riddle":
         ans = c[4] if ar else c[5]
-        panel = f'''<div style="width:{128*SCALE}mm;height:{88*SCALE}mm;border-radius:6mm;background:#14150F;color:#F6F1E3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3mm;text-align:center;padding:0 14mm;font-family:{"Cairo" if ar else "Poppins"}">
-{cube("riddle", "18mm", ICOLS["riddle"])}<div style="font-family:Poppins;font-weight:800;letter-spacing:3px;font-size:9pt;color:#E0B454">{"الحل" if ar else "ANSWER"} · #{num(n, lang)}</div>
+        panel = f'''<div style="width:{128*SCALE}mm;height:{88*SCALE}mm;border-radius:6mm;background:#14150F;color:#F6F1E3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3mm;text-align:center;padding:0 14mm;font-family:{fam(ar)}">
+{cube("riddle", "18mm", ICOLS["riddle"])}<div style="font-family:{FE};font-weight:800;letter-spacing:3px;font-size:9pt;color:#E0B454">{"الحل" if ar else "ANSWER"} | #{num(n, lang)}</div>
 <div style="font-weight:900;font-size:28pt;line-height:1.3">{ans}</div></div>
-<div class="meta"><a href="#c{n}">{"رجوع للغز" if ar else "Back to the riddle"}</a>{f' · <a href="#index">{"الفهرس" if ar else "Index"}</a>' if with_nav else ""}</div>'''
+<div class="meta"><a href="#c{n}">{"رجوع للغز" if ar else "Back to the riddle"}</a>{f' | <a href="#index">{"الفهرس" if ar else "Index"}</a>' if with_nav else ""}</div>'''
         if with_nav:
             h += f'<section class="sp" dir="{"rtl" if ar else "ltr"}">{nav(lang, k)}<div {main_box(lang)}>{panel}{ssig(lang)}</div></section>'
         else:
@@ -413,15 +440,24 @@ def screen_score(lang):
     rows = "".join(f'<tr>{"".join(f"<td></td>" for _ in range(7))}</tr>' for _ in range(8))
     head = "".join(f"<th>{x}</th>" for x in ((["الاسم / الفريق"] + [f"جولة {num(i, lang)}" for i in range(1, 6)] + ["المجموع"]) if ar else (["Name / team"] + [f"Round {i}" for i in range(1, 6)] + ["Total"])))
     return f'''<section class="sp" id="score" dir="{"rtl" if ar else "ltr"}">{nav(lang, "score")}<div {main_box(lang)}>
-<div style="width:{SW-44-24}mm;font-family:{"Cairo" if ar else "Poppins"}"><div style="font-weight:900;font-size:20pt;color:#14150F;margin-bottom:3mm">{"لوحة النقاط" if ar else "Scoreboard"}</div>
-<style>.st{{width:100%;border-collapse:collapse;font-size:9.5pt}}.st th{{background:#2F5A3D;color:#F6F1E3;padding:2mm;font-weight:700}}.st td{{border:.5pt solid #C9BE9C;height:11mm;background:#FFFDF6}}.st th:first-child,.st td:first-child{{width:30%}}</style>
+<div style="width:{SW-44-24}mm;font-family:{fam(ar)}"><div style="font-weight:900;font-size:20pt;color:#14150F;margin-bottom:3mm">{"لوحة النقاط" if ar else "Scoreboard"}</div>
+<style>.st{{width:100%;border-collapse:collapse;font-size:9.5pt}}.st th{{background:#2F5A3D;color:#F6F1E3;padding:2mm;font-weight:700}}.st td{{border:.5pt solid #C9BE9C;height:11mm;background:{CREAM}}}.st th:first-child,.st td:first-child{{width:30%}}</style>
 <table class="st"><tr>{head}</tr>{rows}</table>
 <div style="font-size:9pt;color:#6E6C5A;margin-top:3mm">{"على iPad: تقدرون تكتبون على هذي الصفحة بالقلم في تطبيق الملفات أو أي قارئ PDF." if ar else "On iPad you can write on this page with Markup in the Files app or any PDF reader."}</div>
 </div>{ssig(lang)}</div></section>'''
 
 
+def store_btn(ar):
+    """Tappable link to the real store page of the site (sample -> buy)."""
+    label = "افتحوا متجر إيلان دول" if ar else "Open the Eilan Doll store"
+    shown = STORE_URL.replace("https://", "").rstrip("/")
+    return (f'<a href="{STORE_URL}" style="margin-top:4mm;display:inline-flex;align-items:center;gap:2mm;background:#E0B454;color:#14150F;font-weight:900;'
+            f'border-radius:3mm;padding:2.4mm 7mm;font-size:13pt">{label} {arrow(ar, "3.6mm")}</a>'
+            f'<a href="{STORE_URL}" dir="ltr" style="font-family:{FE};font-weight:700;font-size:9.5pt;color:#C9D8C3;border-bottom:.5pt solid #7FAA8A">{shown}</a>')
+
+
 def screen_end(lang, sample=False):
-    ar = lang == "ar"; fam = "Cairo" if ar else "Poppins"
+    ar = lang == "ar"; ff = fam(ar)
     if sample:
         t1 = "تبي تكمل؟ اشترِ اللعبة" if ar else "Want to keep playing? Get the game"
         t2 = (f"اللعبة الكاملة: ٥٢ بطاقة + نسخة طباعة وجه وقفا + لوحة نقاط — {PRICE['ar']}، من متجر إيلان دول." if ar
@@ -430,10 +466,10 @@ def screen_end(lang, sample=False):
         t1 = "كشتة سعيدة!" if ar else "Happy kashta!"
         t2 = "شكرًا إنكم لعبتوا «الكشتة المجنونة» من إيلان دول." if ar else "Thank you for playing Crazy Kashta by Eilan Doll."
     return f'''<section class="sp" id="end" dir="{"rtl" if ar else "ltr"}" style="background:#0E0E0A;color:#F6F1E3">
-<div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4mm;text-align:center;font-family:{fam};padding:0 30mm">
+<div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4mm;text-align:center;font-family:{ff};padding:0 30mm">
 {fire_art("44mm")}<div style="font-weight:900;font-size:28pt">{t1}</div><div style="font-size:12.5pt;color:#C9D8C3;line-height:1.7;max-width:170mm">{t2}</div>
-{'' if sample else f'<a href="#index" style="margin-top:3mm;color:#E0B454;border-bottom:.5pt solid #E0B454;font-size:11pt">{"رجوع للفهرس" if ar else "Back to the index"}</a>'}</div>
-<div style="position:absolute;bottom:8mm;left:0;right:0;display:flex;justify-content:center;align-items:center;gap:2.4mm;font-family:Poppins;font-weight:800;letter-spacing:3px;font-size:8.5pt;color:#A9BFA9"><img src="{LOGO}" style="width:8mm;height:8mm">EILAN DOLL — THE DIGITAL WORLD</div></section>'''
+{store_btn(ar) if sample else f'<a href="#index" style="margin-top:3mm;color:#E0B454;border-bottom:.5pt solid #E0B454;font-size:11pt">{"رجوع للفهرس" if ar else "Back to the index"}</a>'}</div>
+<div style="position:absolute;bottom:8mm;left:0;right:0;display:flex;justify-content:center;align-items:center;gap:2.4mm;font-family:{FE};font-weight:800;letter-spacing:3px;font-size:8.5pt;color:#A9BFA9"><img src="{LOGO}" style="width:8mm;height:8mm">EILAN DOLL — THE DIGITAL WORLD</div></section>'''
 
 
 def build_screen(lang):
@@ -459,14 +495,14 @@ def build_cover():
     body = f'''<div dir="rtl" style="width:1600px;height:1200px;position:relative;overflow:hidden;background:#0E0E0A;color:#F6F1E3">
 <div style="position:absolute;inset:0;background:radial-gradient(circle at 74% 62%,rgba(224,180,84,.20),transparent 46%)"></div>
 <div style="position:absolute;right:120px;top:150px;width:720px;text-align:right">
-<div style="font-family:Poppins;font-weight:800;letter-spacing:8px;font-size:26px;color:#E0B454">EILAN DOLL</div>
+<div style="font-family:{FE};font-weight:800;letter-spacing:8px;font-size:26px;color:#E0B454">EILAN DOLL</div>
 <div style="font-weight:900;font-size:120px;line-height:1.1;margin:14px 0">الكشتة المجنونة</div>
-<div style="font-family:Poppins;font-weight:800;font-size:40px;letter-spacing:3px;color:#C9D8C3">CRAZY KASHTA</div>
+<div style="font-family:{FE};font-weight:800;font-size:40px;letter-spacing:3px;color:#C9D8C3">CRAZY KASHTA</div>
 <div style="font-size:34px;color:#EBDDB0;margin-top:26px;line-height:1.5">لعبة بطاقات للطلعات والكشتات حول النار</div>
-<div style="display:flex;gap:14px;margin-top:36px;flex-wrap:wrap">{"".join(f'<span style="border:2px solid #E0B454;border-radius:16px;padding:6px 22px;font-size:30px">{x}</span>' for x in ["٥٢ بطاقة", "للشاشة والطباعة", "عربي · English"])}</div></div>
+<div style="display:flex;gap:14px;margin-top:36px;flex-wrap:wrap">{"".join(f'<span style="border:2px solid #E0B454;border-radius:16px;padding:6px 22px;font-size:30px">{x}</span>' for x in ["٥٢ بطاقة", "للشاشة والطباعة", "عربي | English"])}</div></div>
 <div style="position:absolute;left:150px;top:120px">{fire_art("560px")}</div>
 <div style="position:absolute;left:110px;top:730px;width:900px;height:420px">{fan}</div>
-<div style="position:absolute;bottom:46px;right:120px;display:flex;align-items:center;gap:14px;font-family:Poppins;font-weight:800;letter-spacing:5px;font-size:22px;color:#A9BFA9"><img src="{LOGO}" style="width:52px;height:52px">EILAN DOLL — THE DIGITAL WORLD</div></div>'''
+<div style="position:absolute;bottom:46px;right:120px;display:flex;align-items:center;gap:14px;font-family:{FE};font-weight:800;letter-spacing:5px;font-size:22px;color:#A9BFA9"><img src="{LOGO}" style="width:52px;height:52px">EILAN DOLL — THE DIGITAL WORLD</div></div>'''
     html = f'<!doctype html><html lang="ar"><head><meta charset="utf-8"><style>{CSS_BASE}body{{background:#0E0E0A}}</style></head><body>{body}</body></html>'
     with tempfile.NamedTemporaryFile("w", suffix=".html", delete=False, encoding="utf-8") as f:
         f.write(html); tmp = f.name

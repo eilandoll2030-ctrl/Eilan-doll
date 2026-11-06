@@ -15,7 +15,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 SRC = (ROOT / "index.html").read_text(encoding="utf-8")
 OUT = ROOT / "games" / "video"; OUT.mkdir(parents=True, exist_ok=True)
 BUILD = ROOT / "games" / "video-src" / ".build"; BUILD.mkdir(exist_ok=True)
-GAMES = ["guess", "memory", "xo", "catch", "snake", "lahad", "family", "bahar", "mashaer", "nisf"]
+GAMES = ["guess", "memory", "xo", "catch", "snake", "lahad", "family", "bahar", "mashaer", "nisf", "kashta"]
 FPS, W, H = 30, 1280, 720
 
 pat = json.loads(re.search(r"const CUBE_PAT=(\{.*?\});", SRC).group(1))

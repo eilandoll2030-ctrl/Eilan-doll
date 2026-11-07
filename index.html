@@ -1042,6 +1042,30 @@ code.cp{display:inline-block;background:rgba(0,0,0,.4);padding:3px 8px;border-ra
 .xp-meter .xm-b{display:flex;gap:12px;font-size:12.5px}.xp-meter .xm-b b{font-size:15px;color:var(--g,#2F7A52)}
 .xp-meter small{flex-basis:100%;font-size:11px;color:var(--mu,#99a)}
 .prov-more{width:100%;margin-top:4px}
+.tp-coll{display:grid;grid-template-columns:repeat(auto-fit,minmax(104px,1fr));gap:8px;margin:12px 0 4px}
+.tp-coll-c{display:flex;flex-direction:column;align-items:center;gap:2px;padding:11px 6px;border-radius:14px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.03);color:inherit;font:inherit;cursor:pointer;transition:.2s}
+.tp-coll-c b{font-size:19px;line-height:1}.tp-coll-c span{font-size:12px;font-weight:700}.tp-coll-c small{font-size:10.5px;color:var(--mu,#98a)}
+.tp-coll-c.on,.tp-coll-c:hover{border-color:var(--g,#2F7A52);background:rgba(47,122,82,.12)}
+.tp-tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap;width:100%;margin-top:8px}
+.tp-tools .input{flex:1;min-width:180px}
+.of-sec{margin-top:14px;padding:16px}
+.of-h{display:flex;align-items:center;gap:10px;justify-content:space-between;flex-wrap:wrap;margin-bottom:10px}
+.of-h h2{margin:0;font-size:18px}
+.of-packs{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+.of-pack{border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:14px;background:rgba(255,255,255,.02)}
+.of-pack h3{margin:2px 0 6px;font-size:15.5px}.of-pe{font-size:22px}
+.of-pr{font-size:13px;color:var(--mu,#aab)}.of-pr b{font-size:22px;color:var(--g,#2F7A52)}
+.of-bundle{display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.of-bp{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.of-bp s{opacity:.6}.of-bp b{font-size:24px;color:var(--g,#2F7A52)}
+.ws-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:12px}
+.ws-card{padding:14px;display:flex;flex-direction:column;gap:8px}
+.ws-card h3{margin:0;font-size:16px}
+.ws-mock{position:relative;height:92px;border-radius:10px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);overflow:hidden;padding:10px;display:flex;flex-direction:column;gap:5px}
+.ws-mock span{display:block;height:7px;border-radius:4px;background:rgba(232,182,74,.45);width:60%}
+.ws-mock span:nth-child(2){width:85%;background:rgba(255,255,255,.22)}
+.ws-mock span:nth-child(3){width:45%;background:rgba(47,122,82,.5)}
+.ws-mock i{position:absolute;right:10px;bottom:10px;width:52px;height:20px;border-radius:6px;background:rgba(232,182,74,.35)}
+.ws-acts{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto}
 .plc-own{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
 .prov-count{font-size:12px;text-align:center;margin-top:6px}
 @media(max-width:640px){.plc{flex-direction:column}.plc-n{flex:0 0 auto;align-self:flex-start}.prov-stats{margin-inline-start:0;width:100%;flex-wrap:wrap}}
@@ -3163,6 +3187,8 @@ function resolve(input){
   input=String(input||'').trim();if(!input)return 'eilan://home';
   if(/^eilan:\/\//i.test(input))return input;
   if(/^https?:\/\//i.test(input)){window.open(input,'_blank','noopener');return null}
+  if(/^(عروض|العروض|خصومات|offers?)$/i.test(input.trim()))return 'eilan://offers';
+  if(/^(مواقع|المواقع|websites?)$/i.test(input.trim()))return 'eilan://websites';
   const n=norm(input);const hit=NAV.find(x=>(x.k.includes(n)||norm(x.n)===n)&&!navHidden(x.u));
   if(hit)return 'eilan://'+hit.u;
   return 'eilan://search?q='+enc(input);
@@ -3389,7 +3415,7 @@ function showSlide(i){$$('.adslide').forEach((s,j)=>s.classList.toggle('on',j===
 let storeQ='',storeCat='all',storeSort='pop';
 P.store={icon:'🛍️',title:()=>'متجر إيلان دول',html:r=>{storeCat=r.q.cat||storeCat;return `
   <div class="page-h"><div><div class="eyebrow">EILAN DOLL STORE</div><h1>🛍️ متجر <span class="grad-t">إيلان دول</span></h1><p>منتجات رقمية تفصلك عن الروتين — تسليم فوري بعد الدفع.</p></div>
-   <div style="display:flex;gap:8px;flex-wrap:wrap">${S.settings.sallaStore?`<a class="btn salla" href="${esc(S.settings.sallaStore)}" target="_blank" rel="noopener">🛍️ متجرنا في سلة</a>`:''}<button class="btn" data-act="opencart">${I.cart} السلة</button><button class="btn g" data-act="newproduct">${I.plus} أضف منتج</button></div></div>
+   <div style="display:flex;gap:8px;flex-wrap:wrap">${S.settings.sallaStore?`<a class="btn salla" href="${esc(S.settings.sallaStore)}" target="_blank" rel="noopener">🛍️ متجرنا في سلة</a>`:''}<a class="btn" data-go="eilan://offers">🔥 العروض</a><button class="btn" data-act="opencart">${I.cart} السلة</button><button class="btn g" data-act="newproduct">${I.plus} أضف منتج</button></div></div>
   <div class="store-bar"><div class="srch">${I.search}<input class="input" id="sQ" placeholder="ابحث في المتجر…" value="${esc(storeQ)}"></div>
    <select class="select" id="sSort" style="width:200px"><option value="pop">الأكثر مبيعاً</option><option value="rate">الأعلى تقييماً</option><option value="low">السعر: من الأقل</option><option value="high">السعر: من الأعلى</option><option value="new">الأحدث</option></select></div>
   <div class="cats">${[['all','✦ الكل'],...Object.entries(CATS).map(([k,v])=>[k,`${v.i} ${v.n} · ${v.e}`])].map(([k,n])=>`<button class="chip ${storeCat===k?'on':''}" data-act="cat" data-c="${k}">${n}</button>`).join('')}</div>
@@ -4839,6 +4865,7 @@ const tpPalName=k=>TP_PALN[k]||TP_PALN[TP_OLD[k]]||(/^#/.test(String(k||''))?'ل
 const tpPalKey=k=>TP_PAL[k]?k:TP_OLD[k]||(/^#[0-9a-f]{6}$/i.test(String(k||''))?k:'aurora');
 /* inverted palette for "light" slides (white slide on a dark deck / dark slide on a light deck) */
 const tpInv=P=>({...P,b1:P.light?'#0a0a0e':'#f3f2ee',b2:P.light?'#15161c':'#e6e4de',t:P.light?'#ffffff':'#0d0d12',m:P.light?'#9ca0b0':'#62656f',light:P.light?0:1});
+const TP_COLL=[['all','✨','كل القوالب'],['vid','🧊','موشن 3D'],['slides','📊','عروض تقديمية'],['reel','🎬','ريلز'],['post','🖼️','بوست وستوري'],['invite','💌','دعوات'],['web','🌐','مواقع']];
 const TP_CATN={reel:'فيديو ريلز',slides:'عرض تقديمي',post:'بوست / ستوري',invite:'دعوة',web:'صفحة موقع متحركة',vid:'فيديو موشن 3D'};
 const TP_LAB={brand:'اسم الجهة / العلامة',title:'العنوان الرئيسي',sub:'سطر توضيحي',hook:'جملة البداية (تشد الانتباه)',p1:'فقرة ١',p2:'فقرة ٢',p3:'فقرة ٣',f1:'نقطة ١',f2:'نقطة ٢',f3:'نقطة ٣',n1:'رقم ١',n2:'رقم ٢',n3:'رقم ٣',l1:'وصف الرقم ١',l2:'وصف الرقم ٢',l3:'وصف الرقم ٣',cta:'دعوة للتواصل',contact:'الحساب / الرقم',date:'التاريخ',time:'الوقت',place:'المكان',name1:'الاسم الأول',name2:'الاسم الثاني',price:'السعر الجديد',old:'السعر القديم',disc:'نسبة الخصم',quote:'الاقتباس',author:'القائل',role:'المسمّى / التخصص',s1:'مهارة ١',s2:'مهارة ٢',s3:'مهارة ٣',emo:'إيموجي المنتج',g1:'السطر الثاني (ملوّن)',k1:'منتج ١',k2:'منتج ٢',k3:'منتج ٣'};
 const TP_BASE={brand:'EILAN DOLL',title:'عنوانك هنا',sub:'سطر قصير يوضّح فكرتك',hook:'لحظة! لا تمرّر 👀',p1:'هنا تكتب الفكرة الأساسية بجملة واضحة ومختصرة',p2:'وهنا الحل أو الخطوة اللي تفرق',p3:'والخلاصة اللي تبي الناس تتذكرها',f1:'النقطة الأولى',f2:'النقطة الثانية',f3:'النقطة الثالثة',n1:'120+',n2:'95%',n3:'24',l1:'عميل سعيد',l2:'رضا',l3:'ساعة دعم',cta:'تواصل معنا الآن',contact:'@eilan.doll',date:'الخميس 20 نوفمبر',time:'8:00 مساءً',place:'جدة',name1:'سارة',name2:'محمد',price:'49 ر.س',old:'99 ر.س',disc:'50%',quote:'النجاح مجموع جهود صغيرة تتكرر كل يوم',author:'روبرت كولير',role:'مصممة جرافيك',s1:'التصميم',s2:'التسويق',s3:'إدارة المشاريع',emo:'🛍️'};
@@ -5517,6 +5544,32 @@ function tpWebMount(){const r=$('#tpWeb');if(!r)return;
  $('#tpwTopic').onkeydown=e=>{if(e.key==='Enter')tpWebGo()};
  tpShapeBind($('.tp-shbox',r),TPS.web.shape,()=>{const W=TPS.web;if(W.pl&&W.D&&$('#tpwCv')){Object.assign(W.D,W.shape);W.pl.set({...W.D});W.pl.play()}})}
 function tpWebRe(){const W=TPS.web;if(W.pl&&W.out&&$('#tpwCv')){const t=tpGet(W.id);W.out={id:W.id,pal:W.pal||t.pal};W.pl.set(null,{pal:W.out.pal})}}
+P.offers={icon:'🔥',title:()=>'العروض والخصومات | إيلان دول',html:()=>{
+  const all=(S.products||[]).filter(p=>p.on!==false);
+  const disc=all.filter(p=>+p.old>+p.price);
+  const closed=(typeof storeSoon==='function')&&storeSoon();
+  const packs=[['post','🖼️','بوست أو ستوري',TP_PRICE.post.base,'تصميم واحد بمقاسك · تعديلين مجاناً · التسليم '+TP_PRICE.post.days],
+               ['slides','📊','عرض تقديمي',TP_PRICE.slides.base,'حتى '+TP_PRICE.slides.inc+' شرائح · تعديلين · '+TP_PRICE.slides.days],
+               ['video','🎬','فيديو ريلز',TP_PRICE.video.base,'حتى '+TP_PRICE.video.inc+' ثانية · تعديلين · '+TP_PRICE.video.days],
+               ['motion','🧊','موشن جرافيك 3D',TP_PRICE.motion.base,'حتى '+TP_PRICE.motion.inc+' ثانية · تعديلين · '+TP_PRICE.motion.days]];
+  const bundle=all.find(p=>p.id==='d-all');
+  return `<div class="page-h"><div><div class="eyebrow">EILAN OFFERS</div><h1>🔥 <span class="grad-t">العروض</span> والخصومات</h1><p>كل اللي عليه خصم أو سعر واضح في مكان واحد — قبل/بعد مكتوب بصدق، وما نعلن خصم غير حقيقي.</p></div><div style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn g" data-go="eilan://templates">🎞️ القوالب</a><a class="btn" data-go="eilan://websites">🌐 المواقع</a></div></div>
+   <section class="of-sec card"><div class="of-h"><h2>✅ عروض متاحة الآن — تصميم</h2><span class="tag ok">السعر واضح قبل الطلب</span></div>
+    <div class="of-packs">${packs.map(([k,e,n,base,inc])=>`<div class="of-pack"><b class="of-pe">${e}</b><h3>${n}</h3><div class="of-pr">من <b>${base}</b> ر.س</div><p class="mu">${inc}</p><button class="btn sm g" data-go="eilan://templates">اطلب الآن</button></div>`).join('')}</div></section>
+   <section class="of-sec card"><div class="of-h"><h2>🏷️ خصومات المتجر ${closed?'— تُفتح مع الافتتاح':''}</h2><span class="tag">${disc.length} منتج</span></div>
+    ${closed?'<p class="mu" style="margin:0 0 10px">🔔 المتجر يفتح قريباً — هذي الخصومات المجهّزة، وتشتريها أول ما يُفتح.</p>':''}
+    ${disc.length?`<div class="pgrid">${disc.map(p=>pcard(p)).join('')}</div>`:'<p class="mu" style="margin:0">ما فيه منتج عليه خصم حالياً — أول ما ينزل عرض يظهر هنا.</p>'}</section>
+   ${bundle?`<section class="of-sec card"><div class="of-h"><h2>🎁 باقة المكتبة الكاملة</h2><span class="tag ok">أفضل قيمة</span></div>
+    <div class="of-bundle"><div><b>${esc(bundle.name)}</b><p class="mu">${esc(bundle.desc||'')}${closed?' — تُباع مع افتتاح المتجر.':''}</p></div><div class="of-bp"><s>${DW.length*30} ر.س</s><b>${bundle.price} ر.س</b>${closed?'<span class="tag">🔔 قريباً</span>':'<button class="btn g" data-go="eilan://product/d-all">اشترِ الباقة</button>'}</div></div></section>`:''}
+   <p class="mu" style="text-align:center;margin-top:10px">🔒 ما فيه خصومات وهمية — كل سعر هنا هو نفسه في صفحة المنتج أو القالب.</p>`}};
+P.websites={icon:'🌐',title:()=>'مواقع جاهزة بموضوعك | إيلان دول',html:()=>{
+  const W=TP_TPLS.filter(t=>t.cat==='web'&&TP_WEB.includes(t.id));
+  return `<div class="page-h"><div><div class="eyebrow">EILAN WEB STYLES</div><h1>🌐 مواقع <span class="grad-t">جاهزة</span> بموضوعك</h1><p>${W.length} أساليب صفحات موقع — تكتب موضوعك واسم علامتك، وتشوف صفحتك على لابتوب مصغّر داخل صفحة القوالب. الأسلوب يحدد الشكل، والموضوع يحدد المحتوى.</p></div><div style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn" data-go="eilan://templates">🎞️ كل القوالب</a><a class="btn g" data-go="eilan://studio">🎨 الاستوديو</a></div></div>
+   <div class="ws-grid">${W.map(t=>`<div class="ws-card card"><div class="ws-mock m-${t.id}"><span></span><span></span><span></span><i></i></div>
+     <h3>${esc(t.n)}</h3><p class="mu">${esc((t.idea||'').split('\\n')[0].slice(0,90))}</p>
+     <div class="ws-acts"><button class="btn sm g" data-act="wsuse" data-v="${t.id}">✨ صمّم بموضوعي</button><button class="btn sm" data-go="eilan://templates">شوف المعاينة</button></div></div>`).join('')}</div>
+   <p class="xsec-disc mu">ℹ️ المعاينة الكاملة تفتح داخل صفحة القوالب على شاشة لابتوب مصغّرة — الشكل بأسلوب مواقع الماركات، والمحتوى من موضوعك أنت.</p>`},
+  mount:()=>{}};
 P.templates={icon:'🛍️',title:()=>'قوالب إيلان الاحترافية',html:r=>{const orders=tpOrders();return `<div class="tp">
  <section class="tp-hero card"><div class="tp-htxt"><div class="eyebrow">EILAN PRO TEMPLATES</div><h1>قوالب إيلان <span class="grad-t">الاحترافية</span></h1>
   <p>قوالب متحركة جاهزة للعروض التقديمية والريلز والبوستات والدعوات. <b>اختر القالب، أعطنا موضوعك، ونضيفه لك داخل القالب ويوصلك جاهز.</b></p>
@@ -5531,8 +5584,10 @@ P.templates={icon:'🛍️',title:()=>'قوالب إيلان الاحترافي�
   <div class="tp-showbar"><div class="chips" id="tpShowChips">${TP_SHOW.map((id,i)=>`<button class="chip ${i?'':'on'}" data-tp="show" data-v="${id}">${esc(tpGet(id).n)}</button>`).join('')}</div>
    <div class="tp-showact"><button class="btn sm" data-tp="showopen">▶ الفكرة والفيديو</button><button class="btn sm g" data-tp="showtry">✍️ بموضوعي</button></div></div></section>
  ${isOwner()?`<div class="tp-owner card">👑 <b>للمالكة:</b> طلبات التصميم توصلك على إيميل <bdi>eilan.doll2030@gmail.com</bdi> وتلقينها كلها في <a href="https://app.netlify.com/projects/eilan-doll/forms" target="_blank" rel="noopener">لوحة الطلبات ↗</a>. لتسليم طلب: افتحي القالب ← «بموضوعي» ← عبّي نصوص العميل ← «تصدير نهائي».</div>`:''}
- <div class="tp-bar"><div class="chips" id="tpChips">${[['all','الكل'],['vid','🧊 فيديو موشن 3D'],['slides','عروض تقديمية'],['reel','فيديو ريلز'],['post','بوست وستوري'],['invite','دعوات'],['web','صفحات مواقع']].map(([k,n])=>`<button class="chip ${TPS.filter===k?'on':''}" data-tp="filter" data-v="${k}">${n}</button>`).join('')}</div><a class="btn sm" href="#" data-go="eilan://studio">🎨 الاستوديو المجاني</a></div>
+ <div class="tp-coll">${TP_COLL.map(([k,e,n])=>{const c=k==='all'?TP_VIDS.length+TP_TPLS.length:(k==='vid'?TP_VIDS.length:TP_TPLS.filter(t=>t.cat===k).length);return `<button class="tp-coll-c ${TPS.filter===k?'on':''}" data-tp="filter" data-v="${k}"><b>${e}</b><span>${n}</span><small>${c} قالب</small></button>`}).join('')}</div>
+ <div class="tp-bar"><div class="chips" id="tpChips">${[['all','الكل'],['vid','🧊 فيديو موشن 3D'],['slides','عروض تقديمية'],['reel','فيديو ريلز'],['post','بوست وستوري'],['invite','دعوات'],['web','صفحات مواقع']].map(([k,n])=>`<button class="chip ${TPS.filter===k?'on':''}" data-tp="filter" data-v="${k}">${n}</button>`).join('')}</div><div class="tp-tools"><input class="input" id="tpQ" placeholder="🔎 ابحث في القوالب… مثال: عطر، تخرج، ريلز" autocomplete="off"><a class="btn sm" href="#" data-go="eilan://studio">🎨 الاستوديو المجاني</a><a class="btn sm" href="#" data-go="eilan://offers">🔥 العروض</a><a class="btn sm g" href="#" data-go="eilan://websites">🌐 المواقع الجاهزة</a></div></div>
  <div class="tp-grid" id="tpGrid">${TP_VIDS.map(tpVCard).join('')}${TP_TPLS.map(tpCard).join('')}</div>
+ <div class="tp-empty mu" id="tpEmpty" style="display:none;padding:22px;text-align:center">ما لقينا قالب بهذا البحث — جرّب كلمة ثانية أو اختاري «كل القوالب».</div>
  ${tpWebHTML()}
  <section class="tp-plan card" id="tpPlan"><div class="tp-sh"><span class="tp-ic">✨</span><div><h2>اطرح فكرتك… وإيلان يصمم لك الطريقة</h2><p class="mu">اكتب فكرة الفيديو أو العرض اللي في بالك، وإيلان يرتّب لك المشاهد والنصوص والألوان والقالب المناسب، ويعرض لك معاينة متحركة فوراً.</p></div></div>
   <div class="tp-pform"><textarea class="textarea" id="tpIdea" rows="3" maxlength="400" placeholder="مثال: أبي فيديو ريلز لمتجري للعبايات عن تخفيضات الجمعة البيضاء…  أو: عرض تقديمي لمشروع تخرجي عن أثر الذكاء الاصطناعي على الطلاب"></textarea>
@@ -5545,11 +5600,15 @@ P.templates={icon:'🛍️',title:()=>'قوالب إيلان الاحترافي�
   <p class="mu tp-extra">إضافات اختيارية: تعليق صوتي +${TP_PRICE.voice} ر.س · ملف مفتوح للتعديل +${TP_PRICE.source} ر.س · تعديل إضافي +${TP_PRICE.rev} ر.س · مستعجل خلال 24 ساعة +25%</p></section>
  ${orders.length?`<section class="tp-orders card"><h2>📬 طلباتي</h2>${orders.slice(0,8).map(o=>`<div class="tp-ord"><b dir="ltr">${esc(o.no)}</b><span>${esc(o.title)}</span><span class="mu">${esc(o.date)}</span><span class="tp-pill ${o.ok?'ok':''}">${o.ok?'وصل الطلب ✓ — بانتظار التأكيد':'لم يُرسل'}</span><b>≈ ${o.price} ر.س</b></div>`).join('')}<p class="mu">بنتواصل معك على وسيلة التواصل اللي كتبتها خلال 24 ساعة.</p></section>`:''}
 </div>`},
- mount:r=>{TPS.players=[];TPS.web=TPS.web||{id:'webstory',pal:''};TPS.web.shape=TPS.web.shape||{};if(TPS.web.pl){TPS.web.pl.destroy();TPS.web.pl=null}if(typeof sdLoadFonts==='function')sdLoadFonts();tpMountCards();tpShowMount();tpWebMount();tpFilter(TPS.filter);tpVMount();CLEAN.push(tpCleanup);if(TPS.hvOpen){const h=TPS.hvOpen;TPS.hvOpen=null;tpFilter('vid');setTimeout(()=>{const g=$('#tpGrid');if(g)g.scrollIntoView({block:'start'});tpVOpen(h)},350)}
+ mount:r=>{const _tq=$('#tpQ');if(_tq){_tq.value=TPS.q||'';_tq.oninput=()=>{TPS.q=_tq.value;tpFilter(TPS.filter)}}TPS.players=[];TPS.web=TPS.web||{id:'webstory',pal:''};TPS.web.shape=TPS.web.shape||{};if(TPS.web.pl){TPS.web.pl.destroy();TPS.web.pl=null}if(typeof sdLoadFonts==='function')sdLoadFonts();tpMountCards();tpShowMount();tpWebMount();tpFilter(TPS.filter);{const tq=$('#tpQ');if(tq){tq.value=TPS.q||'';tq.oninput=()=>{TPS.q=tq.value;tpFilter(TPS.filter)}}}tpVMount();CLEAN.push(tpCleanup);if(TPS.hvOpen){const h=TPS.hvOpen;TPS.hvOpen=null;tpFilter('vid');setTimeout(()=>{const g=$('#tpGrid');if(g)g.scrollIntoView({block:'start'});tpVOpen(h)},350)}
   const root=$('.tp');root.addEventListener('click',ev=>{const b=ev.target.closest('[data-tp]');if(!b)return;ev.preventDefault();tpAct(b.dataset.tp,b.dataset,b)});
   ['tpKind','tpTone'].forEach(id=>$$('#'+id+' button').forEach(b=>b.onclick=()=>$$('#'+id+' button').forEach(x=>x.classList.toggle('on',x===b))));
   if(r&&r.q){if(r.q.t&&tpGet(r.q.t))setTimeout(()=>tpOpen(r.q.t,r.q.try?'try':'demo'),200);if(r.q.s==='plan')setTimeout(()=>$('#tpPlan').scrollIntoView({behavior:'smooth'}),200);if(r.q.s==='custom')setTimeout(()=>tpAct('custom',{}),200)}}};
-function tpFilter(k){TPS.filter=k;$$('#tpChips .chip').forEach(c=>c.classList.toggle('on',c.dataset.v===k));$$('#tpGrid .tp-card').forEach(c=>c.style.display=k==='all'||c.dataset.cat===k?'':'none');if(TPS.vio)$$('.tp-vthumb video').forEach(v=>{TPS.vio.unobserve(v);TPS.vio.observe(v)})}
+function tpFilter(k){TPS.filter=k;$$('#tpChips .chip').forEach(c=>c.classList.toggle('on',c.dataset.v===k));$$('.tp-coll-c').forEach(c=>c.classList.toggle('on',c.dataset.v===k));
+  const q=norm(TPS.q||'');
+  $$('#tpGrid .tp-card').forEach(c=>{const okCat=k==='all'||c.dataset.cat===k;const okQ=!q||norm(c.textContent).includes(q);c.style.display=okCat&&okQ?'':'none'});
+  const em=$('#tpEmpty');if(em)em.style.display=$$('#tpGrid .tp-card').some(c=>c.style.display!=='none')?'none':'block';
+  if(TPS.vio)$$('.tp-vthumb video').forEach(v=>{TPS.vio.unobserve(v);TPS.vio.observe(v)})}
 function tpNeed(why,fn){if(typeof userOK==='function'&&!userOK()){openAuth('login',why,fn);return false}return true}
 function tpAct(a,d,b){switch(a){
  case 'webgo':return tpWebGo();
@@ -12096,6 +12155,8 @@ Object.assign(ACT,{
   provcat:d=>{extF2.cat=d.c;extF2.show=24;const l=$('#provList');if(l)l.innerHTML=extProvListHTML(l.dataset.pk);
     document.querySelectorAll('.prov-tools .chip').forEach(b=>b.classList.toggle('on',b.dataset.c===extF2.cat))},
   provmore:()=>{extF2.show+=24;const l=$('#provList');if(l)l.innerHTML=extProvListHTML(l.dataset.pk)},
+  wsuse:d=>{TPS.web=TPS.web||{id:d.v,pal:''};TPS.web.id=d.v;go('eilan://templates');
+    setTimeout(()=>{const el=$('#tpWeb');if(el)el.scrollIntoView({behavior:'smooth',block:'start'});const i=$('#tpwTopic');if(i)i.focus()},500)},
   extown:()=>{const s=$('#eilanOwn');if(s)s.scrollIntoView({behavior:'smooth'})},
   extgo:d=>{const c=(S.extCourses||[]).find(x=>x.id===d.id);if(!c)return;
     const run=()=>{S.extc=S.extc||{};const st=S.extc[c.id]||{};

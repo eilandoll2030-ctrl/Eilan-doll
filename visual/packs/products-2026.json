@@ -1,6 +1,7 @@
 {
   "products": [
     {"id": "power-bank-eilan", "name": "شاحن Power Bank إيلان دول", "price": 89, "category": "عروض", "desc": "شاحن محمول بتصميم Spatial Sound (3D Scene، Product Display، حركة سائلة) - نيون/سايبربانك/إيلان", "style": "spatial-sound"},
+    {"id": "eilan-park", "name": "منتزه إيلان (Eilan Park)", "price": 120, "category": "عروض", "desc": "موضوع: المنتزه الرقمي | منتج: تذكرة + أصول | تصميم: Spatial Sound (3D Scene، Product Display، حركة سائلة) - نيون/سايبربانك/إيلان", "style": "spatial-sound"},
     {"id": "cyber-plan-2026", "name": "مخطط سايبر 2026", "price": 49, "category": "عروض", "desc": "خطة تطوير رقمية متكاملة لعام 2026"},
     {"id": "neon-bg-pack", "name": "حزمة خلفيات نيون", "price": 19, "category": "قوالب", "desc": "40 خلفية بدقة 4K للجوال والكمبيوتر"},
     {"id": "eilan-avatar-kit", "name": "عدة أفاتار إيلان", "price": 35, "category": "عروض", "desc": "مجموعة صور شخصية رقمية"},

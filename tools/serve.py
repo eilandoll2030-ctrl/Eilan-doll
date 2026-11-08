@@ -21,6 +21,8 @@ EILAN DOLL — سيرفر معاينة محلي (dev only)
 """
 import os
 import sys
+import gzip
+import hashlib
 import json
 import subprocess
 import http.server
@@ -37,6 +39,49 @@ BRIDGE = os.path.join(ROOT, "tools", "api_bridge.mjs")
 PROTOCOL = "HTTP/1.1"
 API_TIMEOUT = 20
 
+# الملفات النصية تُضغط. index.html = 2.44MB خام ⇒ ~350KB مضغوط.
+# بدون ضغط كانت صفحة واحدة بهذا الحجم تُبطئ/تُبتر عبر بروكسي المعاينة.
+COMPRESSIBLE = (".html", ".css", ".js", ".mjs", ".json", ".svg", ".webmanifest",
+                ".txt", ".xml", ".map")
+COMPRESS_MIN = 1024
+
+# كاش الضغط: (path, mtime, size) ⇒ bytes مضغوطة. يمنع إعادة ضغط 2.4MB كل طلب.
+_GZ_CACHE = {}
+_GZ_CACHE_MAX = 32
+
+
+def _gzip_cached(path):
+    try:
+        st = os.stat(path)
+    except OSError:
+        return None
+    key = (path, st.st_mtime_ns, st.st_size)
+    hit = _GZ_CACHE.get(key)
+    if hit is not None:
+        return hit
+    try:
+        with open(path, "rb") as f:
+            raw = f.read()
+    except OSError:
+        return None
+    if len(raw) < COMPRESS_MIN:
+        return None
+    body = gzip.compress(raw, 6)
+    if len(_GZ_CACHE) >= _GZ_CACHE_MAX:
+        _GZ_CACHE.clear()
+    _GZ_CACHE[key] = body
+    return body
+
+
+def _wants_gzip(accept_encoding):
+    if not accept_encoding:
+        return False
+    for part in accept_encoding.split(","):
+        token = part.split(";")[0].strip().lower()
+        if token in ("gzip", "*"):
+            return "q=0" not in part.replace(" ", "")
+    return False
+
 
 class Handler(http.server.SimpleHTTPRequestHandler):
     protocol_version = PROTOCOL
@@ -46,14 +91,61 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
     # ---------------------------------------------------------------- helpers
     def _send_bytes(self, body, ctype, code=200, extra=None):
+        extra = dict(extra or {})
+        compressible = any(t in (ctype or "") for t in ("text/", "json", "javascript",
+                                                       "svg", "xml"))
+        if (compressible and len(body) >= COMPRESS_MIN and code == 200
+                and _wants_gzip(self.headers.get("Accept-Encoding"))
+                and self.command != "HEAD"):
+            key = (len(body), hashlib.md5(body).hexdigest())
+            cached = _GZ_CACHE.get(key)
+            if cached is None:
+                cached = gzip.compress(body, 6)
+                if len(_GZ_CACHE) >= _GZ_CACHE_MAX:
+                    _GZ_CACHE.clear()
+                _GZ_CACHE[key] = cached
+            body = cached
+            extra["Content-Encoding"] = "gzip"
+            extra["Vary"] = "Accept-Encoding"
         self.send_response(code)
         self.send_header("Content-Type", ctype)
         self.send_header("Content-Length", str(len(body)))
-        for k, v in (extra or {}).items():
+        for k, v in extra.items():
             self.send_header(k, v)
         self.end_headers()
         if self.command != "HEAD":
             self.wfile.write(body)
+
+    def send_head(self):
+        """ضغط الملفات الثابتة النصية (html/css/js/svg/json) قبل إرسال الترويسات."""
+        path = self.translate_path(self.path)
+        if os.path.isdir(path):
+            return super().send_head()
+        if (not path.lower().endswith(COMPRESSIBLE)
+                or not _wants_gzip(self.headers.get("Accept-Encoding"))
+                or self.command == "HEAD"):
+            return super().send_head()
+        try:
+            with open(path, "rb") as f:
+                raw = f.read()
+        except OSError:
+            return super().send_head()
+        if len(raw) < COMPRESS_MIN:
+            return super().send_head()
+
+        body = _gzip_cached(path)
+        if body is None:
+            return super().send_head()
+        ctype = self.guess_type(path)
+        self.send_response(200)
+        self.send_header("Content-Type", ctype)
+        self.send_header("Content-Length", str(len(body)))
+        self.send_header("Content-Encoding", "gzip")
+        self.send_header("Vary", "Accept-Encoding")
+        self.send_header("Last-Modified", self.date_time_string(os.stat(path).st_mtime))
+        self.end_headers()
+        import io
+        return io.BytesIO(body)
 
     def _serve_html_file(self, relpath, base_href=None, code=200):
         """تقديم صفحة HTML من المستودع، مع حقن <base> عند تغيير المجلد."""
@@ -137,6 +229,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 "brand": "/brand/",
                 "api": sorted(f[:-3] for f in os.listdir(API_DIR) if f.endswith(".js"))
                 if os.path.isdir(API_DIR) else [],
+                "gzip": True,
                 "root": ROOT,
             }).encode()
             return self._send_bytes(body, "application/json")

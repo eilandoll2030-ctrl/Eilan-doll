@@ -6,25 +6,36 @@ EILAN DOLL — سيرفر معاينة محلي (dev only)
     python3 tools/serve.py                 # 0.0.0.0:8200
     PORT=8080 python3 tools/serve.py
 
-مصمّم لبيئة المعاينة (E2B preview proxy):
-- يبثّ على 0.0.0.0 (مطلوب).
+مصمّم لبيئة المعاينة (E2B preview proxy) وليطابق الإنتاج على Vercel:
+
+- يبثّ على 0.0.0.0 (مطلوب للمعاينة).
 - HTTP/1.1 مع Content-Length ⇒ keep-alive يريح البروكسي.
-- `/` ترجّع صفحة الشعار مباشرة (200) — لا تحويل، عشان أي فحص أو iframe يلاقي محتوى.
-- `/health` ترجّع 200 JSON — لفحص الجاهزية.
-- لا ترسل X-Frame-Options ⇒ الصفحة تُعرض داخل iframe.
-- CORS مفتوح + no-store للملفات النصية.
+- `/` = التطبيق (index.html) كما في الإنتاج — لا تحويل.
+  سابقًا كان `/` يعرض brand/showcase.html، فكانت المعاينة تُظهر ورقة شعار
+  بدل الموقع؛ الآن ورقة الشعار على /brand/ فقط.
+- `/api/<name>` ينفّذ api/<name>.js الحقيقي عبر node tools/api_bridge.mjs
+  ⇒ نفس سلوك Vercel محليًا. غير المتاح (بلا مفتاح) يرجع off:true كما الإنتاج.
+- `/health` JSON — فحص الجاهزية.
+- لا X-Frame-Options ⇒ الصفحة تُعرض داخل iframe.
+- CORS مفتوح + no-store للنصوص (نفس vercel.json).
 """
 import os
 import sys
 import json
+import subprocess
 import http.server
 import socketserver
+from urllib.parse import urlparse, parse_qs
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PORT = int(os.environ.get("PORT", "8200"))
 HOST = os.environ.get("HOST", "0.0.0.0")
-LANDING = "brand/showcase.html"
+APP = "index.html"
+BRAND_PAGE = "brand/showcase.html"
+API_DIR = os.path.join(ROOT, "api")
+BRIDGE = os.path.join(ROOT, "tools", "api_bridge.mjs")
 PROTOCOL = "HTTP/1.1"
+API_TIMEOUT = 20
 
 
 class Handler(http.server.SimpleHTTPRequestHandler):
@@ -44,45 +55,115 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         if self.command != "HEAD":
             self.wfile.write(body)
 
-    def _landing(self):
-        path = os.path.join(ROOT, LANDING)
+    def _serve_html_file(self, relpath, base_href=None, code=200):
+        """تقديم صفحة HTML من المستودع، مع حقن <base> عند تغيير المجلد."""
+        path = os.path.join(ROOT, relpath)
         if not os.path.isfile(path):
             return self._send_bytes(
-                b"<h1>EILAN DOLL</h1><p>landing page missing: " + LANDING.encode() + b"</p>",
+                ("<h1>EILAN DOLL</h1><p>missing page: %s</p>" % relpath).encode(),
                 "text/html; charset=utf-8", 500)
         with open(path, "rb") as f:
-            html = f.read().decode("utf-8")
-        # الصفحة معدة للعرض من /brand/ — عند تقديمها من الجذر نحقن <base>
-        # وإلا تُحسب الروابط النسبية من / وتنكسر كل الصور.
-        base = f'<base href="/{os.path.dirname(LANDING)}/">'
-        if "<base " not in html:
-            if "<head>" in html:
-                html = html.replace("<head>", "<head>" + base, 1)
-            else:
-                html = base + html
-        self._send_bytes(html.encode("utf-8"), "text/html; charset=utf-8")
+            html = f.read().decode("utf-8", "replace")
+        if base_href and "<base " not in html:
+            tag = '<base href="%s">' % base_href
+            html = html.replace("<head>", "<head>" + tag, 1) if "<head>" in html else tag + html
+        self._send_bytes(html.encode("utf-8"), "text/html; charset=utf-8", code)
+
+    def _app(self):
+        self._serve_html_file(APP)
+
+    def _brand(self):
+        # الصفحة معدة للعرض من /brand/ وروابطها نسبية ⇒ نحقن <base>
+        self._serve_html_file(BRAND_PAGE, base_href="/brand/")
+
+    # ---------------------------------------------------------------- api
+    def _api(self, route):
+        name = route[len("/api/"):].strip("/")
+        if not name or "/" in name or name.startswith("."):
+            return self._send_bytes(b'{"error":"bad api path"}', "application/json", 404)
+        script = os.path.join(API_DIR, name + ".js")
+        if not os.path.isfile(script):
+            return self._send_bytes(b'{"error":"no such function"}', "application/json", 404)
+
+        length = int(self.headers.get("Content-Length") or 0)
+        body = self.rfile.read(length) if length else b""
+
+        payload = json.dumps({
+            "method": self.command,
+            "url": self.path,
+            "headers": {k: v for k, v in self.headers.items()},
+            "body": body.decode("utf-8", "replace"),
+        }).encode()
+
+        try:
+            proc = subprocess.run(
+                ["node", BRIDGE, name],
+                input=payload, cwd=ROOT,
+                capture_output=True, timeout=API_TIMEOUT,
+            )
+        except FileNotFoundError:
+            return self._send_bytes(b'{"error":"node not available in preview"}',
+                                    "application/json", 503)
+        except subprocess.TimeoutExpired:
+            return self._send_bytes(b'{"error":"api timeout in preview"}',
+                                    "application/json", 504)
+
+        try:
+            out = json.loads(proc.stdout.decode("utf-8", "replace") or "{}")
+        except ValueError:
+            detail = (proc.stderr.decode("utf-8", "replace") or "")[-400:]
+            return self._send_bytes(
+                json.dumps({"error": "api bridge failed", "detail": detail}).encode(),
+                "application/json", 500)
+
+        status = int(out.get("status") or 200)
+        text = (out.get("body") or "").encode("utf-8")
+        extra = {k: v for k, v in (out.get("headers") or {}).items()
+                 if k.lower() not in ("content-length", "transfer-encoding", "connection")}
+        ctype = extra.pop("content-type", "application/json; charset=utf-8")
+        return self._send_bytes(text, ctype, status, extra)
 
     # ---------------------------------------------------------------- routes
     def do_GET(self):
-        route = self.path.split("?")[0]
-        if route in ("/", "/index.html", "/brand", "/brand/"):
-            return self._landing()
+        route = urlparse(self.path).path
+        if route in ("/", "/index.html"):
+            return self._app()
+        if route in ("/brand", "/brand/", "/brand/showcase.html"):
+            return self._brand()
         if route == "/health":
-            body = json.dumps({"ok": True, "root": ROOT, "landing": "/" + LANDING}).encode()
+            body = json.dumps({
+                "ok": True,
+                "app": "/" + APP,
+                "brand": "/brand/",
+                "api": sorted(f[:-3] for f in os.listdir(API_DIR) if f.endswith(".js"))
+                if os.path.isdir(API_DIR) else [],
+                "root": ROOT,
+            }).encode()
             return self._send_bytes(body, "application/json")
+        if route.startswith("/api/"):
+            return self._api(route)
         super().do_GET()
 
     def do_HEAD(self):
-        route = self.path.split("?")[0]
-        if route in ("/", "/index.html", "/brand", "/brand/"):
-            return self._landing()
+        route = urlparse(self.path).path
+        if route in ("/", "/index.html", "/brand", "/brand/", "/brand/showcase.html"):
+            return self.do_GET()
         if route == "/health":
             return self._send_bytes(b"", "application/json")
         super().do_HEAD()
 
+    def do_POST(self):
+        route = urlparse(self.path).path
+        if route.startswith("/api/"):
+            return self._api(route)
+        # التطبيق يجرّب POST / كخطة بديلة للإرسال؛ في المعاينة نرفض بوضوح.
+        return self._send_bytes(b'{"error":"POST not handled outside /api"}',
+                                "application/json", 405)
+
     def end_headers(self):
         self.send_header("Access-Control-Allow-Origin", "*")
-        if self.path.endswith((".html", ".svg", ".json", ".webmanifest", "/")):
+        if self.path.split("?")[0].endswith((".html", ".svg", ".json", ".webmanifest", "/")) \
+                or self.path.startswith("/api/"):
             self.send_header("Cache-Control", "no-store")
         super().end_headers()
 
@@ -99,7 +180,7 @@ if __name__ == "__main__":
     if not os.path.isdir(ROOT):
         raise SystemExit("repo root not found")
     with Server((HOST, PORT), Handler) as httpd:
-        print(f"EILAN DOLL preview → http://{HOST}:{PORT}/  (landing: /{LANDING})", flush=True)
+        print(f"EILAN DOLL preview → http://{HOST}:{PORT}/  (app: /{APP}, brand: /brand/)", flush=True)
         try:
             httpd.serve_forever()
         except KeyboardInterrupt:

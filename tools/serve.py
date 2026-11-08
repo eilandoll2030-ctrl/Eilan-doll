@@ -260,6 +260,14 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             self.send_header("Cache-Control", "no-store")
         super().end_headers()
 
+    def handle_one_request(self):
+        """قطع الاتصال أمر عادي: iPad/البروكسي يغلق مسبقًا أثناء التحميل.
+        بدونه يطبع Python تتبّعًا كاملًا لكل انقطاع (ضجيج يخفي الطلبات الحقيقية)."""
+        try:
+            super().handle_one_request()
+        except (ConnectionResetError, BrokenPipeError):
+            self.close_connection = True
+
     def log_message(self, fmt, *args):
         sys.stderr.write("%s - %s\n" % (self.address_string(), fmt % args))
 

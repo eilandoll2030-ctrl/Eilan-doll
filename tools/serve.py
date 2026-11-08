@@ -267,6 +267,9 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 class Server(socketserver.ThreadingTCPServer):
     allow_reuse_address = True
     daemon_threads = True
+    # Python الافتراضي = 5. Safari/iPad يفتح 6 اتصالات متوازية لكل مضيف،
+    # والبروكسي يضيف اتصالاته ⇒ طابور صغير = اتصالات مُسقَطة وإطار فارغ.
+    request_queue_size = 128
 
 
 if __name__ == "__main__":

@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>متجر إيلان دول | EILAN DOLL — المنتجات والأسعار</title>
+<meta name="description" content="متجر إيلان دول: عروض، قوالب، كتب، وأسعار حقيقية بالريال السعودي (SAR). طرق دفع آمنة: مادة، أبل باي، STC Pay، فيزا/ماستركارد، تابي/تمارا. وثيقة عمل حر سارية.">
+<link rel="icon" href="/favicon-48.png" sizes="48x48" type="image/png">
+<style>
+:root{
+  --bg:#14150F;--bg2:#1C1E16;--bg3:#24271C;--card:rgba(28,30,22,.72);
+  --p:#4F8460;--p2:#7FA98A;--p3:#2F5A3D;--g:#E8B64A;--g2:#6FA37C;--pu:#3F2270;--pu2:#5A2E96;--pu3:#A48AE0;--bdp:rgba(90,50,150,.5);
+  --w:#EFE9DA;--mu:#B9B8A8;--mu2:#8A8A78;
+  --bd:rgba(79,132,96,.22);--bd2:rgba(232,182,74,.28);
+  --grad:linear-gradient(90deg,var(--p),var(--g));
+  --r:18px;--sh:0 20px 60px -20px rgba(0,0,0,.8);
+  --font:"Segoe UI","Noto Sans Arabic","Tahoma",system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--bg);color:var(--w);font-family:var(--font);overflow-x:hidden;font-size:15px;line-height:1.6}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+a{color:var(--g);text-decoration:none;cursor:pointer}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:42px;padding:0 20px;border-radius:13px;font-weight:700;font-size:14px;transition:.2s;white-space:nowrap;background:rgba(255,255,255,.06);border:1px solid var(--bd)}
+.btn:hover{transform:translateY(-2px);background:rgba(79,132,96,.15)}
+.btn.p{background:linear-gradient(135deg,var(--p),var(--p3));border-color:transparent;color:#fff;box-shadow:0 10px 30px -10px var(--p)}
+.btn.g{background:linear-gradient(135deg,var(--g),#3C8A5E);border-color:transparent;color:#03140c;box-shadow:0 10px 30px -10px var(--g)}
+.btn.grad{background:var(--grad);color:#0a0a08;border:0}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);backdrop-filter:blur(14px);padding:24px;margin-bottom:24px}
+.sec{margin-top:46px}
+.sec-h{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:18px;gap:12px;flex-wrap:wrap}
+.sec-h h2{font-size:24px;font-weight:900;display:flex;align-items:center;gap:10px}
+.sec-h p{color:var(--mu);font-size:13.5px}
+.price-tag{font-size:18px;font-weight:900;color:var(--g);margin-bottom:8px}
+.pay-icons{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.pay-icon{width:32px;height:32px;border-radius:8px;background:var(--bg2);border:1px solid var(--bd);display:grid;place-items:center;font-size:16px}
+.legal-note{background:var(--bg3);border:1px solid var(--bd);border-radius:13px;padding:16px;margin-top:32px;font-size:13px;color:var(--mu2)}
+.legal-note b{color:var(--g);font-weight:900}
+
+/* سلة المشتريات */
+#cart-drawer{position:fixed;inset-y:0;right:-400px;width:400px;background:var(--bg2);border-left:1px solid var(--bd);z-index:9999;transition:.3s;padding:24px;display:flex;flex-direction:column}
+#cart-drawer.open{right:0}
+#cart-drawer h3{font-size:20px;font-weight:900;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+#cart-items{flex:1;overflow-y:auto;margin-bottom:16px}
+.cart-item{display:flex;align-items:center;justify-content:space-between;padding:12px;border-bottom:1px solid var(--bd);gap:12px}
+.cart-item .name{font-weight:700}
+.cart-item .price{color:var(--g);font-weight:900}
+#cart-total{font-size:18px;font-weight:900;color:var(--g);margin-bottom:16px;text-align:right}
+#cart-footer{display:flex;gap:8px}
+#cart-footer button{flex:1}
+#cart-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9998;display:none}
+#cart-overlay.show{display:block}
+</style>
+</head>
+<body>
+
+<!-- التراكب -->
+<div id="cart-overlay"></div>
+
+<!-- سلة المشتريات -->
+<aside id="cart-drawer">
+  <h3>🛒 سلة المشتريات</h3>
+  <div id="cart-items">
+    <!-- المنتجات تظهر هنا -->
+  </div>
+  <div id="cart-total">الإجمالي: 0.00 SAR</div>
+  <div id="cart-footer">
+    <button class="btn" onclick="closeCart()">إغلاق ✕</button>
+    <button class="btn p" onclick="checkout()">الدفع الآن 💳</button>
+  </div>
+</aside>
+
+<div class="sec" style="max-width:1200px;margin:0 auto;padding:0 24px">
+  <div class="sec-h">
+    <h2>🛒 متجر إيلان دول — الأسعار وطرق الدفع</h2>
+    <p>وثيقة العمل الحر سارية | الحساب البنكي التجاري | بوابة الدفع (مويسر/هايبر باي/باي تابز) | SAMA | ZATCA (حسب الإيراد)</p>
+  </div>
+
+  <!-- المنتجات -->
+  <div id="products-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:24px">
+    
+    <!-- شاحن Power Bank إيلان دول (Spatial Sound Style) -->
+    <div class="card" style="background:linear-gradient(135deg,#14150F,#1C1E16);border:1px solid var(--p);box-shadow:0 0 30px -10px var(--p)">
+      <h3>🔌 شاحن Power Bank إيلان دول</h3>
+      <p style="color:var(--mu);margin-bottom:12px">تصميم Spatial Sound (3D Scene، Product Display، حركة سائلة) - نيون/سايبربانك/إيلان</p>
+      <div class="price-tag">89.00 SAR</div>
+      <button class="btn p" onclick="addToCart('power-bank-eilan', 89, 'شاحن Power Bank إيلان دول')">إضافة للسلة 🛒</button>
+      <div class="pay-icons">
+        <span class="pay-icon" title="مادة">💳</span>
+        <span class="pay-icon" title="أبل باي">🍎</span>
+        <span class="pay-icon" title="STC Pay">📱</span>
+        <span class="pay-icon" title="فيزا/ماستركارد">💳</span>
+        <span class="pay-icon" title="تابي/تمارا">📦</span>
+      </div>
+    </div>
+
+    <!-- مخطط سايبر 2026 -->
+    <div class="card">
+      <h3>مخطط سايبر 2026</h3>
+      <p style="color:var(--mu);margin-bottom:12px">خطة تطوير رقمية متكاملة لعام 2026</p>
+      <div class="price-tag">49.00 SAR</div>
+      <button class="btn p" onclick="addToCart('cyber-plan-2026', 49, 'مخطط سايبر 2026')">إضافة للسلة 🛒</button>
+      <div class="pay-icons">
+        <span class="pay-icon" title="مادة">💳</span>
+        <span class="pay-icon" title="أبل باي">🍎</span>
+        <span class="pay-icon" title="STC Pay">📱</span>
+        <span class="pay-icon" title="فيزا/ماستركارد">💳</span>
+        <span class="pay-icon" title="تابي/تمارا">📦</span>
+      </div>
+    </div>
+
+    <!-- حزمة خلفيات نيون -->
+    <div class="card">
+      <h3>حزمة خلفيات نيون</h3>
+      <p style="color:var(--mu);margin-bottom:12px">40 خلفية بدقة 4K للجوال والكمبيوتر</p>
+      <div class="price-tag">19.00 SAR</div>
+      <button class="btn p" onclick="addToCart('neon-bg-pack', 19, 'حزمة خلفيات نيون')">إضافة للسلة 🛒</button>
+      <div class="pay-icons">
+        <span class="pay-icon" title="مادة">💳</span>
+        <span class="pay-icon" title="أبل باي">🍎</span>
+        <span class="pay-icon" title="STC Pay">📱</span>
+        <span class="pay-icon" title="فيزا/ماستركارد">💳</span>
+        <span class="pay-icon" title="تابي/تمارا">📦</span>
+      </div>
+    </div>
+
+    <!-- عدة أفاتار إيلان -->
+    <div class="card">
+      <h3>عدة أفاتار إيلان</h3>
+      <p style="color:var(--mu);margin-bottom:12px">أكثر من 200 قطعة (شعر، عيون، أزياء)</p>
+      <div class="price-tag">35.00 SAR</div>
+      <button class="btn p" onclick="addToCart('eilan-avatar-kit', 35, 'عدة أفاتار إيلان')">إضافة للسلة 🛒</button>
+      <div class="pay-icons">
+        <span class="pay-icon" title="مادة">💳</span>
+        <span class="pay-icon" title="أبل باي">🍎</span>
+        <span class="pay-icon" title="STC Pay">📱</span>
+        <span class="pay-icon" title="فيزا/ماستركارد">💳</span>
+        <span class="pay-icon" title="تابي/تمارا">📦</span>
+      </div>
+    </div>
+
+    <!-- أصوات التركيز الدراسي -->
+    <div class="card">
+      <h3>أصوات التركيز الدراسي</h3>
+      <p style="color:var(--mu);margin-bottom:12px">12 مقطعاً صوتياً محيطياً</p>
+      <div class="price-tag">25.00 SAR</div>
+      <button class="btn p" onclick="addToCart('focus-sounds', 25, 'أصوات التركيز الدراسي')">إضافة للسلة 🛒</button>
+      <div class="pay-icons">
+        <span class="pay-icon" title="مادة">💳</span>
+        <span class="pay-icon" title="أبل باي">🍎</span>
+        <span class="pay-icon" title="STC Pay">📱</span>
+        <span class="pay-icon" title="فيزا/ماستركارد">💳</span>
+        <span class="pay-icon" title="تابي/تمارا">📦</span>
+      </div>
+    </div>
+
+    <!-- قالب نوشن جليتش -->
+    <div class="card">
+      <h3>قالب نوشن جليتش</h3>
+      <p style="color:var(--mu);margin-bottom:12px">نظام حياة كامل على Notion</p>
+      <div class="price-tag">39.00 SAR</div>
+      <button class="btn p" onclick="addToCart('notion-glitch-template', 39, 'قالب نوشن جليتش')">إضافة للسلة 🛒</button>
+      <div class="pay-icons">
+        <span class="pay-icon" title="مادة">💳</span>
+        <span class="pay-icon" title="أبل باي">🍎</span>
+        <span class="pay-icon" title="STC Pay">📱</span>
+        <span class="pay-icon" title="فيزا/ماستركارد">💳</span>
+        <span class="pay-icon" title="تابي/تمارا">📦</span>
+      </div>
+    </div>
+
+    <!-- فرش بروكريت نيون -->
+    <div class="card">
+      <h3>فرش بروكريت نيون</h3>
+      <p style="color:var(--mu);margin-bottom:12px">60 فرشاة توهج وجليتش</p>
+      <div class="price-tag">29.00 SAR</div>
+      <button class="btn p" onclick="addToCart('procreate-neon-brushes', 29, 'فرش بروكريت نيون')">إضافة للسلة 🛒</button>
+      <div class="pay-icons">
+        <span class="pay-icon" title="مادة">💳</span>
+        <span class="pay-icon" title="أبل باي">🍎</span>
+        <span class="pay-icon" title="STC Pay">📱</span>
+        <span class="pay-icon" title="فيزا/ماستركارد">💳</span>
+        <span class="pay-icon" title="تابي/تمارا">📦</span>
+      </div>
+    </div>
+
+    <!-- خطوط عربية سايبر -->
+    <div class="card">
+      <h3>خطوط عربية سايبر</h3>
+      <p style="color:var(--mu);margin-bottom:12px">5 خطوط عربية وإنجليزية مرخصة</p>
+      <div class="price-tag">45.00 SAR</div>
+      <button class="btn p" onclick="addToCart('cyber-arabic-fonts', 45, 'خطوط عربية سايبر')">إضافة للسلة 🛒</button>
+      <div class="pay-icons">
+        <span class="pay-icon" title="مادة">💳</span>
+        <span class="pay-icon" title="أبل باي">🍎</span>
+        <span class="pay-icon" title="STC Pay">📱</span>
+        <span class="pay-icon" title="فيزا/ماستركارد">💳</span>
+        <span class="pay-icon" title="تابي/تمارا">📦</span>
+      </div>
+    </div>
+
+    <!-- دورة أساسيات UI -->
+    <div class="card">
+      <h3>دورة أساسيات UI</h3>
+      <p style="color:var(--mu);margin-bottom:12px">دورة عملية من 8 وحدات</p>
+      <div class="price-tag">79.00 SAR</div>
+      <button class="btn p" onclick="addToCart('ui-basics-course', 79, 'دورة أساسيات UI')">إضافة للسلة 🛒</button>
+      <div class="pay-icons">
+        <span class="pay-icon" title="مادة">💳</span>
+        <span class="pay-icon" title="أبل باي">🍎</span>
+        <span class="pay-icon" title="STC Pay">📱</span>
+        <span class="pay-icon" title="فيزا/ماستركارد">💳</span>
+        <span class="pay-icon" title="تابي/تمارا">📦</span>
+      </div>
+    </div>
+
+    <!-- ملصقات إيلان الرقمية -->
+    <div class="card">
+      <h3>ملصقات إيلان الرقمية</h3>
+      <p style="color:var(--mu);margin-bottom:12px">300 ملصق رقمي جاهز</p>
+      <div class="price-tag">15.00 SAR</div>
+      <button class="btn p" onclick="addToCart('eilan-stickers', 15, 'ملصقات إيلان الرقمية')">إضافة للسلة 🛒</button>
+      <div class="pay-icons">
+        <span class="pay-icon" title="مادة">💳</span>
+        <span class="pay-icon" title="أبل باي">🍎</span>
+        <span class="pay-icon" title="STC Pay">📱</span>
+        <span class="pay-icon" title="فيزا/ماستركارد">💳</span>
+        <span class="pay-icon" title="تابي/تمارا">📦</span>
+      </div>
+    </div>
+
+    <!-- تذكرة Neon Quest -->
+    <div class="card">
+      <h3>تذكرة Neon Quest</h3>
+      <p style="color:var(--mu);margin-bottom:12px">تذكرة موسمية لتحديات وألغاز</p>
+      <div class="price-tag">22.00 SAR</div>
+      <button class="btn p" onclick="addToCart('neon-quest-ticket', 22, 'تذكرة Neon Quest')">إضافة للسلة 🛒</button>
+      <div class="pay-icons">
+        <span class="pay-icon" title="مادة">💳</span>
+        <span class="pay-icon" title="أبل باي">🍎</span>
+        <span class="pay-icon" title="STC Pay">📱</span>
+        <span class="pay-icon" title="فيزا/ماستركارد">💳</span>
+        <span class="pay-icon" title="تابي/تمارا">📦</span>
+      </div>
+    </div>
+
+    <!-- قوالب سوشال ميديا -->
+    <div class="card">
+      <h3>قوالب سوشال ميديا</h3>
+      <p style="color:var(--mu);margin-bottom:12px">120 قالب انستقرام وتيك توك</p>
+      <div class="price-tag">55.00 SAR</div>
+      <button class="btn p" onclick="addToCart('social-media-templates', 55, 'قوالب سوشال ميديا')">إضافة للسلة 🛒</button>
+      <div class="pay-icons">
+        <span class="pay-icon" title="مادة">💳</span>
+        <span class="pay-icon" title="أبل باي">🍎</span>
+        <span class="pay-icon" title="STC Pay">📱</span>
+        <span class="pay-icon" title="فيزا/ماستركارد">💳</span>
+        <span class="pay-icon" title="تابي/تمارا">📦</span>
+      </div>
+    </div>
+
+    <!-- كتاب أوامر الذكاء الاصطناعي -->
+    <div class="card">
+      <h3>كتاب أوامر الذكاء الاصطناعي</h3>
+      <p style="color:var(--mu);margin-bottom:12px">500 أمر احترافي (Prompt)</p>
+      <div class="price-tag">30.00 SAR</div>
+      <button class="btn p" onclick="addToCart('ai-commands-book', 30, 'كتاب أوامر الذكاء الاصطناعي')">إضافة للسلة 🛒</button>
+      <div class="pay-icons">
+        <span class="pay-icon" title="مادة">💳</span>
+        <span class="pay-icon" title="أبل باي">🍎</span>
+        <span class="pay-icon" title="STC Pay">📱</span>
+        <span class="pay-icon" title="فيزا/ماستركارد">💳</span>
+        <span class="pay-icon" title="تابي/تمارا">📦</span>
+      </div>
+    </div>
+
+    <!-- غرفة الهروب الرقمية -->
+    <div class="card">
+      <h3>غرفة الهروب الرقمية</h3>
+      <p style="color:var(--mu);margin-bottom:12px">تجربة ألغاز تفاعلية جماعية</p>
+      <div class="price-tag">18.00 SAR</div>
+      <button class="btn p" onclick="addToCart('digital-escape-room', 18, 'غرفة الهروب الرقمية')">إضافة للسلة 🛒</button>
+      <div class="pay-icons">
+        <span class="pay-icon" title="مادة">💳</span>
+        <span class="pay-icon" title="أبل باي">🍎</span>
+        <span class="pay-icon" title="STC Pay">📱</span>
+        <span class="pay-icon" title="فيزا/ماستركارد">💳</span>
+        <span class="pay-icon" title="تابي/تمارا">📦</span>
+      </div>
+    </div>
+
+    <!-- جلسة Neon Mind -->
+    <div class="card">
+      <h3>جلسة Neon Mind</h3>
+      <p style="color:var(--mu);margin-bottom:12px">تجربة صوتية-بصرية موجّهة</p>
+      <div class="price-tag">20.00 SAR</div>
+      <button class="btn p" onclick="addToCart('neon-mind-session', 20, 'جلسة Neon Mind')">إضافة للسلة 🛒</button>
+      <div class="pay-icons">
+        <span class="pay-icon" title="مادة">💳</span>
+        <span class="pay-icon" title="أبل باي">🍎</span>
+        <span class="pay-icon" title="STC Pay">📱</span>
+        <span class="pay-icon" title="فيزا/ماستركارد">💳</span>
+        <span class="pay-icon" title="تابي/تمارا">📦</span>
+      </div>
+    </div>
+
+    <!-- دفتر التلوين التفاعلي -->
+    <div class="card">
+      <h3>دفتر التلوين التفاعلي</h3>
+      <p style="color:var(--mu);margin-bottom:12px">كتاب تلوين رقمي</p>
+      <div class="price-tag">10.00 SAR</div>
+      <button class="btn p" onclick="addToCart('coloring-book-interactive', 10, 'دفتر التلوين التفاعلي')">إضافة للسلة 🛒</button>
+      <div class="pay-icons">
+        <span class="pay-icon" title="مادة">💳</span>
+        <span class="pay-icon" title="أبل باي">🍎</span>
+        <span class="pay-icon" title="STC Pay">📱</span>
+        <span class="pay-icon" title="فيزا/ماستركارد">💳</span>
+        <span class="pay-icon" title="تابي/تمارا">📦</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- المتطلبات القانونية -->
+  <div class="legal-note">
+    <b>المتطلبات القانونية والأساسية (2026):</b><br>
+    1. 📄 **وثيقة عمل حر** (سارية - منصة العمل الحر)<br>
+    2. 🏦 **حساب بنكي تجاري** (أو شخصي مرتبط باسم الوثيقة)<br>
+    3. 🛡️ **ترخيص SAMA** (عبر بوابة الدفع: مويسر/هايبر باي/باي تابز)<br>
+    4. 📑 **فاتورة إلكترونية (ZATCA)** (إلزامية إذا تجاوز الإيراد 375,000 ريال سنوياً)<br><br>
+    <b>طرق الدفع المدعومة:</b> مادة (93%)، أبل باي، STC Pay، فيزا/ماستركارد، تابي/تمارا (تقسيط بدون فوائد).
+  </div>
+</div>
+
+<script>
+  let cart = [];
+  
+  function addToCart(id, price, name) {
+    const existing = cart.find(c => c.id === id);
+    if (existing) {
+      existing.qty++;
+    } else {
+      cart.push({id, price, name, qty: 1});
+    }
+    updateCartUI();
+    openCart();
+    console.log("Cart updated:", cart);
+  }
+
+  function updateCartUI() {
+    const container = document.getElementById('cart-items');
+    const totalEl = document.getElementById('cart-total');
+    container.innerHTML = '';
+    let total = 0;
+    
+    cart.forEach(item => {
+      total += item.price * item.qty;
+      const div = document.createElement('div');
+      div.className = 'cart-item';
+      div.innerHTML = `
+        <div>
+          <div class="name">${item.name}</div>
+          <div style="color:var(--mu);font-size:12px">${item.qty} × ${item.price} SAR</div>
+        </div>
+        <div class="price">${(item.price * item.qty).toFixed(2)} SAR</div>
+      `;
+      container.appendChild(div);
+    });
+    
+    totalEl.textContent = `الإجمالي: ${total.toFixed(2)} SAR`;
+    document.getElementById('cartN') && (document.getElementById('cartN').textContent = cart.length);
+  }
+
+  function openCart() {
+    document.getElementById('cart-drawer').classList.add('open');
+    document.getElementById('cart-overlay').classList.add('show');
+  }
+
+  function closeCart() {
+    document.getElementById('cart-drawer').classList.remove('open');
+    document.getElementById('cart-overlay').classList.remove('show');
+  }
+
+  function checkout() {
+    if (cart.length === 0) {
+      alert("السلة فارغة! أضف منتجات أولاً.");
+      return;
+    }
+    const total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+    alert(`تمت عملية الدفع بنجاح! 💳\nالإجمالي: ${total.toFixed(2)} SAR\nطرق الدفع: مادة، أبل باي، STC Pay، فيزا/ماستركارد، تابي/تمارا.\n(وثيقة العمل الحر سارية - بوابة مويسر/هايبر باي)`);
+    cart = [];
+    updateCartUI();
+    closeCart();
+  }
+
+  // إغلاق السلة عند النقر على التراكب
+  document.getElementById('cart-overlay').onclick = closeCart;
+</script>
+
+</body>
+</html>

@@ -25,7 +25,7 @@ for (const page of ['gallery','survey','cafe','studio']) for (const english of [
  if(page==='gallery') {
   assert.match(app.innerHTML,/id="discover"/);
   assert.match(app.innerHTML,/id="concepts"/);
-  assert.match(app.innerHTML,/section=templates/);
+  assert.match(app.innerHTML,/section=projects/);
  }
  if(page==='cafe') {
   filters[1].onclick(); assert.equal(items.filter(i=>!i.hidden).length,2); assert.equal(filters[1]['aria-pressed'],'true');
@@ -41,11 +41,11 @@ const main = readFileSync('index.html','utf8');
 assert.ok(!main.includes('EILAN WEB COLLECTION'));
 const start = main.indexOf('P.templates={');
 assert.ok(start > 0);
-assert.ok(main.indexOf('PROJECT IDEAS &amp; WEBSITE CONCEPTS') > start);
+assert.ok(main.indexOf('PROJECT IDEAS &amp; WEBSITE CONCEPTS') > main.indexOf('P.projects={'));
 assert.match(main,/href="#projectSurvey"/);
 assert.ok(!main.includes('iframe src="/portfolio/survey.html"'));
 assert.ok(main.includes('${surveyHTML()}</section>'));
-assert.ok(main.includes('mount:r=>{mountSurvey();TPS.players=[];'));
+assert.ok(main.includes('mountSurvey();tpWebMount();tpVMount();')); 
 assert.match(main,/src="\/portfolio\/survey.js"/);
 assert.match(main,/portfolio\/index.html#concepts/);
 console.log('PASS shared placement inside templates, no separate homepage section');
@@ -91,3 +91,17 @@ run('surveyState.complete=true');assert.ok(!run('surveyHTML()').includes('Custom
 run('surveyState.complete=false');radios[2].onchange();assert.match(run('surveyHTML()'),/Custom project/);
 elements['survey-reset'].onclick();assert.equal(run('Object.keys(surveyState.answers).length'),0);
 console.log('PASS Other last, conditional text field, back/next retention, hidden answer exclusion and reset');
+
+const projectCode=main.slice(main.indexOf('P.projects={'),main.indexOf('P.templates={'));
+const projectContext={P:{},document:{documentElement:{lang:'ar'}},tpWebHTML:()=>'<section id="tpWeb">website builder</section>',TP_VIDS:[],tpVCard:()=>'',t:(ar,en)=>ar};
+vm.createContext(projectContext);
+vm.runInContext(readFileSync('portfolio/survey.js','utf8'),projectContext);
+vm.runInContext(projectCode,projectContext);
+const nativeProject=vm.runInContext('P.projects.html()',projectContext);
+assert.match(nativeProject,/id="survey"/);assert.match(nativeProject,/name="survey-choice"/);assert.match(nativeProject,/id="survey-next"/);assert.match(nativeProject,/id="tpWeb"/);
+assert.ok(!nativeProject.includes('<iframe'));
+const templateCode=main.slice(main.indexOf('P.templates={'),main.indexOf('function tpFilter('));
+assert.ok(!templateCode.includes('surveyHTML()'));
+assert.ok(!templateCode.includes('${tpWebHTML()}'));
+assert.ok(templateCode.includes("TP_TPLS.filter(t=>t.cat!=='web')"));
+console.log('PASS primary-site projects route renders native survey; templates exclude projects and websites');

@@ -31,3 +31,6 @@ Other-answer drafts remain in memory when switching options, but are excluded fr
 
 ## Native main-site integration
 The Templates & Projects renderer now calls `surveyHTML()` directly and `mountSurvey()` on mount. It no longer embeds an iframe. The main index loads the shared survey script before its app script and scoped `survey.css`. The dedicated survey page remains an optional standalone entry. Tests check the native render/mount wiring and no iframe. Browser visual testing is still pending.
+
+## Publication layout
+Primary-site `P.projects` now owns the native questionnaire, packaging guidance, website builder and advertising previews. `P.templates` retains non-web templates, presentations and cards. Navigation has two entries: Projects & Campaigns and Templates. Latest production changes were merged into this working branch before publication to preserve recent courses and other site updates.

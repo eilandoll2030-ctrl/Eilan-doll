@@ -45,7 +45,7 @@ assert.ok(main.indexOf('PROJECT IDEAS &amp; WEBSITE CONCEPTS') > main.indexOf('P
 assert.match(main,/href="#projectSurvey"/);
 assert.ok(!main.includes('iframe src="/portfolio/survey.html"'));
 assert.ok(main.includes('${surveyHTML()}</section>'));
-assert.ok(main.includes('mountSurvey();tpWebMount();tpVMount();')); 
+assert.ok(main.includes('mountSurvey();tpWebMount();tpVMount();'));
 assert.match(main,/src="\/portfolio\/survey.js"/);
 assert.match(main,/portfolio\/index.html#concepts/);
 console.log('PASS shared placement inside templates, no separate homepage section');

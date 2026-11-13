@@ -121,6 +121,11 @@ assert.match(guide,/مصنع بعلامة خاصة/);
 assert.match(guide,/تعلّم التصنيع/);
 assert.ok(!/<iframe|<form/.test(guide));
 for(const match of guide.matchAll(/(?:href|src)="(\/[^"#]+)/g)) assert.ok(existsSync('.'+match[1]),'Missing guide asset: '+match[1]);
+assert.match(guide,/rifq-soap-product\.jpg/);
+assert.match(guide,/rifq-scrub-product\.jpg/);
+assert.match(guide,/صور المنتج نفسه بشعار رِفق/);
+assert.ok(existsSync('assets/projects/rifq-soap-product.jpg'));
+assert.ok(existsSync('assets/projects/rifq-scrub-product.jpg'));
 console.log('PASS care starter: both routes, learning links, official source and original local assets');
 
 assert.match(nativeProject,/data-go="eilan:\/\/projects\/care"/);

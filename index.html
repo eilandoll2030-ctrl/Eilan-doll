@@ -1469,9 +1469,9 @@ body.lang-en #bBack svg,body.lang-en #bFwd svg{transform:scaleX(-1)}
 .rc-in{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .65s cubic-bezier(.2,1.35,.4,1)}
 .rc-f{position:absolute;inset:0;border:0;padding:0;margin:0;background:#07080C;transform:var(--t) translateZ(calc(var(--s)/2));backface-visibility:hidden;-webkit-backface-visibility:hidden}
 .rc-f::before{content:'';position:absolute;inset:2.5%;border-radius:16%;background:transparent;transition:filter .2s,background .35s}
-.rc-f.o{background:color-mix(in srgb,var(--c) 45%,#07080C)}.rc-f.o::before{background:var(--c);box-shadow:inset 0 0 0 1px rgba(216,255,230,.12)}
-.rc.gold .rc-q.g .rc-f{background:#7E5F1F}.rc.gold .rc-q.g .rc-f::before{background:var(--g);box-shadow:none}
-.rc.gold .rc-q.g .rc-in{transform:translate3d(0,calc(var(--s)*-1.25),0) scale3d(.58,.58,.58)}
+.rc-f.o{background:color-mix(in srgb,var(--c) 45%,#07080C)}.rc-f.o::before{background:linear-gradient(145deg,rgba(255,255,255,.34),rgba(255,255,255,.06) 42%,rgba(255,255,255,0) 60%,rgba(0,0,0,.14)),var(--c);box-shadow:inset 0 0 0 1px rgba(216,255,230,.14),inset 0 1px 0 rgba(255,255,255,.25)}.rc-f.o::after{content:'';position:absolute;inset:2.5%;border-radius:16%;background:linear-gradient(115deg,rgba(255,255,255,0) 38%,rgba(255,255,255,.5) 50%,rgba(255,255,255,0) 62%);background-size:300% 100%;background-position:120% 0;animation:rcshine 5s ease-in-out infinite;pointer-events:none}@keyframes rcshine{0%{background-position:120% 0}30%,100%{background-position:-20% 0}}@media (prefers-reduced-motion:reduce){.rc-f.o::after{animation:none;opacity:0}}body.no-motion .rc-f.o::after{animation:none;opacity:0}
+.rc.gold .rc-q.g .rc-f{background:#7E5F1F}.rc.gold .rc-q.g .rc-f::before{background:linear-gradient(145deg,rgba(255,255,255,.55),rgba(255,255,255,0) 55%),var(--g);box-shadow:0 0 calc(var(--s)*.35) rgba(246,221,143,.55),inset 0 0 0 1px rgba(255,240,190,.5)}.rc.gold .rc-q.g .rc-f::after{animation-duration:2.6s}
+.rc.lift .rc-q.g .rc-in{transform:translate3d(0,calc(var(--s)*-1.25),0) scale3d(.58,.58,.58)}
 .rc-v,.rc-sp,.rc-q,.rc-in,.rc-f{pointer-events:none}.rc button.rc-f{cursor:pointer;pointer-events:auto}.rc button.rc-f:hover::before,.rc button.rc-f:focus-visible::before{filter:brightness(1.35)}
 .rc button.rc-f:focus-visible{outline:none}
 .rc.busy .rc-f{pointer-events:none}
@@ -14508,11 +14508,11 @@ window.RC=(function(){
       await wait(ms+20);apply(a,L,d);sel.forEach(q=>{q.el.style.transition='none';put(q)})}
     const rnd=n=>{const out=[];let last='';while(out.length<n){const a=ax[Math.floor(Math.random()*3)];if(a===last)continue;last=a;out.push([a,[-1,1][Math.floor(Math.random()*2)],[-1,1][Math.floor(Math.random()*2)]])}return out};
     const G=Q.find(q=>q.gold);
-    const setGold=on=>{host.classList.toggle('gold',on)};
+    const setGold=on=>{if(on){host.classList.add('gold','lift')}else{host.classList.remove('lift');setTimeout(()=>{if(!host.classList.contains('lift'))host.classList.remove('gold')},560)}};
     let busy=false;
     async function play(n,ms,spinDeg,instantScramble){
       if(busy)return;busy=true;host.classList.add('busy');
-      setGold(false);await wait(instantScramble?0:520);
+      setGold(false);await wait(instantScramble?0:600);
       const mv_=rnd(n);
       if(instantScramble){mv_.forEach(([a,L,d])=>apply(a,L,d));Q.forEach(q=>put(q))}
       else for(const [a,L,d] of mv_)await turn(a,L,d,ms);

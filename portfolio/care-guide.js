@@ -45,6 +45,14 @@ function careGuideHTML() {
  <li><b>الموقع:</b> ابدأ بمعرض غير بيعي؛ أضف لاحقًا صور المنتج الفعلي ومعلوماته المعتمدة والسياسات وطريقة التواصل والطلب بعد اكتمال الجاهزية.</li>
  <li><b>قرار الإطلاق:</b> لا مبيعات قبل اكتمال المتطلبات وتحديد التشغيل والتسليم ومعالجة الشكاوى. رتّب الخطوات حسب وضعك، وليس موعدًا مضمونًا للجميع.</li>
  </ol></div></details>
+ <details open><summary>كيف راح يكون شكل الموقع؟ / Site skeleton</summary><div class="care-content"><p class="mu">هذا مخطط بصري يوضح للعميل شكل ومراحل الموقع قبل البناء، وليس موقعًا مبنيًا أو منتجًا للبيع. الصور مخطّطات تصميم (mockups) لتوضيح الهيكل العام، وليست موقعًا حقيقيًا ولا صفحة بيع.</p>
+ <div class="care-product-grid">
+ <figure><img src="/assets/projects/rifq-site-home.jpg" alt="مخطط تصميم الصفحة الرئيسية للموقع" loading="lazy" style="width:100%;height:auto;border-radius:14px"><figcaption class="mu"><b>الصفحة الرئيسية:</b> شريط علوي يضم الشعار والقوائم، ثم منطقة صورة وعنوان رئيسية، ثم شبكة بطاقات المنتجات، ثم تذييل.</figcaption></figure>
+ <figure><img src="/assets/projects/rifq-site-product.jpg" alt="مخطط تصميم صفحة تفاصيل المنتج" loading="lazy" style="width:100%;height:auto;border-radius:14px"><figcaption class="mu"><b>صفحة المنتج:</b> صورة المنتج مع العنوان والوصف المختصر ومزايا المنتج وأزرار الإجراء، ومسار التتبّع في الأعلى.</figcaption></figure>
+ </div>
+ <figure style="margin:18px 0"><img src="/assets/projects/rifq-site-learn.jpg" alt="مخطط تصميم صفحة التعلّم والخطة" loading="lazy" style="width:100%;max-width:960px;height:auto;border-radius:14px"><figcaption class="mu"><b>صفحة التعلّم والخطة:</b> خطوات مرتبة برقم ورمز مع عنوان كل مرحلة، لتوضيح مسار التعلّم والمراحل.</figcaption></figure>
+ <p class="mu">الهيكل مبدئي للعرض؛ يُعدّل حسب محتوى العميل النهائي. لا يُظهر الموقع سعرًا أو يبيع، والصور المرجعية ليست منتجًا حقيقيًا.</p>
+ </div></details>
  <p class="mu">تصميم وتخطيط إيلان دول · نموذج تعليمي قيد التطوير. الصور مرجع تصميم، وليست وصفة أو تقييمًا صحيًا أو استشارة قانونية. مسار التغليف والتسعير والموقع هنا خطة تطبيق؛ لا نزعم إرفاق دورات متخصصة لها بعد.</p>
  </section>`;
 }

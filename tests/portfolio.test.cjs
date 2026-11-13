@@ -126,6 +126,14 @@ assert.match(guide,/rifq-scrub-product\.jpg/);
 assert.match(guide,/صور المنتج نفسه بشعار رِفق/);
 assert.ok(existsSync('assets/projects/rifq-soap-product.jpg'));
 assert.ok(existsSync('assets/projects/rifq-scrub-product.jpg'));
+assert.match(guide,/كيف راح يكون شكل الموقع؟/);
+assert.match(guide,/rifq-site-home\.jpg/);
+assert.match(guide,/rifq-site-product\.jpg/);
+assert.match(guide,/rifq-site-learn\.jpg/);
+assert.ok(!/面包/.test(guide));
+assert.ok(existsSync('assets/projects/rifq-site-home.jpg'));
+assert.ok(existsSync('assets/projects/rifq-site-product.jpg'));
+assert.ok(existsSync('assets/projects/rifq-site-learn.jpg'));
 console.log('PASS care starter: both routes, learning links, official source and original local assets');
 
 assert.match(nativeProject,/data-go="eilan:\/\/projects\/care"/);

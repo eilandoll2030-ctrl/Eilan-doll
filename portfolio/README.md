@@ -1,6 +1,6 @@
 # Website concepts / نماذج الأعمال
 
-Preview-only static gallery: `index.html`, café menu `cafe.html`, creative studio `studio.html`. Grouped under the existing Templates & Projects section, with two entry links to `#discover` (project idea question preview) and `#concepts` (website examples). The separate homepage portfolio block has been removed. The gallery links back to `/?section=templates`, supported by the main route resolver. Discovery now contains an eight-step local questionnaire in `survey.js`: optional radio choices, other/not-sure options, a free-text response shown only when the last option, Other, is selected on each step, back/next, editable summary, confirmed reset, and UTF-8 text download. State stays in memory across steps and language changes, but clears on reload/departure. No answers are submitted or persisted. This is not an automated recommendation service. Open `/portfolio/index.html` in the local preview. Add `?lang=en` for English.
+Preview-only static gallery: `index.html`, café menu `cafe.html`, creative studio `studio.html`. Grouped under the existing Templates & Projects section, with two entry links to `#discover` (project idea question preview) and `#concepts` (website examples). The separate homepage portfolio block has been removed. The gallery links back to `/?section=templates`, supported by the main route resolver. Discovery now contains an five-step local questionnaire in `survey.js`: optional radio choices, other/not-sure options, a free-text response shown only when the last option, Other, is selected on each step, back/next, editable summary, confirmed reset, and UTF-8 text download. State stays in memory across steps and language changes, but clears on reload/departure. No answers are submitted or persisted. This is not an automated recommendation service. Open `/portfolio/index.html` in the local preview. Add `?lang=en` for English.
 
 ## Scope and assets
 - Original illustrative names, text, CSS cup and geometric art; not client projects. Names have not been trademark-cleared for commercial launch.
@@ -17,7 +17,7 @@ node --check portfolio/app.js
 node tests/portfolio.test.cjs
 git diff --check
 ```
-Dependency-free smoke tests cover all three pages in both languages, local links/assets, direction, language switching, café filters and presence of studio FAQs. Survey rendering tests also cover all eight steps, open answers, other/not-sure choices and HTML escaping. They use a DOM stub, not a real browser.
+Dependency-free smoke tests cover all three pages in both languages, local links/assets, direction, language switching, café filters and presence of studio FAQs. Survey rendering tests also cover all five steps, open answers, other/not-sure choices and HTML escaping. They use a DOM stub, not a real browser.
 
 Still required: real-browser mobile/iPad and desktop visual checks, keyboard checks, console inspection, QA review and owner approval before publishing. No browser automation tools were available; no packages were installed.
 
@@ -34,3 +34,6 @@ The Templates & Projects renderer now calls `surveyHTML()` directly and `mountSu
 
 ## Publication layout
 Primary-site `P.projects` now owns the native questionnaire, packaging guidance, website builder and advertising previews. `P.templates` retains non-web templates, presentations and cards. Navigation has two entries: Projects & Campaigns and Templates. Latest production changes were merged into this working branch before publication to preserve recent courses and other site updates.
+
+## Lighter discovery questions
+Reduced discovery to five single-topic questions: business stage, activity, offering type, main help needed, and whether a name has been chosen. Removed early budget/timing/style decisions and jargon. Every question retains not-sure/Other, optional skip, conditional text entry and answer review. No Salla/Zid content or branding was copied.

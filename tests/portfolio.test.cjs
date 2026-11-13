@@ -41,7 +41,7 @@ const main = readFileSync('index.html','utf8');
 assert.ok(!main.includes('EILAN WEB COLLECTION'));
 const start = main.indexOf('P.templates={');
 assert.ok(start > 0);
-assert.ok(main.indexOf('PROJECT IDEAS &amp; WEBSITE CONCEPTS') > main.indexOf('P.projects={'));
+assert.ok(main.includes('projects-heading'));
 assert.match(main,/href="#projectSurvey"/);
 assert.ok(!main.includes('iframe src="/portfolio/survey.html"'));
 assert.ok(main.includes('${surveyHTML()}</section>'));
@@ -52,7 +52,7 @@ console.log('PASS shared placement inside templates, no separate homepage sectio
 
 const ctx={t:(ar,en)=>en, page:'gallery',document:{getElementById:()=>null}};
 vm.createContext(ctx);vm.runInContext(readFileSync('portfolio/survey.js','utf8'),ctx);
-for(let i=0;i<8;i++) {
+for(let i=0;i<vm.runInContext('surveyQuestions.length',ctx);i++) {
  vm.runInContext(`surveyState.step=${i}`,ctx);
  const html=vm.runInContext('surveyHTML()',ctx);
  assert.match(html,/type="radio"/);assert.match(html,/value="other"/);assert.match(html,/value="unsure"/);assert.match(html,/<textarea/);
@@ -70,7 +70,7 @@ const radios=['idea','unsure','other'].map(value=>({value}));
 const interaction={t:(ar,en)=>en,page:'gallery',confirm:()=>true,document:{getElementById:id=>elements[id],querySelectorAll:()=>radios}};
 vm.createContext(interaction);vm.runInContext(readFileSync('portfolio/survey.js','utf8'),interaction);
 const run=code=>vm.runInContext(code,interaction);
-for(let step=0;step<8;step++) {
+for(let step=0;step<run('surveyQuestions.length');step++) {
  run(`surveyState.step=${step};surveyState.answers={}`);
  const html=run('surveyHTML()');
  const values=[...html.matchAll(/name="survey-choice" value="([^"]+)"/g)].map(m=>m[1]);
@@ -96,6 +96,7 @@ const projectCode=main.slice(main.indexOf('P.projects={'),main.indexOf('P.templa
 const projectContext={P:{},document:{documentElement:{lang:'ar'}},tpWebHTML:()=>'<section id="tpWeb">website builder</section>',TP_VIDS:[],tpVCard:()=>'',t:(ar,en)=>ar};
 vm.createContext(projectContext);
 vm.runInContext(readFileSync('portfolio/survey.js','utf8'),projectContext);
+vm.runInContext(readFileSync('portfolio/care-guide.js','utf8'),projectContext);
 vm.runInContext(projectCode,projectContext);
 const nativeProject=vm.runInContext('P.projects.html()',projectContext);
 assert.match(nativeProject,/id="survey"/);assert.match(nativeProject,/name="survey-choice"/);assert.match(nativeProject,/id="survey-next"/);assert.match(nativeProject,/id="tpWeb"/);
@@ -105,3 +106,38 @@ assert.ok(!templateCode.includes('surveyHTML()'));
 assert.ok(!templateCode.includes('${tpWebHTML()}'));
 assert.ok(templateCode.includes("TP_TPLS.filter(t=>t.cat!=='web')"));
 console.log('PASS primary-site projects route renders native survey; templates exclude projects and websites');
+
+assert.equal(run('surveyQuestions.length'),5);
+assert.deepEqual(Array.from(run('surveyQuestions.map(q=>q[0])')),['stage','activity','kind','need','name']);
+run('surveyState.step=4;mountSurvey()');
+elements['survey-next'].onclick();assert.equal(run('surveyState.complete'),true);
+console.log('PASS five concise questions, no early budget/design decisions, last step reaches summary');
+
+const guide=vm.runInContext('careGuideHTML()',projectContext);
+assert.match(guide,/id="careProject"/);
+assert.match(guide,/sfda.gov.sa\/ar\/eservices\/88819/);
+assert.match(guide,/free-organic-skincare-formulation-course/);
+assert.match(guide,/مصنع بعلامة خاصة/);
+assert.match(guide,/تعلّم التصنيع/);
+assert.ok(!/<iframe|<form/.test(guide));
+for(const match of guide.matchAll(/(?:href|src)="(\/[^"#]+)/g)) assert.ok(existsSync('.'+match[1]),'Missing guide asset: '+match[1]);
+console.log('PASS care starter: both routes, learning links, official source and original local assets');
+
+assert.match(nativeProject,/data-go="eilan:\/\/projects\/care"/);
+assert.ok(!nativeProject.includes('id="careProject"'));
+const detailContext={P:{},careGuideHTML:()=>guide};
+vm.createContext(detailContext);
+vm.runInContext(main.slice(main.indexOf('P.projectfile={'),main.indexOf('P.projects={')),detailContext);
+const detail=vm.runInContext('P.projectfile.html()',detailContext);
+assert.match(detail,/id="careProject"/);
+assert.match(detail,/كل ملفات المشاريع/);
+assert.ok(!/data-act="addcart"|data-act="buy"/.test(detail));
+assert.ok(main.includes("if(page==='projects'&&id==='care')page='projectfile'"));
+assert.ok(main.includes("if(p==='projects'&&parts[1]==='care')return 'eilan://projects/care'"));
+assert.ok(main.includes("page==='projectfile'?'/projects/care/'"));
+console.log('PASS project card opens full native project file; direct route, return link and no checkout');
+
+assert.ok(!nativeProject.includes('EILAN PROJECTS & WEBSITES'));
+assert.ok(!nativeProject.includes('PROJECT IDEAS &amp; WEBSITE CONCEPTS'));
+assert.ok(nativeProject.indexOf('care-project-card') < nativeProject.indexOf('id="projectSurvey"'));
+console.log('PASS simplified projects header, project cards first, no repeated intro panels');

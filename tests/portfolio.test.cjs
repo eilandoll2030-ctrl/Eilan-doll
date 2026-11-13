@@ -134,6 +134,12 @@ assert.ok(!/面包/.test(guide));
 assert.ok(existsSync('assets/projects/rifq-site-home.jpg'));
 assert.ok(existsSync('assets/projects/rifq-site-product.jpg'));
 assert.ok(existsSync('assets/projects/rifq-site-learn.jpg'));
+assert.match(guide,/جهات سعودية — رسمية وتعليمية/);
+assert.match(guide,/sfda\.gov\.sa\/ar\/news\/16778/);
+assert.match(guide,/doroob\.sa\/ar\//);
+assert.match(guide,/beauty-reasons\.com/);
+assert.match(guide,/raedmind\.com\/course\/snaaa-alsabon-altbyaay/);
+assert.match(guide,/تنبيه قبل الاشتراك/);
 console.log('PASS care starter: both routes, learning links, official source and original local assets');
 
 assert.match(nativeProject,/data-go="eilan:\/\/projects\/care"/);

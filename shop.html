@@ -8,11 +8,11 @@
 <link rel="icon" href="/favicon-48.png" sizes="48x48" type="image/png">
 <style>
 :root{
-  --bg:#14150F;--bg2:#1C1E16;--bg3:#24271C;--card:rgba(28,30,22,.72);
-  --p:#4F8460;--p2:#7FA98A;--p3:#2F5A3D;--g:#E8B64A;--g2:#6FA37C;--pu:#3F2270;--pu2:#5A2E96;--pu3:#A48AE0;--bdp:rgba(90,50,150,.5);
-  --w:#EFE9DA;--mu:#B9B8A8;--mu2:#8A8A78;
-  --bd:rgba(79,132,96,.22);--bd2:rgba(232,182,74,.28);
-  --grad:linear-gradient(90deg,var(--p),var(--g));
+  --bg:#07080C;--bg2:#081022;--bg3:#0B1F5E;--card:rgba(9,18,40,.80);
+  --p:#0F6B44;--p2:#D8FFE6;--p3:#07341F;--g:#D8FFE6;--g2:#D8FFE6;--pu:#251147;--pu2:#4A2A8F;--pu3:#D8FFE6;--bdp:rgba(74,42,143,.72);
+  --w:#EDF6F1;--mu:#9AA8BE;--mu2:#6B7992;
+  --bd:rgba(216,255,230,.17);--bd2:rgba(216,255,230,.38);
+  --grad:linear-gradient(135deg,#0F6B44,#1E44C8);
   --r:18px;--sh:0 20px 60px -20px rgba(0,0,0,.8);
   --font:"Segoe UI","Noto Sans Arabic","Tahoma",system-ui,sans-serif;
 }
@@ -23,10 +23,10 @@ button,input,select,textarea{font:inherit;color:inherit}
 button{cursor:pointer;border:0;background:none}
 a{color:var(--g);text-decoration:none;cursor:pointer}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:42px;padding:0 20px;border-radius:13px;font-weight:700;font-size:14px;transition:.2s;white-space:nowrap;background:rgba(255,255,255,.06);border:1px solid var(--bd)}
-.btn:hover{transform:translateY(-2px);background:rgba(79,132,96,.15)}
-.btn.p{background:linear-gradient(135deg,var(--p),var(--p3));border-color:transparent;color:#fff;box-shadow:0 10px 30px -10px var(--p)}
-.btn.g{background:linear-gradient(135deg,var(--g),#3C8A5E);border-color:transparent;color:#03140c;box-shadow:0 10px 30px -10px var(--g)}
-.btn.grad{background:var(--grad);color:#0a0a08;border:0}
+.btn:hover{transform:translateY(-2px);background:rgba(30,68,200,.28)}
+.btn.p{background:linear-gradient(135deg,#0F6B44,#07341F);border:1px solid rgba(216,255,230,.38);color:#D8FFE6;box-shadow:0 10px 30px -10px rgba(15,107,68,.8)}
+.btn.g{background:linear-gradient(135deg,#1E44C8,#0B1F5E);border:1px solid rgba(216,255,230,.42);color:#D8FFE6;box-shadow:0 10px 30px -10px rgba(30,68,200,.8)}
+.btn.grad{background:linear-gradient(135deg,#0F6B44,#1E44C8 66%,#4A2A8F);color:#D8FFE6;border:1px solid rgba(216,255,230,.40)}
 .card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);backdrop-filter:blur(14px);padding:24px;margin-bottom:24px}
 .sec{margin-top:46px}
 .sec-h{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:18px;gap:12px;flex-wrap:wrap}
@@ -81,7 +81,7 @@ a{color:var(--g);text-decoration:none;cursor:pointer}
   <div id="products-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:24px">
     
     <!-- شاحن Power Bank إيلان دول (Spatial Sound Style) -->
-    <div class="card" style="background:linear-gradient(135deg,#14150F,#1C1E16);border:1px solid var(--p);box-shadow:0 0 30px -10px var(--p)">
+    <div class="card" style="background:linear-gradient(135deg,#07080C,#081022);border:1px solid var(--p);box-shadow:0 0 30px -10px var(--p)">
       <h3>🔌 شاحن Power Bank إيلان دول</h3>
       <p style="color:var(--mu);margin-bottom:12px">تصميم Spatial Sound (3D Scene، Product Display، حركة سائلة) - نيون/سايبربانك/إيلان</p>
       <div class="price-tag">89.00 SAR</div>

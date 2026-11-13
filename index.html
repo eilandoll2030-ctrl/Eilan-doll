@@ -1461,6 +1461,24 @@ body.lang-en #bBack svg,body.lang-en #bFwd svg{transform:scaleX(-1)}
 @keyframes lgfloat{50%{transform:translateY(-7px)}}
 .hero-art{translate:none!important;rotate:none!important;scale:none!important}
 @media (max-width:860px){.hero-art{display:grid!important;margin-top:6px}.hero-art .lg-hub{width:min(74vw,290px);margin-top:46px}.lg-cap{margin-top:22px}}
+/* Eilan Rubik cube */
+.rc{--s:60px;position:relative;direction:ltr}
+.rc-v{position:absolute;left:50%;top:60%;width:0;height:0;transform-style:preserve-3d;transform:rotateX(-35.26deg) rotateY(45deg)}
+.rc-sp{position:absolute;transform-style:preserve-3d}
+.rc-q{position:absolute;left:calc(var(--s)/-2);top:calc(var(--s)/-2);width:var(--s);height:var(--s);transform-style:preserve-3d}
+.rc-in{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .65s cubic-bezier(.2,1.35,.4,1)}
+.rc-f{position:absolute;inset:0;border:0;padding:0;margin:0;background:#07080C;transform:var(--t) translateZ(calc(var(--s)/2));backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.rc-f::before{content:'';position:absolute;inset:6%;border-radius:20%;background:transparent;transition:filter .2s,background .35s}
+.rc-f.o::before{background:var(--c);box-shadow:inset 0 0 0 1px rgba(216,255,230,.16)}
+.rc.gold .rc-q.g .rc-f::before{background:var(--g);box-shadow:none}
+.rc.gold .rc-q.g .rc-in{transform:translate3d(0,calc(var(--s)*-1.25),0) scale3d(.58,.58,.58)}
+.rc-v,.rc-sp,.rc-q,.rc-in,.rc-f{pointer-events:none}.rc button.rc-f{cursor:pointer;pointer-events:auto}.rc button.rc-f:hover::before,.rc button.rc-f:focus-visible::before{filter:brightness(1.35)}
+.rc button.rc-f:focus-visible{outline:none}
+.rc.busy .rc-f{pointer-events:none}
+.rc.still .rc-in{transition:none}
+.hero-art .rc-hub{width:min(100%,300px);aspect-ratio:1/1.34;margin:10px auto 0}
+@media (max-width:860px){.hero-art .rc-hub{width:min(74vw,290px);margin-top:18px}}
+#bootCube{position:absolute;inset:0}
 @media (prefers-reduced-motion:reduce){.lg-t,.lg-t.lg-ai{animation:none}}
 @media (prefers-reduced-motion:reduce){.lg-t,.lg-t.lg-ai{animation:none}}
 .eil-eye{position:absolute;top:45.06%;width:8.56%;height:11.21%;border-radius:50%;background:#EDF6F1;box-shadow:0 0 8px rgba(255,255,255,.28);will-change:transform}
@@ -2833,7 +2851,7 @@ html.light .floaters{opacity:.42}
 <noscript><div style="max-width:760px;margin:40px auto;padding:20px;color:#fff;font-family:sans-serif;line-height:1.8"><h1>إيلان دول — EILAN DOLL | العالم الرقمي</h1><p>إيلان دول عالم رقمي متكامل في موقع واحد: متجر منتجات رقمية وألعاب عائلية تفاعلية (لحد يشدها، أسئلة عائلية، كثّر بهارات، مشاعر)، أكاديمية دورات من جهات حقيقية، استوديو تصميم، محرك بحث ومساعد ذكاء اصطناعي Eilan AI، ومجتمع على ديسكورد.</p><p>EILAN DOLL — The Digital World: store, courses from real providers, family games, design studio, search and AI in one place. Please enable JavaScript.</p></div></noscript>
 <div class="bgfx"><div class="grid"></div><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div></div>
 
-<div id="boot"><div class="boot-in"><div class="boot-mark"><canvas id="bootCv" width="640" height="640"></canvas><img class="boot-logo" data-logo alt="EILAN DOLL"></div><div class="boot-title grad-t">EILAN DOLL</div><div class="boot-sub">THE DIGITAL WORLD</div><div class="boot-bar"><i></i></div><div class="boot-log" id="bootLog">initializing eilan core…</div></div></div>
+<div id="boot"><div class="boot-in"><div class="boot-mark"><div id="bootCube" aria-hidden="true"></div><img class="boot-logo" data-logo alt="EILAN DOLL"></div><div class="boot-title grad-t">EILAN DOLL</div><div class="boot-sub">THE DIGITAL WORLD</div><div class="boot-bar"><i></i></div><div class="boot-log" id="bootLog">initializing eilan core…</div></div></div>
 
 <div id="app">
   <div class="titlebar">
@@ -3387,7 +3405,7 @@ P.home={icon:'🌐',title:()=>'الرئيسية · '+S.settings.brand,html:()=>{
     <form class="mega" onsubmit="event.preventDefault();go(this.q.value)">${I.search}<input name="q" placeholder="ابحث عن منتج، تصميم، مكان، معلومة… أو اسأل Eilan AI" autocomplete="off"><button class="btn g">استكشف</button></form>
     <div class="hero-chips">${['مخطط دراسي','خلفيات نيون','فكرة تصميم ملصق','أين تقع العلا؟','سيرفر Westred','دورة UI'].map(t=>`<button class="chip" data-go="eilan://search?q=${enc(t)}">${t}</button>`).join('')}</div>
    </div>
-   <div class="hero-art"><div class="lg-hub">${[['#1E44C8','#D8FFE6','🛍️','متجر إيلان','eilan://store'],['#0F6B44','#D8FFE6','🎞️','القوالب والعروض','eilan://templates'],0,['#0B1F5E','#D8FFE6','📚','الأكاديمية','eilan://learn'],['#4A2A8F','#D8FFE6','🎮','الترفيه','eilan://play'],['#07341F','#D8FFE6','🧭','وجهتي','eilan://places'],['#251147','#D8FFE6','💬','المجتمع','eilan://community'],['#0F6B44','#D8FFE6','🔖','مكتبتي','eilan://library'],['#1E44C8','#D8FFE6','🏆','المكافآت','eilan://rewards']].map((x,i)=>x?`<button class="lg-t" style="--c:${x[0]};--i:${i};--dx:${(1-i%3)*122}%;--dy:${(1-Math.floor(i/3))*122}%" data-go="${x[4]}" data-l="${x[3]}" aria-label="${x[3]}"></button>`:'<span></span>').join('')}<button class="lg-t lg-ai" style="--c:linear-gradient(145deg,#F6DD8F,#CFA244 55%,#94702A);--i:9;--dx:-174%;--dy:205%" data-go="eilan://ai" data-l="Eilan AI" aria-label="Eilan AI"></button></div><div class="lg-cap">اضغط أي مكعب وادخل العالم</div></div>
+   <div class="hero-art"><div class="rc-hub" data-rc-hub></div><div class="lg-cap rc-cap">اضغط أي مكعب وادخل العالم</div></div>
   </section>
   <section class="pillars">
    ${[['products','📲','Products','منتجات','مخططات، قوالب، خطوط، خلفيات وملصقات رقمية.','#0F6B44','eilan://store?cat=products'],
@@ -14437,6 +14455,98 @@ P.drawn={icon:'🖼️',title:()=>gzL('رسمات إيلان','Eilan Visuals'),h
 </script>
 <!-- /EILAN DRAWN -->
 <script>
+/* ===== Eilan Rubik cube (logo in 3D): scramble → solve → gold corner lifts ===== */
+window.RC=(function(){
+  const COL={'-y':'#1E44C8','-x':'#0F6B44','z':'#4A2A8F','y':'#07341F','x':'#251147','-z':'#0B1F5E'};
+  const GOLD={'-y':'linear-gradient(135deg,#FBE6A6,#E7C567)','-x':'linear-gradient(180deg,#D6AF52,#A9832F)','z':'linear-gradient(180deg,#B48D36,#7E5F1F)','y':'#8E6A24','x':'#9C7629','-z':'#C59A3E'};
+  const FACES=[['x','rotateY(90deg)'],['-x','rotateY(-90deg)'],['y','rotateX(-90deg)'],['-y','rotateX(90deg)'],['z',''],['-z','rotateY(180deg)']];
+  const AX={x:[1,0,0],y:[0,1,0],z:[0,0,1]};
+  const rot=(a,d)=>{const s=d;/* 90deg*d, CSS rotate conventions */
+    if(a==='x')return [[1,0,0],[0,0,-s],[0,s,0]];
+    if(a==='y')return [[0,0,s],[0,1,0],[-s,0,0]];
+    return [[0,-s,0],[s,0,0],[0,0,1]]};
+  const mul=(A,B)=>A.map(r=>B[0].map((_,j)=>r.reduce((t,v,k)=>t+v*B[k][j],0)));
+  const mv=(A,v)=>A.map(r=>r.reduce((t,x,k)=>t+x*v[k],0));
+  const reduce=()=>matchMedia('(prefers-reduced-motion:reduce)').matches||document.body.classList.contains('no-motion');
+  const wait=ms=>new Promise(r=>setTimeout(r,ms));
+
+  function make(host,opt){
+    opt=opt||{};
+    host.classList.add('rc');host.innerHTML='';
+    const view=document.createElement('div');view.className='rc-v';
+    const spin=document.createElement('div');spin.className='rc-sp';view.appendChild(spin);host.appendChild(view);
+    const Q=[];let s=60;
+    const links=opt.links||[];let li=0;
+    for(let x=-1;x<=1;x++)for(let y=-1;y<=1;y++)for(let z=-1;z<=1;z++){
+      const gold=x===1&&y===-1&&z===-1;const el=document.createElement('div');el.className='rc-q'+(gold?' g':'');
+      const inn=document.createElement('div');inn.className='rc-in';el.appendChild(inn);
+      const fc={};
+      FACES.forEach(([k,t])=>{
+        const outer=(k==='x'&&x===1)||(k==='-x'&&x===-1)||(k==='y'&&y===1)||(k==='-y'&&y===-1)||(k==='z'&&z===1)||(k==='-z'&&z===-1);
+        let f;
+        const lk=k==='-y'&&y===-1&&!gold&&links[li]?links[li++]:(gold&&k==='-y'&&opt.gold?opt.gold:null);
+        if(lk){f=document.createElement('button');f.type='button';f.dataset.go=lk[1];f.setAttribute('aria-label',lk[0]);f.dataset.l=lk[0]}
+        else f=document.createElement('div');
+        f.className='rc-f'+(outer?' o':'');f.style.setProperty('--t',t||'rotateY(0deg)');
+        if(outer)f.style.setProperty('--c',COL[k]);
+        if(gold)f.style.setProperty('--g',GOLD[k]);
+        inn.appendChild(f);fc[k]=f});
+      spin.appendChild(el);
+      Q.push({el,inn,P:[x,y,z],O:[[1,0,0],[0,1,0],[0,0,1]],gold});
+    }
+    const mat=q=>{const O=q.O,p=q.P.map(v=>v*s);
+      return `matrix3d(${O[0][0]},${O[1][0]},${O[2][0]},0,${O[0][1]},${O[1][1]},${O[2][1]},0,${O[0][2]},${O[1][2]},${O[2][2]},0,${p[0]},${p[1]},${p[2]},1)`};
+    const put=(q,a,ang)=>{const v=AX[a||'y'];q.el.style.transform=`rotate3d(${v[0]},${v[1]},${v[2]},${ang||0}deg) ${mat(q)}`};
+    const size=()=>{const w=host.clientWidth||240,h=host.clientHeight||w*1.34;s=Math.max(14,Math.round(Math.min(w/4.7,h/6.3)));host.style.setProperty('--s',s+'px');Q.forEach(q=>{q.el.style.transition='none';put(q)})};
+    size();
+    const ro=window.ResizeObserver?new ResizeObserver(()=>{if(!busy)size()}):null;ro&&ro.observe(host);
+    const ax=['x','y','z'];
+    const apply=(a,L,d)=>{const R=rot(a,d),i=ax.indexOf(a);Q.forEach(q=>{if(q.P[i]===L){q.P=mv(R,q.P).map(Math.round);q.O=mul(R,q.O).map(r=>r.map(Math.round))}})};
+    async function turn(a,L,d,ms){const i=ax.indexOf(a),sel=Q.filter(q=>q.P[i]===L);
+      sel.forEach(q=>{q.el.style.transition='none';put(q,a,0)});host.offsetWidth;
+      sel.forEach(q=>{q.el.style.transition=`transform ${ms}ms cubic-bezier(.45,.05,.3,1)`;put(q,a,90*d)});
+      await wait(ms+20);apply(a,L,d);sel.forEach(q=>{q.el.style.transition='none';put(q)})}
+    const rnd=n=>{const out=[];let last='';while(out.length<n){const a=ax[Math.floor(Math.random()*3)];if(a===last)continue;last=a;out.push([a,[-1,1][Math.floor(Math.random()*2)],[-1,1][Math.floor(Math.random()*2)]])}return out};
+    const G=Q.find(q=>q.gold);
+    const setGold=on=>{host.classList.toggle('gold',on)};
+    let busy=false;
+    async function play(n,ms,spinDeg,instantScramble){
+      if(busy)return;busy=true;host.classList.add('busy');
+      setGold(false);await wait(instantScramble?0:520);
+      const mv_=rnd(n);
+      if(instantScramble){mv_.forEach(([a,L,d])=>apply(a,L,d));Q.forEach(q=>put(q))}
+      else for(const [a,L,d] of mv_)await turn(a,L,d,ms);
+      spin.style.transition='none';spin.style.transform=`rotateY(${spinDeg}deg)`;spin.offsetWidth;
+      const total=n*(ms+20);spin.style.transition=`transform ${total+300}ms cubic-bezier(.3,.1,.2,1)`;spin.style.transform='rotateY(0deg)';
+      for(let k=mv_.length-1;k>=0;k--){const [a,L,d]=mv_[k];await turn(a,L,-d,ms)}
+      await wait(200);setGold(true);await wait(650);
+      busy=false;host.classList.remove('busy')}
+    const api={play,host,stop(){ro&&ro.disconnect()}};
+    if(reduce()){setGold(true);host.classList.add('still')}
+    return api;
+  }
+
+  function hub(host){
+    const links=[['متجر إيلان','eilan://store'],['القوالب والعروض','eilan://templates'],['الأكاديمية','eilan://learn'],['الترفيه','eilan://play'],['وجهتي','eilan://places'],['المجتمع','eilan://community'],['مكتبتي','eilan://library'],['المكافآت','eilan://rewards']];
+    const c=make(host,{links,gold:['Eilan AI','eilan://ai']});
+    const cap=host.parentElement&&host.parentElement.querySelector('.rc-cap');const base=cap?cap.textContent:'';
+    host.addEventListener('pointerover',e=>{const b=e.target.closest('[data-l]');if(cap&&b)cap.textContent=b.dataset.l});
+    host.addEventListener('pointerout',()=>{if(cap)cap.textContent=base});
+    host.addEventListener('focusin',e=>{const b=e.target.closest('[data-l]');if(cap&&b)cap.textContent=b.dataset.l});
+    host.addEventListener('focusout',()=>{if(cap)cap.textContent=base});
+    if(reduce())return;
+    const b=document.getElementById('boot'),first=b&&!b.classList.contains('hide')?4700:300;
+    setTimeout(()=>{if(host.isConnected)c.play(5,300,-360,true)},first);
+    const t=setInterval(()=>{if(!host.isConnected){clearInterval(t);c.stop();return}
+      if(document.hidden||host.matches(':hover'))return;c.play(4,260,-360)},10000);
+  }
+
+  function mountAll(root){(root||document).querySelectorAll('[data-rc-hub]:not([data-on])').forEach(h=>{h.dataset.on=1;try{hub(h)}catch(e){console.warn(e)}})}
+  return {make,hub,mountAll};
+})();
+(function(){let p=0;const run=()=>{p=0;RC.mountAll()};new MutationObserver(()=>{if(!p){p=1;requestAnimationFrame(run)}}).observe(document.body,{childList:true,subtree:true});run()})();
+</script>
+<script>
 /* ================= INIT ================= */
 (function init(){
   $$('[data-logo]').forEach(i=>i.src=LOGO);$('#favicon').href=LOGO;
@@ -14459,25 +14569,14 @@ P.drawn={icon:'🖼️',title:()=>gzL('رسمات إيلان','Eilan Visuals'),h
   const tick=()=>$('#clock').textContent=new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});tick();setInterval(tick,30000);
   newTab(pathRoute());
   checkRoutines();processQueue();
-  (function(){const boot=$('#boot'),img=$('.boot-logo'),cv=$('#bootCv');if(!boot||!img||!cv)return;
+  (function(){const boot=$('#boot'),img=$('.boot-logo'),cv=$('#bootCube');if(!boot||!img||!cv)return;
     const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches||document.body.classList.contains('no-motion');
-    const done=()=>{img.classList.add('on');cv.classList.add('off');boot.classList.add('show-t')};
-    if(reduce){done();return}
-    const im=new Image();im.onload=()=>{try{
-      const N=100,cells=[];
-      atob(LOGO.split(',')[1]).replace(/<polygon points="([^"]+)" fill="([^"]+)"( data-g="1")?/g,(_,pts,f,g)=>{const p=pts.trim().split(/\s+/).map(v=>v.split(',').map(Number)),x=p.reduce((a,v)=>a+v[0],0)/p.length,y=p.reduce((a,v)=>a+v[1],0)/p.length;cells.push({p:p.map(v=>[v[0]-x,v[1]-y]),x,y,c:f,dl:g?1.05:(y/N)*.75+Math.random()*.2,a:Math.random()*6.28,m:110+Math.random()*170,r:(Math.random()-.5)*4})});
-      if(!cells.length)throw 0;
-      const ctx=cv.getContext('2d'),S=cv.width/N,t0=performance.now(),DUR=.7,ease=t=>{const c=1.7;return 1+(c+1)*Math.pow(t-1,3)+c*Math.pow(t-1,2)};
-      let end=0;const frame=now=>{const T=(now-t0)/1000;ctx.clearRect(0,0,cv.width,cv.height);let fin=true;
-        for(const q of cells){let u=(T-q.dl)/DUR;if(u<=0){fin=false;continue}if(u<1)fin=false;u=Math.min(1,u);const e=ease(u),inv=1-e;
-          const cx=q.x*S+Math.cos(q.a)*q.m*inv,cy=q.y*S+Math.sin(q.a)*q.m*inv,k=S*Math.min(1,u*2.2);
-          ctx.save();ctx.globalAlpha=Math.min(1,u*3);ctx.translate(cx,cy);ctx.rotate(q.r*inv);ctx.fillStyle=q.c;ctx.beginPath();q.p.forEach((v,i)=>i?ctx.lineTo(v[0]*k,v[1]*k):ctx.moveTo(v[0]*k,v[1]*k));ctx.closePath();ctx.fill();ctx.restore()}
-        if(T>2&&!boot._d){boot._d=1;done()}if(T<3.2&&!boot.classList.contains('hide'))requestAnimationFrame(frame)};
-      requestAnimationFrame(frame);setTimeout(()=>boot.classList.add('show-t'),3000)}catch(e){done()}};
-    im.onerror=done;im.src=img.src})();
+    const done=()=>{img.classList.add('on');cv.style.display='none';boot.classList.add('show-t')};
+    if(reduce||!window.RC){done();return}
+    try{const c=RC.make(cv);c.play(6,330,-450,true).then(()=>boot.classList.add('show-t'));setTimeout(()=>boot.classList.add('show-t'),3600)}catch(e){done()}})();
   const logs=['loading digital world…','connecting eilan network…','syncing westred servers…','waking up the tech team…','welcome, explorer ✦'];
   logs.forEach((l,i)=>setTimeout(()=>{const b=$('#bootLog');if(b)b.textContent=l},600*(i+1)));
-  setTimeout(()=>$('#boot').classList.add('hide'),3700);
+  setTimeout(()=>$('#boot').classList.add('hide'),4500);
 })();
 </script>
 

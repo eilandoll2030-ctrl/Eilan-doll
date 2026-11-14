@@ -14365,6 +14365,25 @@ function soonHero(){const dc=discordLink();return `<div class="soon-hero card">
   P.store.mount=r=>{if(!storeSoon()&&_sm)_sm(r)}}
 ACT.soonpreview=d=>{soonPreview=!soonPreview;if(d&&d.to)go('eilan://'+d.to);else render()};
 
+/* 🔔 «القوالب والعروض» و«المشاريع والمواقع» — الخانة تظهر للزوار، بس المحتوى «يفتح قريباً» (نفس مفتاح المتجر storeSoon) */
+function soonSecHTML(o){const dc=discordLink();return `<div class="soon-hero card">
+  <div class="soon-art"><span class="soon-ring"></span><span class="soon-ring r2"></span><img src="${LOGO}" alt=""></div>
+  <div class="soon-txt"><div class="eyebrow">${o.eb} · OPENING SOON</div>
+   <h1>${o.t} <span class="grad-t">يفتح قريباً</span></h1>
+   <p>${o.p}<br>ترقّبوا الافتتاح… قريب جداً ✨</p>
+   <div class="soon-chips">${o.chips.map(c=>`<span>${c}</span>`).join('')}</div>
+   <div class="soon-acts">${dc?`<a class="btn g" href="${esc(dc)}" target="_blank" rel="noopener">💬 تابع الإعلان في Discord</a>`:''}<button class="btn" data-go="eilan://play">🎮 العب في منطقة الترفيه</button><button class="btn" data-go="eilan://learn">🎓 الأكاديمية</button></div>
+  </div></div>`}
+const SOON_SECS={
+  templates:{to:'templates',eb:'EILAN TEMPLATES',t:'القوالب والعروض',p:'نجهّز لكم قوالب جاهزة بهوية إيلان دول: عروض تقديمية، ريلز، بوستات ودعوات، وتصميم حسب طلبكم.',chips:['🎞️ عروض تقديمية','📱 ريلز وبوستات','💌 دعوات وكروت','🎬 فيديو موشن']},
+  projects:{to:'projects',eb:'EILAN PROJECTS',t:'المشاريع والمواقع',p:'نجهّز لكم قسم المشاريع: أفكار مشاريع وملفاتها، استبيانات، صفحات مواقع وإعلانات.',chips:['💡 أفكار مشاريع','📁 ملفات المشاريع','🌐 صفحات مواقع','📣 إعلانات']}
+};
+SOON_SECS.projectfile=SOON_SECS.projectfileneb=SOON_SECS.projects;
+Object.keys(SOON_SECS).forEach(k=>{const pg=P[k];if(!pg)return;const o=SOON_SECS[k],_h=pg.html,_m=pg.mount;
+  pg.html=r=>{if(!storeSoon())return (isOwner()&&S.settings.storeSoon?`<div class="soon-own card"><span>👁️ هذا القسم <b>مقفل للزوار</b> — يشوفون «يفتح قريباً». أنت كمالك تشوف المحتوى الحقيقي.</span><button class="btn xs p" data-act="soonpreview">معاينة كزائر</button></div>`:'')+_h(r);
+    return (soonPreview?`<div class="soon-own card"><span>👁️ معاينة كزائر — هكذا يرى الزوار هذا القسم الآن.</span><button class="btn xs g" data-act="soonpreview">رجوع لوضع المالك</button></div>`:'')+soonSecHTML(o)};
+  if(_m)pg.mount=r=>{if(!storeSoon())return _m(r)}});
+
 /* product page → notice instead of buy buttons (buttons hidden by CSS) */
 {const _ph=P.product.html;P.product.html=r=>{let h=_ph(r);if(!storeSoon())return h;const i=h.indexOf('<div class="acts">');
   const n=`<div class="soon-note">🔔 <b>المتجر يفتح قريباً</b> — الشراء متاح مع الافتتاح. ترقّبونا!</div>`;return i>-1?h.slice(0,i)+n+h.slice(i):n+h}}

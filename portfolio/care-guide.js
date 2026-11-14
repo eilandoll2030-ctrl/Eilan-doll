@@ -75,14 +75,14 @@ function nebGuideHTML() {
  <div class="eyebrow">EILAN PROJECT STARTER / CANDLES &amp; HOME FRAGRANCE</div>
  <h2 id="neb-title">مشروع الشموع — صناعة الشموع المنزلية</h2>
  <p class="mu" lang="en">A learning-first project starter: home fragrance candles. Two routes: learn candle making, or work with a private-label manufacturer.</p>
- <figure style="margin:20px 0"><img src="/assets/projects/neb-candle-concept.png" alt="تصوّر مولّد بالذكاء الاصطناعي لهوية نبع: عبوة شموع وعبوتي شموع معطرة بألوان أخضر مزرق وكريمي وذهبي" loading="lazy" style="display:block;width:100%;max-width:880px;height:auto;border-radius:16px"><figcaption class="mu">تصوّر بصري مولّد بالذكاء الاصطناعي، وليس تصويرًا لمنتجات مصنّعة. العبوات والملصقات للتوضيح فقط.</figcaption></figure>
+ <figure style="margin:20px 0"><img src="/assets/projects/neb-candle-concept.png" alt="تصوّر مولّد بالذكاء الاصطناعي لهوية نبع: عبوة شموع وعبوتي شموع معطرة بألوان أحمر طوبي وذهبي وكريمي" loading="lazy" style="display:block;width:100%;max-width:880px;height:auto;border-radius:16px"><figcaption class="mu">تصوّر بصري مولّد بالذكاء الاصطناعي، وليس تصويرًا لمنتجات مصنّعة. العبوات والملصقات للتوضيح فقط.</figcaption></figure>
  <details open><summary>صور المنتج نفسه بشعار نبع</summary><div class="care-content"><div class="care-product-grid">
  <figure><img src="/assets/projects/neb-candle-product.jpg" alt="شمعة نبع بشعار العلامة الأصلي على عبوة كريمي" loading="lazy" style="width:100%;height:auto;border-radius:14px"><figcaption class="mu">شمعة نبع — تصوير منتجات تعليمي مولّد بالذكاء الاصطناعي، يحمل شعار العلامة التجريبية. ليس منتجًا مصنّعًا حقيقيًا.</figcaption></figure>
- <figure><img src="/assets/projects/neb-candle-product2.jpg" alt="شموع نبع بشعار العلامة الأصلي على عبوة أخضر مزرق وذهبي" loading="lazy" style="width:100%;height:auto;border-radius:14px"><figcaption class="mu">شموع نبع — تصوير منتجات تعليمي مولّد بالذكاء الاصطناعي، يحمل شعار العلامة التجريبية. ليس منتجًا مصنّعًا حقيقيًا.</figcaption></figure>
+ <figure><img src="/assets/projects/neb-candle-product2.jpg" alt="شموع نبع بشعار العلامة الأصلي على عبوة أحمر طوبي وذهبي" loading="lazy" style="width:100%;height:auto;border-radius:14px"><figcaption class="mu">شموع نبع — تصوير منتجات تعليمي مولّد بالذكاء الاصطناعي، يحمل شعار العلامة التجريبية. ليس منتجًا مصنّعًا حقيقيًا.</figcaption></figure>
  </div><p class="mu">نفس المنتج المعروض في القسم العلوي، مصوّر بأسلوب صور المنتجات المرجعية: تصوير منتجات نظيف ومتجانس مع شعار نبع على العبوة. الصور موّلدة بالذكاء الاصطناعي وتوضيحية؛ لا تعكس منتجًا حقيقيًا ولا تركيبة أو مواصفات معتمدة. الشعار هو هوية تعليمية تجريبية غير مسجّلة.</p></div></details>
  <p><b>الهدف:</b> تعلّم خطوات بناء المشروع قبل شراء الخامات أو إطلاق البيع. لا يحتوي هذا الدليل تركيبة تصنيع أو ضمان ربح أو اعتماد سلامة.</p>
  <details open><summary>١. الهوية والتصميم / Brand concept</summary><div class="care-content">
- <p><b>نبع / NEB'</b>: اسم تجريبي غير مفحوص تجاريًا. شخصية هادئة وواضحة؛ أخضر مزرق وكريمي مع ذهبي خفيف. الهوية مثال للتعلّم وليست علامة مسجّلة أو اسمًا محجوزًا.</p>
+ <p><b>نبع / NEB'</b>: اسم تجريبي غير مفحوص تجاريًا. شخصية دافئة وواضحة؛ أحمر طوبي وذهبي على كريمي. الهوية مثال للتعلّم وليست علامة مسجّلة أو اسمًا محجوزًا.</p>
  <a class="btn sm" href="/assets/projects/neb-concept-logo.svg" target="_blank" rel="noopener">عرض الشعار التجريبي</a>
  <ul><li>الشموع: تصوّر عبوة ورقية وبرطمان زجاجي يحمي المنتج؛ تُحدد العبوة النهائية بعد تقييم المنتج وظروف التخزين.</li><li>الملصق: تُجهّز بيانات المكونات والتحذيرات (مثل تحذيرات الاشتعال) والتتبّع وغيرها بحسب متطلبات المنتج الفعلية. لا تُطبع الملصقات التصورية كملصقات تجارية.</li><li>لا نضيف ادعاءات مثل علاج أو فوائد صحية، ولا نحدد مدة صلاحية من صورة أو وصفة عامة.</li><li>الشموع المعطرة قد تُصنّف بحسب التركيب والاستخدام؛ راجع التصنيف مع المختص قبل الإدراج.</li></ul>
  </div></details>
@@ -122,12 +122,13 @@ function nebGuideHTML() {
  <li><b>قرار الإطلاق:</b> لا مبيعات قبل اكتمال المتطلبات وتحديد التشغيل والتسليم ومعالجة الشكاوى. رتّب الخطوات حسب وضعك، وليس موعدًا مضمونًا للجميع.</li>
  </ol></div></details>
  <details open><summary>كيف راح يكون شكل الموقع؟ / Site skeleton</summary><div class="care-content"><p class="mu">هذا مخطط بصري يوضح للعميل شكل ومراحل الموقع قبل البناء، وليس موقعًا مبنيًا أو منتجًا للبيع. الصور مخطّطات تصميم (mockups) لتوضيح الهيكل العام، وليست موقعًا حقيقيًا ولا صفحة بيع.</p>
+ <p class="mu" style="margin:14px 0">فكرة الموقع المبتكرة: <b>رحلة العطر</b> — موقع يعرّف الشموع كجزء من جوّ المنزل، بعرض دافئ وحميم يأخذ الزائر في رحلة عبر التشكيلة قبل البناء.</p>
  <div class="care-product-grid">
- <figure><img src="/assets/projects/neb-site-home.jpg" alt="مخطط تصميم الصفحة الرئيسية للموقع" loading="lazy" style="width:100%;height:auto;border-radius:14px"><figcaption class="mu"><b>الصفحة الرئيسية:</b> شريط علوي يضم الشعار والقوائم، ثم منطقة صورة وعنوان رئيسية، ثم شبكة بطاقات المنتجات، ثم تذييل.</figcaption></figure>
- <figure><img src="/assets/projects/neb-site-product.jpg" alt="مخطط تصميم صفحة تفاصيل المنتج" loading="lazy" style="width:100%;height:auto;border-radius:14px"><figcaption class="mu"><b>صفحة المنتج:</b> صورة المنتج مع العنوان والوصف المختصر ومزايا المنتج وأزرار الإجراء، ومسار التتبّع في الأعلى.</figcaption></figure>
+ <figure><img src="/assets/projects/neb-site-home.jpg" alt="مخطط تصميم الصفحة الرئيسية للموقع" loading="lazy" style="width:100%;height:auto;border-radius:14px"><figcaption class="mu"><b>الصفحة الرئيسية — رحلة العطر:</b> افتتاحية دافئة تأخذ الزائر في رحلة عبر تشكيلة الشموع، مع منطقة صورة وعنوان رئيسية وعرض مميز، ثم عرض المنتجات، وتذييل.</figcaption></figure>
+ <figure><img src="/assets/projects/neb-site-product.jpg" alt="مخطط تصميم صفحة تفاصيل المنتج" loading="lazy" style="width:100%;height:auto;border-radius:14px"><figcaption class="mu"><b>صفحة المنتج — تجربة الشمعة:</b> صورة الشمعة مع العنوان، وتحليل الرائحة، وتفاصيل مدة الاشتعال والاعتناء بالشمعة، وأزرار الإجراء، ضمن عرض دافئ وحميم.</figcaption></figure>
  </div>
- <figure style="margin:18px 0"><img src="/assets/projects/neb-site-learn.jpg" alt="مخطط تصميم صفحة التعلّم والخطة" loading="lazy" style="width:100%;max-width:960px;height:auto;border-radius:14px"><figcaption class="mu"><b>صفحة التعلّم والخطة:</b> خطوات مرتبة برقم ورمز مع عنوان كل مرحلة، لتوضيح مسار التعلّم والمراحل.</figcaption></figure>
- <p class="mu">الهيكل مبدئي للعرض؛ يُعدّل حسب محتوى العميل النهائي. لا يُظهر الموقع سعرًا أو يبيع، والصور المرجعية ليست منتجًا حقيقيًا.</p>
+ <figure style="margin:18px 0"><img src="/assets/projects/neb-site-learn.jpg" alt="مخطط تصميم صفحة التعلّم والخطة" loading="lazy" style="width:100%;max-width:960px;height:auto;border-radius:14px"><figcaption class="mu"><b>صفحة التعلّم والخطة — ورشة الشموع:</b> خطوات مرتبة كرحلة زمنية مع رمز لكل مرحلة، لتوضيح مسار تعلّم صناعة الشموع والمراحل.</figcaption></figure>
+ <p class="mu">فكرة «رحلة العطر» مبدئية للعرض؛ يُعدّل حسب محتوى العميل النهائي. لا يُظهر الموقع سعرًا أو يبيع، والصور المرجعية ليست منتجًا حقيقيًا.</p>
  </div></details>
  <p class="mu">تصميم وتخطيط إيلان دول · نموذج تعليمي قيد التطوير. الصور مرجع تصميم، وليست وصفة أو تقييمًا صحيًا أو استشارة قانونية. مسار التغليف والتسعير والموقع هنا خطة تطبيق؛ لا نزعم إرفاق دورات متخصصة لها بعد.</p>
  </section>`;

@@ -114,6 +114,8 @@ elements['survey-next'].onclick();assert.equal(run('surveyState.complete'),true)
 console.log('PASS five concise questions, no early budget/design decisions, last step reaches summary');
 
 const guide=vm.runInContext('careGuideHTML()',projectContext);
+const nebGuide=vm.runInContext('nebGuideHTML()',projectContext);
+const nebCard=vm.runInContext('nebProjectCardHTML()',projectContext);
 assert.match(guide,/id="careProject"/);
 assert.match(guide,/sfda.gov.sa\/ar\/eservices\/88819/);
 assert.match(guide,/free-organic-skincare-formulation-course/);
@@ -160,3 +162,27 @@ assert.ok(!nativeProject.includes('EILAN PROJECTS & WEBSITES'));
 assert.ok(!nativeProject.includes('PROJECT IDEAS &amp; WEBSITE CONCEPTS'));
 assert.ok(nativeProject.indexOf('care-project-card') < nativeProject.indexOf('id="projectSurvey"'));
 console.log('PASS simplified projects header, project cards first, no repeated intro panels');
+
+// --- Second care project (brand: NEB') ---
+const nebContext={P:{},careGuideHTML:()=>guide,nebGuideHTML:()=>nebGuide,nebProjectCardHTML:()=>nebCard};
+vm.createContext(nebContext);
+vm.runInContext(main.slice(main.indexOf('P.projectfile={'),main.indexOf('P.projects={')),nebContext);
+const nebDetail=vm.runInContext('P.projectfileneb.html()',nebContext);
+assert.match(nebDetail,/id="nebProject"/);
+assert.match(nebDetail,/نبع \/ NEB'/);
+assert.match(nebDetail,/neb-care-concept\.png/);
+assert.match(nebDetail,/neb-soap-product\.jpg/);
+assert.match(nebDetail,/neb-scrub-product\.jpg/);
+assert.match(nebDetail,/neb-site-home\.jpg/);
+assert.match(nebDetail,/neb-site-product\.jpg/);
+assert.match(nebDetail,/neb-site-learn\.jpg/);
+assert.match(nebDetail,/كيف راح يكون شكل الموقع؟/);
+assert.ok(!/data-act="addcart"|data-act="buy"/.test(nebDetail));
+assert.match(nativeProject,/data-go="eilan:\/\/projects\/neb"/);
+assert.match(nativeProject,/neb-care-concept\.png/);
+assert.ok(!nativeProject.includes('id="nebProject"'));
+assert.ok(main.includes("if(page==='projects'&&id==='neb')page='projectfileneb'"));
+assert.ok(main.includes("if(p==='projects'&&parts[1]==='neb')return 'eilan://projects/neb'"));
+assert.ok(main.includes("page==='projectfileneb'?'/projects/neb/'"));
+for(const m of [ 'assets/projects/neb-care-concept.png','assets/projects/neb-soap-product.jpg','assets/projects/neb-scrub-product.jpg','assets/projects/neb-site-home.jpg','assets/projects/neb-site-product.jpg','assets/projects/neb-site-learn.jpg','assets/projects/neb-concept-logo.svg' ]) assert.ok(existsSync(m),'Missing NEB asset: '+m);
+console.log('PASS second care project (NEB) as separate file card, route, assets and no checkout');

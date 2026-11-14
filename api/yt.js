@@ -223,6 +223,37 @@ module.exports = async (req, res) => {
   let matches = null;
 
   try {
+
+    if (q.avatar) {
+      const target = String(q.avatar).trim();
+      let url = '';
+      if (CH_RE.test(target)) {
+        url = `https://www.youtube.com/channel/${target}`;
+      } else if (target.startsWith('@')) {
+        url = `https://www.youtube.com/${target}`;
+      } else {
+        res.status(400).json({ error: 'bad avatar target' });
+        return;
+      }
+      try {
+        const html = await get(url, UA, deadline);
+        const m = html.match(/<meta\s+(?:property="og:image"|name="twitter:image")\s+content="([^"]+)"/i);
+        const img = m ? m[1] : 'https://www.youtube.com/img/desktop/auto/logo_channel_default_light.png';
+        res.setHeader('Cache-Control', 'public, max-age=604800, s-maxage=2592000');
+        if (typeof res.redirect === 'function') {
+          res.redirect(302, img);
+        } else {
+          res.writeHead(302, { Location: img });
+          res.end();
+        }
+      } catch (err) {
+        res.setHeader('Cache-Control', 'public, max-age=3600');
+        const d = 'https://www.youtube.com/img/desktop/auto/logo_channel_default_light.png';
+        if (typeof res.redirect === 'function') { res.redirect(302, d); }
+        else { res.writeHead(302, { Location: d }); res.end(); }
+      }
+      return;
+    }
     if (q.q && !ch && !q.u) {
       const found = await searchChannels(q.q, deadline);
       res.setHeader('Cache-Control', 's-maxage=900, stale-while-revalidate=3600');

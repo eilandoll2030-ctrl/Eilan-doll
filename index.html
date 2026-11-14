@@ -12958,7 +12958,7 @@ P.cities = {
       <button class="btn sm g" data-go="eilan://places" style="padding:6px 14px">الانتقال للأماكن والخرائط 🗺️</button>
     </div>
     <div class="mp-tabs" style="margin-bottom:16px">
-      ${tabs.map(([k, i, t]) => `<button class="mp-tab ${ctTab===k?'on':''}" data-act="cttab" data-t="${k}"><span>${i}</span>${t}</button>`).join('')}
+      ${tabs.map(([k, i, t]) => `<button class="mp-tab ${ctTab===k?'on':''}" data-go="eilan://cities/${k}"><span>${i}</span>${t}</button>`).join('')}
     </div>
     <div class="ct-body-wrap">${bodyHTML}</div>`;
   },

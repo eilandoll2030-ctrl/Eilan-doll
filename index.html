@@ -2848,6 +2848,159 @@ html.light .floaters{opacity:.42}
 .it-price-tag{font-size:18px;font-weight:900;color:#fff;display:flex;align-items:center;gap:6px}
 .it-price-tag s{font-size:13px;color:var(--mu);font-weight:normal}
 
+
+/* Travel Journal 3D Book Cover */
+.tj-3d-book-container {
+  perspective: 1200px;
+  width: 240px;
+  height: 340px;
+  margin: 30px auto;
+  filter: drop-shadow(0 30px 40px rgba(15,107,68,0.3));
+}
+.tj-3d-book {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transform: rotateY(-25deg) rotateX(10deg);
+  animation: tj-float 4s ease-in-out infinite;
+}
+@keyframes tj-float {
+  0%, 100% { transform: rotateY(-25deg) rotateX(10deg) translateY(0); }
+  50% { transform: rotateY(-20deg) rotateX(8deg) translateY(-15px); }
+}
+.tj-3d-book-front, .tj-3d-book-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #0B1F5E, #07341F);
+  border-radius: 4px 12px 12px 4px;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.tj-3d-book-front {
+  transform: translateZ(15px);
+  z-index: 2;
+  box-shadow: inset 4px 0 10px rgba(0,0,0,0.5);
+}
+.tj-3d-book-back {
+  transform: rotateY(180deg) translateZ(15px);
+}
+.tj-3d-book-left {
+  position: absolute;
+  width: 30px;
+  height: 100%;
+  background: linear-gradient(to right, #07080C, #0B1F5E);
+  transform: rotateY(-90deg) translateZ(15px);
+  left: -15px;
+  border-radius: 4px 0 0 4px;
+}
+.tj-3d-book-right {
+  position: absolute;
+  width: 30px;
+  height: 98%;
+  top: 1%;
+  background: repeating-linear-gradient(to bottom, #fff, #fff 2px, #ddd 3px, #ccc 3px);
+  transform: rotateY(90deg) translateZ(225px);
+  right: -15px;
+}
+.tj-3d-book-top {
+  position: absolute;
+  width: 98%;
+  height: 30px;
+  left: 1%;
+  background: repeating-linear-gradient(to right, #fff, #fff 2px, #ddd 3px, #ccc 3px);
+  transform: rotateX(90deg) translateZ(15px);
+  top: -15px;
+}
+.tj-3d-book-bottom {
+  position: absolute;
+  width: 98%;
+  height: 30px;
+  left: 1%;
+  background: repeating-linear-gradient(to right, #fff, #fff 2px, #ddd 3px, #ccc 3px);
+  transform: rotateX(-90deg) translateZ(325px);
+  bottom: -15px;
+}
+.tj-3d-cover-content {
+  padding: 30px 20px;
+  text-align: center;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.tj-3d-cover-content .tj-tag {
+  font-size: 10px;
+  letter-spacing: 2px;
+  background: rgba(255,255,255,0.1);
+  padding: 4px 10px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+}
+.tj-3d-cover-content h1 {
+  font-size: 28px;
+  font-weight: 900;
+  margin: 0 0 10px 0;
+  color: #D8FFE6;
+  text-shadow: 0 0 15px rgba(216,255,230,0.5);
+  line-height: 1.2;
+}
+.tj-3d-cover-content p {
+  font-size: 13px;
+  color: #9AA8BE;
+  line-height: 1.5;
+}
+.tj-3d-icon {
+  font-size: 40px;
+  margin-top: 20px;
+  filter: drop-shadow(0 0 10px rgba(30,68,200,0.8));
+}
+
+/* Open Book Journal Style */
+.tj-open-book {
+  background: #fbfaf8 !important; /* light paper color */
+  border-radius: 12px;
+  padding: 30px;
+  position: relative;
+  box-shadow: 
+    inset 0 0 60px rgba(0,0,0,0.03),
+    0 20px 40px -10px rgba(0,0,0,0.2);
+  background-image: 
+    linear-gradient(90deg, transparent 40px, rgba(30,68,200,0.1) 40px, rgba(30,68,200,0.1) 42px, transparent 42px),
+    linear-gradient(0deg, rgba(0,0,0,0.05) 1px, transparent 1px);
+  background-size: 100% 30px;
+  background-position: 0 15px;
+}
+.tj-open-book::before {
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0; left: 40px;
+  width: 2px;
+  background: rgba(190, 40, 40, 0.4);
+  z-index: 1;
+}
+.tj-open-book * {
+  z-index: 2;
+  position: relative;
+}
+.tj-spiral {
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  right: -10px;
+  width: 20px;
+  background: repeating-linear-gradient(to bottom, #777, #777 4px, transparent 4px, transparent 30px);
+  border-radius: 10px;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.3);
+  z-index: 5;
+}
+
+@media (max-width:600px){
+  .tj-open-book { padding: 20px 15px; background-size: 100% 40px; }
+  .tj-open-book::before { left: 20px; }
+}
+
 </style>
 </head>
 <body>
@@ -4847,7 +5000,160 @@ create table public.eilan_store_orders (
     </div>` : ''}
     
   </div>
-  <style>.st-pane:not(.active){display:none}</style>`;
+  <style>.st-pane:not(.active){display:none}
+/* Travel Journal 3D Book Cover */
+.tj-3d-book-container {
+  perspective: 1200px;
+  width: 240px;
+  height: 340px;
+  margin: 30px auto;
+  filter: drop-shadow(0 30px 40px rgba(15,107,68,0.3));
+}
+.tj-3d-book {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transform: rotateY(-25deg) rotateX(10deg);
+  animation: tj-float 4s ease-in-out infinite;
+}
+@keyframes tj-float {
+  0%, 100% { transform: rotateY(-25deg) rotateX(10deg) translateY(0); }
+  50% { transform: rotateY(-20deg) rotateX(8deg) translateY(-15px); }
+}
+.tj-3d-book-front, .tj-3d-book-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #0B1F5E, #07341F);
+  border-radius: 4px 12px 12px 4px;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.tj-3d-book-front {
+  transform: translateZ(15px);
+  z-index: 2;
+  box-shadow: inset 4px 0 10px rgba(0,0,0,0.5);
+}
+.tj-3d-book-back {
+  transform: rotateY(180deg) translateZ(15px);
+}
+.tj-3d-book-left {
+  position: absolute;
+  width: 30px;
+  height: 100%;
+  background: linear-gradient(to right, #07080C, #0B1F5E);
+  transform: rotateY(-90deg) translateZ(15px);
+  left: -15px;
+  border-radius: 4px 0 0 4px;
+}
+.tj-3d-book-right {
+  position: absolute;
+  width: 30px;
+  height: 98%;
+  top: 1%;
+  background: repeating-linear-gradient(to bottom, #fff, #fff 2px, #ddd 3px, #ccc 3px);
+  transform: rotateY(90deg) translateZ(225px);
+  right: -15px;
+}
+.tj-3d-book-top {
+  position: absolute;
+  width: 98%;
+  height: 30px;
+  left: 1%;
+  background: repeating-linear-gradient(to right, #fff, #fff 2px, #ddd 3px, #ccc 3px);
+  transform: rotateX(90deg) translateZ(15px);
+  top: -15px;
+}
+.tj-3d-book-bottom {
+  position: absolute;
+  width: 98%;
+  height: 30px;
+  left: 1%;
+  background: repeating-linear-gradient(to right, #fff, #fff 2px, #ddd 3px, #ccc 3px);
+  transform: rotateX(-90deg) translateZ(325px);
+  bottom: -15px;
+}
+.tj-3d-cover-content {
+  padding: 30px 20px;
+  text-align: center;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.tj-3d-cover-content .tj-tag {
+  font-size: 10px;
+  letter-spacing: 2px;
+  background: rgba(255,255,255,0.1);
+  padding: 4px 10px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+}
+.tj-3d-cover-content h1 {
+  font-size: 28px;
+  font-weight: 900;
+  margin: 0 0 10px 0;
+  color: #D8FFE6;
+  text-shadow: 0 0 15px rgba(216,255,230,0.5);
+  line-height: 1.2;
+}
+.tj-3d-cover-content p {
+  font-size: 13px;
+  color: #9AA8BE;
+  line-height: 1.5;
+}
+.tj-3d-icon {
+  font-size: 40px;
+  margin-top: 20px;
+  filter: drop-shadow(0 0 10px rgba(30,68,200,0.8));
+}
+
+/* Open Book Journal Style */
+.tj-open-book {
+  background: #fbfaf8 !important; /* light paper color */
+  border-radius: 12px;
+  padding: 30px;
+  position: relative;
+  box-shadow: 
+    inset 0 0 60px rgba(0,0,0,0.03),
+    0 20px 40px -10px rgba(0,0,0,0.2);
+  background-image: 
+    linear-gradient(90deg, transparent 40px, rgba(30,68,200,0.1) 40px, rgba(30,68,200,0.1) 42px, transparent 42px),
+    linear-gradient(0deg, rgba(0,0,0,0.05) 1px, transparent 1px);
+  background-size: 100% 30px;
+  background-position: 0 15px;
+}
+.tj-open-book::before {
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0; left: 40px;
+  width: 2px;
+  background: rgba(190, 40, 40, 0.4);
+  z-index: 1;
+}
+.tj-open-book * {
+  z-index: 2;
+  position: relative;
+}
+.tj-spiral {
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  right: -10px;
+  width: 20px;
+  background: repeating-linear-gradient(to bottom, #777, #777 4px, transparent 4px, transparent 30px);
+  border-radius: 10px;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.3);
+  z-index: 5;
+}
+
+@media (max-width:600px){
+  .tj-open-book { padding: 20px 15px; background-size: 100% 40px; }
+  .tj-open-book::before { left: 20px; }
+}
+
+</style>`;
 }, mount:()=>{}};
 
 
@@ -12146,6 +12452,7 @@ function ctScheduleHTML(){
   const cityObj = IT_CITIES.find(c => c.id === itCity) || IT_CITIES[0];
   const schedule = getCityScheduleActivities(itCity, itDays);
   const budget = calculateCityBudget(itCity, itDays, itTier);
+  const hasFullAccess = !!(S.owned['it_'+cityObj.n] || S.owned['g-passport'] || (typeof isOwner==='function'&&isOwner()));
 
   const tierNames = {
     eco: {n: 'اقتصادي (توفير وذكاء)', badge: '🟢 خطة التوفير', desc: 'فنادق اقتصادية نظيفة، مواصلات عامة وتطبيقات، مطاعم شعبية ووجبات سريعة.'},
@@ -12153,189 +12460,193 @@ function ctScheduleHTML(){
     vip: {n: 'فاخر VIP (رفاهية مطلقة)', badge: '🟡 تجربة VIP', desc: 'منتجعات وفنادق 5 نجوم فاخرة، سيارة فارهة بسائق، ومطاعم فاخرة Fine Dining.'}
   };
 
+  if(!hasFullAccess) {
+    return `<div class="it-wrap" style="display:flex;flex-direction:column;align-items:center;padding:40px 20px;text-align:center">
+      <div class="tj-3d-book-container">
+        <div class="tj-3d-book">
+          <div class="tj-3d-book-front">
+            <div class="tj-3d-cover-content">
+              <span class="tj-tag">EILAN DOLL</span>
+              <h1>دفتر رحلات إيلان</h1>
+              <p>جدول سياحي ومالي تفاعلي لمدينة <b>${esc(cityObj.n)}</b></p>
+              <div class="tj-3d-icon">✈️</div>
+            </div>
+          </div>
+          <div class="tj-3d-book-back"></div>
+          <div class="tj-3d-book-left"></div>
+        </div>
+      </div>
+      
+      <div class="tj-product-info card" style="max-width:500px;margin-top:40px;width:100%;border:2px solid rgba(15,107,68,0.3)">
+        <h2 style="font-size:24px;margin-bottom:10px">اقتنِ دفتر الرحلات الخاص بك</h2>
+        <p class="mu" style="font-size:15px;line-height:1.6;margin-bottom:20px">يفتح لك هذا الدفتر التفاعلي ثلاثي الأبعاد خطة يومية مفصلة (صباح، ظهر، عصر، مساء) بالإضافة إلى توزيع الميزانية الدقيقة بالريال السعودي. يمكنك التعديل عليه وتحميله كـ PDF فوراً!</p>
+        
+        <div style="background:rgba(30,68,200,0.1);padding:15px;border-radius:10px;margin-bottom:20px">
+          <div style="font-size:28px;font-weight:900;color:var(--g)">19 <small style="font-size:16px">ر.س</small></div>
+          <s style="color:var(--mu)">49 ر.س</s>
+        </div>
+        
+        <button class="btn g" style="width:100%;font-size:16px;padding:12px" data-act="itbuy" data-city="${esc(cityObj.n)}" data-days="${itDays}" data-total="${budget.grandTotal}">🛒 شراء الدفتر التفاعلي الآن</button>
+        <button class="btn p" style="width:100%;font-size:16px;padding:12px;margin-top:10px" onclick="unlockScheduleXP('${esc(cityObj.n)}')">🎁 أو افتحه بـ 40 XP مجاناً</button>
+      </div>
+    </div>`;
+  }
+
   return `
-  <div class="it-wrap">
-    <div class="it-hero card">
-      <div class="eyebrow">EILAN TRAVEL SCHEDULE & FINANCIAL BUDGET</div>
-      <h2>🧳 جداول الرحلات <span class="grad-t">والميزانية المالية الدقيقة</span></h2>
-      <p>برنامج سياحي منظم يوماً بيوم يوضح لك أين تذهب بالتفصيل (صباحاً، ظهراً، عصراً، ومساءً)، مع جدول مالي متكامل وميزانية دقيقة بالريال السعودي يمكنك اقتناؤها أو حفظها كـ PDF فوراً.</p>
+  <div class="it-wrap tj-open-book">
+    <div class="tj-spiral"></div>
+    <div class="it-hero" style="border-bottom:2px dashed rgba(0,0,0,0.1);padding-bottom:15px;margin-bottom:20px">
+      <div class="eyebrow" style="color:rgba(0,0,0,0.5)">EILAN TRAVEL JOURNAL</div>
+      <h2 style="color:#000;margin:5px 0">🧳 دفتر رحلات <span style="color:#1E44C8">إيلان</span></h2>
+      <p style="color:#444">برنامج سياحي منظم يوماً بيوم يوضح لك أين تذهب بالتفصيل، مع جدول مالي متكامل وميزانية دقيقة بالريال السعودي جاهزة للطباعة كـ PDF.</p>
     </div>
 
     <!-- Configuration Box -->
-    <div class="it-cfg-box">
+    <div class="it-cfg-box" style="background:rgba(255,255,255,0.6);border:1px solid rgba(0,0,0,0.1);box-shadow:none;border-radius:8px">
       <div class="it-cfg-row">
-        <div>
-          <label class="it-label">اختر المدينة أو الوجهة السياحية</label>
-          <select class="input" id="itCitySel" onchange="itCity=this.value;rerender()">
-            ${IT_CITIES.map(c => `<option value="${c.id}" ${itCity===c.id?'selected':''}>${c.sa?'🇸🇦 ':'✈️ '}${c.n}</option>`).join('')}
-          </select>
-        </div>
-
-        <div>
-          <label class="it-label">مدة الرحلة (عدد الأيام)</label>
-          <div style="display:flex;gap:6px;flex-wrap:wrap">
-            ${[2, 3, 4, 5, 7].map(d => `<button class="chip ${itDays===d?'on':''}" data-act="itdays" data-d="${d}">${d} ${d<3?'أيام':'أيام'}</button>`).join('')}
-          </div>
-        </div>
+        <label style="color:#000;font-weight:bold">المدينة:</label>
+        <select class="select" data-act="itcity" style="background:#fff;color:#000;border:1px solid rgba(0,0,0,0.2)">
+          ${IT_CITIES.map(c => `<option value="${c.id}" ${c.id === itCity ? 'selected' : ''}>${esc(c.n)} ${c.f}</option>`).join('')}
+        </select>
       </div>
-
-      <label class="it-label">مستوى الميزانية والتجربة</label>
-      <div class="it-tiers">
-        ${['eco', 'mid', 'vip'].map(k => `
-        <div class="it-tier-card ${itTier===k?'on':''}" data-act="ittier" data-k="${k}">
-          <span style="font-size:12px;font-weight:800;color:var(--g2)">${tierNames[k].badge}</span>
-          <b>${tierNames[k].n}</b>
-          <small>${tierNames[k].desc}</small>
-        </div>`).join('')}
+      <div class="it-cfg-row">
+        <label style="color:#000;font-weight:bold">مدة الرحلة:</label>
+        <select class="select" data-act="itdays" style="background:#fff;color:#000;border:1px solid rgba(0,0,0,0.2)">
+          ${[3,5,7,10,14].map(d => `<option value="${d}" ${d === itDays ? 'selected' : ''}>${d} أيام</option>`).join('')}
+        </select>
       </div>
+      <div class="it-cfg-row">
+        <label style="color:#000;font-weight:bold">الميزانية:</label>
+        <select class="select" data-act="ittier" style="background:#fff;color:#000;border:1px solid rgba(0,0,0,0.2)">
+          ${Object.entries(tierNames).map(([k, v]) => `<option value="${k}" ${k === itTier ? 'selected' : ''}>${esc(v.n)}</option>`).join('')}
+        </select>
+      </div>
+    </div>
+    
+    <div class="it-tier-desc" style="background:rgba(0,0,0,0.03);color:#333;border:1px solid rgba(0,0,0,0.1);border-radius:8px;padding:12px;margin-bottom:25px">
+      <b style="color:#000">${esc(tierNames[itTier].badge)}:</b> ${esc(tierNames[itTier].desc)}
     </div>
 
     <!-- Master Schedule (Day by Day) -->
-    <div class="it-schedule-box">
+    <div class="it-schedule-box" style="background:transparent;box-shadow:none;border:none;padding:0">
       <div class="page-h" style="margin-bottom:14px">
         <div>
-          <h3 style="font-size:20px;font-weight:900;color:var(--w)">🗓️ جدول الرحلة اليومي: ${esc(cityObj.n)} (${itDays} أيام)</h3>
-          <p class="mu" style="font-size:13px">مرتب حسب أوقات اليوم وأفضل أوقات الزيارة لتجنب الزحام وحرارة الجو.</p>
-        </div>
-        <button class="btn sm g" data-act="itprint">🖨️ طباعة الجدول / PDF</button>
-      </div>
-
-      ${!hasFullAccess ? `<div class="card empty" style="border:1px solid rgba(15,107,68,0.3);background:linear-gradient(to bottom, transparent, rgba(15,107,68,0.05))">
-        <h3>🔒 الجدول السياحي والمالي الكامل مقفل</h3>
-        <p class="mu mt1">اشترِ جواز إيلان أو افتح جدول هذه المدينة لرؤية الجدول السياحي يومياً (صباحاً، ظهراً، عصراً، ومساءً)، مع خطة وتوزيع التكلفة المادية.</p>
-        <button class="btn g mt2" data-act="itbuy" data-city="${esc(cityObj.n)}" data-days="${itDays}" data-total="${budget.grandTotal}">🛒 شراء الجدول الآن (19 ر.س أو 40 XP)</button>
-      </div>
-      
-      <h3 style="margin-top:20px;font-size:16px;color:var(--mu)">👀 مثال لتوضيح طريقة العرض:</h3>
-      <div class="it-day-card" style="opacity:0.6;pointer-events:none">
-        <div class="it-day-head">
-          <h3>اليوم 1</h3>
-          <span class="it-day-badge">تذاكر المعالم التقديرية: ~${schedule[0].ticketsCost} ر.س</span>
-        </div>
-        <div class="it-slots">
-          <div class="it-slot">
-            <span class="it-slot-time">🌅 الصباح</span>
-            <div class="it-slot-info"><b>${esc(schedule[0].morning)}</b><p>البداية بنشاط واستكشاف المعلم الرئيسي أو التاريخي مع أجواء صباحية منعشة.</p></div>
-          </div>
-          <div class="it-slot"><span class="it-slot-time">☀️ الظهر / غداء</span><div class="it-slot-info"><b>... محتوى مقفل ...</b></div></div>
+          <h3 style="font-size:20px;font-weight:900;color:#000">🗓️ جدول الرحلة اليومي: ${esc(cityObj.n)} (${itDays} أيام)</h3>
+          <p style="font-size:13px;color:#555">مرتب حسب أوقات اليوم وأفضل أوقات الزيارة لتجنب الزحام وحرارة الجو.</p>
         </div>
       </div>
-      ` : schedule.map(s => `
-      <div class="it-day-card">
-        <div class="it-day-head">
-          <h3>اليوم ${s.day}</h3>
-          <span class="it-day-badge">تذاكر المعالم التقديرية: ~${s.ticketsCost} ر.س</span>
+
+      ${schedule.map(s => `
+      <div class="it-day-card" style="background:#fff;color:#000;border:1px solid rgba(0,0,0,0.1);box-shadow:0 4px 10px rgba(0,0,0,0.05);border-radius:8px;margin-bottom:15px">
+        <div class="it-day-head" style="border-bottom:1px dashed rgba(0,0,0,0.1);background:#f9f9f9;border-radius:8px 8px 0 0;padding:12px 16px">
+          <h3 style="color:#000;margin:0">اليوم ${s.day}</h3>
+          <span class="it-day-badge" style="background:rgba(0,0,0,0.05);color:#333;border:1px solid rgba(0,0,0,0.1)">تذاكر المعالم التقديرية: ~${s.ticketsCost} ر.س</span>
         </div>
-        <div class="it-slots">
-          <div class="it-slot">
-            <span class="it-slot-time">🌅 الصباح</span>
+        <div class="it-slots" style="padding:16px">
+          <div class="it-slot" style="border-left-color:#0F6B44">
+            <span class="it-slot-time" style="color:#555">🌅 الصباح</span>
             <div class="it-slot-info">
-              <b>${esc(s.morning)}</b>
-              <p>البداية بنشاط واستكشاف المعلم الرئيسي أو التاريخي مع أجواء صباحية منعشة.</p>
+              <b style="color:#000">${esc(s.morning)}</b>
+              <p style="color:#666;font-size:12px">البداية بنشاط واستكشاف المعلم الرئيسي أو التاريخي.</p>
             </div>
-            <a class="btn xs" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(s.morning+' '+cityObj.n)}" target="_blank" rel="noopener">📍 الخريطة</a>
+            <a class="btn xs" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(s.morning+' '+cityObj.n)}" target="_blank" rel="noopener" style="background:#eee;color:#000;border:1px solid #ccc">📍 الخريطة</a>
           </div>
 
-          <div class="it-slot">
-            <span class="it-slot-time">☀️ الظهر / غداء</span>
+          <div class="it-slot" style="border-left-color:#1E44C8">
+            <span class="it-slot-time" style="color:#555">☀️ الظهر / غداء</span>
             <div class="it-slot-info">
-              <b>${esc(s.lunch)}</b>
-              <p>تجربة طعام في أشهر مطاعم المدينة أو تجربة قهوة مميزة في كافيه شهير.</p>
+              <b style="color:#000">${esc(s.lunch)}</b>
+              <p style="color:#666;font-size:12px">تجربة طعام في أشهر مطاعم المدينة أو كافيه شهير.</p>
             </div>
-            <span class="it-slot-cost">🍽️ وجبة غداء</span>
+            <a class="btn xs" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(s.lunch+' '+cityObj.n)}" target="_blank" rel="noopener" style="background:#eee;color:#000;border:1px solid #ccc">📍 الخريطة</a>
           </div>
 
-          <div class="it-slot">
-            <span class="it-slot-time">🌇 العصر</span>
+          <div class="it-slot" style="border-left-color:#e68a00">
+            <span class="it-slot-time" style="color:#555">🌇 العصر</span>
             <div class="it-slot-info">
-              <b>${esc(s.afternoon)}</b>
-              <p>جولة مشي خفيفة في حديقة عامة، ممشى واجهة بحرية، أو متحف فني مغلق.</p>
+              <b style="color:#000">${esc(s.afternoon)}</b>
+              <p style="color:#666;font-size:12px">نشاط خفيف، تسوق، أو الاسترخاء في الكافيهات والحدائق.</p>
             </div>
-            <a class="btn xs" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(s.afternoon+' '+cityObj.n)}" target="_blank" rel="noopener">📍 الخريطة</a>
+            <a class="btn xs" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(s.afternoon+' '+cityObj.n)}" target="_blank" rel="noopener" style="background:#eee;color:#000;border:1px solid #ccc">📍 الخريطة</a>
           </div>
 
-          <div class="it-slot">
-            <span class="it-slot-time">🌙 المساء</span>
+          <div class="it-slot" style="border-left-color:#4A2A8F">
+            <span class="it-slot-time" style="color:#555">🌙 المساء / عشاء</span>
             <div class="it-slot-info">
-              <b>${esc(s.evening)}</b>
-              <p>أمسية ترفيهية في البوليفارد أو الأسواق الحديثة وعشاء فاخر ذي إطلالة.</p>
+              <b style="color:#000">${esc(s.evening)}</b>
+              <p style="color:#666;font-size:12px">عشاء مميز وجولة مسائية في المناطق الحيوية والأسواق.</p>
             </div>
-            <span class="it-slot-cost">🌃 سهرة ليلية</span>
+            <a class="btn xs" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(s.evening+' '+cityObj.n)}" target="_blank" rel="noopener" style="background:#eee;color:#000;border:1px solid #ccc">📍 الخريطة</a>
           </div>
         </div>
       </div>`).join('')}
-    </div>
 
-    <!-- Master Financial / Budget Table -->
-    <div class="it-budget-card">
-      <h3>💰 الجدول المالي وتفصيل الميزانية التقديرية <small class="mu" style="font-size:14px;font-weight:normal">(${tierNames[itTier].badge})</small></h3>
-      <p>تفصيل واضح وشامل لكل ريال متوقع إنفاقه طوال الرحلة، مبني على أسعار واقعية ومحدثة لعام 2026.</p>
-
-      <table class="it-table">
-        <thead>
-          <tr>
-            <th>بند المصروفات والتكلفة</th>
-            <th>التفاصيل والملاحظات</th>
-            <th>المعدل اليومي</th>
-            <th>الإجمالي (${itDays} أيام)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><span class="it-t-cat">🏨 الإقامة والفنادق</span></td>
-            <td>فنادق موصى بها تناسب باقة ${tierNames[itTier].n}</td>
-            <td class="it-t-val">${budget.hotelPerNight} ر.س / ليلة</td>
-            <td class="it-t-val">${budget.hotelTotal} ر.س</td>
-          </tr>
-          <tr>
-            <td><span class="it-t-cat">🚕 المواصلات والتنقل</span></td>
-            <td>تأجير سيارة أو مشاوير تطبيقات التوصيل اليومية</td>
-            <td class="it-t-val">${budget.transPerDay} ر.س / يوم</td>
-            <td class="it-t-val">${budget.transTotal} ر.س</td>
-          </tr>
-          <tr>
-            <td><span class="it-t-cat">🍽️☕ المطاعم والكافيهات</span></td>
-            <td>3 وجبات طعام + مقاهي مختصة وسناكات</td>
-            <td class="it-t-val">${budget.foodPerDay} ر.س / يوم</td>
-            <td class="it-t-val">${budget.foodTotal} ر.س</td>
-          </tr>
-          <tr>
-            <td><span class="it-t-cat">🎟️ رسوم الفعاليات والمعالم</span></td>
-            <td>تذاكر دخول المتاحف والبوليفارد والأماكن السياحية</td>
-            <td class="it-t-val">حسب النشاط</td>
-            <td class="it-t-val">${budget.ticketsTotal} ر.س</td>
-          </tr>
-          <tr>
-            <td><span class="it-t-cat">🛍️ ميزانية طوارئ وهدايا</span></td>
-            <td>احتياط بنسبة 15% للمشتريات الخفيفة والتذكارات</td>
-            <td class="it-t-val">—</td>
-            <td class="it-t-val">${budget.bufferTotal} ر.س</td>
-          </tr>
-          <tr class="it-total-row">
-            <td colspan="3">💰 الإجمالي التقديري الشامل للشخص الواحد</td>
-            <td class="it-t-val">${budget.grandTotal} ر.س</td>
-          </tr>
-        </tbody>
-      </table>
+      <h3 style="margin-top:30px;color:#000">💰 الجدول المالي وتفصيل الميزانية التقديرية <small style="font-size:14px;font-weight:normal;color:#555">(${tierNames[itTier].badge})</small></h3>
+      
+      <div class="it-budget-grid">
+        <div class="it-budget-item" style="background:#fff;border:1px solid rgba(0,0,0,0.1)">
+          <div class="it-budget-icon">🏨</div>
+          <div class="it-budget-info">
+            <span style="color:#555">السكن والإقامة (فنادق)</span>
+            <b style="color:#000">${budget.hotelTotal} <small>ر.س</small></b>
+            <small style="color:#888">${budget.hotelPerNight} ر.س/لليلة</small>
+          </div>
+        </div>
+        <div class="it-budget-item" style="background:#fff;border:1px solid rgba(0,0,0,0.1)">
+          <div class="it-budget-icon">🚕</div>
+          <div class="it-budget-info">
+            <span style="color:#555">المواصلات وتأجير السيارة</span>
+            <b style="color:#000">${budget.transTotal} <small>ر.س</small></b>
+            <small style="color:#888">${budget.transPerDay} ر.س/لليوم</small>
+          </div>
+        </div>
+        <div class="it-budget-item" style="background:#fff;border:1px solid rgba(0,0,0,0.1)">
+          <div class="it-budget-icon">🍽️</div>
+          <div class="it-budget-info">
+            <span style="color:#555">الأكل والمقاهي (3 وجبات)</span>
+            <b style="color:#000">${budget.foodTotal} <small>ر.س</small></b>
+            <small style="color:#888">${budget.foodPerDay} ر.س/لليوم</small>
+          </div>
+        </div>
+        <div class="it-budget-item" style="background:#fff;border:1px solid rgba(0,0,0,0.1)">
+          <div class="it-budget-icon">🎟️</div>
+          <div class="it-budget-info">
+            <span style="color:#555">تذاكر المعالم والأنشطة</span>
+            <b style="color:#000">${budget.ticketsTotal} <small>ر.س</small></b>
+            <small style="color:#888">موزعة على الأيام</small>
+          </div>
+        </div>
+        <div class="it-budget-item" style="background:#fff;border:1px solid rgba(0,0,0,0.1)">
+          <div class="it-budget-icon">🛍️</div>
+          <div class="it-budget-info">
+            <span style="color:#555">ميزانية طوارئ وهدايا</span>
+            <b style="color:#000">${budget.bufferTotal} <small>ر.س</small></b>
+            <small style="color:#888">احتياط بنسبة 15%</small>
+          </div>
+        </div>
+        <div class="it-budget-item total" style="background:#f4f4f4;border:1px solid rgba(0,0,0,0.2)">
+          <div class="it-budget-icon">💵</div>
+          <div class="it-budget-info">
+            <span style="color:#333">الإجمالي التقديري الشامل</span>
+            <b style="color:#0F6B44">${budget.grandTotal} <small>ر.س</small></b>
+          </div>
+        </div>
+      </div>
 
       <!-- CTA Purchase / Download Bar -->
-      <div class="it-action-bar">
+      <div class="it-action-bar" style="background:#fff;border:1px solid rgba(0,0,0,0.1);margin-top:25px">
         <div style="flex:1">
-          <div class="it-price-tag">
-            <span>اقتناء الجدول السياحي والمالي الكامل (PDF + تفاعلي)</span>
-            <span style="color:var(--g);font-size:22px">19 ر.س</span>
-            <s>49 ر.س</s>
+          <div class="it-price-tag" style="color:#000">
+            <span>الدفتر السياحي والمالي الكامل (تفاعلي + PDF)</span>
           </div>
-          <small class="mu">يشمل ملف PDF جاهز للطباعة وخريطة Google Maps بروابط مباشرة ونصائح توفير من إيلان.</small>
+          <small style="color:#666">تم فتح الدفتر، يمكنك طباعته أو حفظه، أو استشارة إيلان لتعديل الخطة.</small>
         </div>
-        <button class="btn g" data-act="itbuy" data-city="${esc(cityObj.n)}" data-days="${itDays}" data-total="${budget.grandTotal}">🛒 شراء الجدول الآن (19 ر.س أو 40 XP)</button>
-        <button class="btn" data-act="itprint">🖨️ طباعة PDF</button>
-        <button class="btn" data-act="itai" data-city="${esc(cityObj.n)}">🤖 استشارة AI لتعديل الميزانية</button>
+        <button class="btn g" data-act="itprint">🖨️ طباعة PDF</button>
+        <button class="btn p" data-act="itai" data-city="${esc(cityObj.n)}">🤖 استشارة المساعد لتعديل الخطة</button>
       </div>
     </div>
   </div>`;
 }
-
 function buyTravelSchedule(city, days, total){
   openModal(`
   <div class="mh">
@@ -12404,7 +12715,160 @@ function printTravelSchedule(){
       th{background:#fcfbfa;color:#357d49}
       .total-row{background:#f0fdf4;font-weight:bold;font-size:16px;color:#166534}
       footer{text-align:center;color:#888;font-size:12px;margin-top:30px;border-top:1px solid #eee;padding-top:10px}
-    </style>
+    
+/* Travel Journal 3D Book Cover */
+.tj-3d-book-container {
+  perspective: 1200px;
+  width: 240px;
+  height: 340px;
+  margin: 30px auto;
+  filter: drop-shadow(0 30px 40px rgba(15,107,68,0.3));
+}
+.tj-3d-book {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transform: rotateY(-25deg) rotateX(10deg);
+  animation: tj-float 4s ease-in-out infinite;
+}
+@keyframes tj-float {
+  0%, 100% { transform: rotateY(-25deg) rotateX(10deg) translateY(0); }
+  50% { transform: rotateY(-20deg) rotateX(8deg) translateY(-15px); }
+}
+.tj-3d-book-front, .tj-3d-book-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #0B1F5E, #07341F);
+  border-radius: 4px 12px 12px 4px;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.tj-3d-book-front {
+  transform: translateZ(15px);
+  z-index: 2;
+  box-shadow: inset 4px 0 10px rgba(0,0,0,0.5);
+}
+.tj-3d-book-back {
+  transform: rotateY(180deg) translateZ(15px);
+}
+.tj-3d-book-left {
+  position: absolute;
+  width: 30px;
+  height: 100%;
+  background: linear-gradient(to right, #07080C, #0B1F5E);
+  transform: rotateY(-90deg) translateZ(15px);
+  left: -15px;
+  border-radius: 4px 0 0 4px;
+}
+.tj-3d-book-right {
+  position: absolute;
+  width: 30px;
+  height: 98%;
+  top: 1%;
+  background: repeating-linear-gradient(to bottom, #fff, #fff 2px, #ddd 3px, #ccc 3px);
+  transform: rotateY(90deg) translateZ(225px);
+  right: -15px;
+}
+.tj-3d-book-top {
+  position: absolute;
+  width: 98%;
+  height: 30px;
+  left: 1%;
+  background: repeating-linear-gradient(to right, #fff, #fff 2px, #ddd 3px, #ccc 3px);
+  transform: rotateX(90deg) translateZ(15px);
+  top: -15px;
+}
+.tj-3d-book-bottom {
+  position: absolute;
+  width: 98%;
+  height: 30px;
+  left: 1%;
+  background: repeating-linear-gradient(to right, #fff, #fff 2px, #ddd 3px, #ccc 3px);
+  transform: rotateX(-90deg) translateZ(325px);
+  bottom: -15px;
+}
+.tj-3d-cover-content {
+  padding: 30px 20px;
+  text-align: center;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.tj-3d-cover-content .tj-tag {
+  font-size: 10px;
+  letter-spacing: 2px;
+  background: rgba(255,255,255,0.1);
+  padding: 4px 10px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+}
+.tj-3d-cover-content h1 {
+  font-size: 28px;
+  font-weight: 900;
+  margin: 0 0 10px 0;
+  color: #D8FFE6;
+  text-shadow: 0 0 15px rgba(216,255,230,0.5);
+  line-height: 1.2;
+}
+.tj-3d-cover-content p {
+  font-size: 13px;
+  color: #9AA8BE;
+  line-height: 1.5;
+}
+.tj-3d-icon {
+  font-size: 40px;
+  margin-top: 20px;
+  filter: drop-shadow(0 0 10px rgba(30,68,200,0.8));
+}
+
+/* Open Book Journal Style */
+.tj-open-book {
+  background: #fbfaf8 !important; /* light paper color */
+  border-radius: 12px;
+  padding: 30px;
+  position: relative;
+  box-shadow: 
+    inset 0 0 60px rgba(0,0,0,0.03),
+    0 20px 40px -10px rgba(0,0,0,0.2);
+  background-image: 
+    linear-gradient(90deg, transparent 40px, rgba(30,68,200,0.1) 40px, rgba(30,68,200,0.1) 42px, transparent 42px),
+    linear-gradient(0deg, rgba(0,0,0,0.05) 1px, transparent 1px);
+  background-size: 100% 30px;
+  background-position: 0 15px;
+}
+.tj-open-book::before {
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0; left: 40px;
+  width: 2px;
+  background: rgba(190, 40, 40, 0.4);
+  z-index: 1;
+}
+.tj-open-book * {
+  z-index: 2;
+  position: relative;
+}
+.tj-spiral {
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  right: -10px;
+  width: 20px;
+  background: repeating-linear-gradient(to bottom, #777, #777 4px, transparent 4px, transparent 30px);
+  border-radius: 10px;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.3);
+  z-index: 5;
+}
+
+@media (max-width:600px){
+  .tj-open-book { padding: 20px 15px; background-size: 100% 40px; }
+  .tj-open-book::before { left: 20px; }
+}
+
+</style>
   </head>
   <body>
     <div class="head">
@@ -12591,7 +13055,160 @@ function mpBizVid(id){const p=mpBizList().find(x=>x.id===id);if(!p||!p.video)ret
 /* ---------- trip print / share / AI ---------- */
 function mpTripPrint(){if(!mpTripR)return;const R=mpTripR,w=window.open('','_blank');if(!w){toast('اسمح بالنوافذ المنبثقة للطباعة','err');return}
   const sl={m:'صباحاً',a:'عصراً',e:'مساءً',x:'أي وقت'};
-  w.document.write(`<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><title>رحلتي إلى ${esc(R.city)} — Eilan Doll</title><style>body{font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;max-width:760px;margin:30px auto;padding:0 20px;color:#081022}h1{margin:0 0 4px;background:linear-gradient(90deg,#0F6B44,#1E44C8);-webkit-background-clip:text;color:transparent}.d{border:2px solid #0F6B44;border-radius:14px;padding:12px 16px;margin:14px 0}.d h2{margin:0 0 8px;color:#07341F;font-size:18px}.a{display:flex;gap:10px;padding:6px 0;border-bottom:1px dashed #ddd}.a:last-child{border:0}.t{min-width:70px;color:#0f9d6a;font-weight:700}small{color:#666}footer{margin-top:24px;color:#888;font-size:12px;text-align:center}</style></head><body><h1>🧳 رحلتي إلى ${esc(R.city)}</h1><small>${R.days.length} ${R.days.length<3?(R.days.length===1?'يوم':'يومان'):'أيام'} · خطّطتها في عالم إيلان دول</small>
+  w.document.write(`<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><title>رحلتي إلى ${esc(R.city)} — Eilan Doll</title><style>body{font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;max-width:760px;margin:30px auto;padding:0 20px;color:#081022}h1{margin:0 0 4px;background:linear-gradient(90deg,#0F6B44,#1E44C8);-webkit-background-clip:text;color:transparent}.d{border:2px solid #0F6B44;border-radius:14px;padding:12px 16px;margin:14px 0}.d h2{margin:0 0 8px;color:#07341F;font-size:18px}.a{display:flex;gap:10px;padding:6px 0;border-bottom:1px dashed #ddd}.a:last-child{border:0}.t{min-width:70px;color:#0f9d6a;font-weight:700}small{color:#666}footer{margin-top:24px;color:#888;font-size:12px;text-align:center}
+/* Travel Journal 3D Book Cover */
+.tj-3d-book-container {
+  perspective: 1200px;
+  width: 240px;
+  height: 340px;
+  margin: 30px auto;
+  filter: drop-shadow(0 30px 40px rgba(15,107,68,0.3));
+}
+.tj-3d-book {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transform: rotateY(-25deg) rotateX(10deg);
+  animation: tj-float 4s ease-in-out infinite;
+}
+@keyframes tj-float {
+  0%, 100% { transform: rotateY(-25deg) rotateX(10deg) translateY(0); }
+  50% { transform: rotateY(-20deg) rotateX(8deg) translateY(-15px); }
+}
+.tj-3d-book-front, .tj-3d-book-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #0B1F5E, #07341F);
+  border-radius: 4px 12px 12px 4px;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.tj-3d-book-front {
+  transform: translateZ(15px);
+  z-index: 2;
+  box-shadow: inset 4px 0 10px rgba(0,0,0,0.5);
+}
+.tj-3d-book-back {
+  transform: rotateY(180deg) translateZ(15px);
+}
+.tj-3d-book-left {
+  position: absolute;
+  width: 30px;
+  height: 100%;
+  background: linear-gradient(to right, #07080C, #0B1F5E);
+  transform: rotateY(-90deg) translateZ(15px);
+  left: -15px;
+  border-radius: 4px 0 0 4px;
+}
+.tj-3d-book-right {
+  position: absolute;
+  width: 30px;
+  height: 98%;
+  top: 1%;
+  background: repeating-linear-gradient(to bottom, #fff, #fff 2px, #ddd 3px, #ccc 3px);
+  transform: rotateY(90deg) translateZ(225px);
+  right: -15px;
+}
+.tj-3d-book-top {
+  position: absolute;
+  width: 98%;
+  height: 30px;
+  left: 1%;
+  background: repeating-linear-gradient(to right, #fff, #fff 2px, #ddd 3px, #ccc 3px);
+  transform: rotateX(90deg) translateZ(15px);
+  top: -15px;
+}
+.tj-3d-book-bottom {
+  position: absolute;
+  width: 98%;
+  height: 30px;
+  left: 1%;
+  background: repeating-linear-gradient(to right, #fff, #fff 2px, #ddd 3px, #ccc 3px);
+  transform: rotateX(-90deg) translateZ(325px);
+  bottom: -15px;
+}
+.tj-3d-cover-content {
+  padding: 30px 20px;
+  text-align: center;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.tj-3d-cover-content .tj-tag {
+  font-size: 10px;
+  letter-spacing: 2px;
+  background: rgba(255,255,255,0.1);
+  padding: 4px 10px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+}
+.tj-3d-cover-content h1 {
+  font-size: 28px;
+  font-weight: 900;
+  margin: 0 0 10px 0;
+  color: #D8FFE6;
+  text-shadow: 0 0 15px rgba(216,255,230,0.5);
+  line-height: 1.2;
+}
+.tj-3d-cover-content p {
+  font-size: 13px;
+  color: #9AA8BE;
+  line-height: 1.5;
+}
+.tj-3d-icon {
+  font-size: 40px;
+  margin-top: 20px;
+  filter: drop-shadow(0 0 10px rgba(30,68,200,0.8));
+}
+
+/* Open Book Journal Style */
+.tj-open-book {
+  background: #fbfaf8 !important; /* light paper color */
+  border-radius: 12px;
+  padding: 30px;
+  position: relative;
+  box-shadow: 
+    inset 0 0 60px rgba(0,0,0,0.03),
+    0 20px 40px -10px rgba(0,0,0,0.2);
+  background-image: 
+    linear-gradient(90deg, transparent 40px, rgba(30,68,200,0.1) 40px, rgba(30,68,200,0.1) 42px, transparent 42px),
+    linear-gradient(0deg, rgba(0,0,0,0.05) 1px, transparent 1px);
+  background-size: 100% 30px;
+  background-position: 0 15px;
+}
+.tj-open-book::before {
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0; left: 40px;
+  width: 2px;
+  background: rgba(190, 40, 40, 0.4);
+  z-index: 1;
+}
+.tj-open-book * {
+  z-index: 2;
+  position: relative;
+}
+.tj-spiral {
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  right: -10px;
+  width: 20px;
+  background: repeating-linear-gradient(to bottom, #777, #777 4px, transparent 4px, transparent 30px);
+  border-radius: 10px;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.3);
+  z-index: 5;
+}
+
+@media (max-width:600px){
+  .tj-open-book { padding: 20px 15px; background-size: 100% 40px; }
+  .tj-open-book::before { left: 20px; }
+}
+
+</style></head><body><h1>🧳 رحلتي إلى ${esc(R.city)}</h1><small>${R.days.length} ${R.days.length<3?(R.days.length===1?'يوم':'يومان'):'أيام'} · خطّطتها في عالم إيلان دول</small>
    ${R.days.map((d,i)=>`<div class="d"><h2>اليوم ${i+1}</h2>${d.map(x=>`<div class="a"><span class="t">${sl[x.sl]}</span><div><b>${esc(x.n)}</b> <small>~${x.h} ساعة</small><br><small>${esc(x.d)}</small></div></div>`).join('')}</div>`).join('')}<footer>EILAN DOLL — THE DIGITAL WORLD · eilan-doll.vercel.app</footer><script>setTimeout(()=>print(),400)<\/script></body></html>`);w.document.close()}
 function mpTripShare(){if(!mpTripR)return;const t=mpTripText(mpTripR);if(navigator.share)navigator.share({title:'رحلتي إلى '+mpTripR.city,text:t}).catch(()=>{});else{navigator.clipboard&&navigator.clipboard.writeText(t).then(()=>toast('📋 نُسخت الخطة')).catch(()=>{})}}
 
@@ -14653,6 +15270,159 @@ html.light .gzc-tag.on{color:#5c5b4c;border-color:rgba(11,31,94,0.345)}
 html.light .gzc-tag.pr{color:#9a6f12}html.light .gzc-tag.dv{color:#2F7A45}
 html.light .gzw-box{background:linear-gradient(170deg,#fbf8f0,#f1ecdf)}
 html.light .xo-c,html.light .cc-c{background:linear-gradient(145deg,#fff,#EDF6F1)}
+
+/* Travel Journal 3D Book Cover */
+.tj-3d-book-container {
+  perspective: 1200px;
+  width: 240px;
+  height: 340px;
+  margin: 30px auto;
+  filter: drop-shadow(0 30px 40px rgba(15,107,68,0.3));
+}
+.tj-3d-book {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transform: rotateY(-25deg) rotateX(10deg);
+  animation: tj-float 4s ease-in-out infinite;
+}
+@keyframes tj-float {
+  0%, 100% { transform: rotateY(-25deg) rotateX(10deg) translateY(0); }
+  50% { transform: rotateY(-20deg) rotateX(8deg) translateY(-15px); }
+}
+.tj-3d-book-front, .tj-3d-book-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #0B1F5E, #07341F);
+  border-radius: 4px 12px 12px 4px;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.tj-3d-book-front {
+  transform: translateZ(15px);
+  z-index: 2;
+  box-shadow: inset 4px 0 10px rgba(0,0,0,0.5);
+}
+.tj-3d-book-back {
+  transform: rotateY(180deg) translateZ(15px);
+}
+.tj-3d-book-left {
+  position: absolute;
+  width: 30px;
+  height: 100%;
+  background: linear-gradient(to right, #07080C, #0B1F5E);
+  transform: rotateY(-90deg) translateZ(15px);
+  left: -15px;
+  border-radius: 4px 0 0 4px;
+}
+.tj-3d-book-right {
+  position: absolute;
+  width: 30px;
+  height: 98%;
+  top: 1%;
+  background: repeating-linear-gradient(to bottom, #fff, #fff 2px, #ddd 3px, #ccc 3px);
+  transform: rotateY(90deg) translateZ(225px);
+  right: -15px;
+}
+.tj-3d-book-top {
+  position: absolute;
+  width: 98%;
+  height: 30px;
+  left: 1%;
+  background: repeating-linear-gradient(to right, #fff, #fff 2px, #ddd 3px, #ccc 3px);
+  transform: rotateX(90deg) translateZ(15px);
+  top: -15px;
+}
+.tj-3d-book-bottom {
+  position: absolute;
+  width: 98%;
+  height: 30px;
+  left: 1%;
+  background: repeating-linear-gradient(to right, #fff, #fff 2px, #ddd 3px, #ccc 3px);
+  transform: rotateX(-90deg) translateZ(325px);
+  bottom: -15px;
+}
+.tj-3d-cover-content {
+  padding: 30px 20px;
+  text-align: center;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.tj-3d-cover-content .tj-tag {
+  font-size: 10px;
+  letter-spacing: 2px;
+  background: rgba(255,255,255,0.1);
+  padding: 4px 10px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+}
+.tj-3d-cover-content h1 {
+  font-size: 28px;
+  font-weight: 900;
+  margin: 0 0 10px 0;
+  color: #D8FFE6;
+  text-shadow: 0 0 15px rgba(216,255,230,0.5);
+  line-height: 1.2;
+}
+.tj-3d-cover-content p {
+  font-size: 13px;
+  color: #9AA8BE;
+  line-height: 1.5;
+}
+.tj-3d-icon {
+  font-size: 40px;
+  margin-top: 20px;
+  filter: drop-shadow(0 0 10px rgba(30,68,200,0.8));
+}
+
+/* Open Book Journal Style */
+.tj-open-book {
+  background: #fbfaf8 !important; /* light paper color */
+  border-radius: 12px;
+  padding: 30px;
+  position: relative;
+  box-shadow: 
+    inset 0 0 60px rgba(0,0,0,0.03),
+    0 20px 40px -10px rgba(0,0,0,0.2);
+  background-image: 
+    linear-gradient(90deg, transparent 40px, rgba(30,68,200,0.1) 40px, rgba(30,68,200,0.1) 42px, transparent 42px),
+    linear-gradient(0deg, rgba(0,0,0,0.05) 1px, transparent 1px);
+  background-size: 100% 30px;
+  background-position: 0 15px;
+}
+.tj-open-book::before {
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0; left: 40px;
+  width: 2px;
+  background: rgba(190, 40, 40, 0.4);
+  z-index: 1;
+}
+.tj-open-book * {
+  z-index: 2;
+  position: relative;
+}
+.tj-spiral {
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  right: -10px;
+  width: 20px;
+  background: repeating-linear-gradient(to bottom, #777, #777 4px, transparent 4px, transparent 30px);
+  border-radius: 10px;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.3);
+  z-index: 5;
+}
+
+@media (max-width:600px){
+  .tj-open-book { padding: 20px 15px; background-size: 100% 40px; }
+  .tj-open-book::before { left: 20px; }
+}
+
 </style>
 <script>
 /* ================= 🎮 EILAN GAMES ZONE — cube catalog =================
@@ -14882,6 +15652,159 @@ ACT.cchit=d=>{if(!CC.run)return;const i=+d.i,c=$$('#ccB .cc-c')[i];if(!c)return;
 @media (max-width:980px){.vl-wrap{grid-template-columns:1fr}.vl-main{order:-1}.vl-side{position:static;max-height:none}.vl-pk{grid-template-columns:1fr 1fr}}
 @media (max-width:560px){.vl-tpls{grid-template-columns:repeat(4,1fr)}.vl-promo{grid-template-columns:1fr}.vl-pk{grid-template-columns:1fr}.vl-hero h1{font-size:24px}}
 html.light .vl-f input,html.light .vl-f textarea{background:#fff}
+
+/* Travel Journal 3D Book Cover */
+.tj-3d-book-container {
+  perspective: 1200px;
+  width: 240px;
+  height: 340px;
+  margin: 30px auto;
+  filter: drop-shadow(0 30px 40px rgba(15,107,68,0.3));
+}
+.tj-3d-book {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transform: rotateY(-25deg) rotateX(10deg);
+  animation: tj-float 4s ease-in-out infinite;
+}
+@keyframes tj-float {
+  0%, 100% { transform: rotateY(-25deg) rotateX(10deg) translateY(0); }
+  50% { transform: rotateY(-20deg) rotateX(8deg) translateY(-15px); }
+}
+.tj-3d-book-front, .tj-3d-book-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #0B1F5E, #07341F);
+  border-radius: 4px 12px 12px 4px;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.tj-3d-book-front {
+  transform: translateZ(15px);
+  z-index: 2;
+  box-shadow: inset 4px 0 10px rgba(0,0,0,0.5);
+}
+.tj-3d-book-back {
+  transform: rotateY(180deg) translateZ(15px);
+}
+.tj-3d-book-left {
+  position: absolute;
+  width: 30px;
+  height: 100%;
+  background: linear-gradient(to right, #07080C, #0B1F5E);
+  transform: rotateY(-90deg) translateZ(15px);
+  left: -15px;
+  border-radius: 4px 0 0 4px;
+}
+.tj-3d-book-right {
+  position: absolute;
+  width: 30px;
+  height: 98%;
+  top: 1%;
+  background: repeating-linear-gradient(to bottom, #fff, #fff 2px, #ddd 3px, #ccc 3px);
+  transform: rotateY(90deg) translateZ(225px);
+  right: -15px;
+}
+.tj-3d-book-top {
+  position: absolute;
+  width: 98%;
+  height: 30px;
+  left: 1%;
+  background: repeating-linear-gradient(to right, #fff, #fff 2px, #ddd 3px, #ccc 3px);
+  transform: rotateX(90deg) translateZ(15px);
+  top: -15px;
+}
+.tj-3d-book-bottom {
+  position: absolute;
+  width: 98%;
+  height: 30px;
+  left: 1%;
+  background: repeating-linear-gradient(to right, #fff, #fff 2px, #ddd 3px, #ccc 3px);
+  transform: rotateX(-90deg) translateZ(325px);
+  bottom: -15px;
+}
+.tj-3d-cover-content {
+  padding: 30px 20px;
+  text-align: center;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.tj-3d-cover-content .tj-tag {
+  font-size: 10px;
+  letter-spacing: 2px;
+  background: rgba(255,255,255,0.1);
+  padding: 4px 10px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+}
+.tj-3d-cover-content h1 {
+  font-size: 28px;
+  font-weight: 900;
+  margin: 0 0 10px 0;
+  color: #D8FFE6;
+  text-shadow: 0 0 15px rgba(216,255,230,0.5);
+  line-height: 1.2;
+}
+.tj-3d-cover-content p {
+  font-size: 13px;
+  color: #9AA8BE;
+  line-height: 1.5;
+}
+.tj-3d-icon {
+  font-size: 40px;
+  margin-top: 20px;
+  filter: drop-shadow(0 0 10px rgba(30,68,200,0.8));
+}
+
+/* Open Book Journal Style */
+.tj-open-book {
+  background: #fbfaf8 !important; /* light paper color */
+  border-radius: 12px;
+  padding: 30px;
+  position: relative;
+  box-shadow: 
+    inset 0 0 60px rgba(0,0,0,0.03),
+    0 20px 40px -10px rgba(0,0,0,0.2);
+  background-image: 
+    linear-gradient(90deg, transparent 40px, rgba(30,68,200,0.1) 40px, rgba(30,68,200,0.1) 42px, transparent 42px),
+    linear-gradient(0deg, rgba(0,0,0,0.05) 1px, transparent 1px);
+  background-size: 100% 30px;
+  background-position: 0 15px;
+}
+.tj-open-book::before {
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0; left: 40px;
+  width: 2px;
+  background: rgba(190, 40, 40, 0.4);
+  z-index: 1;
+}
+.tj-open-book * {
+  z-index: 2;
+  position: relative;
+}
+.tj-spiral {
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  right: -10px;
+  width: 20px;
+  background: repeating-linear-gradient(to bottom, #777, #777 4px, transparent 4px, transparent 30px);
+  border-radius: 10px;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.3);
+  z-index: 5;
+}
+
+@media (max-width:600px){
+  .tj-open-book { padding: 20px 15px; background-size: 100% 40px; }
+  .tj-open-book::before { left: 20px; }
+}
+
 </style>
 <script>
 /* ================= 🎨 مختبر إيلان البصري — Eilan Visual Lab =================
@@ -15098,7 +16021,160 @@ const VL_ORDER=['tree','iceberg','timeline','roadmap','cycle','layers','matrix',
 /* ---------- render ---------- */
 function vlSize(k){return VL_T[k].portrait?[1000,1500]:[1600,1000]}
 function vlSvg(k,d,themeKey,forExport){const t=VL_T[k],T=VL_THEMES[themeKey]||VL_THEMES.dark,[W,H]=vlSize(k);let inner='';try{inner=t.draw(d||{},T,W,H)}catch(e){console.warn('vl',e);inner=`<rect width="${W}" height="${H}" fill="${T.bg}"/>`+vlT(W/2,H/2,'تأكد من البيانات',{size:30,fill:T.ink,a:'m'}).s}
- const font=(forExport&&VL.font64&&/Marhey/.test(inner))?`<style>@font-face{font-family:"Marhey";src:url(data:font/woff2;base64,${VL.font64}) format("woff2")}</style>`:'';
+ const font=(forExport&&VL.font64&&/Marhey/.test(inner))?`<style>@font-face{font-family:"Marhey";src:url(data:font/woff2;base64,${VL.font64}) format("woff2")}
+/* Travel Journal 3D Book Cover */
+.tj-3d-book-container {
+  perspective: 1200px;
+  width: 240px;
+  height: 340px;
+  margin: 30px auto;
+  filter: drop-shadow(0 30px 40px rgba(15,107,68,0.3));
+}
+.tj-3d-book {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transform: rotateY(-25deg) rotateX(10deg);
+  animation: tj-float 4s ease-in-out infinite;
+}
+@keyframes tj-float {
+  0%, 100% { transform: rotateY(-25deg) rotateX(10deg) translateY(0); }
+  50% { transform: rotateY(-20deg) rotateX(8deg) translateY(-15px); }
+}
+.tj-3d-book-front, .tj-3d-book-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #0B1F5E, #07341F);
+  border-radius: 4px 12px 12px 4px;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.tj-3d-book-front {
+  transform: translateZ(15px);
+  z-index: 2;
+  box-shadow: inset 4px 0 10px rgba(0,0,0,0.5);
+}
+.tj-3d-book-back {
+  transform: rotateY(180deg) translateZ(15px);
+}
+.tj-3d-book-left {
+  position: absolute;
+  width: 30px;
+  height: 100%;
+  background: linear-gradient(to right, #07080C, #0B1F5E);
+  transform: rotateY(-90deg) translateZ(15px);
+  left: -15px;
+  border-radius: 4px 0 0 4px;
+}
+.tj-3d-book-right {
+  position: absolute;
+  width: 30px;
+  height: 98%;
+  top: 1%;
+  background: repeating-linear-gradient(to bottom, #fff, #fff 2px, #ddd 3px, #ccc 3px);
+  transform: rotateY(90deg) translateZ(225px);
+  right: -15px;
+}
+.tj-3d-book-top {
+  position: absolute;
+  width: 98%;
+  height: 30px;
+  left: 1%;
+  background: repeating-linear-gradient(to right, #fff, #fff 2px, #ddd 3px, #ccc 3px);
+  transform: rotateX(90deg) translateZ(15px);
+  top: -15px;
+}
+.tj-3d-book-bottom {
+  position: absolute;
+  width: 98%;
+  height: 30px;
+  left: 1%;
+  background: repeating-linear-gradient(to right, #fff, #fff 2px, #ddd 3px, #ccc 3px);
+  transform: rotateX(-90deg) translateZ(325px);
+  bottom: -15px;
+}
+.tj-3d-cover-content {
+  padding: 30px 20px;
+  text-align: center;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.tj-3d-cover-content .tj-tag {
+  font-size: 10px;
+  letter-spacing: 2px;
+  background: rgba(255,255,255,0.1);
+  padding: 4px 10px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+}
+.tj-3d-cover-content h1 {
+  font-size: 28px;
+  font-weight: 900;
+  margin: 0 0 10px 0;
+  color: #D8FFE6;
+  text-shadow: 0 0 15px rgba(216,255,230,0.5);
+  line-height: 1.2;
+}
+.tj-3d-cover-content p {
+  font-size: 13px;
+  color: #9AA8BE;
+  line-height: 1.5;
+}
+.tj-3d-icon {
+  font-size: 40px;
+  margin-top: 20px;
+  filter: drop-shadow(0 0 10px rgba(30,68,200,0.8));
+}
+
+/* Open Book Journal Style */
+.tj-open-book {
+  background: #fbfaf8 !important; /* light paper color */
+  border-radius: 12px;
+  padding: 30px;
+  position: relative;
+  box-shadow: 
+    inset 0 0 60px rgba(0,0,0,0.03),
+    0 20px 40px -10px rgba(0,0,0,0.2);
+  background-image: 
+    linear-gradient(90deg, transparent 40px, rgba(30,68,200,0.1) 40px, rgba(30,68,200,0.1) 42px, transparent 42px),
+    linear-gradient(0deg, rgba(0,0,0,0.05) 1px, transparent 1px);
+  background-size: 100% 30px;
+  background-position: 0 15px;
+}
+.tj-open-book::before {
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0; left: 40px;
+  width: 2px;
+  background: rgba(190, 40, 40, 0.4);
+  z-index: 1;
+}
+.tj-open-book * {
+  z-index: 2;
+  position: relative;
+}
+.tj-spiral {
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  right: -10px;
+  width: 20px;
+  background: repeating-linear-gradient(to bottom, #777, #777 4px, transparent 4px, transparent 30px);
+  border-radius: 10px;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.3);
+  z-index: 5;
+}
+
+@media (max-width:600px){
+  .tj-open-book { padding: 20px 15px; background-size: 100% 40px; }
+  .tj-open-book::before { left: 20px; }
+}
+
+</style>`:'';
  return `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" style="stroke:none;stroke-width:0;fill:none;flex-shrink:0">${font}${inner}</svg>`}
 function vlLoadFont(){if(VL.font64)return Promise.resolve();return fetch('/visual/fonts/marhey.woff2').then(r=>r.arrayBuffer()).then(b=>{let s='';const u=new Uint8Array(b);for(let i=0;i<u.length;i+=8192)s+=String.fromCharCode.apply(null,u.subarray(i,i+8192));VL.font64=btoa(s)}).catch(()=>{})}
 function vlDraw(){const st=$('#vlStage');if(!st)return;st.innerHTML=vlSvg(VL.tpl,VL.data[VL.tpl],VL.theme)}
@@ -15126,7 +16202,160 @@ async function vlPng(){if(!vlGate())return;await vlLoadFont();const svg=vlSvg(VL
  img.onerror=()=>toast(gzL('ما قدرنا نجهّز الصورة — جرّب PDF','Could not build the image — try PDF'),'err');img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg)}
 async function vlPdf(){if(!vlGate())return;await vlLoadFont();const svg=vlSvg(VL.tpl,VL.data[VL.tpl],VL.theme,true),port=VL_T[VL.tpl].portrait,w=window.open('','_blank');
  if(!w){toast(gzL('اسمح بالنوافذ المنبثقة عشان يطلع الـ PDF','Allow pop-ups for PDF'),'err');return}
- w.document.write(`<!doctype html><html dir="rtl"><head><meta charset="utf-8"><title>Eilan — ${VL_T[VL.tpl].n}</title><style>@page{size:A4 ${port?'portrait':'landscape'};margin:0}html,body{margin:0;background:#fff}svg{width:100vw;height:100vh;display:block}</style></head><body>${svg}<script>setTimeout(()=>print(),400)<\/script></body></html>`);w.document.close();rerenderQuota()}
+ w.document.write(`<!doctype html><html dir="rtl"><head><meta charset="utf-8"><title>Eilan — ${VL_T[VL.tpl].n}</title><style>@page{size:A4 ${port?'portrait':'landscape'};margin:0}html,body{margin:0;background:#fff}svg{width:100vw;height:100vh;display:block}
+/* Travel Journal 3D Book Cover */
+.tj-3d-book-container {
+  perspective: 1200px;
+  width: 240px;
+  height: 340px;
+  margin: 30px auto;
+  filter: drop-shadow(0 30px 40px rgba(15,107,68,0.3));
+}
+.tj-3d-book {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transform: rotateY(-25deg) rotateX(10deg);
+  animation: tj-float 4s ease-in-out infinite;
+}
+@keyframes tj-float {
+  0%, 100% { transform: rotateY(-25deg) rotateX(10deg) translateY(0); }
+  50% { transform: rotateY(-20deg) rotateX(8deg) translateY(-15px); }
+}
+.tj-3d-book-front, .tj-3d-book-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #0B1F5E, #07341F);
+  border-radius: 4px 12px 12px 4px;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.tj-3d-book-front {
+  transform: translateZ(15px);
+  z-index: 2;
+  box-shadow: inset 4px 0 10px rgba(0,0,0,0.5);
+}
+.tj-3d-book-back {
+  transform: rotateY(180deg) translateZ(15px);
+}
+.tj-3d-book-left {
+  position: absolute;
+  width: 30px;
+  height: 100%;
+  background: linear-gradient(to right, #07080C, #0B1F5E);
+  transform: rotateY(-90deg) translateZ(15px);
+  left: -15px;
+  border-radius: 4px 0 0 4px;
+}
+.tj-3d-book-right {
+  position: absolute;
+  width: 30px;
+  height: 98%;
+  top: 1%;
+  background: repeating-linear-gradient(to bottom, #fff, #fff 2px, #ddd 3px, #ccc 3px);
+  transform: rotateY(90deg) translateZ(225px);
+  right: -15px;
+}
+.tj-3d-book-top {
+  position: absolute;
+  width: 98%;
+  height: 30px;
+  left: 1%;
+  background: repeating-linear-gradient(to right, #fff, #fff 2px, #ddd 3px, #ccc 3px);
+  transform: rotateX(90deg) translateZ(15px);
+  top: -15px;
+}
+.tj-3d-book-bottom {
+  position: absolute;
+  width: 98%;
+  height: 30px;
+  left: 1%;
+  background: repeating-linear-gradient(to right, #fff, #fff 2px, #ddd 3px, #ccc 3px);
+  transform: rotateX(-90deg) translateZ(325px);
+  bottom: -15px;
+}
+.tj-3d-cover-content {
+  padding: 30px 20px;
+  text-align: center;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.tj-3d-cover-content .tj-tag {
+  font-size: 10px;
+  letter-spacing: 2px;
+  background: rgba(255,255,255,0.1);
+  padding: 4px 10px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+}
+.tj-3d-cover-content h1 {
+  font-size: 28px;
+  font-weight: 900;
+  margin: 0 0 10px 0;
+  color: #D8FFE6;
+  text-shadow: 0 0 15px rgba(216,255,230,0.5);
+  line-height: 1.2;
+}
+.tj-3d-cover-content p {
+  font-size: 13px;
+  color: #9AA8BE;
+  line-height: 1.5;
+}
+.tj-3d-icon {
+  font-size: 40px;
+  margin-top: 20px;
+  filter: drop-shadow(0 0 10px rgba(30,68,200,0.8));
+}
+
+/* Open Book Journal Style */
+.tj-open-book {
+  background: #fbfaf8 !important; /* light paper color */
+  border-radius: 12px;
+  padding: 30px;
+  position: relative;
+  box-shadow: 
+    inset 0 0 60px rgba(0,0,0,0.03),
+    0 20px 40px -10px rgba(0,0,0,0.2);
+  background-image: 
+    linear-gradient(90deg, transparent 40px, rgba(30,68,200,0.1) 40px, rgba(30,68,200,0.1) 42px, transparent 42px),
+    linear-gradient(0deg, rgba(0,0,0,0.05) 1px, transparent 1px);
+  background-size: 100% 30px;
+  background-position: 0 15px;
+}
+.tj-open-book::before {
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0; left: 40px;
+  width: 2px;
+  background: rgba(190, 40, 40, 0.4);
+  z-index: 1;
+}
+.tj-open-book * {
+  z-index: 2;
+  position: relative;
+}
+.tj-spiral {
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  right: -10px;
+  width: 20px;
+  background: repeating-linear-gradient(to bottom, #777, #777 4px, transparent 4px, transparent 30px);
+  border-radius: 10px;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.3);
+  z-index: 5;
+}
+
+@media (max-width:600px){
+  .tj-open-book { padding: 20px 15px; background-size: 100% 40px; }
+  .tj-open-book::before { left: 20px; }
+}
+
+</style></head><body>${svg}<script>setTimeout(()=>print(),400)<\/script></body></html>`);w.document.close();rerenderQuota()}
 function rerenderQuota(){const q=$('#vlQuota');if(q)q.innerHTML=vlQuotaHTML()}
 function vlQuotaHTML(){return vlUnlocked()?`<span class="gzc-tag dv">✓ ${gzL('مفعّل — تحميل بلا حدود','Unlocked — unlimited')}</span>`:`<span class="gzc-tag pr">🎁 ${gzL(`باقي لك ${vlLeft()} من ${VL_FREE} تحميل مجاني`,`${vlLeft()} of ${VL_FREE} free exports left`)}</span><button class="btn xs" data-act="vlpay">🔑 ${gzL('عندي كود','I have a code')}</button>`}
 /* ---------- page ---------- */
@@ -15186,6 +16415,159 @@ VL_PRODUCTS.forEach(p=>{if(!S.products.some(x=>x.id===p.id)&&!(S.custom&&S.custo
 .dw-all{display:flex;gap:12px;align-items:center;padding:16px 18px;margin-bottom:18px;border-color:var(--bd2);flex-wrap:wrap}
 .dw-all b{font-size:17px}.dw-all .sp{flex:1}
 @media (max-width:560px){.dw-grid{grid-template-columns:1fr 1fr;gap:8px}.dw-hero h1{font-size:24px}.dw-t .cap{font-size:11px;padding:14px 7px 6px}}
+
+/* Travel Journal 3D Book Cover */
+.tj-3d-book-container {
+  perspective: 1200px;
+  width: 240px;
+  height: 340px;
+  margin: 30px auto;
+  filter: drop-shadow(0 30px 40px rgba(15,107,68,0.3));
+}
+.tj-3d-book {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transform: rotateY(-25deg) rotateX(10deg);
+  animation: tj-float 4s ease-in-out infinite;
+}
+@keyframes tj-float {
+  0%, 100% { transform: rotateY(-25deg) rotateX(10deg) translateY(0); }
+  50% { transform: rotateY(-20deg) rotateX(8deg) translateY(-15px); }
+}
+.tj-3d-book-front, .tj-3d-book-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #0B1F5E, #07341F);
+  border-radius: 4px 12px 12px 4px;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.tj-3d-book-front {
+  transform: translateZ(15px);
+  z-index: 2;
+  box-shadow: inset 4px 0 10px rgba(0,0,0,0.5);
+}
+.tj-3d-book-back {
+  transform: rotateY(180deg) translateZ(15px);
+}
+.tj-3d-book-left {
+  position: absolute;
+  width: 30px;
+  height: 100%;
+  background: linear-gradient(to right, #07080C, #0B1F5E);
+  transform: rotateY(-90deg) translateZ(15px);
+  left: -15px;
+  border-radius: 4px 0 0 4px;
+}
+.tj-3d-book-right {
+  position: absolute;
+  width: 30px;
+  height: 98%;
+  top: 1%;
+  background: repeating-linear-gradient(to bottom, #fff, #fff 2px, #ddd 3px, #ccc 3px);
+  transform: rotateY(90deg) translateZ(225px);
+  right: -15px;
+}
+.tj-3d-book-top {
+  position: absolute;
+  width: 98%;
+  height: 30px;
+  left: 1%;
+  background: repeating-linear-gradient(to right, #fff, #fff 2px, #ddd 3px, #ccc 3px);
+  transform: rotateX(90deg) translateZ(15px);
+  top: -15px;
+}
+.tj-3d-book-bottom {
+  position: absolute;
+  width: 98%;
+  height: 30px;
+  left: 1%;
+  background: repeating-linear-gradient(to right, #fff, #fff 2px, #ddd 3px, #ccc 3px);
+  transform: rotateX(-90deg) translateZ(325px);
+  bottom: -15px;
+}
+.tj-3d-cover-content {
+  padding: 30px 20px;
+  text-align: center;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.tj-3d-cover-content .tj-tag {
+  font-size: 10px;
+  letter-spacing: 2px;
+  background: rgba(255,255,255,0.1);
+  padding: 4px 10px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+}
+.tj-3d-cover-content h1 {
+  font-size: 28px;
+  font-weight: 900;
+  margin: 0 0 10px 0;
+  color: #D8FFE6;
+  text-shadow: 0 0 15px rgba(216,255,230,0.5);
+  line-height: 1.2;
+}
+.tj-3d-cover-content p {
+  font-size: 13px;
+  color: #9AA8BE;
+  line-height: 1.5;
+}
+.tj-3d-icon {
+  font-size: 40px;
+  margin-top: 20px;
+  filter: drop-shadow(0 0 10px rgba(30,68,200,0.8));
+}
+
+/* Open Book Journal Style */
+.tj-open-book {
+  background: #fbfaf8 !important; /* light paper color */
+  border-radius: 12px;
+  padding: 30px;
+  position: relative;
+  box-shadow: 
+    inset 0 0 60px rgba(0,0,0,0.03),
+    0 20px 40px -10px rgba(0,0,0,0.2);
+  background-image: 
+    linear-gradient(90deg, transparent 40px, rgba(30,68,200,0.1) 40px, rgba(30,68,200,0.1) 42px, transparent 42px),
+    linear-gradient(0deg, rgba(0,0,0,0.05) 1px, transparent 1px);
+  background-size: 100% 30px;
+  background-position: 0 15px;
+}
+.tj-open-book::before {
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0; left: 40px;
+  width: 2px;
+  background: rgba(190, 40, 40, 0.4);
+  z-index: 1;
+}
+.tj-open-book * {
+  z-index: 2;
+  position: relative;
+}
+.tj-spiral {
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  right: -10px;
+  width: 20px;
+  background: repeating-linear-gradient(to bottom, #777, #777 4px, transparent 4px, transparent 30px);
+  border-radius: 10px;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.3);
+  z-index: 5;
+}
+
+@media (max-width:600px){
+  .tj-open-book { padding: 20px 15px; background-size: 100% 40px; }
+  .tj-open-book::before { left: 20px; }
+}
+
 </style>
 <script>
 /* ================= 🖼️ رسمات إيلان — ready-made visual packs =================

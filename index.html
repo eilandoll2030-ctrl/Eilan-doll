@@ -4574,6 +4574,50 @@ async function sendAI(q){q=String(q||'').trim();if(!q||aiBusy)return;aiBusy=true
 function aiSubmit(e){e.preventDefault();const i=e.target.q;sendAI(i.value);i.value=''}
 
 
+
+window.stTab = (btn, id) => {
+  document.querySelectorAll('.st-tabs .st-pane').forEach(e => e.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.st-nav .chip').forEach(e => e.classList.remove('on'));
+  btn.classList.add('on');
+};
+
+window.stAddProd = (sid) => {
+  const p = { id: 'p_'+Date.now(), name: 'منتج جديد', price: 50, stock: 10, desc: '' };
+  S.storeData[sid].products.push(p);
+  save();
+  go('eilan://storeadmin?id='+sid);
+};
+
+window.stDelProd = (sid, pid) => {
+  if(!confirm('هل أنت متأكد من حذف المنتج؟')) return;
+  S.storeData[sid].products = S.storeData[sid].products.filter(x => x.id !== pid);
+  save();
+  go('eilan://storeadmin?id='+sid);
+};
+
+window.stSaveProd = (sid, pid, el) => {
+  const p = S.storeData[sid].products.find(x => x.id === pid);
+  if(!p) return;
+  const card = el.closest('.st-prod-card');
+  p.name = card.querySelector('[name=pname]').value;
+  p.price = Number(card.querySelector('[name=pprice]').value);
+  p.stock = Number(card.querySelector('[name=pstock]').value);
+  p.desc = card.querySelector('[name=pdesc]').value;
+  save();
+  toast('تم حفظ المنتج');
+};
+
+window.stAI = async (sid) => {
+  const input = document.getElementById('st-ai-in').value.trim();
+  if(!input) return toast('اكتب طلبك أولاً','err');
+  toast('جاري التفكير...');
+  // Simulate AI
+  setTimeout(()=> {
+    document.getElementById('st-ai-out').innerHTML = `<div class="ai-msg"><b>💡 اقتراح إيلان:</b> بناءً على طلبك، أقترح تسمية المنتجات (كولومبي إكسير، إثيوبي قمة)، مع استخدام لون خلفية دافئ #E8D3C3 للقهوة.</div>`;
+  }, 1200);
+};
+
 P.storeadmin={icon:'⚙️',title:()=>'لوحة إدارة المتجر | إيلان دول',html:()=>{
   const q = new URLSearchParams(location.search);
   const sid = q.get('id');
@@ -4583,7 +4627,7 @@ P.storeadmin={icon:'⚙️',title:()=>'لوحة إدارة المتجر | إيل
     return `<div class="page-h"><div><div class="eyebrow">MY STORES</div><h1>متاجري</h1></div></div>
     <div style="display:flex;gap:15px;flex-direction:column">
       ${ownedStores.map(s=>`<div class="card" style="display:flex;justify-content:space-between;align-items:center">
-        <div><h3>${s.name}</h3><a href="/website-studio/${s.id}-preview/index.html" target="_blank" class="mu">رابط المعاينة ↗</a></div>
+        <div><h3>${esc(s.name)}</h3><a href="/website-studio/${s.id}-preview/index.html" target="_blank" class="mu">رابط المعاينة ↗</a></div>
         <button class="btn p" data-go="eilan://storeadmin?id=${s.id}">إدارة المتجر</button>
       </div>`).join('')}
     </div>`;
@@ -4599,51 +4643,76 @@ P.storeadmin={icon:'⚙️',title:()=>'لوحة إدارة المتجر | إيل
   
   return `<div class="page-h" style="flex-direction:column;align-items:flex-start">
     <div style="display:flex;justify-content:space-between;width:100%">
-      <div><div class="eyebrow">STORE DASHBOARD</div><h1>إدارة: <span class="grad-t">${store.name}</span></h1></div>
-      <div>
-        <a class="btn" href="/website-studio/${store.id}-preview/index.html" target="_blank">معاينة المتجر ↗</a>
-        <button class="btn g" onclick="toast('تم الحفظ بنجاح!')">💾 حفظ ونشر</button>
+      <div><div class="eyebrow">STORE DASHBOARD</div><h1>إدارة: <span class="grad-t">${esc(dat.name)}</span></h1></div>
+      <div style="display:flex;gap:8px">
+        <a class="btn sm" href="/website-studio/${store.id}-preview/index.html" target="_blank">المعاينة المباشرة ↗</a>
+        <button class="btn sm g" onclick="toast('تم الحفظ بنجاح!')">💾 تحديث المتجر</button>
       </div>
     </div>
     
-    <div style="display:flex;gap:10px;margin-top:20px;border-bottom:1px solid rgba(15,107,68,0.2);padding-bottom:10px;width:100%;overflow-x:auto">
+    <div class="st-nav" style="display:flex;gap:10px;margin-top:20px;border-bottom:1px solid rgba(15,107,68,0.2);padding-bottom:10px;width:100%;overflow-x:auto">
       <button class="chip on" onclick="stTab(this,'st-gen')">🎨 المظهر والهوية</button>
       <button class="chip" onclick="stTab(this,'st-prod')">📦 المنتجات</button>
-      <button class="chip" onclick="stTab(this,'st-orders')">🛍️ الطلبات والتوصيل</button>
+      <button class="chip" onclick="stTab(this,'st-orders')">🛍️ الطلبات</button>
       <button class="chip" onclick="stTab(this,'st-pay')">💳 الدفع والربط</button>
-      <button class="chip" onclick="stTab(this,'st-ai')">✨ مساعد إيلان الذكي</button>
+      <button class="chip" onclick="stTab(this,'st-ai')">✨ المساعد الذكي</button>
+      ${isOwner() ? `<button class="chip" onclick="stTab(this,'st-sql')" style="border-color:#1E44C8;color:#1E44C8">👑 قواعد البيانات</button>` : ''}
     </div>
   </div>
   
-  <div class="st-tabs">
+  <div class="st-tabs" style="margin-top:20px">
     <!-- General Settings -->
     <div id="st-gen" class="st-pane active">
       <div class="card">
         <h3>هوية المتجر</h3>
-        <label class="frm-lbl">اسم المتجر</label>
+        <label class="frm-lbl">اسم المتجر / العلامة التجارية</label>
         <input class="input" type="text" value="${esc(dat.name)}" onchange="S.storeData['${sid}'].name=this.value;save()">
         
-        <div style="display:flex;gap:20px;margin-top:15px">
+        <div style="display:flex;gap:20px;margin-top:15px;flex-wrap:wrap">
           <div>
-            <label class="frm-lbl">لون الخلفية</label>
-            <input type="color" value="${dat.colors.bg}" onchange="S.storeData['${sid}'].colors.bg=this.value;save()">
+            <label class="frm-lbl">لون الخلفية الأساسي</label>
+            <input type="color" value="${dat.colors.bg}" onchange="S.storeData['${sid}'].colors.bg=this.value;save()" style="width:100px;height:40px;border:none;border-radius:8px">
           </div>
           <div>
             <label class="frm-lbl">لون النصوص</label>
-            <input type="color" value="${dat.colors.text}" onchange="S.storeData['${sid}'].colors.text=this.value;save()">
+            <input type="color" value="${dat.colors.text}" onchange="S.storeData['${sid}'].colors.text=this.value;save()" style="width:100px;height:40px;border:none;border-radius:8px">
           </div>
         </div>
       </div>
     </div>
     
-    <!-- Products -->
+    <!-- Products CRUD -->
     <div id="st-prod" class="st-pane" style="display:none">
-      <div class="card">
-        <div style="display:flex;justify-content:space-between;margin-bottom:15px">
-          <h3>المنتجات (${dat.products.length})</h3>
-          <button class="btn sm" onclick="alert('واجهة إضافة المنتج...')">➕ إضافة منتج</button>
-        </div>
-        ${dat.products.length ? '' : '<p class="mu">لا توجد منتجات بعد. أضف منتجك الأول لتبدأ البيع.</p>'}
+      <div style="display:flex;justify-content:space-between;margin-bottom:15px;align-items:center">
+        <h3>المنتجات (${dat.products.length})</h3>
+        <button class="btn sm" onclick="stAddProd('${sid}')">➕ إضافة منتج جديد</button>
+      </div>
+      ${dat.products.length===0 ? '<div class="card empty"><p class="mu">لا توجد منتجات بعد. أضف منتجك الأول لتبدأ البيع.</p></div>' : ''}
+      <div style="display:flex;flex-direction:column;gap:15px">
+        ${dat.products.map(p=>`<div class="card st-prod-card" style="display:grid;grid-template-columns:1fr 1fr;gap:15px">
+          <div>
+            <label class="frm-lbl">اسم المنتج</label>
+            <input class="input" name="pname" type="text" value="${esc(p.name)}">
+            <label class="frm-lbl mt2">وصف المنتج</label>
+            <textarea class="textarea" name="pdesc" rows="2">${esc(p.desc)}</textarea>
+          </div>
+          <div>
+            <div style="display:flex;gap:10px">
+              <div style="flex:1">
+                <label class="frm-lbl">السعر (ر.س)</label>
+                <input class="input" name="pprice" type="number" value="${p.price}">
+              </div>
+              <div style="flex:1">
+                <label class="frm-lbl">المخزون المتوفر</label>
+                <input class="input" name="pstock" type="number" value="${p.stock}">
+              </div>
+            </div>
+            <div style="display:flex;gap:8px;margin-top:20px;justify-content:flex-end">
+              <button class="btn sm" onclick="stSaveProd('${sid}', '${p.id}', this)">حفظ التغييرات</button>
+              <button class="btn sm p" onclick="stDelProd('${sid}', '${p.id}')">حذف</button>
+            </div>
+          </div>
+        </div>`).join('')}
       </div>
     </div>
     
@@ -4651,7 +4720,7 @@ P.storeadmin={icon:'⚙️',title:()=>'لوحة إدارة المتجر | إيل
     <div id="st-orders" class="st-pane" style="display:none">
       <div class="card">
         <h3>الطلبات الحديثة</h3>
-        <p class="mu">لا توجد طلبات بعد. شارك رابط متجرك لتبدأ باستقبال الطلبات!</p>
+        <p class="mu">لا توجد طلبات بعد. لم يتم الربط بقاعدة البيانات (Supabase) حتى الآن.</p>
       </div>
       <div class="card mt2">
         <h3>إعدادات التوصيل والشحن</h3>
@@ -4674,9 +4743,9 @@ P.storeadmin={icon:'⚙️',title:()=>'لوحة إدارة المتجر | إيل
         </select>
         <div style="margin-top:15px">
           <label class="frm-lbl">مفتاح الربط (API Key)</label>
-          <input class="input" type="password" placeholder="sk_test_...">
+          <input class="input" type="password" placeholder="sk_test_..." autocomplete="new-password">
         </div>
-        <p class="mu mt2" style="font-size:12px">⚠️ <b>ملاحظة:</b> الدفع معطّل حالياً بأمر الإدارة حتى اعتماد خطة الربط النهائي.</p>
+        <p class="mu mt2" style="font-size:12px;background:rgba(255,200,0,0.1);padding:10px;border-radius:8px">⚠️ <b>ملاحظة:</b> الدفع معطّل حالياً بأمر الإدارة حتى اعتماد خطة الربط النهائي وقواعد البيانات.</p>
       </div>
     </div>
     
@@ -4685,25 +4754,60 @@ P.storeadmin={icon:'⚙️',title:()=>'لوحة إدارة المتجر | إيل
       <div class="card" style="background:linear-gradient(145deg, rgba(74,42,143,0.1), transparent);border:1px solid rgba(74,42,143,0.3)">
         <h3>✨ مساعد إيلان الذكي</h3>
         <p class="mu mb2">اطلب من المساعد اقتراح نصوص تسويقية، ألوان للمتجر، أو أفكار منتجات. سيتم عرض التغييرات عليك للمراجعة قبل التطبيق.</p>
-        <textarea class="textarea" rows="3" placeholder="مثال: اقترح لي 3 أسماء لمنتجات قهوة مختصة مع وصف جذاب لكل منها..."></textarea>
-        <button class="btn p mt2" onclick="toast('جاري معالجة طلبك...')">إرسال للمساعد</button>
+        <textarea id="st-ai-in" class="textarea" rows="3" placeholder="مثال: اقترح لي 3 أسماء لمنتجات قهوة مختصة مع وصف جذاب لكل منها..."></textarea>
+        <button class="btn p mt2" onclick="stAI('${sid}')">إرسال للمساعد</button>
+        <div id="st-ai-out" style="margin-top:15px"></div>
       </div>
     </div>
+    
+    <!-- SQL / DB (Owner Only) -->
+    ${isOwner() ? `
+    <div id="st-sql" class="st-pane" style="display:none">
+      <div class="card" style="border:2px solid #1E44C8">
+        <h3>👑 إعداد قواعد بيانات المتاجر (Supabase)</h3>
+        <p class="mu mb2">لجعل المتاجر قادرة على استقبال الطلبات وعرضها للعملاء بشكل منفصل، يجب إنشاء هذه الجداول في Supabase الخاص بك عبر SQL Editor:</p>
+        <textarea class="textarea ltr mono" rows="8" readonly style="font-size:12px">
+-- 1. جدول المتاجر
+create table public.eilan_stores (
+  id uuid default gen_random_uuid() primary key,
+  owner_id uuid references auth.users(id) not null,
+  store_slug text unique not null,
+  name text,
+  settings jsonb,
+  created_at timestamp with time zone default timezone('utc'::text, now())
+);
+
+-- 2. جدول المنتجات
+create table public.eilan_store_products (
+  id uuid default gen_random_uuid() primary key,
+  store_id uuid references public.eilan_stores(id) on delete cascade,
+  name text,
+  desc text,
+  price numeric,
+  stock int,
+  created_at timestamp with time zone default timezone('utc'::text, now())
+);
+
+-- 3. جدول الطلبات
+create table public.eilan_store_orders (
+  id uuid default gen_random_uuid() primary key,
+  store_id uuid references public.eilan_stores(id) on delete cascade,
+  customer_name text,
+  customer_phone text,
+  items jsonb,
+  total numeric,
+  status text default 'pending',
+  created_at timestamp with time zone default timezone('utc'::text, now())
+);
+        </textarea>
+        <p class="mu mt2">بمجرد تنفيذ هذا الكود، سنتمكن من استبدال الحفظ المحلي <code>S.storeData</code> بحفظ سحابي حقيقي في قاعدة البيانات.</p>
+      </div>
+    </div>` : ''}
+    
   </div>
-  
-  <style>
-    .st-tabs { margin-top: 20px; }
-    .st-pane.active { display: block !important; }
-  </style>
-  <script>
-    window.stTab = (btn, id) => {
-      document.querySelectorAll('.st-tabs .st-pane').forEach(e => e.classList.remove('active'));
-      document.getElementById(id).classList.add('active');
-      document.querySelectorAll('.chip').forEach(e => e.classList.remove('on'));
-      btn.classList.add('on');
-    };
-  </script>`;
+  <style>.st-pane:not(.active){display:none}</style>`;
 }, mount:()=>{}};
+
 
 P.ai={icon:'✨',title:()=>'Eilan AI',html:()=>`
   <div class="ai-page"><div class="card ai-side"><div style="display:flex;align-items:center;gap:10px"><img src="${LOGO}" style="width:44px" alt=""><div><b>Eilan AI</b><div style="font-size:11.5px;color:var(--g)">● ${S.settings.apiKey?'Claude متصل':'المحرك المحلي'}</div></div></div>

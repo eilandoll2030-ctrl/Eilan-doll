@@ -12200,7 +12200,27 @@ function ctScheduleHTML(){
         <button class="btn sm g" data-act="itprint">🖨️ طباعة الجدول / PDF</button>
       </div>
 
-      ${schedule.map(s => `
+      ${!hasFullAccess ? `<div class="card empty" style="border:1px solid rgba(15,107,68,0.3);background:linear-gradient(to bottom, transparent, rgba(15,107,68,0.05))">
+        <h3>🔒 الجدول السياحي والمالي الكامل مقفل</h3>
+        <p class="mu mt1">اشترِ جواز إيلان أو افتح جدول هذه المدينة لرؤية الجدول السياحي يومياً (صباحاً، ظهراً، عصراً، ومساءً)، مع خطة وتوزيع التكلفة المادية.</p>
+        <button class="btn g mt2" data-act="itbuy" data-city="${esc(cityObj.n)}" data-days="${itDays}" data-total="${budget.grandTotal}">🛒 شراء الجدول الآن (19 ر.س أو 40 XP)</button>
+      </div>
+      
+      <h3 style="margin-top:20px;font-size:16px;color:var(--mu)">👀 مثال لتوضيح طريقة العرض:</h3>
+      <div class="it-day-card" style="opacity:0.6;pointer-events:none">
+        <div class="it-day-head">
+          <h3>اليوم 1</h3>
+          <span class="it-day-badge">تذاكر المعالم التقديرية: ~${schedule[0].ticketsCost} ر.س</span>
+        </div>
+        <div class="it-slots">
+          <div class="it-slot">
+            <span class="it-slot-time">🌅 الصباح</span>
+            <div class="it-slot-info"><b>${esc(schedule[0].morning)}</b><p>البداية بنشاط واستكشاف المعلم الرئيسي أو التاريخي مع أجواء صباحية منعشة.</p></div>
+          </div>
+          <div class="it-slot"><span class="it-slot-time">☀️ الظهر / غداء</span><div class="it-slot-info"><b>... محتوى مقفل ...</b></div></div>
+        </div>
+      </div>
+      ` : schedule.map(s => `
       <div class="it-day-card">
         <div class="it-day-head">
           <h3>اليوم ${s.day}</h3>

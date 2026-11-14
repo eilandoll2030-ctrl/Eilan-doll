@@ -80,6 +80,17 @@ function nebGuideHTML() {
  <figure><img src="/assets/projects/neb-candle-product.jpg" alt="شمعة نبع بشعار العلامة الأصلي على عبوة كريمي" loading="lazy" style="width:100%;height:auto;border-radius:14px"><figcaption class="mu">شمعة نبع — تصوير منتجات تعليمي مولّد بالذكاء الاصطناعي، يحمل شعار العلامة التجريبية. ليس منتجًا مصنّعًا حقيقيًا.</figcaption></figure>
  <figure><img src="/assets/projects/neb-candle-product2.jpg" alt="شموع نبع بشعار العلامة الأصلي على عبوة أحمر طوبي وذهبي" loading="lazy" style="width:100%;height:auto;border-radius:14px"><figcaption class="mu">شموع نبع — تصوير منتجات تعليمي مولّد بالذكاء الاصطناعي، يحمل شعار العلامة التجريبية. ليس منتجًا مصنّعًا حقيقيًا.</figcaption></figure>
  </div><p class="mu">نفس المنتج المعروض في القسم العلوي، مصوّر بأسلوب صور المنتجات المرجعية: تصوير منتجات نظيف ومتجانس مع شعار نبع على العبوة. الصور موّلدة بالذكاء الاصطناعي وتوضيحية؛ لا تعكس منتجًا حقيقيًا ولا تركيبة أو مواصفات معتمدة. الشعار هو هوية تعليمية تجريبية غير مسجّلة.</p></div></details>
+ <details open><summary>أفكار وأشكال الشموع الجذابة</summary><div class="care-content">
+ <p class="mu">مجموعة من أشكال الشموع المقترحة لتكون واضحة وجذابة للعميل، مبنيّة على أفكار الصور المرجعية. كل شكل فكرة تصميم قابلة للتعديل حسب المنتج والعبوة النهائية؛ لا تعكس منتجات مصنّعة حقيقية ولا مواصفات معتمدة.</p>
+ <div class="care-product-grid">
+ <figure><img src="/assets/projects/neb-candle-idea1.jpg" alt="شمعة نبع في برطمان زجاجي مضلّد بشعار العلامة" loading="lazy" style="width:100%;height:auto;border-radius:14px"><figcaption class="mu"><b>برطمان زجاجي مضلّد:</b> شكل كلاسيكي واضح وفاخر، يحفظ الشمعة ويظهر اللون والرائحة. مناسب لشموع العطري المنزلي.</figcaption></figure>
+ <figure><img src="/assets/projects/neb-candle-idea2.jpg" alt="شمعة نبع عمودية بتصميم بسيط بشعار العلامة" loading="lazy" style="width:100%;height:auto;border-radius:14px"><figcaption class="mu"><b>شمعة عمودية:</b> شكل بسيط وفني يلفت النظر، مناسب للعرض كقطعة ديكور وهدايا.</figcaption></figure>
+ <figure><img src="/assets/projects/neb-candle-idea3.jpg" alt="مجموعة شموع نبع صغيرة متعددة الأحجام بشعار العلامة" loading="lazy" style="width:100%;height:auto;border-radius:14px"><figcaption class="mu"><b>مجموعة متعددة الأحجام:</b> تشكيلة من الشموع الصغيرة بأطوال مختلفة، جذابة للعرض وتجرب أكثر من رائحة.</figcaption></figure>
+ <figure><img src="/assets/projects/neb-candle-idea4.jpg" alt="شمعة نبع ببرطمان خرساني هندسي بشعار العلامة" loading="lazy" style="width:100%;height:auto;border-radius:14px"><figcaption class="mu"><b>برطمان خرساني هندسي:</b> شكل عصري حديث يعطي طابعًا مميزًا ويناسب الديكور الحديث.</figcaption></figure>
+ <figure><img src="/assets/projects/neb-candle-idea5.jpg" alt="مجموعة هدايا شموع نبع في علبة كرافية بشعار العلامة" loading="lazy" style="width:100%;height:auto;border-radius:14px"><figcaption class="mu"><b>مجموعة هدايا:</b> تشكيلة شموع في علبة كرافية، فكرة جذابة للهدايا والمناسبات وتقدم تجربة متكاملة.</figcaption></figure>
+ </div>
+ <p class="mu">هذه الأشكال أفكار تصميم للعرض فقط؛ تُعدّل حسب المنتج الفعلي والعبوة المعتمدة والسلامة. لا نعرضها كمنتجات جاهزة للبيع، ولا نحدد لها مكونات أو صلاحية أو مواصفات.</p>
+ </div></details>
  <p><b>الهدف:</b> تعلّم خطوات بناء المشروع قبل شراء الخامات أو إطلاق البيع. لا يحتوي هذا الدليل تركيبة تصنيع أو ضمان ربح أو اعتماد سلامة.</p>
  <details open><summary>١. الهوية والتصميم / Brand concept</summary><div class="care-content">
  <p><b>نبع / NEB'</b>: اسم تجريبي غير مفحوص تجاريًا. شخصية دافئة وواضحة؛ أحمر طوبي وذهبي على كريمي. الهوية مثال للتعلّم وليست علامة مسجّلة أو اسمًا محجوزًا.</p>

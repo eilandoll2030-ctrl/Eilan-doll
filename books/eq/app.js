@@ -280,7 +280,9 @@ function getAudio(text){const v=cloudVoice();const key=v+'|'+text;if(TOUR.cache.
  const p=fetch('/api/tts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text,voice:v})}).then(r=>{if(!r.ok)throw new Error('tts '+r.status);return r.blob()}).then(b=>URL.createObjectURL(b));
  p.catch(()=>TOUR.cache.delete(key));TOUR.cache.set(key,p);return p}
 const synth=window.speechSynthesis||null;
-function pickVoice(){if(!synth)return null;const vs=synth.getVoices();const want=rtl()?'ar':'en';return vs.find(v=>v.lang&&v.lang.toLowerCase().startsWith(want+'-sa'))||vs.find(v=>v.lang&&v.lang.toLowerCase().startsWith(want))||null}
+function pickVoice(){if(!synth)return null;const want=rtl()?'ar':'en';const vs=synth.getVoices().filter(v=>v.lang&&v.lang.toLowerCase().replace('_','-').startsWith(want));if(!vs.length)return null;
+ const score=v=>{const n=(v.name+' '+v.voiceURI).toLowerCase();let s=0;if(/premium/.test(n))s+=40;if(/enhanced|natural|neural|siri/.test(n))s+=30;if(/compact|eloquence/.test(n))s-=30;if(rtl()&&/sa/i.test(v.lang))s+=8;if(!rtl()&&/en-us|en-gb/i.test(v.lang))s+=5;if(v.localService)s+=2;return s};
+ return vs.sort((a,b)=>score(b)-score(a))[0]}
 if(synth&&synth.onvoiceschanged!==undefined)synth.onvoiceschanged=()=>{TOUR.voice=pickVoice()};
 const speakNum=v=>{const s=fmt(v);return s.replace('×10^',rtl()?' ضرب عشرة أُس ':' times ten to the ').replace(/,/g,'')};
 const nameOf=k=>L(sym(k).n);
@@ -324,7 +326,7 @@ function runStep(){const st=TOUR.steps[TOUR.i];if(!st){endTour();return}const g=
  if(cloudVoice()&&TOUR.cloud){getAudio(sayText).then(url=>{if(g!==TOUR.gen)return;const a=TOUR.audio;a.onended=()=>{if(g===TOUR.gen)next()};a.onerror=()=>{if(g===TOUR.gen)next()};a.src=url;a.play().catch(()=>{deviceSay()})}).catch(()=>{TOUR.cloud=false;tourUI();if(g===TOUR.gen)deviceSay()});return}
  deviceSay();
  function deviceSay(){
- if(synth&&TOUR.voice){try{synth.cancel();const sp=sayText;const u=new SpeechSynthesisUtterance(sp);u.voice=TOUR.voice;u.lang=TOUR.voice.lang;u.rate=rtl()?.95:1;u.pitch=1.05;let done=false;u.onend=()=>{if(!done){done=true;next()}};u.onerror=()=>{if(!done){done=true;next()}};synth.speak(u);TOUR.timer=setTimeout(()=>{if(!done&&!synth.speaking){done=true;next()}},st.say.length*120+4000)}catch(e){fallback()}}else fallback()}}
+ if(synth&&TOUR.voice){try{synth.cancel();const sp=sayText;const u=new SpeechSynthesisUtterance(sp);u.voice=TOUR.voice;u.lang=TOUR.voice.lang||(rtl()?'ar-SA':'en-US');u.rate=rtl()?.9:1;u.pitch=1;let done=false;u.onend=()=>{if(!done){done=true;next()}};u.onerror=()=>{if(!done){done=true;next()}};synth.speak(u);TOUR.timer=setTimeout(()=>{if(!done&&!synth.speaking){done=true;next()}},st.say.length*120+4000)}catch(e){fallback()}}else fallback()}}
 function party(){const box=document.createElement('div');box.className='party';const cols=['#1E44C8','#0F6B44','#4A2A8F','#C9A227','#D8FFE6','#C8463C'];for(let i=0;i<70;i++){const p=document.createElement('i');p.style.left=Math.random()*100+'%';p.style.background=cols[i%6];p.style.animationDelay=Math.random()*.6+'s';p.style.transform=`rotate(${Math.random()*360}deg)`;box.appendChild(p)}document.body.appendChild(box);setTimeout(()=>box.remove(),3200)}
 document.addEventListener('click',ev=>{const vb=ev.target.closest('[data-voice]');if(vb){VMODE=vb.dataset.voice;try{localStorage.setItem('eq-voice',VMODE)}catch(e){}TOUR.cloud=true;if(TOUR.on&&!TOUR.paused){stopSpeech();runStep()}else tourUI();return}const t2=ev.target.closest('[data-tour]');if(!t2)return;const a=t2.dataset.tour;
  if(a==='start')startTour();else if(a==='stop')endTour();else if(a==='next'){const st=TOUR.steps[TOUR.i];if(st&&st.after)st.after();stopSpeech();TOUR.paused=false;TOUR.i++;runStep()}

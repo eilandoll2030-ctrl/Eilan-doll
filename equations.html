@@ -92,6 +92,7 @@ button{background:none;border:0;cursor:pointer}
 @keyframes talk{50%{transform:translateY(-3px) scale(1.06)}}
 .tbody{flex:1;min-width:0}#tsay{font-size:17px;line-height:1.7;font-weight:700;color:#fff}
 #tdots{display:flex;gap:4px;margin-top:6px;flex-wrap:wrap}#tdots i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.2)}#tdots i.d{background:var(--mint)}#tdots i.c{background:var(--gold);transform:scale(1.4)}
+#tvoice{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}#tvoice button{height:28px;padding:0 10px;border-radius:999px;font-size:12px;font-weight:700;background:rgba(255,255,255,.1);color:#fff}#tvoice button.on{background:var(--mint);color:var(--night)}
 #tnovoice{font-size:12px;color:#ffd9a0;margin-top:4px}
 .tctl{display:flex;flex-direction:column;gap:6px}.tctl button{width:38px;height:38px;border-radius:12px;background:rgba(255,255,255,.1);font-size:16px;color:#fff}
 .tourbtn{background:linear-gradient(135deg,#C9A227,#9c7a12)!important;color:#1b1503!important;border-color:transparent!important}
@@ -164,7 +165,7 @@ form select option{background:#11142a}
 <div id="hint" data-t="drag"></div>
 <div id="tray" class="hide"><div id="tmode" class="tmode"></div><div id="tmsg"></div><div id="tchips" class="tchips"></div></div>
 <div id="dhint" class="hide"></div>
-<div id="tour" class="hide"><div class="tavatar"><img src="/assets/logo/eilan-icon.svg" alt=""></div><div class="tbody"><div id="tsay"></div><div id="tdots"></div><div id="tnovoice" class="hide">🔇 الصوت غير متاح في هذا المتصفح — الشرح مكتوب ويمشي تلقائيًا</div></div><div class="tctl"><button data-tour="pause" id="tpause">⏸</button><button data-tour="next">⏭</button><button data-tour="stop">✕</button></div></div>
+<div id="tour" class="hide"><div class="tavatar"><img src="/assets/logo/eilan-icon.svg" alt=""></div><div class="tbody"><div id="tsay"></div><div id="tdots"></div><div id="tvoice" class="tvoice"></div><div id="tnovoice" class="hide">🔇 الصوت غير متاح في هذا المتصفح — الشرح مكتوب ويمشي تلقائيًا</div></div><div class="tctl"><button data-tour="pause" id="tpause">⏸</button><button data-tour="next">⏭</button><button data-tour="stop">✕</button></div></div>
 
 <div id="veil" class="hide"></div>
 <section class="sheet hide" id="s-search"><div class="sh"><h3>🔍 <span data-t="title"></span></h3><button class="ib" data-close>✕</button></div><div class="sb"><input class="search" id="q" type="search" autocomplete="off"><div id="sres"></div></div></section>
@@ -191,16 +192,16 @@ form select option{background:#11142a}
 window.addEventListener('DOMContentLoaded',()=>{const en=(localStorage.getItem('eb-lang')||'ar')==='en'||new URLSearchParams(location.search).get('lang')==='en';if(!en)return;const T={addH:'✍️ Do you have an equation?',addIntro:'If your equation is not in the Eilan book yet, add it here with your own way of explaining it. Eilan designs the interactive explanation; the idea and explanation stay yours.',lN:'Equation name *',lF:'Formula *',lS:'Field',lH:'Your explanation (what does it mean? what is each symbol? an example?) *',lBy:'Name to show in the book',lC:'Contact (optional — never shown)',tourLb:'Explain it with voice',addNote:'You will see your equation at the end of the book right away. Everyone else sees it after the Eilan team reviews it.',addBtnT:'Add my equation',ldT:'Opening the book…'};for(const k in T){const el=document.getElementById(k);if(el)el.textContent=T[k]}document.getElementById('lShow').innerHTML='<b>Do you want your name shown in the Eilan book?</b><br>If you agree, your name appears at the bottom of the equation page — “Idea & explanation: your name” — for everyone who opens the book.'});
 </script>
 <script type="importmap">{"imports":{"three":"/vendor/three/three.module.min.js"}}</script>
-<script src="/books/eq/core.js?v=4"></script>
-<script src="/books/eq/data-physics.js?v=4"></script>
-<script src="/books/eq/data-physics2.js?v=4"></script>
-<script src="/books/eq/data-chemistry.js?v=4"></script>
-<script src="/books/eq/data-math.js?v=4"></script>
-<script src="/books/eq/data-math2.js?v=4"></script>
-<script src="/books/eq/data-stats.js?v=4"></script>
-<script src="/books/eq/data-life.js?v=4"></script>
-<script src="/books/eq/data-more.js?v=4"></script>
-<script src="/books/eq/community.js?v=4"></script>
-<script type="module" src="/books/eq/app.js?v=4"></script>
+<script src="/books/eq/core.js?v=5"></script>
+<script src="/books/eq/data-physics.js?v=5"></script>
+<script src="/books/eq/data-physics2.js?v=5"></script>
+<script src="/books/eq/data-chemistry.js?v=5"></script>
+<script src="/books/eq/data-math.js?v=5"></script>
+<script src="/books/eq/data-math2.js?v=5"></script>
+<script src="/books/eq/data-stats.js?v=5"></script>
+<script src="/books/eq/data-life.js?v=5"></script>
+<script src="/books/eq/data-more.js?v=5"></script>
+<script src="/books/eq/community.js?v=5"></script>
+<script type="module" src="/books/eq/app.js?v=5"></script>
 </body>
 </html>

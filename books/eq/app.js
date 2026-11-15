@@ -19,11 +19,22 @@ const UI={title:['موسوعة معادلات إيلان','Eilan Equations Encyc
  noPart:['ما تنحسب بدون','Cannot be computed without'],what:['وش تقول المعادلة؟','What does it say?'],how:['كيف تتغيّر النتيجة؟','How does the result change?'],solve:['الحل خطوة بخطوة','Solving it step by step'],try:['جرّب بنفسك','Try it yourself'],close:['إغلاق','Close'],none:['ما لقينا معادلة بهذا الاسم. تقدر تضيفها أنت! ✍️','No equation found. You can add it yourself! ✍️'],loading:['جاري فتح الكتاب…','Opening the book…']};
 const t=k=>L(UI[k]);
 
+/* ---------- subject books (same 3D engine, filtered) ---------- */
+const BOOKS={physics:{g:['phys'],ic:'⚡',n:['كتاب الفيزياء','Physics book']},chemistry:{g:['chem'],ic:'⚗️',n:['كتاب الكيمياء','Chemistry book']},biology:{c:['bio','med'],grp:'life',ic:'🧬',n:['كتاب الأحياء','Biology book']},math:{g:['math'],ic:'📐',n:['كتاب الرياضيات','Mathematics book']},statistics:{g:['stat'],ic:'📊',n:['كتاب الإحصاء','Statistics book']}};
+const BOOK=new URLSearchParams(location.search).get('book'),BK=BOOKS[BOOK]||null;const POSK='eq-pos'+(BK?'-'+BOOK:'');
+const SIMMAP={pe:'energy',coaster:'motion',newton:'motion',pendulum:'pendulum',wave:'wave',ohm:'circuit',linear:'graph',quad:'graph',pyth:'solids',unit:'graph',vectors:'graph',circle:'solids',atom:'atom',states:'heat',gas:'gas',ph:'beaker',react:'molecule',cell:'plant',eye:'optics',heart:'plant',photo:'plant',pop:'plant',mean:'dice',normal:'dice',lln:'dice',corr:'graph',clt:'dice'};
+let LESSONS=[];
+function loadLessons(){if(!BK)return Promise.resolve();window.EB=window.EB||{register:b=>{window.__lb=b},C:{},D:{fmt:v=>String(v)},L:(a,e)=>a,rand:()=>Math.random};
+ return new Promise(res=>{const sc=document.createElement('script');sc.src='/books/'+BOOK+'.js?v=2';sc.onload=sc.onerror=()=>res();document.head.appendChild(sc)}).then(()=>{const b=window.__lb;if(!b)return;
+  EQ.cats.les={id:'les',g:BK.grp||BK.g[0],n:['دروس الكتاب','Book lessons'],sc:'energy'};
+  const fx=h=>String(h||'').replace(/<sub>(.*?)<\/sub>/g,'_{$1}').replace(/<sup>2<\/sup>/g,'²').replace(/<sup>3<\/sup>/g,'³').replace(/<[^>]+>/g,'').replace(/&nbsp;/g,' ');
+  LESSONS=b.lessons.map((l,i)=>({cat:'les',id:'les-'+(i+1),lesson:{book:BOOK,i},n:[l.t.ar,l.t.en],f:fx(l.eq)||strip(l.t.ar),d:[l.p.ar,l.p.en],pts:(l.pts||[]).map(x=>[strip(x.ar),strip(x.en)]),q:l.q?[strip(l.q.ar),strip(l.q.en)]:null,a:l.a?[strip(l.a.ar),strip(l.a.en)]:null,sc:SIMMAP[l.sim]||'energy',out:'',x:'',ins:[]}))})}
+
 /* ---------- list ---------- */
 let LIST=[];
-function buildList(){const order=EQ.groups.map(g=>g.id);const cats=Object.values(EQ.cats);LIST=[];
+function buildList(){const order=EQ.groups.map(g=>g.id);const cats=Object.values(EQ.cats).filter(c=>c.id!=='les'&&(!BK||(BK.g?BK.g.includes(c.g):BK.c.includes(c.id))));LIST=[...LESSONS];
  order.forEach(g=>cats.filter(c=>c.g===g).forEach(c=>{const items=EQ.list.filter(e=>e.cat===c.id);items.forEach((e,i)=>{e.id=e.id||c.id+'-'+(i+1);LIST.push(e)})}));
- mine().forEach((m,i)=>LIST.push({...m,cat:'com',id:'mine-'+(i+1),mine:true}))}
+ mine().forEach((m,i)=>{if(!BK||(BK.g||[BK.grp]).includes(m.subj))LIST.push({...m,cat:'com',id:'mine-'+(i+1),mine:true})})}
 function mine(){try{return JSON.parse(localStorage.getItem('eq-mine')||'[]')}catch(e){return[]}}
 
 /* ---------- math evaluation ---------- */
@@ -82,12 +93,13 @@ function wrap(x,s,maxW){const words=String(s).split(/\s+/);const lines=[];let cu
 const strip=s=>String(s||'').replace(/<[^>]+>/g,'');
 function drawText(c,e,idx){const x=c.getContext('2d'),W=c.width,H=c.height,P=86;paper(x,W,H);const ar=rtl();x.direction=ar?'rtl':'ltr';x.textAlign=ar?'right':'left';const X0=ar?W-P:P,maxW=W-2*P;let y=P+10;
  const UIF=(px,b)=>`${b?'700 ':''}${px}px ${ar?'Tajawal':'system-ui,-apple-system,Segoe UI'},sans-serif`,BODY=(px,b)=>`${b?'700 ':''}${px}px ${ar?'Amiri,Tajawal':'Georgia,serif'}`;
- const cat=EQ.cats[e.cat],grp=EQ.groups.find(g=>g.id===cat.g);x.font=UIF(32,true);x.fillStyle='#0F6B44';x.fillText((grp?L(grp.n)+' · ':'')+L(cat.n),X0,y);y+=56;
+ const cat=EQ.cats[e.cat],grp=EQ.groups.find(g=>g.id===cat.g);x.font=UIF(32,true);x.fillStyle='#0F6B44';x.fillText(e.lesson?(rtl()?'الدرس ':'Lesson ')+(e.lesson.i+1)+' · '+L(BK.n):(grp?L(grp.n)+' · ':'')+L(cat.n),X0,y);y+=56;
  x.font=BODY(74,true);x.fillStyle='#101218';wrap(x,strip(L(e.n)),maxW).forEach(l=>{x.fillText(l,X0,y);y+=84});y+=6;
  // formula box
  x.save();const fz=e.f.length>34?54:e.f.length>24?66:82;x.font=`italic ${fz}px 'Cambria Math','Times New Roman',serif`;x.direction='ltr';x.textAlign='center';const fl=wrap(x,e.f,maxW-60);const bh=fl.length*(fz+18)+40;x.fillStyle='rgba(30,68,200,.07)';x.strokeStyle='rgba(30,68,200,.45)';x.setLineDash([10,8]);x.lineWidth=3;const rx=P,ry=y,rw=maxW;x.beginPath();x.roundRect?x.roundRect(rx,ry,rw,bh,22):x.rect(rx,ry,rw,bh);x.fill();x.stroke();x.fillStyle='#14286f';const FF=px=>`italic ${px}px 'Cambria Math','Times New Roman',serif`;fl.forEach((l,i)=>richDraw(x,l,W/2,ry+40+fz*.75+i*(fz+18),FF,fz,'center'));x.restore();y+=bh+44;
  // note
  x.font=BODY(46);x.fillStyle='#1d1f27';wrap(x,strip(L(e.d)),maxW).forEach(l=>{x.fillText(l,X0,y);y+=64});y+=18;
+ if(e.pts){x.font=BODY(40);x.fillStyle='#1E44C8';e.pts.forEach(pt=>wrap(x,'• '+L(pt),maxW).forEach(w=>{x.fillText(w,X0,y);y+=54}));y+=10}if(e.q&&y<H-300){x.font=UIF(34,true);x.fillStyle='#4A2A8F';wrap(x,(rtl()?'سؤال: ':'Question: ')+L(e.q),maxW).forEach(w=>{x.fillText(w,X0,y);y+=48});y+=10}
  const rl=relations(e);if(rl.length){x.font=BODY(40);x.fillStyle='#0F6B44';rl.slice(0,2).forEach(l=>{wrap(x,'• '+l.replace(/[«»“”]/g,''),maxW).forEach(w=>{x.fillText(w,X0,y);y+=54})});y+=12}
  // symbols
  const all=[...(e.out?[e.out]:[]),...e.ins];if(all.length){x.font=UIF(34,true);x.fillStyle='#4A2A8F';x.fillText(t('syms'),X0,y);y+=52;x.font=UIF(35);all.slice(0,8).forEach(k=>{const s=sym(k);x.fillStyle='#1E44C8';x.save();const SF=px=>`italic 700 ${px}px 'Times New Roman',serif`;x.direction='ltr';const sw=richW(x,s.d,SF,40);richDraw(x,s.d,X0,y,SF,40,ar?'right':'left');x.restore();x.font=UIF(35);x.textAlign=ar?'right':'left';x.fillStyle='#2b2d36';x.fillText('  '+L(s.n)+(s.u?'  ('+s.u+')':''),ar?X0-sw-8:X0+sw+8,y);y+=52})}
@@ -133,8 +145,9 @@ function doFlip(dir,done){// dir>0 forward. RTL forward: left page turns over to
 
 /* ---------- camera rig ---------- */
 const rig={tx:0,ty:.05,tz:.06,r:3.1,th:0,ph:.86,ttx:0,tr:3.1,tth:0,tph:.86,mode:'book'};
-function fitR(){const a=camera.aspect;const need=2.75/(2*Math.tan(THREE.MathUtils.degToRad(camera.fov/2))*a);return Math.max(2.9,need)}
-function setMode(m){rig.mode=m;const s=textSide();if(m==='book'){rig.ttx=0;rig.tr=fitR();rig.tph=.86}else{rig.ttx=(m==='text'?s:-s)*PW/2;const tn=2*Math.tan(THREE.MathUtils.degToRad(camera.fov/2));rig.tr=Math.max(1.5,Math.max(1.15/(tn*camera.aspect),(m==='text'?1.5:1.2)/tn));rig.tph=m==='text'?.3:.9}rig.tth=0;$$('.vbtn').forEach(b=>b.classList.toggle('on',b.dataset.v===m))}
+function bookR(){const W=window.innerWidth,H=window.innerHeight;return fitR(panelW?Math.max(.4,(W-panelW-30)/H):0)*(panelH?1+panelH/H*.6:1)}
+function fitR(aw){const a=aw||camera.aspect;const need=2.45/(2*Math.tan(THREE.MathUtils.degToRad(camera.fov/2))*a);return Math.max(2.9,need)}
+function setMode(m){rig.mode=m;const s=textSide();if(m==='book'){rig.ttx=0;rig.tr=bookR();rig.tph=.86}else{rig.ttx=(m==='text'?s:-s)*PW/2;const tn=2*Math.tan(THREE.MathUtils.degToRad(camera.fov/2));rig.tr=Math.max(1.5,Math.max(1.15/(tn*camera.aspect),(m==='text'?1.5:1.2)/tn));rig.tph=m==='text'?.3:.9}rig.tth=0;$$('.vbtn').forEach(b=>b.classList.toggle('on',b.dataset.v===m))}
 function updCam(dt){const k=Math.min(1,dt*5);rig.tx+=(rig.ttx-rig.tx)*k;rig.r+=(rig.tr-rig.r)*k;rig.th+=(rig.tth-rig.th)*k;rig.ph+=(rig.tph-rig.ph)*k;const sp=Math.sin(rig.ph);camera.position.set(rig.tx+rig.r*sp*Math.sin(rig.th),rig.ty+rig.r*Math.cos(rig.ph),rig.tz+rig.r*sp*Math.cos(rig.th));camera.lookAt(rig.tx,rig.ty,rig.tz)}
 /* pointer: drag rotate, pinch zoom, tap pick */
 {const pts=new Map();let down=null,pinch0=0,r0=0;
@@ -163,7 +176,7 @@ function tray(){const box=$('#tray');if(!box||!PS.kids.length){box&&box.classLis
  $('#tmode').innerHTML=`<button class="${PS.build?'':'on'}" data-mode="auto">${t('auto')}</button><button class="${PS.build?'on':''}" data-mode="build">${t('build')}</button>`;
  $('#tmsg').innerHTML=msg;$('#tmsg').className=PS.stopped&&!PS.build?'stop':(PS.build&&!missE.length&&ess.length?'ok':'');
  $('#tchips').innerHTML=rem.map((k,j)=>`<button class="chip ${k.userData.part.e?'ess':''} ${(PS.build&&j===0&&k.userData.part.e)||(!PS.build&&PS.stopped&&k.userData.part.e&&j===0)?'next':''}" data-addpart="${k.userData.idx}">＋ ${esc(L(k.userData.part.n))}</button>`).join('')}
-document.addEventListener('click',ev=>{const a=ev.target.closest('[data-addpart]');if(a){addPart(+a.dataset.addpart);return}const m=ev.target.closest('[data-mode]');if(m){PS.build=m.dataset.mode==='build';try{localStorage.setItem('eq-build',PS.build?'1':'0')}catch(e){}if(cur){PS.removed=new Set();PS.kids.forEach((k,i)=>{k.visible=true;k.position.copy(k.userData.home);k.scale.set(1,1,1);if(PS.build&&!k.userData.part.b){PS.removed.add(i);k.visible=false}})}refreshModel()}});
+document.addEventListener('click',ev=>{const l2=ev.target.closest('[data-l2d]');if(l2){const[b,i]=l2.dataset.l2d.split(':');try{localStorage.setItem('eb-pos-'+b,String(3+2*(+i)))}catch(e){}return}const a=ev.target.closest('[data-addpart]');if(a){addPart(+a.dataset.addpart);return}const m=ev.target.closest('[data-mode]');if(m){PS.build=m.dataset.mode==='build';try{localStorage.setItem('eq-build',PS.build?'1':'0')}catch(e){}if(cur){PS.removed=new Set();PS.kids.forEach((k,i)=>{k.visible=true;k.position.copy(k.userData.home);k.scale.set(1,1,1);if(PS.build&&!k.userData.part.b){PS.removed.add(i);k.visible=false}})}refreshModel()}});
 function pick(e){if(!cur||busy)return;const r=cv.getBoundingClientRect();ndc.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);ray.setFromCamera(ndc,camera);const hit=ray.intersectObjects(cur.root.children,true).find(h=>h.object.isMesh);
  if(hit){let handled=cur.tap&&cur.tap(hit.object);let p=hit.object;while(p&&!p.userData.pop)p=p.parent;if(p&&p.userData.part&&!handled){const pt=p.userData.part;hint(`${L(pt.n)} — ${L(pt.r)}${pt.b?'':(rtl()?' · اسحبها برّا الصفحة لتشيلها':' · drag it off the page to remove it')}`);clearTimeout(hintT);hintT=setTimeout(()=>hint(''),3200)}if(p){const s0=p.scale.y;tween(500,el=>{const q=K.clamp(el/500,0,1);p.position.y=(p.userData.y0??(p.userData.y0=p.position.y))+Math.sin(q*Math.PI)*.05})}return}
  const hp=ray.intersectObject(textMesh())[0];if(hp&&rig.mode==='book')setMode('text');else if(rig.mode!=='book'&&!hp)setMode('book')}
@@ -174,7 +187,7 @@ function resize(){const W=window.innerWidth,H=window.innerHeight;R3.setSize(W,H,
  const p=$('#panel');const open=!p.classList.contains('closed');const wide=W>=900;panelW=open&&wide?p.offsetWidth+24:0;panelH=open&&!wide?Math.min(p.offsetHeight,H*.5):0;
  if(panelW||panelH){const offX=(rtl()?panelW/2:-panelW/2),offY=panelH/2-30;camera.setViewOffset(W,H,offX,offY,W,H)}else camera.setViewOffset(W,H,0,-20,W,H);
  const tr=$('#tray');if(tr){const avail=W-panelW;tr.style.left=(rtl()?avail/2:panelW+avail/2)+'px';tr.style.width=Math.min(720,avail-24)+'px'}
- camera.updateProjectionMatrix();if(rig.mode==='book')rig.tr=fitR()*(panelW?1+panelW/W*2.1:1)*(panelH?1+panelH/H*.6:1);else setMode(rig.mode)}
+ camera.updateProjectionMatrix();if(rig.mode==='book')rig.tr=bookR();else setMode(rig.mode)}
 window.addEventListener('resize',resize);
 let last=performance.now();function loop(now){const dt=Math.min(.05,(now-last)/1000);last=now;
  for(let i=tweens.length-1;i>=0;i--){const tw=tweens[i];const el=now-tw.t0;tw.fn(el);if(el>=tw.dur){tweens.splice(i,1);tw.done&&tw.done()}}
@@ -193,7 +206,7 @@ function ui(){const e=LIST[idx];if(!e)return;const cat=EQ.cats[e.cat];
   $$('#calc input').forEach(inp=>inp.addEventListener('input',()=>{const val=parseFloat(inp.value);if(!isNaN(val)){values(e)[inp.dataset.k]=val;updRes();refreshModel()}}));updRes()}
  updRes();
  try{history.replaceState(null,'','#'+e.id)}catch(er){}
- try{localStorage.setItem('eq-pos',e.id)}catch(er){}}
+ try{localStorage.setItem(POSK,e.id)}catch(er){}}
 function updRes(){const e=LIST[idx];if(!e)return;const v=evalEq(e);const r=v[e.out];const el=$('#resv');if(el){if(v.__stop)el.textContent=t('stopRes');else if(!isFinite(r)&&v.__zero.size){const k=[...PS.removed].map(i=>PS.kids[i].userData.part).find(p=>(p.s||[]).some(s=>v.__zero.has(s)));el.textContent=t('noPart')+' '+(k?L(k.n):'')}else el.textContent=fmt(r)+(sym(e.out).u?' '+sym(e.out).u:'')}const x=$('#pexp');if(x)x.innerHTML=explainHTML(e)}
 /* auto explanation: built from the equation itself */
 function relations(e){const f=compile(e);if(!f)return[];const v=values(e);const base=e.ins.map(k=>+v[k]);let f0;try{f0=f(...base)}catch(er){return[]}if(!isFinite(f0)||f0===0)return[];const out=[];const on=L(sym(e.out).n);
@@ -210,13 +223,17 @@ function relations(e){const f=compile(e);if(!f)return[];const v=values(e);const 
   else txt=rtl()?`إذا ضاعفت «${nm}» ${r>1?'يزيد':'يقل'} «${on}» (×${(+r.toPrecision(3))}).`:`Double “${nm}” and “${on}” ${r>1?'rises':'falls'} (×${(+r.toPrecision(3))}).`;
   out.push(txt)});return out}
 function explainHTML(e){const f=compile(e);const ins=e.ins;const v=values(e);let h=`<div class="xh">📌 ${t('what')}</div><p>${esc(strip(L(e.d)))}</p>`;
+ if(e.lesson){if(e.pts)h+=`<div class="xh">🔑 ${rtl()?'أهم النقاط':'Key points'}</div><ul>${e.pts.map(p=>`<li>${esc(L(p))}</li>`).join('')}</ul>`;
+  if(e.q)h+=`<div class="xh">❓ ${rtl()?'سؤال':'Question'}</div><p>${esc(L(e.q))}</p><details class="ans"><summary>${rtl()?'اضغط لترى الإجابة':'Tap to see the answer'}</summary><p>${esc(L(e.a))}</p></details>`;
+  h+=`<p style="margin-top:10px"><a class="exp2d" href="/interactive-books.html${rtl()?'':'?lang=en'}#${e.lesson.book}" data-l2d="${e.lesson.book}:${e.lesson.i}">🧪 ${rtl()?'افتح تجربة الدرس بالمؤشرات':'Open the lesson’s slider experiment'}</a></p>`;
+  const ess=PS.kids.map(k=>k.userData.part).filter(p=>p&&p.e);h+=`<div class="xh">🧪 ${t('try')}</div><ul>${ess.slice(0,2).map(p=>`<li>${rtl()?`شيل «${esc(L(p.n))}» من الصفحة وشوف وش يصير.`:`Remove the “${esc(L(p.n))}” and see what happens.`}</li>`).join('')}<li>${rtl()?'جرّب «ابنِها خطوة بخطوة».':'Try “Build it step by step”.'}</li></ul>`;return h}
  if(f&&e.out){h+=`<p>${rtl()?`المعادلة تحسب <b>${esc(L(sym(e.out).n))}</b> (<i>${htmlF(sym(e.out).d)}</i>) من: ${ins.map(k=>`<b>${esc(L(sym(k).n))}</b>`).join('، ')}.`:`It finds <b>${esc(L(sym(e.out).n))}</b> (<i>${htmlF(sym(e.out).d)}</i>) from ${ins.map(k=>`<b>${esc(L(sym(k).n))}</b>`).join(', ')}.`}</p>`;
   const rel=relations(e);if(rel.length)h+=`<div class="xh">📈 ${t('how')}</div><ul>${rel.map(x=>`<li>${x}</li>`).join('')}</ul>`;
   const r=evalEq(e,true)[e.out];h+=`<div class="xh">✍️ ${t('solve')}</div><ol><li>${rtl()?'اكتب المعادلة:':'Write the equation:'} <span class="fx">${htmlF(e.f)}</span></li><li>${rtl()?'عوّض بالقيم:':'Substitute the values:'} <span class="fx">${ins.map(k=>`${htmlF(sym(k).d)} = ${fmt(+v[k])}${sym(k).u?' '+esc(sym(k).u):''}`).join('  ·  ')}</span></li><li>${rtl()?'احسب:':'Calculate:'} <span class="fx"><b>${htmlF(sym(e.out).d)} = ${fmt(r)}${sym(e.out).u?' '+esc(sym(e.out).u):''}</b></span></li></ol>`}
  else h+=`<p class="mu">${rtl()?'هذي معادلة وصفية (تفاعل أو قانون عام) — اقرأ الرموز وشوف المجسم.':'This is a descriptive equation (a reaction or general law) — read the symbols and explore the model.'}</p>`;
  const ess=PS.kids.map(k=>k.userData.part).filter(p=>p&&p.e);h+=`<div class="xh">🧪 ${t('try')}</div><ul>${ess.slice(0,2).map(p=>`<li>${rtl()?`شيل «${esc(L(p.n))}» من الصفحة وشوف وش يصير للمعادلة.`:`Remove the “${esc(L(p.n))}” from the page and see what happens.`}</li>`).join('')}${f?`<li>${rtl()?'غيّر الأرقام في الحاسبة وراقب المجسم.':'Change the numbers and watch the model.'}</li>`:''}<li>${rtl()?'جرّب وضع «ابنِها خطوة بخطوة» وركّب المعادلة قطعة قطعة.':'Try “Build it step by step” and assemble the equation piece by piece.'}</li></ul>`;return h}
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-function texts(){document.documentElement.lang=lang;document.documentElement.dir=rtl()?'rtl':'ltr';$$('[data-t]').forEach(el=>el.textContent=t(el.dataset.t));$('#q').placeholder=t('search');$('#lang').textContent=rtl()?'EN':'عربي';$('#cnt').textContent=`${EQ.list.length.toLocaleString('en-US')} ${t('count')}`}
+function texts(){document.documentElement.lang=lang;document.documentElement.dir=rtl()?'rtl':'ltr';$$('[data-t]').forEach(el=>el.textContent=t(el.dataset.t));$('#q').placeholder=t('search');$('#lang').textContent=rtl()?'EN':'عربي';if(BK){$$('[data-t="title"]').forEach(el=>el.textContent=L(BK.n));const ne=LIST.length-LESSONS.length;$('#cnt').textContent=rtl()?`${LESSONS.length} دروس · ${ne.toLocaleString('en-US')} معادلة`:`${LESSONS.length} lessons · ${ne.toLocaleString('en-US')} equations`;document.title=L(BK.n)+' | '+(rtl()?'أكاديمية إيلان دول':'Eilan Doll Academy')}else $('#cnt').textContent=`${EQ.list.length.toLocaleString('en-US')} ${t('count')}`}
 function setLang(l){lang=l;try{localStorage.setItem('eb-lang',l)}catch(e){}K=kit(lang);texts();show(idx);resize();setMode(rig.mode)}
 
 /* search & index */
@@ -247,7 +264,7 @@ $('#showYes').addEventListener('change',e=>$('#consent').classList.toggle('hide'
 
 /* ---------- boot ---------- */
 async function boot(){try{await Promise.race([Promise.all([document.fonts.load('700 30px Tajawal'),document.fonts.load('30px Amiri')]),new Promise(r=>setTimeout(r,1500))])}catch(e){}
- buildList();texts();resize();const h=decodeURIComponent(location.hash.slice(1));let st=LIST.findIndex(e=>e.id===h);if(st<0){let sv='';try{sv=localStorage.getItem('eq-pos')||''}catch(e){}st=Math.max(0,LIST.findIndex(e=>e.id===sv))}
+ await loadLessons();buildList();texts();resize();const h=decodeURIComponent(location.hash.slice(1));let st=LIST.findIndex(e=>e.id===h);if(st<0){let sv='';try{sv=localStorage.getItem(POSK)||''}catch(e){}st=Math.max(0,LIST.findIndex(e=>e.id===sv))}
  const narrow=window.innerWidth<700;if(narrow)$('#panel').classList.add('closed');
  show(st);resize();setMode(narrow?'model':'book');rig.r=rig.tr+1.2;rig.ph=.5;$('#loading').classList.add('hide');requestAnimationFrame(loop);
  setTimeout(()=>{const h=$('#hint');h.classList.add('hide')},5000)}

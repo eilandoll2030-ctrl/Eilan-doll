@@ -85,6 +85,7 @@ button{background:none;border:0;cursor:pointer}
 .pexp .fx{direction:ltr;unicode-bidi:isolate;font-family:'Times New Roman',serif;font-style:italic;color:#14286f;display:inline-block}
 .pexp p{margin:4px 0}
 @media (max-width:899px){#tray{bottom:auto;top:100px}#dhint{top:auto;bottom:84px}}
+.ans{margin:4px 0 6px;background:#E3F1E7;border:1px solid #9cc8ad;border-radius:10px;padding:6px 10px}.ans summary{cursor:pointer;font-weight:700;color:#0F6B44}.exp2d{display:inline-block;padding:8px 14px;border-radius:999px;background:#0B1F5E;color:#fff;font-weight:700;text-decoration:none;font-size:13px}
 /* sheets */
 #veil{position:fixed;inset:0;z-index:20;background:rgba(5,6,10,.6);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 .sheet{position:fixed;z-index:21;left:50%;top:50%;transform:translate(-50%,-50%);width:min(640px,94vw);max-height:86vh;display:flex;flex-direction:column;background:#11142a;border:1px solid rgba(216,255,230,.14);border-radius:20px;box-shadow:0 30px 70px rgba(0,0,0,.6);overflow:hidden}
@@ -176,16 +177,16 @@ form select option{background:#11142a}
 window.addEventListener('DOMContentLoaded',()=>{const en=(localStorage.getItem('eb-lang')||'ar')==='en'||new URLSearchParams(location.search).get('lang')==='en';if(!en)return;const T={addH:'✍️ Do you have an equation?',addIntro:'If your equation is not in the Eilan book yet, add it here with your own way of explaining it. Eilan designs the interactive explanation; the idea and explanation stay yours.',lN:'Equation name *',lF:'Formula *',lS:'Field',lH:'Your explanation (what does it mean? what is each symbol? an example?) *',lBy:'Name to show in the book',lC:'Contact (optional — never shown)',addNote:'You will see your equation at the end of the book right away. Everyone else sees it after the Eilan team reviews it.',addBtnT:'Add my equation',ldT:'Opening the book…'};for(const k in T){const el=document.getElementById(k);if(el)el.textContent=T[k]}document.getElementById('lShow').innerHTML='<b>Do you want your name shown in the Eilan book?</b><br>If you agree, your name appears at the bottom of the equation page — “Idea & explanation: your name” — for everyone who opens the book.'});
 </script>
 <script type="importmap">{"imports":{"three":"/vendor/three/three.module.min.js"}}</script>
-<script src="/books/eq/core.js?v=2"></script>
-<script src="/books/eq/data-physics.js?v=2"></script>
-<script src="/books/eq/data-physics2.js?v=2"></script>
-<script src="/books/eq/data-chemistry.js?v=2"></script>
-<script src="/books/eq/data-math.js?v=2"></script>
-<script src="/books/eq/data-math2.js?v=2"></script>
-<script src="/books/eq/data-stats.js?v=2"></script>
-<script src="/books/eq/data-life.js?v=2"></script>
-<script src="/books/eq/data-more.js?v=2"></script>
-<script src="/books/eq/community.js?v=2"></script>
-<script type="module" src="/books/eq/app.js?v=2"></script>
+<script src="/books/eq/core.js?v=3"></script>
+<script src="/books/eq/data-physics.js?v=3"></script>
+<script src="/books/eq/data-physics2.js?v=3"></script>
+<script src="/books/eq/data-chemistry.js?v=3"></script>
+<script src="/books/eq/data-math.js?v=3"></script>
+<script src="/books/eq/data-math2.js?v=3"></script>
+<script src="/books/eq/data-stats.js?v=3"></script>
+<script src="/books/eq/data-life.js?v=3"></script>
+<script src="/books/eq/data-more.js?v=3"></script>
+<script src="/books/eq/community.js?v=3"></script>
+<script type="module" src="/books/eq/app.js?v=3"></script>
 </body>
 </html>

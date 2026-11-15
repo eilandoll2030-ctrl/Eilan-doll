@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>لو كنت… — إيلان دول</title>
+<meta name="robots" content="noindex">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&family=Lalezar&family=Reem+Kufi:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{--night:#07080C;--blue:#0B1F5E;--blue2:#1E44C8;--green:#07341F;--green2:#0F6B44;--purple:#251147;--purple2:#4A2A8F;--mint:#D8FFE6;--gold:#E2B44B;--gold2:#FFD97A}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{font-family:'Tajawal',system-ui,sans-serif;color:var(--mint);overflow:hidden;
+ background:radial-gradient(1px 1px at 12% 18%,#fff 98%,transparent) 0 0/140px 140px,radial-gradient(1px 1px at 62% 44%,#cfe 98%,transparent) 0 0/190px 190px,
+ radial-gradient(60% 50% at 85% 5%,rgba(74,42,143,.6),transparent 70%),radial-gradient(55% 50% at 5% 95%,rgba(15,107,68,.45),transparent 70%),
+ radial-gradient(70% 60% at 50% 55%,rgba(11,31,94,.7),transparent 80%),var(--night)}
+.screen{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;padding:24px;gap:18px;overflow-y:auto}
+.screen.active{display:flex;animation:fade .45s ease}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.glass{background:linear-gradient(145deg,rgba(255,255,255,.09),rgba(255,255,255,.02));border:1px solid rgba(216,255,230,.16);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-radius:26px;box-shadow:0 20px 60px rgba(0,0,0,.45)}
+.brand{position:fixed;top:16px;right:20px;display:flex;align-items:center;gap:8px;font-weight:700;font-size:13px;letter-spacing:1px;direction:ltr;opacity:.85;z-index:5}
+.brand svg{width:30px;height:30px}
+.title{font-family:'Lalezar',sans-serif;font-size:clamp(70px,13vw,150px);line-height:1;color:#fff;text-shadow:0 6px 0 var(--purple2),0 0 40px rgba(30,68,200,.6)}
+.title span{color:var(--gold2)}
+.sub{font-size:clamp(16px,2.2vw,21px);opacity:.9;text-align:center;max-width:560px;line-height:1.7}
+.btn{font-family:inherit;font-weight:900;font-size:19px;border:0;border-radius:18px;padding:15px 32px;cursor:pointer;color:var(--mint);background:linear-gradient(135deg,var(--purple2),var(--blue2));box-shadow:0 7px 0 var(--purple),0 14px 30px rgba(30,68,200,.35);transition:transform .1s}
+.btn:active{transform:translateY(4px);box-shadow:0 3px 0 var(--purple)}
+.btn.gold{background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--night);box-shadow:0 7px 0 #8a6a1e}
+.btn.ghost{background:rgba(255,255,255,.07);border:1px solid rgba(216,255,230,.2);box-shadow:0 6px 0 rgba(0,0,0,.4)}
+.btn.green{background:linear-gradient(135deg,var(--green2),#14935d);box-shadow:0 7px 0 var(--green)}
+.row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+
+/* setup */
+.setup{width:min(520px,94vw);padding:22px}
+.setup h3{color:var(--gold2);margin-bottom:12px;font-size:20px}
+.plist{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0;min-height:10px}
+.chip{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;background:rgba(74,42,143,.45);border:1px solid rgba(216,255,230,.2);font-weight:700}
+.chip b{cursor:pointer;opacity:.7}
+.add{display:flex;gap:8px}
+.add input{flex:1;font-family:inherit;font-size:18px;font-weight:700;color:var(--mint);background:rgba(7,8,12,.55);border:1px solid rgba(216,255,230,.22);border-radius:14px;padding:12px 14px;outline:none}
+.add input:focus{border-color:var(--gold2)}
+.add button{font-family:inherit;font-size:22px;font-weight:900;width:52px;border:0;border-radius:14px;background:linear-gradient(135deg,var(--green2),#14935d);color:var(--mint);cursor:pointer}
+.hint{font-size:14px;opacity:.7;line-height:1.7}
+
+/* cube */
+.turn{font-size:clamp(20px,3vw,28px);font-weight:900;margin-bottom:10px}
+.turn b{color:var(--gold2)}
+.scene{width:150px;height:150px;perspective:700px;margin:20px 0 56px}
+.cube{width:100%;height:100%;position:relative;transform-style:preserve-3d;transform:rotateX(-24deg) rotateY(36deg);transition:transform 1.3s cubic-bezier(.2,.8,.2,1)}
+.face{position:absolute;inset:0;border-radius:18px;display:grid;place-items:center;font-size:58px;border:2px solid rgba(255,255,255,.18);box-shadow:inset 0 0 30px rgba(0,0,0,.35)}
+.f1{background:linear-gradient(135deg,#1E44C8,#0B1F5E);transform:translateZ(75px)}
+.f2{background:linear-gradient(135deg,#4A2A8F,#251147);transform:rotateY(90deg) translateZ(75px)}
+.f3{background:linear-gradient(135deg,#0F6B44,#07341F);transform:rotateY(180deg) translateZ(75px)}
+.f4{background:linear-gradient(135deg,#4A2A8F,#1E44C8);transform:rotateY(-90deg) translateZ(75px)}
+.f5{background:linear-gradient(135deg,#FFD97A,#B8862A);transform:rotateX(90deg) translateZ(75px)}
+.f6{background:linear-gradient(135deg,#0F6B44,#1E44C8);transform:rotateX(-90deg) translateZ(75px)}
+.cube.idle{animation:idle 6s ease-in-out infinite}
+@keyframes idle{50%{transform:rotateX(-30deg) rotateY(60deg)}}
+
+/* card */
+.card{position:relative;width:min(620px,92vw);min-height:250px;padding:34px 28px 28px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px}
+.card.pop{animation:pop .5s cubic-bezier(.2,1.4,.4,1)}
+@keyframes pop{from{transform:scale(.6) rotate(-4deg);opacity:0}to{transform:none;opacity:1}}
+.card .emo{font-size:58px;filter:drop-shadow(0 8px 14px rgba(0,0,0,.5))}
+.card .q{font-family:'Reem Kufi','Tajawal',sans-serif;font-size:clamp(28px,5.4vw,46px);line-height:1.35;color:#fff}
+.card .q em{font-style:normal;color:var(--gold2)}
+.card .why{font-size:16px;opacity:.75}
+.num{position:absolute;top:14px;left:18px;font-family:'Lalezar';font-size:20px;opacity:.5}
+.twist{display:none;margin-top:6px;max-width:92%;line-height:1.6;padding:9px 16px;border-radius:14px;font-weight:900;font-size:16px;background:rgba(226,180,75,.16);border:1px dashed rgba(255,217,122,.6);color:var(--gold2)}
+.twist.show{display:inline-block;animation:pop .5s .25s both}
+.sig{position:absolute;bottom:10px;left:0;right:0;text-align:center;font-size:11px;letter-spacing:1px;opacity:.45}
+.prog{position:fixed;top:0;right:0;height:4px;background:linear-gradient(90deg,var(--gold2),var(--green2),var(--blue2));transition:width .4s;z-index:6}
+.close{position:fixed;top:14px;left:16px;width:44px;height:44px;border-radius:14px;border:1px solid rgba(216,255,230,.2);background:rgba(7,8,12,.6);color:var(--mint);font-size:18px;cursor:pointer;z-index:6}
+.xbtn{position:fixed;top:14px;left:16px;z-index:20;width:44px;height:44px;border-radius:14px;border:1px solid rgba(216,255,230,.2);background:rgba(7,8,12,.6);color:var(--mint);font-size:18px;cursor:pointer}
+.trial{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);z-index:20;font-weight:700;font-size:13px;padding:7px 14px;border-radius:999px;background:rgba(226,180,75,.18);border:1px solid rgba(255,217,122,.45);color:var(--gold2);white-space:nowrap}
+.end h2{font-family:'Lalezar';font-size:clamp(50px,9vw,96px);color:var(--gold2);text-shadow:0 6px 0 var(--purple2)}
+@media (max-height:700px){.scene{width:110px;height:110px;margin:12px 0 40px}.f1{transform:translateZ(55px)}.f2{transform:rotateY(90deg) translateZ(55px)}.f3{transform:rotateY(180deg) translateZ(55px)}.f4{transform:rotateY(-90deg) translateZ(55px)}.f5{transform:rotateX(90deg) translateZ(55px)}.f6{transform:rotateX(-90deg) translateZ(55px)}.face{font-size:42px}.card{min-height:200px}}
+</style>
+</head>
+<body>
+<div class="prog" id="prog" style="width:0"></div>
+<button class="xbtn" onclick="closeGame()" aria-label="إغلاق">✕</button>
+<div class="trial" id="trialPill" hidden>🎁 تجربة مجانية: أول ٣ أسئلة</div>
+<div class="brand"><svg viewBox="0 0 100 100"><polygon points="50,30 82,47 50,64 18,47" fill="#1E44C8"/><polygon points="18,47 50,64 50,96 18,79" fill="#07341F"/><polygon points="50,64 82,47 82,79 50,96" fill="#4A2A8F"/><polygon points="50,6 62,12 50,18 38,12" fill="#FFD97A"/><polygon points="38,12 50,18 50,28 38,22" fill="#B8862A"/><polygon points="50,18 62,12 62,22 50,28" fill="#E2B44B"/></svg>EILAN DOLL</div>
+
+<!-- START -->
+<section class="screen active" id="start">
+ <div class="scene"><div class="cube idle"><div class="face f1">🌍</div><div class="face f2">🎨</div><div class="face f3">🌿</div><div class="face f4">🪐</div><div class="face f5">✦</div><div class="face f6">🍓</div></div></div>
+ <h1 class="title">لو <span>كنت</span></h1>
+ <p class="sub">دحرج مكعب إيلان، واكتشف وش بتكون لو كنت لون أو بلد أو كوكب…<br>وقول <b>ليش!</b> لعبة تعارف وضحك للأهل والأصحاب.</p>
+ <button class="btn gold" onclick="show('setup')">يلا نلعب ✦</button>
+</section>
+
+<!-- SETUP -->
+<section class="screen" id="setup">
+ <div class="glass setup">
+  <h3>مين بيلعب؟</h3>
+  <div class="add"><input id="pname" placeholder="اكتب اسم اللاعب…" maxlength="16" onkeydown="if(event.key==='Enter')addP()"><button onclick="addP()">+</button></div>
+  <div class="plist" id="plist"></div>
+  <p class="hint">أضيفوا من ٢ إلى ٨ لاعبين، والدور يمشي عليكم بالترتيب. تقدرون تلعبون بدون أسماء بعد.</p>
+ </div>
+ <div class="row"><button class="btn ghost" onclick="show('start')">→ رجوع</button><button class="btn green" onclick="startGame()">ابدأ اللعب</button></div>
+</section>
+
+<!-- GAME -->
+<section class="screen" id="game">
+ <div class="turn" id="turn"></div>
+ <div class="scene"><div class="cube" id="cube"><div class="face f1">🌍</div><div class="face f2">🎨</div><div class="face f3">🌿</div><div class="face f4">🪐</div><div class="face f5">✦</div><div class="face f6">🍓</div></div></div>
+ <div class="glass card" id="card">
+  <span class="num" id="num"></span>
+  <div class="emo" id="emo">🎲</div>
+  <div class="q" id="q">دحرج المكعب!</div>
+  <div class="why" id="why">اضغط الزر تحت ويطلع لك سؤالك</div>
+  <div class="twist" id="twist"></div>
+  <div class="sig">إيلان دول · EILAN DOLL</div>
+ </div>
+ <div class="row"><button class="btn gold" id="roll" onclick="roll()">🎲 دحرج المكعب</button></div>
+</section>
+
+<!-- END -->
+<section class="screen end" id="end">
+ <h2>خلصت البطاقات!</h2>
+ <p class="sub">عرفتوا عن بعض أشياء جديدة؟ ✦<br>جربوها مرة ثانية، والترتيب بيتغيّر.</p>
+ <div class="row"><button class="btn gold" onclick="startGame()">العب مرة ثانية</button><button class="btn ghost" onclick="show('start')">الرئيسية</button></div>
+</section>
+
+<script>
+/* داخل موقع إيلان دول: تنفتح فوق الموقع وتسأل الموقع إذا كانت مفعّلة. برّا الموقع أو بدون تفعيل = أول ٣ أسئلة. */
+const HOST=(()=>{try{return window.parent!==window&&window.parent.arcUnlocked?window.parent:null}catch(e){return null}})();
+const FULL=!!(HOST&&HOST.arcUnlocked('lawkunt'));const TRIAL_N=3;
+function closeGame(){if(HOST&&HOST.efClose)HOST.efClose();else location.href='/';}
+function trialOver(){if(HOST&&HOST.efTrialEnd)HOST.efTrialEnd('lawkunt');else location.href='/';}
+if(!FULL)document.getElementById('trialPill').hidden=false;
+// [الإيموجي, الفئة] — السؤال: «لو كنت <الفئة>… وش بتكون؟»
+const Q=[
+ ["🗣️","لغة"],["🌍","بلد"],["🪐","شي في الفضاء"],["💭","شعور"],["🍓","فاكهة"],["🕰️","ساعة من اليوم"],["📅","شهر"],["☀️","يوم من الأسبوع"],
+ ["🍂","فصل من فصول السنة"],["🎨","لون"],["📦","غرض أو شي"],["📺","رسوم متحركة"],["🌿","شي من الطبيعة"],["🔢","رقم"],
+ ["🐾","حيوان"],["🍲","أكلة"],["☕","مشروب"],["🌸","ريحة أو عطر"],["🔊","صوت"],["🏙️","مدينة سعودية"],["📱","تطبيق في الجوال"],["🎵","نوع موسيقى"],
+ ["🎻","آلة موسيقية"],["⚽","رياضة"],["📚","مادة دراسية"],["💼","مهنة"],["📖","نوع كتاب"],["🎬","نوع فيلم"],["🎮","لعبة"],["🚗","سيارة"],
+ ["🍰","حلى"],["⛅","طقس"],["🌹","زهرة"],["💎","حجر كريم"],["🛋️","قطعة أثاث"],["🚀","وسيلة مواصلات"],["🔥","عنصر: نار، ماء، هواء، أو تراب"],["🏠","مكان في البيت"],
+ ["😊","إيموجي"],["⚡","قوة خارقة"],["🔤","حرف من الحروف"],["🌶️","بهار"],["🧥","قطعة ملابس"],["🗺️","مكان سياحي"]
+];
+const TW=["🔁 الكل يجاوب على نفس السؤال، واحد ورا الثاني!","🎯 قبل تجاوب: الباقين يخمّنون وش بيكون جوابك","👉 خلّ اللي على يمينك يجاوب","👈 خلّ اللي على يسارك يجاوب","🪞 خلّ اللي قدامك يجاوب","🧒 خلّ أصغر واحد في الجلسة يجاوب","👑 خلّ أكبر واحد في الجلسة يجاوب","⏱️ جاوب خلال ٥ ثواني بس!","🤝 اختار شخص يجاوب معك على نفس السؤال","🙊 جاوب بالإشارة بدون كلام، والباقين يخمّنون"];
+let P=[],order=[],i=0,turn=0,rx=-24,ry=36,busy=false;
+
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');if(id!=='game')document.getElementById('prog').style.width='0'}
+function drawP(){document.getElementById('plist').innerHTML=P.map((n,k)=>`<span class="chip">${n.replace(/[<>&]/g,'')}<b onclick="P.splice(${k},1);drawP()">✕</b></span>`).join('')}
+function addP(){const el=document.getElementById('pname');const v=el.value.trim();if(v&&P.length<8){P.push(v);drawP()}el.value='';el.focus()}
+function startGame(){order=Q.map((_,k)=>k).sort(()=>Math.random()-.5);i=0;turn=0;show('game');reset()}
+function who(){return P.length?P[turn%P.length]:null}
+function reset(){
+ const w=who();document.getElementById('turn').innerHTML=w?`دور: <b>${w.replace(/[<>&]/g,'')}</b>`:`بطاقة <b>${i+1}</b> من ${Q.length}`;
+ document.getElementById('emo').textContent='🎲';document.getElementById('q').textContent='دحرج المكعب!';
+ document.getElementById('why').textContent='اضغط الزر تحت ويطلع لك سؤالك';document.getElementById('twist').className='twist';
+ document.getElementById('num').textContent=String(i+1).padStart(2,'0')+' / '+Q.length;
+ const b=document.getElementById('roll');b.textContent='🎲 دحرج المكعب';b.onclick=roll;
+}
+function roll(){
+ if(busy)return;busy=true;beep(440,.06);
+ rx+=360+Math.floor(Math.random()*4)*90;ry+=720+Math.floor(Math.random()*4)*90;
+ document.getElementById('cube').style.transform=`rotateX(${rx}deg) rotateY(${ry}deg)`;
+ let t=0;const tk=setInterval(()=>{beep(300+Math.random()*300,.03);if(++t>8)clearInterval(tk)},120);
+ setTimeout(()=>{
+  const [e,c]=Q[order[i]];const card=document.getElementById('card');
+  card.classList.remove('pop');void card.offsetWidth;card.classList.add('pop');
+  document.getElementById('emo').textContent=e;
+  document.getElementById('q').innerHTML=`لو كنت <em>${c}</em>…<br>وش بتكون؟`;
+  document.getElementById('why').textContent='وقول ليش! 💬';
+  const tw=document.getElementById('twist');
+  if(Math.random()<.35){tw.textContent=TW[Math.floor(Math.random()*TW.length)];tw.className='twist show'}else tw.className='twist';
+  document.getElementById('prog').style.width=((i+1)/Q.length*100)+'%';
+  const b=document.getElementById('roll');b.textContent=i<Q.length-1?'التالي ←':'النهاية ✦';b.onclick=next;
+  beep(880,.1);setTimeout(()=>beep(1320,.12),100);busy=false;
+ },1350);
+}
+function next(){if(!FULL&&i>=TRIAL_N-1)return trialOver();if(i>=Q.length-1)return show('end');i++;turn++;reset()}
+let ac;function beep(f,d){try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator(),g=ac.createGain();o.frequency.value=f;o.type='triangle';g.gain.setValueAtTime(.12,ac.currentTime);g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+d);o.connect(g);g.connect(ac.destination);o.start();o.stop(ac.currentTime+d)}catch(e){}}
+</script>
+</body>
+</html>

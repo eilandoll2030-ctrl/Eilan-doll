@@ -133,7 +133,7 @@ function refreshModel(){const e=LIST[idx];if(!cur||!e)return;if(allNeeded())PS.d
   else if(o.isMesh&&o.material&&o.material.emissive&&!o.material.emissiveMap){const m=o.material;if(!dimMap.has(m))dimMap.set(m,m.emissiveIntensity);if(PS.stopped)m.emissiveIntensity=0;else if(m.emissiveIntensity===0&&e.sc!=='circuit')m.emissiveIntensity=dimMap.get(m)}});
  tray();updRes()}
 function paint(e){drawText(textMesh().material.map.image,e,idx);textMesh().material.map.needsUpdate=true;drawModelPage(modelMesh().material.map.image,e,idx);modelMesh().material.map.needsUpdate=true}
-function show(i,{flip=0}={}){if(!LIST.length)return;i=(i+LIST.length)%LIST.length;const e=LIST[i];
+function show(i,{flip=0}={}){if(!LIST.length)return;if(TOUR.on){stopSpeech();TOUR.on=false;tourUI()}i=(i+LIST.length)%LIST.length;const e=LIST[i];
  if(!flip||busy){idx=i;paint(e);mountModel(e);popAll(cur.root,1);ui();return}
  busy=true;popAll(cur.root,-1,380,()=>{doFlip(flip,()=>{idx=i;paint(e);mountModel(e);popAll(cur.root,1);ui();busy=false})})}
 function doFlip(dir,done){// dir>0 forward. RTL forward: left page turns over to the right.
@@ -271,5 +271,48 @@ async function boot(){try{await Promise.race([Promise.all([document.fonts.load('
  show(st);resize();setMode(narrow?'model':'book');rig.r=rig.tr+1.2;rig.ph=.5;$('#loading').classList.add('hide');requestAnimationFrame(loop);
  setTimeout(()=>{const h=$('#hint');h.classList.add('hide')},5000)}
 window.addEventListener('hashchange',()=>{const h=decodeURIComponent(location.hash.slice(1));const i=LIST.findIndex(e=>e.id===h);if(i>=0&&i!==idx)show(i,{flip:i>idx?1:-1})});
+
+/* ---------- Eilan voice tour: narrated, build-along explanation ---------- */
+const TOUR={on:false,steps:[],i:0,paused:false,timer:null,voice:null,gen:0};
+const synth=window.speechSynthesis||null;
+function pickVoice(){if(!synth)return null;const vs=synth.getVoices();const want=rtl()?'ar':'en';return vs.find(v=>v.lang&&v.lang.toLowerCase().startsWith(want+'-sa'))||vs.find(v=>v.lang&&v.lang.toLowerCase().startsWith(want))||null}
+if(synth&&synth.onvoiceschanged!==undefined)synth.onvoiceschanged=()=>{TOUR.voice=pickVoice()};
+const speakNum=v=>{const s=fmt(v);return s.replace('×10^',rtl()?' ضرب عشرة أُس ':' times ten to the ').replace(/,/g,'')};
+const nameOf=k=>L(sym(k).n);
+function buildTour(e){const ar=rtl(),S=[],nm=strip(L(e.n));const f=compile(e);
+ const hello=ar?[`يا هلا! أنا إيلان، وخلّنا نكتشف مع بعض سرّ «${nm}».`,`أهلين! جاهز؟ اليوم نفهم «${nm}» ونبنيها بأيدينا.`,`مرحبا! تعال نشوف «${nm}» كيف تشتغل من الداخل.`]:[`Hi! I’m Eilan — let’s discover the secret of “${nm}” together.`,`Hello! Ready? Today we understand “${nm}” and build it ourselves.`,`Welcome! Let’s see how “${nm}” works from the inside.`];
+ S.push({cam:'book',say:hello[idx%3]});
+ S.push({cam:'text',say:strip(L(e.d))});
+ if(f&&e.out)S.push({cam:'text',say:ar?`المعادلة تحسب ${nameOf(e.out)}، باستخدام ${e.ins.map(nameOf).join(' و ')}.`:`The equation finds the ${nameOf(e.out)}, using ${e.ins.map(nameOf).join(' and ')}.`});
+ if(e.pts)e.pts.slice(0,2).forEach(p=>S.push({cam:'text',say:L(p)}));
+ // build the model piece by piece
+ const kids=PS.kids;const needI=kids.map((k,i)=>i).filter(i=>need(kids[i].userData.part)),restI=kids.map((k,i)=>i).filter(i=>!need(kids[i].userData.part));
+ if(kids.length){S.push({cam:'model',act:()=>{clearModel()},say:ar?'الحين نبني المجسم قطعة قطعة. ركّز معي!':'Now let’s build the model piece by piece. Watch closely!'});
+  needI.forEach((i,n)=>{const pt=kids[i].userData.part;S.push({cam:'model',act:()=>{addPart(i);glow(i)},say:(ar?(n===0?'أول شي نحط ':'بعدها نحط ')+`«${L(pt.n)}»، ${L(pt.r)}.`:(n===0?'First we place ':'Next comes ')+`the ${L(pt.n)}: ${L(pt.r)}.`)})});
+  if(restI.length)S.push({cam:'model',act:()=>restI.forEach(i=>{if(PS.removed.has(i))addPart(i)}),say:ar?'ونكمّل باقي القطع الصغيرة.':'And we add the remaining small pieces.'});
+  S.push({cam:'model',say:ar?'شوف! كذا اكتملت، والمعادلة صارت تشتغل قدامك.':'Look! It’s complete, and the equation is running right in front of you.'})}
+ // show how the result changes
+ if(f&&e.out){const rel=relations(e).slice(0,2);const v=values(e);rel.forEach((r,j)=>{const k=e.ins.filter(k=>sym(k).u!=='°'&&sym(k).u!=='rad')[j];if(!k)return;const old=+v[k];S.push({cam:'model',act:()=>{values(e)[k]=old*2;ui();refreshModel()},after:()=>{values(e)[k]=old;ui();refreshModel()},say:r.replace(/[«»“”]/g,'')})});
+  const r=evalEq(e,true)[e.out];S.push({cam:'text',say:ar?`مثال: إذا كانت ${e.ins.map(k=>`${nameOf(k)} ${speakNum(+v[k])}`).join('، و ')}، تطلع ${nameOf(e.out)} ${speakNum(r)} ${sym(e.out).u||''}.`:`Example: with ${e.ins.map(k=>`${nameOf(k)} ${speakNum(+v[k])}`).join(', ')}, the ${nameOf(e.out)} is ${speakNum(r)} ${sym(e.out).u||''}.`})}
+ // challenge
+ if(e.q){S.push({cam:'text',say:(ar?'سؤال سريع: ':'Quick question: ')+L(e.q)});S.push({cam:'text',wait:4500,say:ar?'فكّر شوي…':'Think for a moment…'});S.push({cam:'text',say:(ar?'الإجابة: ':'The answer: ')+L(e.a)})}
+ else{const ess=kids.map(k=>k.userData.part).find(p=>p&&p.e);if(ess)S.push({cam:'model',say:ar?`تحدّي لك: اسحب «${L(ess.n)}» برّا الصفحة، وشوف وش يصير للمعادلة!`:`Your challenge: drag the ${L(ess.n)} off the page and see what happens to the equation!`})}
+ const bye=ar?['أحسنت! صرت تعرف السر 🎉 جرّب تغيّر الأرقام بنفسك.','رهيب! فهمتها صح؟ قلّب للصفحة الجاية ونكمل المغامرة.','برافو عليك! كذا صرت خبير فيها.']:['Well done — now you know the secret! Try changing the numbers yourself.','Awesome! Turn the page and let’s keep exploring.','Bravo — you’re an expert on this one now!'];
+ S.push({cam:'book',party:1,say:bye[idx%3]});return S}
+function clearModel(){PS.kids.forEach((k,i)=>{PS.removed.add(i);k.visible=false});PS.done=false;refreshModel()}
+function glow(i){const k=PS.kids[i];if(!k)return;tween(900,el=>{const q=K.clamp(el/900,0,1);const b=1+Math.sin(q*Math.PI*3)*.08*(1-q);k.scale.set(b,Math.max(.001,k.scale.y),b)},()=>k.scale.set(1,1,1))}
+function tourUI(){const b=$('#tour');if(!TOUR.on){b.classList.add('hide');$('#tray').style.visibility='';return}b.classList.remove('hide');$('#tray').style.visibility='hidden';const st=TOUR.steps[TOUR.i]||{};$('#tsay').textContent=st.say||'';$('#tdots').innerHTML=TOUR.steps.map((_,j)=>`<i class="${j<TOUR.i?'d':j===TOUR.i?'c':''}"></i>`).join('');$('#tpause').textContent=TOUR.paused?'▶':'⏸';$('#tnovoice').textContent=rtl()?'🔇 الصوت غير متاح في هذا المتصفح — الشرح مكتوب ويمشي تلقائيًا':'🔇 Voice isn’t available in this browser — the explanation is written and plays automatically';$('#tnovoice').classList.toggle('hide',!!(synth&&TOUR.voice))}
+function startTour(){if(!LIST[idx]||!cur)return;stopSpeech();TOUR.voice=pickVoice();TOUR.steps=buildTour(LIST[idx]);TOUR.i=0;TOUR.on=true;TOUR.paused=false;$('#panel').classList.add('closed');resize();runStep()}
+function stopSpeech(){TOUR.gen++;clearTimeout(TOUR.timer);if(synth)try{synth.cancel()}catch(e){}}
+function endTour(){const st=TOUR.steps[TOUR.i];if(st&&st.after)st.after();stopSpeech();TOUR.on=false;tourUI();setMode('book')}
+function runStep(){const st=TOUR.steps[TOUR.i];if(!st){endTour();return}const g=++TOUR.gen;if(st.cam)setMode(st.cam);if(st.act)try{st.act()}catch(e){console.error(e)}if(st.party)party();tourUI();
+ const next=()=>{if(g!==TOUR.gen||TOUR.paused)return;if(st.after)st.after();TOUR.i++;TOUR.timer=setTimeout(runStep,st.wait||450)};
+ const fallback=()=>{TOUR.timer=setTimeout(next,Math.max(2200,st.say.length*70))};
+ if(synth&&TOUR.voice){try{synth.cancel();const sp=st.say.replace(/[🎉✨…]/g,'').replace(/[«»()]/g,' ').replace(/×/g,rtl()?' ضرب ':' times ').replace(/÷/g,rtl()?' تقسيم ':' divided by ').replace(/=/g,rtl()?' يساوي ':' equals ').replace(/—/g,'، ');const u=new SpeechSynthesisUtterance(sp);u.voice=TOUR.voice;u.lang=TOUR.voice.lang;u.rate=rtl()?.95:1;u.pitch=1.05;let done=false;u.onend=()=>{if(!done){done=true;next()}};u.onerror=()=>{if(!done){done=true;next()}};synth.speak(u);TOUR.timer=setTimeout(()=>{if(!done&&!synth.speaking){done=true;next()}},st.say.length*120+4000)}catch(e){fallback()}}else fallback()}
+function party(){const box=document.createElement('div');box.className='party';const cols=['#1E44C8','#0F6B44','#4A2A8F','#C9A227','#D8FFE6','#C8463C'];for(let i=0;i<70;i++){const p=document.createElement('i');p.style.left=Math.random()*100+'%';p.style.background=cols[i%6];p.style.animationDelay=Math.random()*.6+'s';p.style.transform=`rotate(${Math.random()*360}deg)`;box.appendChild(p)}document.body.appendChild(box);setTimeout(()=>box.remove(),3200)}
+document.addEventListener('click',ev=>{const t2=ev.target.closest('[data-tour]');if(!t2)return;const a=t2.dataset.tour;
+ if(a==='start')startTour();else if(a==='stop')endTour();else if(a==='next'){const st=TOUR.steps[TOUR.i];if(st&&st.after)st.after();stopSpeech();TOUR.paused=false;TOUR.i++;runStep()}
+ else if(a==='pause'){if(TOUR.paused){TOUR.paused=false;runStep()}else{TOUR.paused=true;stopSpeech();tourUI()}}});
+
 window.__eq={PS,removePart,addPart,screenOf:i=>{const k=PS.kids[i];const v=new THREE.Vector3();k.getWorldPosition(v);v.y+=.03;v.project(camera);const r=cv.getBoundingClientRect();return{x:(v.x+1)/2*r.width+r.left,y:(1-v.y)/2*r.height+r.top}}};
 boot();

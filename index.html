@@ -16757,5 +16757,19 @@ window.RC=(function(){
 <form aria-hidden='true' enctype='multipart/form-data' hidden method='POST' name='design-request'><input type='hidden' name='form-name' value='design-request' />
 <input name="bot-field"><input name="order"><input name="kind"><input name="template"><input name="size"><input name="options"><input name="price"><input name="name"><input name="contact"><input name="account"><textarea name="details"></textarea><textarea name="plan"></textarea><input name="palette"><input type="file" name="attachment">
 </form>
+<!-- EILAN INTERACTIVE BOOKS (library: /interactive-books.html, books: /books/*.js) -->
+<style>
+.ib-promo{position:relative;overflow:hidden;display:grid;grid-template-columns:auto 1fr auto;gap:18px;align-items:center;padding:18px 20px;margin-bottom:18px;border-color:var(--bd2);background:linear-gradient(120deg,rgba(30,68,200,.18),rgba(15,107,68,.14) 55%,rgba(74,42,143,.18))}
+.ib-promo h3{font-size:19px;margin:4px 0}
+.ib-promo .ib-bk{width:64px;height:86px;border-radius:4px 10px 10px 4px;background:linear-gradient(150deg,#1E44C8,#0B1F5E);box-shadow:inset 5px 0 8px rgba(0,0,0,.35),0 10px 20px rgba(0,0,0,.45);display:grid;place-items:center;font-size:30px;transform:perspective(400px) rotateY(-18deg)}
+.ib-promo .ib-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.ib-promo .ib-tags span{font-size:12px;padding:3px 9px;border-radius:999px;background:rgba(216,255,230,.08);border:1px solid rgba(216,255,230,.14)}
+@media (max-width:560px){.ib-promo{grid-template-columns:1fr}.ib-promo .ib-bk{display:none}}
+</style>
+<script>
+{const _l=P.learn&&P.learn.html;if(_l)P.learn.html=r=>{const h=_l(r);const T=(a,e)=>(typeof gzL==='function'?gzL(a,e):a);const en=typeof isEN==='function'&&isEN();
+ const promo=`<div class="ib-promo card no-ei"><div class="ib-bk">📖</div><div><div class="eyebrow">NEW · INTERACTIVE LIBRARY</div><h3>📚 ${T('مكتبة الكتب التفاعلية','Interactive Books Library')}</h3><p class="mu" style="margin:0">${T('كتب ثلاثية الأبعاد تتقلب صفحاتها: شرح ومعادلات في صفحة، وتجربة تطلع من الصفحة وتتحكم فيها بنفسك.','3D books you flip: the lesson and its equation on one page, a live pop-up experiment on the other.')}</p><div class="ib-tags"><span>⚡ ${T('فيزياء','Physics')}</span><span>📐 ${T('رياضيات','Math')}</span><span>⚗️ ${T('كيمياء','Chemistry')}</span><span>🧬 ${T('أحياء','Biology')}</span><span>📊 ${T('إحصاء','Statistics')}</span><span>∑ ${T('+1400 معادلة','1400+ equations')}</span></div></div><div style="display:flex;flex-direction:column;gap:8px"><a class="btn g" href="/interactive-books.html${en?'?lang=en':''}">${T('افتح المكتبة','Open the library')}</a><a class="btn" href="/equations.html${en?'?lang=en':''}">∑ ${T('موسوعة المعادلات 3D','3D Equations Encyclopedia')}</a></div></div>`;
+ let i=h.indexOf('<section class="src-strip');if(i<0)i=h.indexOf('<div class="vl-promo');if(i<0)i=h.indexOf('<div class="level-card');return i>-1?h.slice(0,i)+promo+h.slice(i):promo+h}}
+</script>
+<!-- /EILAN INTERACTIVE BOOKS -->
 </body>
 </html>

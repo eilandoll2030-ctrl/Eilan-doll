@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>قولها بلهجتك — إيلان دول</title>
+<meta name="robots" content="noindex">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&family=Lalezar&family=Amiri:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{--night:#07080C;--blue:#0B1F5E;--blue2:#1E44C8;--green:#07341F;--green2:#0F6B44;--purple:#251147;--purple2:#4A2A8F;--mint:#D8FFE6;--gold:#E2B44B;--gold2:#FFD97A;--air:#3DFF9A}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{font-family:'Tajawal',system-ui,sans-serif;color:var(--mint);overflow:hidden;
+ background:repeating-linear-gradient(90deg,rgba(255,255,255,.018) 0 2px,transparent 2px 9px),
+ radial-gradient(60% 50% at 50% 0%,rgba(15,107,68,.45),transparent 70%),radial-gradient(60% 60% at 100% 100%,rgba(74,42,143,.5),transparent 70%),
+ radial-gradient(60% 60% at 0% 100%,rgba(30,68,200,.35),transparent 70%),var(--night)}
+.screen{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;padding:70px 20px 50px;gap:16px;overflow-y:auto}
+.screen.active{display:flex;animation:fade .45s ease}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.glass{background:linear-gradient(145deg,rgba(255,255,255,.08),rgba(255,255,255,.02));border:1px solid rgba(216,255,230,.16);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-radius:24px;box-shadow:0 20px 60px rgba(0,0,0,.45)}
+.brand{position:fixed;top:16px;right:20px;display:flex;align-items:center;gap:8px;font-weight:700;font-size:13px;letter-spacing:1px;direction:ltr;opacity:.85;z-index:5}
+.brand svg{width:30px;height:30px}
+.onair{display:inline-flex;align-items:center;gap:8px;font-weight:900;font-size:13px;letter-spacing:2px;direction:ltr;padding:6px 14px;border-radius:8px;border:1.5px solid var(--air);color:var(--air);text-shadow:0 0 10px var(--air);box-shadow:0 0 18px -4px var(--air)}
+.onair i{width:9px;height:9px;border-radius:50%;background:var(--air);box-shadow:0 0 10px var(--air);animation:blink 1.2s infinite}
+@keyframes blink{50%{opacity:.25}}
+.mic{width:110px;height:110px;border-radius:50%;display:grid;place-items:center;font-size:54px;background:radial-gradient(circle at 35% 30%,#4A2A8F,#251147 70%);border:2px solid rgba(255,217,122,.5);box-shadow:0 0 0 10px rgba(74,42,143,.18),0 0 0 22px rgba(74,42,143,.08),0 20px 50px rgba(0,0,0,.5)}
+.title{font-family:'Lalezar',sans-serif;font-size:clamp(56px,11vw,120px);line-height:1.05;color:#fff;text-align:center;text-shadow:0 5px 0 var(--green),0 0 34px rgba(61,255,154,.35)}
+.title span{color:var(--gold2)}
+.sub{font-size:clamp(15px,2.1vw,20px);opacity:.9;text-align:center;max-width:580px;line-height:1.75}
+.eq{display:flex;gap:5px;align-items:flex-end;height:44px}
+.eq b{width:7px;border-radius:4px;background:linear-gradient(var(--gold2),var(--green2));animation:eq 1s ease-in-out infinite}
+.eq b:nth-child(2){animation-delay:-.2s}.eq b:nth-child(3){animation-delay:-.5s}.eq b:nth-child(4){animation-delay:-.1s}.eq b:nth-child(5){animation-delay:-.7s}.eq b:nth-child(6){animation-delay:-.35s}.eq b:nth-child(7){animation-delay:-.6s}.eq b:nth-child(8){animation-delay:-.15s}.eq b:nth-child(9){animation-delay:-.45s}
+@keyframes eq{0%,100%{height:8px}50%{height:44px}}
+.eq.off b{animation:none;height:8px;opacity:.4}
+.btn{font-family:inherit;font-weight:900;font-size:18px;border:0;border-radius:16px;padding:14px 28px;cursor:pointer;color:var(--mint);background:linear-gradient(135deg,var(--purple2),var(--blue2));box-shadow:0 7px 0 var(--purple),0 14px 30px rgba(30,68,200,.35);transition:transform .1s}
+.btn:active{transform:translateY(4px);box-shadow:0 3px 0 var(--purple)}
+.btn.gold{background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--night);box-shadow:0 7px 0 #8a6a1e}
+.btn.ghost{background:rgba(255,255,255,.07);border:1px solid rgba(216,255,230,.2);box-shadow:0 6px 0 rgba(0,0,0,.4)}
+.btn.green{background:linear-gradient(135deg,var(--green2),#14935d);box-shadow:0 7px 0 var(--green)}
+.row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.setup{width:min(520px,94vw);padding:22px}
+.setup h3{color:var(--gold2);margin-bottom:12px;font-size:20px}
+.plist{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.chip{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;background:rgba(15,107,68,.4);border:1px solid rgba(216,255,230,.2);font-weight:700}
+.chip b{cursor:pointer;opacity:.7}
+.add{display:flex;gap:8px}
+.add input{flex:1;font-family:inherit;font-size:18px;font-weight:700;color:var(--mint);background:rgba(7,8,12,.55);border:1px solid rgba(216,255,230,.22);border-radius:14px;padding:12px 14px;outline:none}
+.add input:focus{border-color:var(--air)}
+.add button{font-family:inherit;font-size:22px;font-weight:900;width:52px;border:0;border-radius:14px;background:linear-gradient(135deg,var(--green2),#14935d);color:var(--mint);cursor:pointer}
+.hint{font-size:14px;opacity:.7;line-height:1.7}
+/* game */
+.board{position:fixed;top:14px;left:70px;right:150px;display:flex;gap:6px;flex-wrap:wrap;justify-content:center;z-index:4}
+.sc{font-size:13px;font-weight:700;padding:5px 11px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(216,255,230,.14)}
+.sc.on{border-color:var(--air);color:var(--air);box-shadow:0 0 12px -3px var(--air)}
+.sc em{font-style:normal;color:var(--gold2);margin-inline-start:4px}
+.turn{font-size:clamp(20px,3vw,26px);font-weight:900;display:flex;align-items:center;gap:10px}
+.turn b{color:var(--gold2)}
+.card{position:relative;width:min(640px,92vw);padding:30px 26px 34px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:14px;
+ background:linear-gradient(170deg,rgba(11,31,94,.6),rgba(7,8,12,.88));border:1px solid rgba(61,255,154,.3);border-radius:22px;box-shadow:0 0 0 6px rgba(7,8,12,.6),0 30px 70px -20px #000}
+.card.pop{animation:pop .45s cubic-bezier(.2,1.3,.4,1)}
+@keyframes pop{from{transform:translateY(16px) scale(.94);opacity:0}to{transform:none;opacity:1}}
+.card .lbl{font-size:13px;font-weight:700;letter-spacing:1px;opacity:.7}
+.card .w{font-family:'Amiri',serif;font-size:clamp(40px,8vw,72px);line-height:1.3;color:#fff;text-shadow:0 0 26px rgba(30,68,200,.6)}
+.card .num{position:absolute;top:14px;left:18px;font-family:'Lalezar';font-size:18px;opacity:.5}
+.dia{font-weight:900;font-size:17px;padding:10px 18px;border-radius:14px;background:rgba(61,255,154,.1);border:1px dashed rgba(61,255,154,.55);color:var(--air)}
+.dia.ch{background:rgba(226,180,75,.16);border-color:rgba(255,217,122,.65);color:var(--gold2);animation:pop .5s .2s both}
+.ex{display:none;font-size:15px;line-height:1.9;max-width:96%;padding:10px 14px;border-radius:12px;background:rgba(74,42,143,.25);border:1px solid rgba(216,255,230,.15)}
+.ex.show{display:block}
+.sig{position:absolute;bottom:10px;left:0;right:0;text-align:center;font-size:11px;letter-spacing:1px;opacity:.45}
+.prog{position:fixed;top:0;right:0;height:4px;background:linear-gradient(90deg,var(--gold2),var(--air),var(--blue2));transition:width .4s;z-index:6}
+.xbtn{position:fixed;top:14px;left:16px;z-index:20;width:44px;height:44px;border-radius:14px;border:1px solid rgba(216,255,230,.2);background:rgba(7,8,12,.6);color:var(--mint);font-size:18px;cursor:pointer}
+.trial{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);z-index:20;font-weight:700;font-size:13px;padding:7px 14px;border-radius:999px;background:rgba(226,180,75,.18);border:1px solid rgba(255,217,122,.45);color:var(--gold2);white-space:nowrap}
+.end h2{font-family:'Lalezar';font-size:clamp(46px,8vw,90px);color:var(--gold2);text-shadow:0 6px 0 var(--green)}
+.rank{width:min(420px,90vw);padding:14px 18px;display:flex;flex-direction:column;gap:8px}
+.rank div{display:flex;justify-content:space-between;font-weight:700;font-size:18px}
+.rank div:first-child{color:var(--gold2);font-size:22px}
+</style>
+</head>
+<body>
+<div class="prog" id="prog" style="width:0"></div>
+<div class="trial" id="trialPill" hidden>🎁 تجربة مجانية: أول ٣ بطاقات</div>
+<button class="xbtn" onclick="closeGame()" aria-label="إغلاق">✕</button>
+<div class="brand"><svg viewBox="0 0 100 100"><polygon points="50,30 82,47 50,64 18,47" fill="#1E44C8"/><polygon points="18,47 50,64 50,96 18,79" fill="#07341F"/><polygon points="50,64 82,47 82,79 50,96" fill="#4A2A8F"/><polygon points="50,6 62,12 50,18 38,12" fill="#FFD97A"/><polygon points="38,12 50,18 50,28 38,22" fill="#B8862A"/><polygon points="50,18 62,12 62,22 50,28" fill="#E2B44B"/></svg>EILAN DOLL</div>
+
+<!-- START -->
+<section class="screen active" id="start">
+ <span class="onair"><i></i>ON AIR</span>
+ <div class="mic">🎙️</div>
+ <h1 class="title">قولها <span>بلهجتك</span></h1>
+ <div class="eq"><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b></div>
+ <p class="sub">كلمات وجمل بالفصحى تختلف من لهجة للثانية… قولها بلهجتك!<br>وأحيانًا يطلع لك تحدّي: قلها بلهجة ثانية 😄</p>
+ <button class="btn gold" onclick="startGame()">🎙️ يلا نبدأ</button>
+</section>
+
+
+<!-- GAME -->
+<section class="screen" id="game">
+ <div class="turn" id="turn"></div>
+ <div class="eq" id="eq"><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b></div>
+ <div class="card" id="card">
+  <span class="num" id="num"></span>
+  <span class="lbl">بالفصحى:</span>
+  <div class="w" id="w"></div>
+  <div class="dia" id="dia"></div>
+  <div class="ex" id="ex"></div>
+  <div class="sig">إيلان دول · EILAN DOLL</div>
+ </div>
+ <div class="row">
+  <button class="btn ghost" id="exb" onclick="document.getElementById('ex').classList.toggle('show')">👀 أمثلة</button>
+  <button class="btn gold" onclick="next()">التالي ←</button>
+ </div>
+</section>
+
+<!-- END -->
+<section class="screen end" id="end">
+ <h2>انتهى البث! 🎙️</h2>
+ <p class="sub">مين كانت لهجته الأحلى؟ 😄<br>جربوها مرة ثانية، والترتيب بيتغيّر.</p>
+ <div class="row"><button class="btn gold" onclick="startGame()">العب مرة ثانية</button><button class="btn ghost" onclick="show('start')">الرئيسية</button></div>
+</section>
+
+<script>
+/* داخل موقع إيلان دول: تنفتح فوق الموقع وتسأل الموقع إذا كانت مفعّلة. برّا الموقع أو بدون تفعيل = أول ٣ بطاقات. */
+const HOST=(()=>{try{return window.parent!==window&&window.parent.arcUnlocked?window.parent:null}catch(e){return null}})();
+const FULL=!!(HOST&&HOST.arcUnlocked('qulha'));const TRIAL_N=3;
+function closeGame(){if(HOST&&HOST.efClose)HOST.efClose();else location.href='/';}
+function trialOver(){if(HOST&&HOST.efTrialEnd)HOST.efTrialEnd('qulha');else location.href='/';}
+
+// [الفصحى, أمثلة من اللهجات (للمقدّم فقط، وممكن يكون عندكم غيرها)]
+if(!FULL)document.getElementById('trialPill').hidden=false;
+const W=[
+ ["الآن","سعودي: الحين · حجازي: دحين · مصري: دلوقتي · شامي: هلّق · عراقي: هسّه · مغربي: دابا"],
+ ["كثيرًا جدًا","سعودي: مرّة · كويتي: وايد · مصري: قوي · شامي: كتير · عراقي: هوايه · مغربي: بزاف"],
+ ["ماذا؟","سعودي: وش · حجازي: إيش · مصري: إيه · شامي: شو · عراقي: شنو · مغربي: آش"],
+ ["جيّد","سعودي: زين · مصري: كويس · شامي: منيح · تونسي: باهي · مغربي: مزيان"],
+ ["لا يوجد","خليجي: مافي · مصري: مفيش · عراقي: ماكو · مغربي: ماكاينش"],
+ ["أريد","سعودي: أبغى / أبي · مصري: عايز · شامي: بدّي · مغربي: بغيت"],
+ ["طفل","سعودي: بزر · كويتي: ياهل · مصري: عيّل · مغربي: دري"],
+ ["أنف","خليجي: خشم · مصري: مناخير · شامي: منخار · مغربي: نيف"],
+ ["طماطم","سعودي: طماط · مصري: أوطة · شامي: بندورة · مغربي: مطيشة"],
+ ["حذاء","خليجي: نعال / جوتي · مصري: جزمة · شامي: صبّاط · عراقي: قندرة"],
+ ["ملعقة","عراقي وكويتي: خاشوقة · مصري: معلقة · مغربي: مغرفة"],
+ ["بنطال","خليجي: بنطلون · عراقي: بنطرون · مغربي: سروال"],
+ ["سيارة","كويتي: موتر · مصري: عربية · تونسي: كرهبة · مغربي: طوموبيل"],
+ ["طاولة","خليجي: طاولة · مصري: ترابيزة · عراقي: ميز · مغربي: طبلة"],
+ ["نافذة","خليجي: دريشة · مصري وشامي: شبّاك · مغربي: سرجم"],
+ ["ثلاجة","خليجي: ثلاجة · مصري: تلاجة · شامي: برّاد · مغربي: فريجيدير"],
+ ["دجاجة","كويتي: دياية · مصري: فرخة · شامي: جاجة"],
+ ["خبز","خليجي: خبز · مصري: عيش"],
+ ["ماء","سعودي: موية · مصري: ميّة · شامي: مي · كويتي: ماي"],
+ ["ملابس","سعودي ومصري: هدوم · شامي: تياب · مغربي: حوايج"],
+ ["غرفة","مصري: أوضة · شامي: غرفة · مغربي: بيت"],
+ ["مقلاة","سعودي: طاوة · مصري: طاسة · شامي: مقلاية"],
+ ["مكنسة","سعودي: مكنسة · مصري: مقشّة · مغربي: شطّابة"],
+ ["خزانة الملابس","خليجي: كبت / دولاب · مصري: دولاب · مغربي: ماريو"],
+ ["الأمس","سعودي: أمس · مصري: امبارح · شامي: مبارح · عراقي: البارحة"],
+ ["غدًا","سعودي: بكرة · كويتي: باجر · مغربي: غدّا"],
+ ["هكذا","سعودي: كذا · مصري: كده · شامي: هيك · عراقي: هيچ · مغربي: هكّا"],
+ ["هناك","شامي: هونيك · مغربي: لهيه"],
+ ["حقيبة","سعودي: شنطة · عراقي: جنطة · مغربي: صاك"],
+ ["انظر","سعودي: شوف / طالع · مصري: بص · عراقي: باوع"],
+ ["ما بك؟","سعودي: وش فيك؟ · مصري: مالك؟ · شامي: شو بك؟ · عراقي: شبيك؟"],
+ ["انتظرني","مصري: استناني · شامي: انطرني · مغربي: تسنّاني"],
+ ["كيف حالك؟","سعودي: وش لونك؟ · مصري: إزيك؟ · عراقي: شلونك؟ · مغربي: لاباس؟"],
+ ["لماذا؟","سعودي: ليش · مصري: ليه · مغربي: علاش"],
+ ["أين؟","سعودي: وين · مصري ومغربي: فين"],
+ ["متى؟","سعودي: متى · مصري: إمتى · عراقي: شوكت · مغربي: فوقاش"],
+ ["فضولي","سعودي: لقّاف · شامي: حشري"],
+ ["كثير الكلام","سعودي: هذرة · مصري: رغّاي"],
+ // جُمل صعبة: كل كلمة فيها تختلف من لهجة للثانية
+ ["ماذا تريد الآن؟",""],["لا أعرف أين ذهب",""],["أين وضعتَ الحقيبة؟",""],["انظر إلى ذلك الطفل الصغير",""],
+ ["لماذا أنت غاضب هكذا؟",""],["ماذا حدث بالأمس؟",""],["لا يوجد خبز في المطبخ",""],["أعطني الملعقة من الثلاجة",""],
+ ["هذا جميل جدًا",""],["تعالَ إلى هنا بسرعة",""],["اترك هذا الشيء",""],["كيف حالك يا صديقي؟",""],
+ ["أنا متعب كثيرًا اليوم",""],["ربما يأتي لاحقًا",""],["متى ستعود إلى البيت؟",""]
+];
+const DIA=["المصرية 🇪🇬","الشامية","الكويتية 🇰🇼","العراقية 🇮🇶","المغربية 🇲🇦","السودانية 🇸🇩","اليمنية 🇾🇪","الحجازية","النجدية","الجنوبية","الإماراتية 🇦🇪","بصوت مذيع أخبار 📺","بصوت جدّتك 👵","وأنت تهمس 🤫"];
+let order=[],i=0;
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');if(id!=='game')document.getElementById('prog').style.width='0'}
+function startGame(){order=W.map((_,k)=>k).sort(()=>Math.random()-.5);i=0;show('game');render()}
+function render(){
+ document.getElementById('turn').innerHTML=`🎙️ بطاقة <b>${i+1}</b> من ${W.length}`;
+ const c=document.getElementById('card');c.classList.remove('pop');void c.offsetWidth;c.classList.add('pop');
+ document.getElementById('w').textContent=W[order[i]][0];
+ const ex=W[order[i]][1],hx=document.getElementById('ex');hx.textContent=ex?'أمثلة: '+ex:'';hx.classList.remove('show');document.getElementById('exb').style.display=ex?'':'none';
+ const d=document.getElementById('dia');
+ if(Math.random()<.3){const x=DIA[Math.floor(Math.random()*DIA.length)];d.className='dia ch';d.textContent=(/^[بو]/.test(x)?'🎲 تحدّي: قلها ':'🎲 تحدّي: قلها باللهجة ')+x;}
+ else{d.className='dia';d.textContent='🗣️ قلها بلهجتك!'}
+ document.getElementById('num').textContent=String(i+1).padStart(2,'0')+' / '+W.length;
+ document.getElementById('prog').style.width=((i+1)/W.length*100)+'%';
+ beep(660,.06);
+}
+function next(){
+ if(!FULL&&i>=TRIAL_N-1)return trialOver();
+ if(i>=W.length-1)return show('end');i++;render()}
+let ac;function beep(f,d){try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator(),g=ac.createGain();o.frequency.value=f;o.type='triangle';g.gain.setValueAtTime(.12,ac.currentTime);g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+d);o.connect(g);g.connect(ac.destination);o.start();o.stop(ac.currentTime+d)}catch(e){}}
+</script>
+</body>
+</html>

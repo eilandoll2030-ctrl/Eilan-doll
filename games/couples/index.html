@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>بيني وبينك — إيلان دول</title>
+<meta name="robots" content="noindex">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&family=Aref+Ruqaa:wght@700&family=El+Messiri:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{--night:#07080C;--purple:#251147;--purple2:#4A2A8F;--wine:#4a0f2e;--rose:#FF7AA2;--gold:#E2B44B;--gold2:#FFD97A;--mint:#D8FFE6;--cream:#FFF4E2}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{font-family:'Tajawal',system-ui,sans-serif;color:var(--cream);overflow:hidden;
+ background:radial-gradient(70% 45% at 50% 108%,rgba(255,170,80,.32),transparent 70%),radial-gradient(60% 50% at 90% 0%,rgba(74,42,143,.55),transparent 70%),
+ radial-gradient(60% 50% at 0% 30%,rgba(120,20,70,.45),transparent 70%),linear-gradient(170deg,#1a0820,#07040c)}
+.sparks span{position:fixed;bottom:-10px;width:4px;height:4px;border-radius:50%;background:var(--gold2);box-shadow:0 0 8px 2px rgba(255,200,100,.7);opacity:0;animation:spark linear infinite;pointer-events:none}
+@keyframes spark{0%{transform:translate(0,0);opacity:0}10%{opacity:1}100%{transform:translate(var(--x),-80vh);opacity:0}}
+.screen{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;padding:70px 20px 50px;gap:16px;overflow-y:auto}
+.screen.active{display:flex;animation:fade .5s ease}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.brand{position:fixed;top:16px;right:20px;display:flex;align-items:center;gap:8px;font-weight:700;font-size:13px;letter-spacing:1px;direction:ltr;opacity:.85;z-index:5}
+.brand svg{width:30px;height:30px}
+.xbtn{position:fixed;top:14px;left:16px;z-index:20;width:44px;height:44px;border-radius:14px;border:1px solid rgba(255,244,226,.2);background:rgba(7,4,12,.6);color:var(--cream);font-size:18px;cursor:pointer}
+.badge{display:inline-flex;gap:8px;align-items:center;font-weight:900;font-size:13px;padding:6px 14px;border-radius:999px;border:1px solid rgba(255,122,162,.6);color:var(--rose);background:rgba(255,122,162,.08)}
+.candle{position:relative;width:34px;height:70px;margin-top:10px}
+.candle::before{content:"";position:absolute;bottom:0;left:4px;width:26px;height:46px;border-radius:6px 6px 4px 4px;background:linear-gradient(90deg,#f3e2c4,#fff7e8,#e6d0aa)}
+.candle::after{content:"";position:absolute;bottom:44px;left:9px;width:16px;height:26px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:radial-gradient(circle at 50% 70%,#fff 0 20%,#FFD97A 40%,#ff8a3d 75%,transparent 76%);filter:drop-shadow(0 0 12px #ffb35c);animation:flick 1.6s ease-in-out infinite;transform-origin:50% 100%}
+@keyframes flick{25%{transform:scale(.92,1.06) rotate(-3deg)}50%{transform:scale(1.04,.95) rotate(2deg)}75%{transform:scale(.97,1.03) rotate(-1deg)}}
+.title{font-family:'Aref Ruqaa',serif;font-size:clamp(66px,12vw,132px);line-height:1.1;color:#fff;text-align:center;text-shadow:0 0 30px rgba(255,122,162,.55),0 4px 0 var(--wine)}
+.title span{color:var(--gold2)}
+.sub{font-size:clamp(15px,2.1vw,20px);opacity:.92;text-align:center;max-width:580px;line-height:1.8}
+.btn{font-family:inherit;font-weight:900;font-size:18px;border:0;border-radius:16px;padding:14px 28px;cursor:pointer;color:#fff;background:linear-gradient(135deg,#9b1d50,var(--purple2));box-shadow:0 7px 0 var(--wine),0 14px 30px rgba(155,29,80,.35);transition:transform .1s}
+.btn:active{transform:translateY(4px);box-shadow:0 3px 0 var(--wine)}
+.btn.gold{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#2a0c18;box-shadow:0 7px 0 #8a6a1e}
+.btn.ghost{background:rgba(255,255,255,.07);border:1px solid rgba(255,244,226,.2);box-shadow:0 6px 0 rgba(0,0,0,.4)}
+.btn:disabled{opacity:.35;pointer-events:none}
+.row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.rules{max-width:520px;padding:16px 22px;border-radius:20px;background:rgba(255,255,255,.05);border:1px solid rgba(255,244,226,.14);font-size:15px;line-height:1.9}
+.rules b{color:var(--gold2)}
+/* game */
+.top{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:center}
+.side{display:flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;background:rgba(255,255,255,.05);border:1px solid rgba(255,244,226,.14);font-weight:900;transition:.3s}
+.side.on{border-color:var(--gold2);box-shadow:0 0 18px -4px var(--gold2);background:rgba(226,180,75,.12)}
+.side small{font-weight:700;opacity:.75;font-size:12px}
+.lvl{font-weight:900;font-size:14px;padding:6px 14px;border-radius:999px}
+.l1{background:rgba(255,215,160,.14);color:#ffd7a0}.l2{background:rgba(255,122,162,.16);color:var(--rose)}.l3{background:rgba(200,40,90,.28);color:#ff9ab8}.l4{background:linear-gradient(90deg,#9b1d50,#4A2A8F);color:#fff}
+.card{position:relative;width:min(640px,92vw);min-height:260px;padding:44px 28px 40px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;
+ border-radius:26px;background:linear-gradient(165deg,rgba(74,15,46,.92),rgba(26,8,32,.95));border:1.5px solid rgba(255,217,122,.55);
+ box-shadow:0 0 0 7px rgba(26,8,32,.7),0 0 0 8px rgba(255,217,122,.25),0 30px 80px -20px #000}
+.card.pop{animation:pop .55s cubic-bezier(.2,1.3,.4,1)}
+@keyframes pop{from{transform:rotateY(80deg) scale(.9);opacity:0}to{transform:none;opacity:1}}
+.card::before,.card::after{content:"♥";position:absolute;font-size:18px;color:var(--gold2);opacity:.55}
+.card::before{top:14px;right:18px}.card::after{bottom:14px;left:18px}
+.card .q{font-family:'El Messiri','Tajawal',sans-serif;font-size:clamp(25px,4.8vw,38px);line-height:1.6;color:#fff}
+.card .kind{font-size:14px;font-weight:900;color:var(--gold2)}
+.card .num{position:absolute;top:14px;left:20px;font-size:14px;font-weight:700;opacity:.5}
+.sig{position:absolute;bottom:12px;left:0;right:0;text-align:center;font-size:11px;letter-spacing:1px;opacity:.45}
+.prog{position:fixed;top:0;right:0;height:4px;background:linear-gradient(90deg,var(--gold2),var(--rose),var(--purple2));transition:width .4s;z-index:6}
+.trial{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);z-index:20;font-weight:700;font-size:13px;padding:7px 14px;border-radius:999px;background:rgba(226,180,75,.18);border:1px solid rgba(255,217,122,.45);color:var(--gold2);white-space:nowrap}
+.end h2{font-family:'Aref Ruqaa',serif;font-size:clamp(50px,9vw,96px);color:var(--gold2);text-shadow:0 0 24px rgba(255,122,162,.5)}
+</style>
+</head>
+<body>
+<div class="sparks" id="sparks"></div>
+<div class="prog" id="prog" style="width:0"></div>
+<div class="trial" id="trialPill" hidden>🎁 تجربة مجانية: أول ٣ بطاقات</div>
+<button class="xbtn" onclick="closeGame()" aria-label="إغلاق">✕</button>
+<div class="brand"><svg viewBox="0 0 100 100"><polygon points="50,30 82,47 50,64 18,47" fill="#1E44C8"/><polygon points="18,47 50,64 50,96 18,79" fill="#07341F"/><polygon points="50,64 82,47 82,79 50,96" fill="#4A2A8F"/><polygon points="50,6 62,12 50,18 38,12" fill="#FFD97A"/><polygon points="38,12 50,18 50,28 38,22" fill="#B8862A"/><polygon points="50,18 62,12 62,22 50,28" fill="#E2B44B"/></svg>EILAN DOLL</div>
+
+<section class="screen active" id="start">
+ <span class="badge">💍 للمتزوجين فقط</span>
+ <div class="candle"></div>
+ <h1 class="title">بيني <span>وبينك</span></h1>
+ <p class="sub">٤٠ سؤال وتحدّي لزوجين… تبدأ دافية وتصير جريئة شوي شوي 🔥<br>طفّوا الجوالات، وولّعوا شمعة، وابدؤوا.</p>
+ <div class="rules">
+  💜 و 💛 = أنتم الاثنين، والدور يمشي بينكم.<br>
+  لكل واحد <b>٢ جوكر 🃏</b> يتخطّى فيهم أي سؤال ما يبي يجاوبه.<br>
+  المستويات: <b>دافي ← رومانسي ← جريء ← جريء جدًا 🔥</b>
+ </div>
+ <button class="btn gold" onclick="startGame()">🕯️ نبدأ؟</button>
+</section>
+
+<section class="screen" id="game">
+ <div class="top">
+  <div class="side" id="s0">💜 <small id="j0"></small></div>
+  <span class="lvl" id="lvl"></span>
+  <div class="side" id="s1">💛 <small id="j1"></small></div>
+ </div>
+ <div class="card" id="card">
+  <span class="num" id="num"></span>
+  <span class="kind" id="kind"></span>
+  <div class="q" id="q"></div>
+  <div class="sig">إيلان دول · EILAN DOLL</div>
+ </div>
+ <div class="row">
+  <button class="btn ghost" id="jk" onclick="joker()">🃏 جوكر</button>
+  <button class="btn gold" onclick="next()">التالي ←</button>
+ </div>
+</section>
+
+<section class="screen end" id="end">
+ <h2>تصبحون على حب 🤍</h2>
+ <p class="sub">خلصت الأسئلة… والسوالف لسا ما خلصت 😉<br>العبوها مرة ثانية، والترتيب بيتغيّر.</p>
+ <div class="row"><button class="btn gold" onclick="startGame()">مرة ثانية</button><button class="btn ghost" onclick="show('start')">الرئيسية</button></div>
+</section>
+
+<script>
+const HOST=(()=>{try{return window.parent!==window&&window.parent.arcUnlocked?window.parent:null}catch(e){return null}})();
+const FULL=!!(HOST&&HOST.arcUnlocked('couples'));
+const TRIAL_N=3;
+if(!FULL)document.getElementById('trialPill').hidden=false;
+function closeGame(){if(HOST&&HOST.efClose)HOST.efClose();else location.href='/';}
+function trialOver(){if(HOST&&HOST.efTrialEnd)HOST.efTrialEnd('couples');else location.href='/';}
+
+// [المستوى 1-4, نوع البطاقة, النص]  — صياغة تنفع للزوج والزوجة
+const Q=[
+ [1,'💬 سؤال','وش أول شي لفت انتباهك فيّ؟'],
+ [1,'💬 سؤال','أي لحظة بيننا ودّك ترجع لها؟'],
+ [1,'💬 سؤال','وش الأغنية اللي تذكّرك فيني؟'],
+ [1,'💬 سؤال','لو نسافر بكرة لحالنا… وين الوجهة؟'],
+ [1,'💬 سؤال','وش أكثر عادة صغيرة منّي تذوّبك؟'],
+ [1,'💬 سؤال','وش اللقب اللي ودّك أناديك فيه دايم؟'],
+ [1,'💬 سؤال','وش أحلى هدية جتك منّي؟ وليش؟'],
+ [1,'💬 سؤال','لو نعيد يوم زواجنا… وش الشي اللي ودّك نغيّره؟'],
+ [1,'💬 سؤال','وش الأكلة اللي ودّك نطبخها مع بعض؟'],
+ [1,'💬 سؤال','وش أكثر شي يضحّكك فيني؟'],
+ [2,'💞 رومانسي','وش الكلمة اللي لو انقالت لك الحين يطير قلبك؟'],
+ [2,'💞 رومانسي','متى آخر مرة قلبك دق بسببي؟'],
+ [2,'💞 رومانسي','وش أكثر لبس يعجبك عليّ؟'],
+ [2,'💞 رومانسي','ليلة كاملة بدون جوالات… وش ودّك نسوي فيها؟'],
+ [2,'💞 رومانسي','وش الشي اللي ودّك أسويه لك أكثر؟'],
+ [2,'💞 رومانسي','وش أحلى رسالة وصلتك منّي؟'],
+ [2,'💞 رومانسي','وش أكثر عطر يعجبك عليّ؟'],
+ [2,'💞 رومانسي','لو الوقت يوقف في لحظة وحدة معي… وش هي؟'],
+ [2,'💞 رومانسي','وش الموقف اللي كانت غيرتك عليّ فيه في أعلى درجاتها؟'],
+ [2,'💞 رومانسي','وش الشي اللي ما انقال من زمان… وودّك ينقال الحين؟'],
+ [3,'🔥 جريء','وش أكثر شي يجذبك فيني… ولا عمره انقال؟'],
+ [3,'🔥 جريء','ليلة رومانسية من تخطيطك بالكامل… وش تفاصيلها؟'],
+ [3,'🔥 جريء','وش أجرأ مفاجأة ودّك أسويها لك؟'],
+ [3,'🔥 جريء','تقييم آخر بوسة بيننا من ١٠؟ 😏'],
+ [3,'🔥 جريء','وش الشي فيني اللي ينسّيك الدنيا كلها؟'],
+ [3,'🔥 جريء','وش أكثر نظرة منّي تربكك؟'],
+ [3,'🔥 جريء','وش أكثر مكان في البيت يذكّرك بلحظة حلوة بيننا؟'],
+ [3,'🔥 جريء','لو نرجع لأول أسبوع زواج… وش أول شي ودّك نعيده؟'],
+ [3,'🔥 جريء','وش الكلمة اللي تذوّبك لو انقالت بصوت واطي؟'],
+ [3,'🔥 جريء','وش الشي اللي ودّك أكون أجرأ فيه معك؟'],
+ [4,'🔥🔥 جريء جدًا','وش الشي في شكلي اللي ما تشبع منه عيونك؟'],
+ [4,'🔥🔥 جريء جدًا','أمنية وحدة بيننا الليلة… وش هي؟'],
+ [4,'🔥🔥 اعتراف','حلم كنت أنا فيه… وما انحكى لي للحين؟'],
+ [4,'🔥🔥 اعتراف','وش الشي اللي ودّك نجربه مع بعض لأول مرة؟'],
+ [4,'🎯 تحدّي','عشر ثواني تطالعون بعض في العيون… بدون ضحك!'],
+ [4,'🎯 تحدّي','همسة في الأذن بأحلى كلمة 🤫'],
+ [4,'🎯 تحدّي','رقصة سلو ٣٠ ثانية على أغنيتكم 💃'],
+ [4,'🎯 تحدّي','رسالة غزل الحين على الجوال… والثاني يقراها بصوت عالي 📱'],
+ [4,'🎯 تحدّي','وصف الثاني بثلاث كلمات بس… وكلها غزل'],
+ [4,'🎯 تحدّي','حضن طويل لين يخلص العد للعشرة 🤍']
+];
+const LV={1:['دافي','l1'],2:['رومانسي','l2'],3:['جريء 🔥','l3'],4:['جريء جدًا 🔥🔥','l4']};
+let order=[],i=0,J=[2,2];
+const sp=document.getElementById('sparks');
+for(let k=0;k<16;k++){const e=document.createElement('span');e.style.left=Math.random()*100+'vw';e.style.setProperty('--x',(Math.random()*120-60)+'px');e.style.animationDuration=(7+Math.random()*7)+'s';e.style.animationDelay=(-Math.random()*12)+'s';sp.appendChild(e)}
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');if(id!=='game')document.getElementById('prog').style.width='0'}
+function startGame(){
+ // نفس المستوى يتخلط، والمستويات تبقى بالترتيب (من دافي إلى جريء جدًا)
+ order=[];for(const L of [1,2,3,4]){const g=Q.map((q,k)=>q[0]===L?k:-1).filter(k=>k>=0).sort(()=>Math.random()-.5);order.push(...g)}
+ i=0;J=[2,2];show('game');render()}
+function render(){
+ const [L,kind,q]=Q[order[i]],t=i%2;
+ const c=document.getElementById('card');c.classList.remove('pop');void c.offsetWidth;c.classList.add('pop');
+ document.getElementById('q').textContent=q;document.getElementById('kind').textContent=kind;
+ document.getElementById('num').textContent=(i+1)+' / '+Q.length;
+ const lv=document.getElementById('lvl');lv.textContent=LV[L][0];lv.className='lvl '+LV[L][1];
+ for(const k of [0,1]){document.getElementById('s'+k).classList.toggle('on',k===t);document.getElementById('j'+k).textContent=(k===t?'دورك · ':'')+'🃏'.repeat(J[k])}
+ document.getElementById('jk').disabled=J[t]<=0;
+ document.getElementById('prog').style.width=((i+1)/Q.length*100)+'%';
+ chime(L);
+}
+function next(){if(!FULL&&i>=TRIAL_N-1)return trialOver();if(i>=Q.length-1)return show('end');i++;render()}
+function joker(){const t=i%2;if(J[t]<=0)return;J[t]--;
+ // الجوكر يبدّل البطاقة ببطاقة من نفس المستوى أو اللي بعده، والدور يظل لنفس الشخص
+ if(i<Q.length-1){const n=order.splice(i,1)[0];order.splice(Math.min(order.length,i+3),0,n)}
+ render()}
+let ac;function chime(L){try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();[523,659,784].slice(0,L>2?3:2).forEach((f,k)=>{const o=ac.createOscillator(),g=ac.createGain();o.type='sine';o.frequency.value=f;g.gain.setValueAtTime(0,ac.currentTime+k*.09);g.gain.linearRampToValueAtTime(.09,ac.currentTime+k*.09+.02);g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+k*.09+.5);o.connect(g);g.connect(ac.destination);o.start(ac.currentTime+k*.09);o.stop(ac.currentTime+k*.09+.55)})}catch(e){}}
+</script>
+</body>
+</html>

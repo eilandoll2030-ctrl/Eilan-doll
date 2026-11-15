@@ -45,8 +45,9 @@ const sym=k=>EQ.sym[k]||{d:k,n:[k,k],u:'',v:1};
 const fmt=v=>{if(v===undefined||v===null||Number.isNaN(v))return '—';if(!isFinite(v))return v>0?'∞':'−∞';const a=Math.abs(v);if(a!==0&&(a>=1e6||a<1e-3))return v.toExponential(3).replace('e','×10^').replace('+','');return (+v.toPrecision(5)).toLocaleString('en-US',{maximumFractionDigits:6})};
 function values(e){const st=VALS[e.id]||(VALS[e.id]={});e.ins.forEach(k=>{if(st[k]===undefined)st[k]=sym(k).v});return st}
 const VALS={};
-const PS={kids:[],removed:new Set(),build:false,stopped:false,why:null};try{PS.build=localStorage.getItem('eq-build')==='1'}catch(e){}
-function partsState(e){const zero=new Set();let stop=null;PS.removed.forEach(i=>{const pt=PS.kids[i]&&PS.kids[i].userData.part;if(!pt)return;(pt.s||[]).forEach(k=>{if(e.ins.includes(k))zero.add(k)});if(pt.e&&!stop)stop=pt});return{zero,stop}}
+const PS={kids:[],removed:new Set(),build:false,stopped:false,why:null};PS.build=true;try{PS.build=localStorage.getItem('eq-build')!=='0'}catch(e){}
+function partsState(e){const zero=new Set();let stop=null;PS.removed.forEach(i=>{const pt=PS.kids[i]&&PS.kids[i].userData.part;if(!pt)return;(pt.s||[]).forEach(k=>{if(e.ins.includes(k))zero.add(k)});if((pt.e||pt.b)&&!stop)stop=pt});return{zero,stop}}
+const need=pt=>pt&&(pt.e||pt.b);function allNeeded(){return PS.kids.every((k,i)=>!need(k.userData.part)||!PS.removed.has(i))}
 function evalEq(e,raw){const f=compile(e);const v=values(e);const out={...v};const ps=raw?{zero:new Set(),stop:null}:partsState(e);ps.zero.forEach(k=>out[k]=0);if(f){try{out[e.out]=f(...e.ins.map(k=>+out[k]))}catch(err){out[e.out]=NaN}}if(ps.stop&&e.out)out[e.out]=0;out.__stop=ps.stop;out.__zero=ps.zero;return out}
 function graphFn(e){const f=compile(e);if(!f||!e.ins.length)return null;const v=values(e);const k0=e.ins[0];return{key:k0,x0:+v[k0],xl:sym(k0).d,yl:sym(e.out).d,f:x=>{try{return f(...e.ins.map(k=>k===k0?x:+v[k]))}catch(err){return NaN}}}}
 
@@ -122,10 +123,11 @@ function mountModel(e){if(cur){modelAnchor.remove(cur.root);cur.root.traverse(o=
  const fnB=SCENES[e.sc]||SCENES.energy;let s;try{s=fnB(K,e)}catch(err){console.error('scene',e.sc,err);s=SCENES.energy(K,e)}cur=s;
  const side=-textSide();modelAnchor.position.set(side*PW/2,TOPY+.004,-.02);modelAnchor.scale.setScalar(1.18);modelAnchor.add(s.root);s.root.traverse(o=>{if(o.isMesh){o.castShadow=o.castShadow!==false}});
  const kids=s.root.children.filter(k=>k.userData.pop);const spec=(PARTS[e.sc]||(()=>[]))(e);kids.forEach((k,i)=>{k.userData.part=spec[i]||{n:['قطعة','Piece'],r:['جزء من المجسم','part of the model']};k.userData.home=k.position.clone();k.userData.idx=i});PS.kids=kids;PS.removed=new Set();dimMap.clear();
- if(PS.build)kids.forEach((k,i)=>{if(!k.userData.part.b){PS.removed.add(i);k.visible=false}});
+ PS.strays=s.root.children.filter(k=>!k.userData.pop);PS.done=false;
+ if(PS.build)kids.forEach((k,i)=>{PS.removed.add(i);k.visible=false});
  refreshModel();s.root.children.forEach(k=>{if(k.userData.pop){k.scale.set(1,.001,1);k.rotation.x=-1.25}})}
 const dimMap=new Map();
-function refreshModel(){const e=LIST[idx];if(!cur||!e)return;const v=evalEq(e);PS.stopped=!!v.__stop;try{cur.update&&cur.update(v,graphFn(e))}catch(err){console.error(err)}
+function refreshModel(){const e=LIST[idx];if(!cur||!e)return;if(allNeeded())PS.done=true;(PS.strays||[]).forEach(o=>o.visible=!PS.build||PS.done);const v=evalEq(e);PS.stopped=!!v.__stop;try{cur.update&&cur.update(v,graphFn(e))}catch(err){console.error(err)}
  // stopped: lights and glows go dark; restored when running again
  cur.root.traverse(o=>{if(o.isLight){if(!dimMap.has(o))dimMap.set(o,o.intensity);if(PS.stopped)o.intensity=0;else if(o.intensity===0)o.intensity=dimMap.get(o)}
   else if(o.isMesh&&o.material&&o.material.emissive&&!o.material.emissiveMap){const m=o.material;if(!dimMap.has(m))dimMap.set(m,m.emissiveIntensity);if(PS.stopped)m.emissiveIntensity=0;else if(m.emissiveIntensity===0&&e.sc!=='circuit')m.emissiveIntensity=dimMap.get(m)}});
@@ -161,22 +163,22 @@ let drag=null;const dragPlane=new THREE.Plane(new THREE.Vector3(0,1,0),0),tmpV=n
 function rayAt(e){const r=cv.getBoundingClientRect();ndc.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);ray.setFromCamera(ndc,camera)}
 function planePt(e){rayAt(e);dragPlane.constant=-(TOPY+.004);if(!ray.ray.intersectPlane(dragPlane,tmpV))return null;return modelAnchor.worldToLocal(tmpV.clone())}
 function partOf(o){while(o&&!o.userData.pop)o=o.parent;return o}
-function startDrag(e){if(!cur||busy)return;rayAt(e);const hit=ray.intersectObjects(cur.root.children,true).find(h=>h.object.isMesh&&h.object.visible);if(!hit)return;const k=partOf(hit.object);if(!k||!k.userData.part||k.userData.part.b)return;const p=planePt(e);if(!p)return;drag={k,ox:k.position.x-p.x,oz:k.position.z-p.z}}
+function startDrag(e){if(!cur||busy)return;rayAt(e);const hit=ray.intersectObjects(cur.root.children,true).find(h=>h.object.isMesh&&h.object.visible);if(!hit)return;const k=partOf(hit.object);if(!k||!k.userData.part||(k.userData.part.b&&!PS.build))return;const p=planePt(e);if(!p)return;drag={k,ox:k.position.x-p.x,oz:k.position.z-p.z}}
 function moveDrag(e){const p=planePt(e);if(!p||!drag)return;drag.k.position.x=p.x+drag.ox;drag.k.position.z=p.z+drag.oz;const off=Math.abs(drag.k.position.x)>.47||Math.abs(drag.k.position.z)>.6;drag.k.traverse(o=>{if(o.isMesh&&o.material&&o.material.transparent===false)o.material.opacity=1});cv.style.cursor=off?'not-allowed':'grabbing';hint(off?(rtl()?'🗑️ أفلتها هنا لتشيلها':'🗑️ Let go to remove it'):'')}
 function endDrag(e,tap){if(!drag)return;const k=drag.k;drag=null;cv.style.cursor='';hint('');if(tap){k.position.y=0;return}const off=Math.abs(k.position.x)>.47||Math.abs(k.position.z)>.6;if(off){removePart(k.userData.idx)}else{tween(250,el=>{k.position.y=.035*(1-K.clamp(el/250,0,1))})}}
-function removePart(i){const k=PS.kids[i];if(!k||k.userData.part.b)return;PS.removed.add(i);tween(300,el=>{const q=K.clamp(el/300,0,1);k.scale.setScalar(Math.max(.001,1-q))},()=>{k.visible=false;k.scale.set(1,1,1)});refreshModel()}
+function removePart(i){const k=PS.kids[i];if(!k||(k.userData.part.b&&!PS.build))return;PS.removed.add(i);tween(300,el=>{const q=K.clamp(el/300,0,1);k.scale.setScalar(Math.max(.001,1-q))},()=>{k.visible=false;k.scale.set(1,1,1)});refreshModel()}
 function addPart(i){const k=PS.kids[i];if(!k)return;PS.removed.delete(i);k.position.copy(k.userData.home);k.visible=true;k.scale.set(1,.001,1);tween(700,el=>{const p=back(K.clamp(el/700,0,1));k.scale.set(1,Math.max(.001,p),1)},()=>k.scale.set(1,1,1));refreshModel()}
 let hintT=null;function hint(msg){const h=$('#dhint');if(!h)return;h.textContent=msg;h.classList.toggle('hide',!msg)}
 function tray(){const box=$('#tray');if(!box||!PS.kids.length){box&&box.classList.add('hide');return}box.classList.remove('hide');const e=LIST[idx];
- const rem=[...PS.removed].map(i=>PS.kids[i]).filter(Boolean).sort((a,b)=>(b.userData.part.e?1:0)-(a.userData.part.e?1:0)||a.userData.idx-b.userData.idx);
- const ess=PS.kids.filter(k=>k.userData.part.e),missE=rem.filter(k=>k.userData.part.e);let msg;
+ const rem=[...PS.removed].map(i=>PS.kids[i]).filter(Boolean).sort((a,b)=>(need(b.userData.part)?1:0)-(need(a.userData.part)?1:0)||a.userData.idx-b.userData.idx);
+ const ess=PS.kids.filter(k=>need(k.userData.part)),missE=rem.filter(k=>need(k.userData.part));let msg;
  if(PS.build&&missE.length){const n=ess.length-missE.length+1,pt=missE[0].userData.part;msg=`<b>${t('step')} ${n} / ${ess.length}:</b> ${t('add2')} «${L(pt.n)}» — ${L(pt.r)}`}
  else if(PS.stopped){const pt=evalEq(e).__stop;msg=`<b>${t('stopped')} «${L(pt.n)}»</b> — ${L(pt.r)}. ${t('putBack')}`}
  else if(PS.build&&(ess.length||!rem.length))msg=t('done');else msg=t('dragHint');
  $('#tmode').innerHTML=`<button class="${PS.build?'':'on'}" data-mode="auto">${t('auto')}</button><button class="${PS.build?'on':''}" data-mode="build">${t('build')}</button>`;
  $('#tmsg').innerHTML=msg;$('#tmsg').className=PS.stopped&&!PS.build?'stop':(PS.build&&!missE.length&&ess.length?'ok':'');
- $('#tchips').innerHTML=rem.map((k,j)=>`<button class="chip ${k.userData.part.e?'ess':''} ${(PS.build&&j===0&&k.userData.part.e)||(!PS.build&&PS.stopped&&k.userData.part.e&&j===0)?'next':''}" data-addpart="${k.userData.idx}">＋ ${esc(L(k.userData.part.n))}</button>`).join('')}
-document.addEventListener('click',ev=>{const l2=ev.target.closest('[data-l2d]');if(l2){const[b,i]=l2.dataset.l2d.split(':');try{localStorage.setItem('eb-pos-'+b,String(3+2*(+i)))}catch(e){}return}const a=ev.target.closest('[data-addpart]');if(a){addPart(+a.dataset.addpart);return}const m=ev.target.closest('[data-mode]');if(m){PS.build=m.dataset.mode==='build';try{localStorage.setItem('eq-build',PS.build?'1':'0')}catch(e){}if(cur){PS.removed=new Set();PS.kids.forEach((k,i)=>{k.visible=true;k.position.copy(k.userData.home);k.scale.set(1,1,1);if(PS.build&&!k.userData.part.b){PS.removed.add(i);k.visible=false}})}refreshModel()}});
+ $('#tchips').innerHTML=rem.map((k,j)=>`<button class="chip ${need(k.userData.part)?'ess':''} ${(PS.build&&j===0&&need(k.userData.part))||(!PS.build&&PS.stopped&&need(k.userData.part)&&j===0)?'next':''}" data-addpart="${k.userData.idx}">＋ ${esc(L(k.userData.part.n))}</button>`).join('')}
+document.addEventListener('click',ev=>{const l2=ev.target.closest('[data-l2d]');if(l2){const[b,i]=l2.dataset.l2d.split(':');try{localStorage.setItem('eb-pos-'+b,String(3+2*(+i)))}catch(e){}return}const a=ev.target.closest('[data-addpart]');if(a){addPart(+a.dataset.addpart);return}const m=ev.target.closest('[data-mode]');if(m){PS.build=m.dataset.mode==='build';try{localStorage.setItem('eq-build',PS.build?'1':'0')}catch(e){}if(cur){PS.removed=new Set();PS.kids.forEach((k,i)=>{k.visible=true;k.position.copy(k.userData.home);k.scale.set(1,1,1);if(PS.build){PS.removed.add(i);k.visible=false}});PS.done=false}refreshModel()}});
 function pick(e){if(!cur||busy)return;const r=cv.getBoundingClientRect();ndc.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);ray.setFromCamera(ndc,camera);const hit=ray.intersectObjects(cur.root.children,true).find(h=>h.object.isMesh);
  if(hit){let handled=cur.tap&&cur.tap(hit.object);let p=hit.object;while(p&&!p.userData.pop)p=p.parent;if(p&&p.userData.part&&!handled){const pt=p.userData.part;hint(`${L(pt.n)} — ${L(pt.r)}${pt.b?'':(rtl()?' · اسحبها برّا الصفحة لتشيلها':' · drag it off the page to remove it')}`);clearTimeout(hintT);hintT=setTimeout(()=>hint(''),3200)}if(p){const s0=p.scale.y;tween(500,el=>{const q=K.clamp(el/500,0,1);p.position.y=(p.userData.y0??(p.userData.y0=p.position.y))+Math.sin(q*Math.PI)*.05})}return}
  const hp=ray.intersectObject(textMesh())[0];if(hp&&rig.mode==='book')setMode('text');else if(rig.mode!=='book'&&!hp)setMode('book')}

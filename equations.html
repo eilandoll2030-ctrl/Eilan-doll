@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>موسوعة معادلات إيلان | أكاديمية إيلان دول</title>
+<meta name="description" content="موسوعة معادلات إيلان: أكثر من ألف معادلة في الفيزياء والكيمياء والرياضيات والإحصاء والأحياء والمال، في كتاب ثلاثي الأبعاد تطلع منه المجسمات، مع حاسبة لكل معادلة، ويقدر أي أحد يضيف معادلته باسمه.">
+<meta name="theme-color" content="#07080C">
+<link rel="icon" href="/favicon-96.png" sizes="96x96" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Reem+Kufi:wght@500;700&family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--night:#07080C;--blue:#1E44C8;--blue-d:#0B1F5E;--green:#0F6B44;--purple:#4A2A8F;--mint:#D8FFE6;--gold:#C9A227;--paper:#F6F1E4;--ink:#23252E;--ui:'Tajawal',system-ui,-apple-system,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;background:radial-gradient(1000px 600px at 50% 10%,#1a2140,#07080C 70%);color:#EDEFF6;font-family:var(--ui);-webkit-font-smoothing:antialiased;touch-action:manipulation}
+button,input,select,textarea{font:inherit;color:inherit}
+button{background:none;border:0;cursor:pointer}
+.hide{display:none!important}
+#gl{position:fixed;inset:0;width:100vw;height:100vh;display:block;touch-action:none;outline:none}
+.top{position:fixed;top:0;left:0;right:0;z-index:5;display:flex;align-items:center;gap:8px;padding:10px 12px;padding-top:max(10px,env(safe-area-inset-top));background:linear-gradient(180deg,rgba(7,8,12,.85),rgba(7,8,12,0));pointer-events:none}
+.top>*{pointer-events:auto}
+.brand{display:flex;align-items:center;gap:9px;text-decoration:none;color:inherit;min-width:0}
+.brand img{width:32px;height:32px;flex:0 0 auto}
+.brand b{display:block;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand small{display:block;font-size:11px;color:#A9B0C6}
+.sp{flex:1}
+.ib{height:40px;min-width:40px;padding:0 12px;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid rgba(216,255,230,.16);background:rgba(15,18,30,.7);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);font-size:14px;font-weight:700;white-space:nowrap;text-decoration:none;color:inherit}
+.ib:hover{background:rgba(40,46,70,.8)}
+.ib.g{background:linear-gradient(135deg,var(--green),#07341F);border-color:transparent}
+.ib .lb{display:inline}
+.prog{position:fixed;top:0;left:0;right:0;height:3px;z-index:6;background:rgba(255,255,255,.06)}.prog i{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--mint));transition:width .5s}
+.bot{position:fixed;left:0;right:0;bottom:0;z-index:5;display:flex;align-items:center;justify-content:center;gap:10px;padding:10px;padding-bottom:max(12px,env(safe-area-inset-bottom));pointer-events:none}
+.bot>*{pointer-events:auto}
+.nav{height:48px;min-width:48px;padding:0 18px;border-radius:999px;background:var(--mint);color:var(--night);font-weight:900;font-size:18px;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.num{font-size:13px;color:#C9CEDD;background:rgba(15,18,30,.7);padding:8px 14px;border-radius:999px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);white-space:nowrap}
+.views{position:fixed;top:64px;inset-inline-end:12px;z-index:5;display:flex;gap:6px}
+.vbtn{height:34px;padding:0 12px;border-radius:999px;font-size:13px;font-weight:700;background:rgba(15,18,30,.7);border:1px solid rgba(216,255,230,.14);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.vbtn.on{background:var(--mint);color:var(--night)}
+#hint{position:fixed;bottom:84px;left:50%;transform:translateX(-50%);z-index:4;font-size:12px;color:#B9BFD0;background:rgba(15,18,30,.6);padding:6px 12px;border-radius:999px;white-space:nowrap;transition:opacity .6s;pointer-events:none}
+#hint.hide{display:block!important;opacity:0}
+/* panel */
+#panel{position:fixed;z-index:6;top:108px;inset-inline-start:12px;width:340px;max-height:calc(100% - 190px);display:flex;flex-direction:column;background:var(--paper);color:var(--ink);border-radius:18px;box-shadow:0 20px 50px rgba(0,0,0,.5);transition:transform .3s,opacity .3s;overflow:hidden}
+#panel.closed{transform:translateX(calc(var(--dir,1) * 110%));opacity:0;pointer-events:none}
+[dir=ltr] #panel.closed{--dir:-1}
+.ph{display:flex;align-items:center;justify-content:space-between;padding:12px 14px 6px}
+.ph .k{font-size:12px;font-weight:700;color:var(--green)}
+.ph button{width:32px;height:32px;border-radius:10px;background:#fff;border:1px solid rgba(0,0,0,.1);color:var(--ink);font-weight:700}
+.pb{padding:0 14px 14px;overflow:auto;min-height:0}
+.pn{font-family:'Reem Kufi','Tajawal',sans-serif;font-size:20px;line-height:1.35;margin-bottom:6px}
+.pf{direction:ltr;unicode-bidi:isolate;font-family:'Cambria Math','Times New Roman',serif;font-style:italic;font-size:22px;text-align:center;padding:10px;border-radius:12px;background:rgba(30,68,200,.07);border:1px dashed rgba(30,68,200,.4);color:#14286f;margin:6px 0 8px;word-break:break-word}
+.pd{font-size:14px;line-height:1.75;color:#3a3c46;margin-bottom:10px}
+.ch{font-size:13px;font-weight:900;color:var(--purple);margin:6px 0}
+#calc{display:flex;flex-direction:column;gap:7px}
+#calc label{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:13px}
+#calc label span{flex:1;min-width:0}
+#calc label i{font-family:'Times New Roman',serif;font-weight:700;color:var(--blue);font-size:15px}
+#calc label em{font-style:normal;color:#7b7d88;font-size:12px}
+#calc input{width:120px;height:38px;border-radius:10px;border:1px solid rgba(0,0,0,.18);background:#fff;padding:0 10px;direction:ltr;text-align:left;font-size:15px}
+.res{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:4px;padding:10px 12px;border-radius:12px;background:#0B1F5E;color:#fff}
+.res i{font-family:'Times New Roman',serif;font-weight:700}
+.res b{direction:ltr;font-size:17px;color:var(--mint)}
+.mu{color:#6b6d78;font-size:13px;line-height:1.7}
+#pby{margin-top:10px;font-size:13px;line-height:1.7;color:var(--purple)}#pby small{color:#6b6d78}
+.pend{display:inline-block;background:#fff3c4;color:#6b5200;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:700}
+@media (max-width:899px){#panel{top:auto;bottom:74px;left:8px;right:8px;width:auto;max-height:46vh}#panel.closed{transform:translateY(120%)}.views{top:60px}}
+@media (max-width:560px){.ib .lb{display:none}.brand small{display:none}}
+/* sheets */
+#veil{position:fixed;inset:0;z-index:20;background:rgba(5,6,10,.6);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.sheet{position:fixed;z-index:21;left:50%;top:50%;transform:translate(-50%,-50%);width:min(640px,94vw);max-height:86vh;display:flex;flex-direction:column;background:#11142a;border:1px solid rgba(216,255,230,.14);border-radius:20px;box-shadow:0 30px 70px rgba(0,0,0,.6);overflow:hidden}
+.sh{display:flex;align-items:center;gap:8px;padding:14px 16px;border-bottom:1px solid rgba(216,255,230,.08)}
+.sh h3{flex:1;font-family:'Reem Kufi','Tajawal',sans-serif;font-size:19px}
+.sb{padding:12px 16px 16px;overflow:auto}
+.search{width:100%;height:46px;border-radius:14px;border:1px solid rgba(216,255,230,.18);background:rgba(255,255,255,.05);padding:0 14px;font-size:16px;margin-bottom:10px}
+.row{width:100%;display:grid;grid-template-columns:1fr auto;gap:2px 10px;text-align:start;padding:10px 12px;border-radius:12px;border:1px solid transparent}
+.row:hover{background:rgba(255,255,255,.05);border-color:rgba(216,255,230,.1)}
+.row b{font-size:15px}.row span{grid-column:1/-1;font-family:'Times New Roman',serif;font-style:italic;color:#AFC1FF;text-align:start}.row small{color:#8d93a8;font-size:12px;grid-row:1;grid-column:2}
+.sb h4{margin:14px 0 4px;font-size:15px;color:var(--mint)}
+.empty{text-align:center;padding:24px;color:#A9B0C6;line-height:2}
+.pill{display:inline-flex;align-items:center;gap:6px;height:40px;padding:0 16px;border-radius:999px;font-weight:700;border:1px solid rgba(216,255,230,.18)}
+.pill.g{background:linear-gradient(135deg,var(--green),#07341F);border-color:transparent}
+form label.f{display:block;font-size:13px;font-weight:700;margin:10px 0 5px;color:#D6DAE6}
+form input[type=text],form textarea,form select{width:100%;border-radius:12px;border:1px solid rgba(216,255,230,.18);background:rgba(255,255,255,.05);padding:10px 12px;font-size:15px}
+form textarea{min-height:110px;resize:vertical;line-height:1.7}
+form select option{background:#11142a}
+.ltr{direction:ltr;text-align:left;font-family:'Times New Roman',serif;font-style:italic}
+.chk{display:flex;gap:10px;align-items:flex-start;margin-top:14px;padding:12px;border-radius:14px;background:rgba(216,255,230,.05);border:1px solid rgba(216,255,230,.12);font-size:14px;line-height:1.7}
+.chk input{width:22px;height:22px;margin-top:3px;accent-color:#0F6B44;flex:0 0 auto}
+.note{font-size:12.5px;color:#A9B0C6;line-height:1.8;margin-top:8px}
+#addMsg{margin-top:10px;font-size:14px;line-height:1.7;color:var(--mint)}
+.intro{font-size:14px;color:#C3C8D6;line-height:1.8}
+#loading{position:fixed;inset:0;z-index:30;display:grid;place-items:center;background:#07080C;color:#C9CEDD;font-size:15px}
+#loading img{width:64px;display:block;margin:0 auto 12px;animation:spin 2.4s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<canvas id="gl" aria-label="3D book"></canvas>
+<div class="prog"><i id="prog"></i></div>
+<header class="top">
+  <a class="ib" href="/interactive-books.html" title="">‹ <span class="lb" data-t="back"></span></a>
+  <a class="brand" href="/"><img src="/assets/logo/eilan-icon.svg" alt=""><div><b data-t="title"></b><small id="cnt"></small></div></a>
+  <span class="sp"></span>
+  <button class="ib" data-open="s-search" aria-label="search">🔍</button>
+  <button class="ib" data-open="s-index">☰ <span class="lb" data-t="index"></span></button>
+  <button class="ib" id="rnd" title="">🎲</button>
+  <button class="ib g" data-open="s-add">＋ <span class="lb" data-t="add"></span></button>
+  <button class="ib" id="lang">EN</button>
+</header>
+<div class="views"><button class="vbtn" data-v="book" data-t="vBook"></button><button class="vbtn" data-v="text" data-t="vText"></button><button class="vbtn" data-v="model" data-t="vModel"></button></div>
+
+<aside id="panel">
+  <div class="ph"><span class="k" id="pk"></span><button id="pclose" onclick="document.getElementById('ptog').click()">✕</button></div>
+  <div class="pb">
+    <div class="pn" id="pn"></div>
+    <div class="pf" id="pf"></div>
+    <div class="pd" id="pd"></div>
+    <div class="ch">🧮 <span data-t="calc"></span></div>
+    <div id="calc"></div>
+    <div id="pby"></div>
+  </div>
+</aside>
+
+<div class="bot">
+  <button class="nav" id="prev" aria-label="previous">→</button>
+  <span class="num" id="num"></span>
+  <button class="ib" id="ptog">🧮 <span class="lb" data-t="calc"></span></button>
+  <button class="nav" id="next" aria-label="next">←</button>
+</div>
+<div id="hint" data-t="drag"></div>
+
+<div id="veil" class="hide"></div>
+<section class="sheet hide" id="s-search"><div class="sh"><h3>🔍 <span data-t="title"></span></h3><button class="ib" data-close>✕</button></div><div class="sb"><input class="search" id="q" type="search" autocomplete="off"><div id="sres"></div></div></section>
+<section class="sheet hide" id="s-index"><div class="sh"><h3>☰ <span data-t="index"></span></h3><button class="ib" data-close>✕</button></div><div class="sb" id="ires"></div></section>
+<section class="sheet hide" id="s-add"><div class="sh"><h3 id="addH">✍️ هل عندك معادلة؟</h3><button class="ib" data-close>✕</button></div><div class="sb">
+  <p class="intro" id="addIntro">إذا عندك معادلة مو موجودة في كتاب إيلان، أضفها هنا مع طريقتك في شرحها. إيلان يصمم لها الشرح التفاعلي، والفكرة والشرح يبقون لك.</p>
+  <form id="addForm" autocomplete="off">
+    <label class="f" id="lN">اسم المعادلة *</label><input type="text" name="name" maxlength="120" required>
+    <label class="f" id="lF">الصيغة *</label><input type="text" name="formula" class="ltr" maxlength="200" placeholder="E = m c²" required>
+    <label class="f" id="lS">المجال</label><select name="subj"><option value="phys">⚡ فيزياء · Physics</option><option value="chem">⚗️ كيمياء · Chemistry</option><option value="math">📐 رياضيات · Math</option><option value="stat">📊 إحصاء · Statistics</option><option value="life">🧬 أحياء وطب · Life sciences</option><option value="more">💼 مال وهندسة وحاسب · Finance & more</option></select>
+    <label class="f" id="lH">طريقة الشرح (وش تعني المعادلة؟ وش كل رمز؟ مثال؟) *</label><textarea name="how" maxlength="1500" required></textarea>
+    <div class="chk"><input type="checkbox" id="showYes" name="show" value="yes"><label for="showYes" id="lShow"><b>هل تريد أن يظهر اسمك داخل كتاب إيلان؟</b><br>إذا وافقت، يظهر اسمك أسفل صفحة المعادلة: «الفكرة والشرح: اسمك»، ويشوفه كل من يفتح الكتاب.</label></div>
+    <div id="consent" class="hide"><label class="f" id="lBy">الاسم اللي يظهر في الكتاب</label><input type="text" name="by" maxlength="60" placeholder=""></div>
+    <label class="f" id="lC">وسيلة تواصل (اختياري — ما تظهر لأحد)</label><input type="text" name="contact" maxlength="120" class="ltr" placeholder="email">
+    <p class="note" id="addNote">تظهر معادلتك لك أنت فورًا في آخر الكتاب. ولكل الناس بعد ما يراجعها فريق إيلان ويتأكد إنها صحيحة.</p>
+    <div style="margin-top:12px"><button class="pill g" id="addBtn" type="submit">＋ <span id="addBtnT">أضف معادلتي</span></button></div>
+    <div id="addMsg"></div>
+  </form>
+</div></section>
+
+<div id="loading"><div><img src="/assets/logo/eilan-icon.svg" alt=""><span id="ldT">جاري فتح الكتاب…</span></div></div>
+
+<script>/* translations for the static form (Arabic is the default in the markup) */
+window.addEventListener('DOMContentLoaded',()=>{const en=(localStorage.getItem('eb-lang')||'ar')==='en'||new URLSearchParams(location.search).get('lang')==='en';if(!en)return;const T={addH:'✍️ Do you have an equation?',addIntro:'If your equation is not in the Eilan book yet, add it here with your own way of explaining it. Eilan designs the interactive explanation; the idea and explanation stay yours.',lN:'Equation name *',lF:'Formula *',lS:'Field',lH:'Your explanation (what does it mean? what is each symbol? an example?) *',lBy:'Name to show in the book',lC:'Contact (optional — never shown)',addNote:'You will see your equation at the end of the book right away. Everyone else sees it after the Eilan team reviews it.',addBtnT:'Add my equation',ldT:'Opening the book…'};for(const k in T){const el=document.getElementById(k);if(el)el.textContent=T[k]}document.getElementById('lShow').innerHTML='<b>Do you want your name shown in the Eilan book?</b><br>If you agree, your name appears at the bottom of the equation page — “Idea & explanation: your name” — for everyone who opens the book.'});
+</script>
+<script type="importmap">{"imports":{"three":"/vendor/three/three.module.min.js"}}</script>
+<script src="/books/eq/core.js?v=1"></script>
+<script src="/books/eq/data-physics.js?v=1"></script>
+<script src="/books/eq/data-physics2.js?v=1"></script>
+<script src="/books/eq/data-chemistry.js?v=1"></script>
+<script src="/books/eq/data-math.js?v=1"></script>
+<script src="/books/eq/data-math2.js?v=1"></script>
+<script src="/books/eq/data-stats.js?v=1"></script>
+<script src="/books/eq/data-life.js?v=1"></script>
+<script src="/books/eq/data-more.js?v=1"></script>
+<script src="/books/eq/community.js?v=1"></script>
+<script type="module" src="/books/eq/app.js?v=1"></script>
+</body>
+</html>

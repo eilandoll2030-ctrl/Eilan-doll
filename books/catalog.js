@@ -1,6 +1,7 @@
 /* Eilan Interactive Library — catalog. To add a book: add an entry here and a file books/<id>.js (see physics.js). */
 window.EB_CATALOG={
  cats:[
+  {id:'enc',ic:'∑',n:{ar:'الموسوعات التفاعلية',en:'Interactive encyclopedias'}},
   {id:'sci',ic:'🔬',n:{ar:'العلوم',en:'Sciences'}},
   {id:'math',ic:'📐',n:{ar:'الرياضيات والإحصاء',en:'Math & Statistics'}},
   {id:'tech',ic:'💻',n:{ar:'التقنية',en:'Technology'}},
@@ -9,6 +10,7 @@ window.EB_CATALOG={
   {id:'arts',ic:'🎨',n:{ar:'الفنون',en:'Arts'}}
  ],
  books:[
+  {id:'equations',cat:'enc',ready:true,href:'/equations.html',count:1453,ic:'∑',c:['#0B1F5E','#4A2A8F'],n:{ar:'موسوعة معادلات إيلان',en:'Eilan Equations Encyclopedia'},sub:{ar:'+1400 معادلة بمجسمات 3D',en:'1400+ equations in 3D'},kw:['معادلات','معادلة','موسوعة','قوانين','equations','formula','formulas','encyclopedia']},
   {id:'physics',cat:'sci',ready:true,ic:'⚡',c:['#1E44C8','#0B1F5E'],n:{ar:'الفيزياء',en:'Physics'},sub:{ar:'الطاقة · القوة · الموجات · الكهرباء',en:'Energy · Force · Waves · Electricity'},kw:['فيزياء','طاقة','قوة','بندول','موجة','كهرباء','physics','energy','force','wave','ohm'],
    toc:[{ar:'طاقة الوضع',en:'Potential energy'},{ar:'حفظ الطاقة',en:'Conservation of energy'},{ar:'قانون نيوتن الثاني',en:"Newton's second law"},{ar:'البندول البسيط',en:'Simple pendulum'},{ar:'الموجات',en:'Waves'},{ar:'قانون أوم',en:"Ohm's law"}]},
   {id:'chemistry',cat:'sci',ready:true,ic:'⚗️',c:['#4A2A8F','#251147'],n:{ar:'الكيمياء',en:'Chemistry'},sub:{ar:'الذرة · المادة · الغازات · التفاعلات',en:'Atoms · Matter · Gases · Reactions'},kw:['كيمياء','ذرة','غاز','حمض','تفاعل','chemistry','atom','gas','ph','reaction'],

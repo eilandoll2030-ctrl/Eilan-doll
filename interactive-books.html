@@ -70,7 +70,7 @@ a{color:inherit}
 .shelf-row{display:flex;gap:22px;overflow-x:auto;padding:22px 6px 0;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}
 .shelf-row::-webkit-scrollbar{height:6px}.shelf-row::-webkit-scrollbar-thumb{background:rgba(255,255,255,.15);border-radius:3px}
 .plank{height:16px;margin-top:-2px;border-radius:4px;background:linear-gradient(180deg,#2a2f45,#141726);box-shadow:0 14px 26px rgba(0,0,0,.55),inset 0 1px 0 rgba(216,255,230,.18)}
-.bk{flex:0 0 auto;width:150px;scroll-snap-align:start;perspective:900px;text-align:center;padding-bottom:8px;position:relative}
+.bk.wide .bk-3d{width:170px}.bk{flex:0 0 auto;width:150px;scroll-snap-align:start;perspective:900px;text-align:center;padding-bottom:8px;position:relative}
 .bk-3d{width:132px;height:184px;margin:0 auto;position:relative;transform-style:preserve-3d;transform:rotateY(-24deg);transition:transform .45s cubic-bezier(.2,.8,.2,1)}
 [dir=ltr] .bk-3d{transform:rotateY(24deg)}
 .bk:hover .bk-3d,.bk:focus-visible .bk-3d{transform:rotateY(-8deg) translateY(-8px)}
@@ -356,9 +356,9 @@ function renderLib(){
   bs.sort((a,b)=>(b.ready?1:0)-(a.ready?1:0));
   html+=`<section class="shelf"><h2>${c.ic||''} ${L(c.n)} <small>${bs.filter(b=>b.ready).length} ${t('ready')} · ${bs.filter(b=>!b.ready).length} ${t('soon')}</small></h2><div class="shelf-row">${bs.map(bookHTML).join('')}</div><div class="plank"></div></section>`});
  $('#shelves').innerHTML=html||`<div class="empty">${t('notFound')}</div>`}
-function bookHTML(b){return `<button class="bk ${b.ready?'':'soon'}" data-book="${b.id}" aria-label="${L(b.n)}">${b.ready?`<span class="badge">${t('ready')}</span>`:`<span class="badge soon">${t('soon')}</span>`}<div class="bk-3d"><div class="bk-pages"></div><div class="bk-cover" style="background:linear-gradient(150deg,${b.c[0]},${b.c[1]})"><div class="ic">${b.ic}</div><div><b>${L(b.n)}</b><small>${L(b.sub||'')}</small></div><div class="sig"><img src="${LOGO}" alt="">EILAN DOLL</div></div></div><div class="meta"><b>${L(b.n)}</b>${b.ready?`${(b.toc||[]).length} ${t('lessons')}`:t('soon')}</div></button>`}
+function bookHTML(b){return `<button class="bk ${b.ready?'':'soon'}" data-book="${b.id}" aria-label="${L(b.n)}">${b.ready?`<span class="badge">${t('ready')}</span>`:`<span class="badge soon">${t('soon')}</span>`}<div class="bk-3d"><div class="bk-pages"></div><div class="bk-cover" style="background:linear-gradient(150deg,${b.c[0]},${b.c[1]})"><div class="ic">${b.ic}</div><div><b>${L(b.n)}</b><small>${L(b.sub||'')}</small></div><div class="sig"><img src="${LOGO}" alt="">EILAN DOLL</div></div></div><div class="meta"><b>${L(b.n)}</b>${b.count?`${b.count.toLocaleString('en-US')} ${EB.lang==='ar'?'معادلة':'equations'}`:b.ready?`${(b.toc||[]).length} ${t('lessons')}`:t('soon')}</div></button>`}
 document.addEventListener('click',e=>{const c=e.target.closest('[data-cat]');if(c){CAT=c.dataset.cat;renderLib();return}
- const b=e.target.closest('[data-book]');if(b){const meta=catalog().books.find(x=>x.id===b.dataset.book);if(!meta)return;if(!meta.ready){toast(t('soonMsg'));return}openBook(meta.id)}});
+ const b=e.target.closest('[data-book]');if(b){const meta=catalog().books.find(x=>x.id===b.dataset.book);if(!meta)return;if(!meta.ready){toast(t('soonMsg'));return}if(meta.href){location.href=meta.href+(EB.lang==='en'?'?lang=en':'');return}openBook(meta.id)}});
 $('#q').addEventListener('input',renderLib);
 $('#langBtn').onclick=()=>setLang(EB.lang==='ar'?'en':'ar');
 function setLang(l){EB.lang=l;try{localStorage.setItem('eb-lang',l)}catch(e){}renderLib();if(R.book)renderReader(true)}

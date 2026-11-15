@@ -1,0 +1,131 @@
+/* ===== Eilan Games — one world per game (v2, Nov 2026) =====
+   كل لعبة لها عالم وفكرة شكل خاصة فيها. تُطبَّق على:
+   - نافذة اللعب (#gz #lh #fm #bh #ms #ns للألعاب البطاقات، .gzw[data-g] للآركيد)
+   - غلاف اللعبة في القائمة (.gzc[data-g])  */
+
+/* ---------- shared engine (uses per-theme variables) ---------- */
+.gz[id]{--tA:#1E44C8;--tA2:#0B1F5E;--tInk:#fff;--tCard:linear-gradient(160deg,rgba(11,31,94,.6),rgba(7,8,12,.9));--tLine:rgba(216,255,230,.2);--tRad:28px;--tFont:inherit}
+#gz,#lh,#fm,#bh,#ms,#ns{font-family:var(--font)}
+:is(#gz,#lh,#fm,#bh,#ms,#ns) .gz-card{background:var(--tCard)!important;border:var(--tBorder,1px solid var(--tLine))!important;border-radius:var(--tRad)!important;box-shadow:var(--tShadow,0 30px 80px -30px #000)!important;position:relative}
+:is(#gz,#lh,#fm,#bh,#ms,#ns) .gz-card h2,:is(#gz,#lh,#fm,#bh,#ms,#ns) .gz-title{font-family:var(--tFont),var(--font)!important;letter-spacing:0}
+:is(#gz,#lh,#fm,#bh,#ms,#ns) .btn.g,:is(#gz,#lh,#fm,#bh,#ms,#ns) .gz-cta{background:linear-gradient(135deg,var(--tA),var(--tA2))!important;color:var(--tInk)!important;border-color:transparent!important;box-shadow:0 12px 30px -12px var(--tA)!important}
+:is(#gz,#lh,#fm,#bh,#ms,#ns) .btn.p{background:transparent!important;color:var(--tA)!important;border:1.5px solid var(--tA)!important;box-shadow:none!important}
+:is(#gz,#lh,#fm,#bh,#ms,#ns) .gz-bgfx{background:var(--tScene)!important}
+:is(#gz,#lh,#fm,#bh,#ms,#ns) .gz-bgfx::before,:is(#gz,#lh,#fm,#bh,#ms,#ns) .gz-bgfx::after{content:"";position:absolute;pointer-events:none}
+:is(#gz,#lh,#fm,#bh,#ms,#ns) .gz-bgfx i{background:var(--tA);box-shadow:0 0 14px 4px var(--tA)}
+:is(#gz,#lh,#fm,#bh,#ms,#ns) input{border-color:var(--tLine)!important}
+:is(#gz,#lh,#fm,#bh,#ms,#ns) input:focus{border-color:var(--tA)!important;box-shadow:0 0 0 3px color-mix(in srgb,var(--tA) 25%,transparent)!important}
+
+/* 🔍 خمّن؟ — «مكتب المحقق»: ورق مخطط أزرق، عدسة مكبّرة، وبطاقة ملف سري */
+#gz{--tA:#5FD4EA;--tA2:#1E44C8;--tInk:#04122e;--tFont:'Reem Kufi';--tRad:12px;
+ --tScene:radial-gradient(circle at 88% 12%,transparent 0 110px,rgba(95,212,234,.35) 111px 116px,transparent 117px),linear-gradient(rgba(95,212,234,.09) 1px,transparent 1px) 0 0/28px 28px,linear-gradient(90deg,rgba(95,212,234,.09) 1px,transparent 1px) 0 0/28px 28px,linear-gradient(rgba(95,212,234,.18) 1px,transparent 1px) 0 0/140px 140px,linear-gradient(90deg,rgba(95,212,234,.18) 1px,transparent 1px) 0 0/140px 140px,linear-gradient(160deg,#0B2466,#06123a);
+ --tCard:linear-gradient(170deg,rgba(9,28,82,.94),rgba(4,14,44,.96));--tBorder:2px dashed rgba(95,212,234,.55)}
+#gz .gz-bgfx::before{width:26px;height:120px;right:calc(12% - 30px);top:178px;background:linear-gradient(#5FD4EA,#1E44C8);border-radius:13px;transform:rotate(-40deg);opacity:.35}
+#gz .gz-card::before{content:"ملف سري · CASE";position:absolute;top:0;inset-inline-start:24px;font:700 12px 'Reem Kufi',var(--font);letter-spacing:1px;color:#04122e;background:#5FD4EA;padding:4px 14px;border-radius:0 0 8px 8px}
+
+/* 🎉 لحد يشدها — «حفلة نيون»: وردي فاقع، قصاصات ملونة، بطاقة مايلة تلمع */
+#lh{--tA:#FF3EA5;--tA2:#7B2FF7;--tFont:'Lalezar';--tRad:30px;
+ --tScene:radial-gradient(6px 6px at 10% 20%,#FF3EA5 50%,transparent 52%),radial-gradient(5px 9px at 80% 30%,#FFD24A 50%,transparent 52%),radial-gradient(7px 4px at 30% 80%,#3EE6FF 50%,transparent 52%),radial-gradient(5px 5px at 65% 70%,#9B5CFF 50%,transparent 52%),radial-gradient(8px 4px at 50% 12%,#3EFFA0 50%,transparent 52%),radial-gradient(60vmax 50vmax at 100% 0%,rgba(255,62,165,.4),transparent 60%),radial-gradient(60vmax 50vmax at 0% 100%,rgba(123,47,247,.45),transparent 60%),#16041f;
+ --tCard:linear-gradient(160deg,rgba(46,8,58,.92),rgba(20,4,30,.95));--tBorder:2px solid #FF3EA5;--tShadow:0 0 0 6px rgba(255,62,165,.12),0 0 40px rgba(255,62,165,.45),0 30px 80px -30px #000}
+#lh .gz-bgfx{background-size:220px 220px,260px 260px,240px 240px,300px 300px,280px 280px,auto,auto,auto!important;animation:thConfetti 18s linear infinite}
+@keyframes thConfetti{to{background-position:0 220px,0 260px,0 240px,0 300px,0 280px,0 0,0 0,0 0}}
+#lh .gz-card{transform:rotate(-1.2deg)}
+#lh .gz-card h2{text-shadow:0 3px 0 #7B2FF7,0 0 24px rgba(255,62,165,.7)}
+
+/* 🏠 أسئلة عائلية — «مجلس البيت»: أخضر دافي، ذهبي، شريط سدو، وبطاقة على شكل قوس */
+#fm{--tA:#F0C25E;--tA2:#B8862A;--tInk:#1a1205;--tFont:'El Messiri';--tRad:46px 46px 18px 18px;
+ --tScene:radial-gradient(70vmax 40vmax at 50% -10%,rgba(240,194,94,.28),transparent 60%),radial-gradient(50vmax 50vmax at 0% 100%,rgba(15,107,68,.5),transparent 60%),linear-gradient(170deg,#073a24,#03170e);
+ --tCard:linear-gradient(170deg,rgba(9,58,36,.94),rgba(4,24,15,.96));--tBorder:2px solid rgba(240,194,94,.75);--tShadow:0 0 0 6px rgba(4,24,15,.9),0 0 0 7px rgba(240,194,94,.4),0 30px 80px -30px #000}
+#fm .gz-bgfx::after{left:0;right:0;bottom:0;height:34px;opacity:.85;
+ background:linear-gradient(135deg,#B8862A 25%,transparent 25%) -17px 0/34px 34px,linear-gradient(225deg,#B8862A 25%,transparent 25%) -17px 0/34px 34px,linear-gradient(315deg,#8f2b20 25%,transparent 25%) 0 0/34px 34px,linear-gradient(45deg,#8f2b20 25%,transparent 25%) 0 0/34px 34px,#F3E7C9;border-top:4px solid #07341F}
+#fm .gz-card::before{content:"";position:absolute;top:12px;left:50%;width:46px;height:6px;margin-left:-23px;border-radius:6px;background:linear-gradient(90deg,#B8862A,#F0C25E,#B8862A)}
+
+/* 🌶️ كثّر بهارات — «سوق البهارات»: عنابي، زعفران، فلفل، وكيس خيش مخيّط */
+#bh{--tA:#F2A541;--tA2:#E2492F;--tInk:#2a0e05;--tFont:'Marhey';--tRad:20px;
+ --tScene:radial-gradient(3px 3px at 20% 30%,#F2A541 60%,transparent 62%) 0 0/46px 46px,radial-gradient(3px 3px at 70% 60%,#E2492F 60%,transparent 62%) 0 0/58px 58px,radial-gradient(2px 2px at 40% 80%,#E8D44D 60%,transparent 62%) 0 0/38px 38px,radial-gradient(60vmax 50vmax at 100% 0%,rgba(226,73,47,.38),transparent 60%),radial-gradient(60vmax 50vmax at 0% 100%,rgba(242,165,65,.25),transparent 60%),linear-gradient(170deg,#3a1209,#1a0703);
+ --tCard:repeating-linear-gradient(45deg,rgba(255,255,255,.018) 0 2px,transparent 2px 6px),linear-gradient(170deg,rgba(74,32,14,.95),rgba(38,14,6,.96));--tBorder:2px dashed rgba(242,165,65,.7);--tShadow:0 0 0 8px rgba(58,24,10,.9),0 30px 80px -30px #000}
+#bh .gz-card::before{content:"🌶️";position:absolute;top:10px;inset-inline-end:26px;font-size:34px;transform:rotate(18deg);filter:drop-shadow(0 6px 10px rgba(0,0,0,.6))}
+
+/* 💌 مشاعر — «رسالة من القلب»: خوخي وليلكي، قلوب طايرة، وختم شمع على البطاقة */
+#ms{--tA:#FF8FB1;--tA2:#B48CFF;--tInk:#2b0a1c;--tFont:'Aref Ruqaa';--tRad:24px;
+ --tScene:radial-gradient(60vmax 50vmax at 90% 0%,rgba(255,143,177,.35),transparent 60%),radial-gradient(60vmax 50vmax at 0% 100%,rgba(180,140,255,.32),transparent 60%),linear-gradient(170deg,#2a0f2e,#12061a);
+ --tCard:linear-gradient(170deg,rgba(54,20,52,.93),rgba(26,8,30,.96));--tBorder:1px solid rgba(255,143,177,.55);--tShadow:0 30px 80px -30px #000,inset 0 0 0 10px rgba(255,143,177,.05)}
+#ms .gz-bgfx i{background:none;box-shadow:none;width:auto;height:auto;opacity:.55}
+#ms .gz-bgfx i::before{content:"♥";font-size:28px;color:#FF8FB1;text-shadow:0 0 18px #FF8FB1}
+#ms .gz-bgfx i:nth-child(2)::before{color:#B48CFF;font-size:20px}
+#ms .gz-card{padding-top:74px!important}
+#ms .gz-card::before{content:"♥";position:absolute;top:14px;left:50%;margin-left:-24px;width:48px;height:48px;border-radius:50%;display:grid;place-items:center;font-size:22px;color:#fff;background:radial-gradient(circle at 35% 35%,#ff9fbf,#c2185b);box-shadow:0 6px 16px rgba(0,0,0,.5),inset 0 -3px 6px rgba(0,0,0,.25)}
+#ms .gz-card::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(155deg,transparent 49.6%,rgba(255,143,177,.18) 50%,transparent 50.4%),linear-gradient(205deg,transparent 49.6%,rgba(255,143,177,.18) 50%,transparent 50.4%);background-size:100% 70px;background-repeat:no-repeat}
+
+/* 🌙 نص الليل — «سماء نجدية»: نجوم كثيفة، شفق خفيف، وخط أميري */
+#ns{--tA:#A9BCFF;--tA2:#5A6EFF;--tInk:#070b24;--tFont:'Amiri';--tRad:32px;
+ --tScene:radial-gradient(1px 1px at 10% 15%,#fff 98%,transparent) 0 0/120px 120px,radial-gradient(1px 1px at 60% 40%,#cfd8ff 98%,transparent) 0 0/170px 170px,radial-gradient(1.5px 1.5px at 30% 70%,#fff 98%,transparent) 0 0/230px 230px,radial-gradient(1px 1px at 80% 85%,#fff 98%,transparent) 0 0/90px 90px,radial-gradient(90vmax 30vmax at 50% 105%,rgba(15,107,68,.35),transparent 60%),radial-gradient(70vmax 40vmax at 80% -10%,rgba(90,110,255,.35),transparent 60%),linear-gradient(#050816,#0a1238);
+ --tCard:linear-gradient(170deg,rgba(14,22,62,.86),rgba(6,10,30,.92));--tBorder:1px solid rgba(169,188,255,.45)}
+#ns .gz-bgfx{animation:thTwinkle 6s ease-in-out infinite alternate}
+@keyframes thTwinkle{to{filter:brightness(1.35)}}
+#ns .gz-card h2{font-size:clamp(1.8rem,5.6vw,2.7rem)}
+
+
+/* flip cards (shared .lh-face markup in all card games) */
+:is(#lh,#fm,#bh,#ms,#ns) .lh-back{background:var(--tBack)!important;border-color:var(--tA)!important;box-shadow:0 0 50px -12px var(--tA),inset 0 0 0 10px rgba(255,255,255,.03)!important}
+:is(#lh,#fm,#bh,#ms,#ns) .lh-front{background:var(--tFront)!important}
+:is(#lh,#fm,#bh,#ms,#ns) .lh-back b,:is(#lh,#fm,#bh,#ms,#ns) .lh-back h3,:is(#lh,#fm,#bh,#ms,#ns) .lh-back strong{font-family:var(--tFont),var(--font)}
+#lh{--tBack:radial-gradient(5px 5px at 20% 30%,#FFD24A 50%,transparent 52%) 0 0/70px 70px,radial-gradient(4px 4px at 70% 60%,#3EE6FF 50%,transparent 52%) 0 0/90px 90px,repeating-linear-gradient(-45deg,rgba(255,62,165,.16) 0 16px,transparent 16px 32px),linear-gradient(160deg,#3a0a4a,#14031c);--tFront:linear-gradient(165deg,#22072e,#0f0216)}
+#fm{--tBack:linear-gradient(135deg,rgba(184,134,42,.35) 25%,transparent 25%) -20px 0/40px 40px,linear-gradient(225deg,rgba(184,134,42,.35) 25%,transparent 25%) -20px 0/40px 40px,linear-gradient(315deg,rgba(143,43,32,.35) 25%,transparent 25%) 0 0/40px 40px,linear-gradient(45deg,rgba(143,43,32,.35) 25%,transparent 25%) 0 0/40px 40px,linear-gradient(160deg,#0a4a2e,#03170e);--tFront:linear-gradient(165deg,#073a24,#03170e)}
+#bh{--tBack:radial-gradient(3px 3px at 20% 30%,#F2A541 60%,transparent 62%) 0 0/30px 30px,radial-gradient(3px 3px at 70% 70%,#E2492F 60%,transparent 62%) 0 0/40px 40px,linear-gradient(160deg,#5a1f0e,#220904);--tFront:linear-gradient(165deg,#3a170a,#1a0703)}
+#ms{--tBack:radial-gradient(circle at 30% 40%,rgba(255,143,177,.35) 0 6px,transparent 7px) 0 0/48px 48px,radial-gradient(circle at 70% 75%,rgba(180,140,255,.3) 0 4px,transparent 5px) 0 0/48px 48px,linear-gradient(160deg,#4a1a4e,#1a0820);--tFront:linear-gradient(165deg,#2e1032,#14061a)}
+#ns{--tBack:radial-gradient(1px 1px at 10% 15%,#fff 98%,transparent) 0 0/50px 50px,radial-gradient(1.5px 1.5px at 60% 40%,#cfd8ff 98%,transparent) 0 0/80px 80px,radial-gradient(circle at 82% 19%,#0f1a4a 0 21px,transparent 22px),radial-gradient(circle at 78% 22%,#e9edff 0 22px,transparent 23px),linear-gradient(170deg,#0f1a4a,#050816);--tFront:linear-gradient(165deg,#0c1540,#050816)}
+
+/* ---------- arcade windows ---------- */
+.gzw[data-g] .gzw-box{position:relative;overflow:hidden}
+.gzw[data-g] .gzw-box>*{position:relative;z-index:1}
+.gzw[data-g] .gzw-box::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none}
+
+/* 🧠 ذاكرة إيلان — «شريحة إلكترونية»: لوحة دوائر خضراء ورقائق بأطراف ذهبية */
+.gzw[data-g="brain"] .gzw-box{background:linear-gradient(170deg,#06281a,#020d08)!important;border:1px solid rgba(61,220,151,.45)!important;border-radius:16px!important}
+.gzw[data-g="brain"] .gzw-box::before{background:linear-gradient(90deg,transparent 30%,rgba(61,220,151,.16) 30% 31%,transparent 31% 70%,rgba(61,220,151,.16) 70% 71%,transparent 71%) 0 0/120px 60px,linear-gradient(transparent 45%,rgba(61,220,151,.12) 45% 47%,transparent 47%) 0 0/60px 90px,radial-gradient(circle,rgba(226,180,75,.5) 2px,transparent 3px) 0 0/60px 60px}
+.gzw[data-g="brain"] h3{font-family:'Orbitron',var(--font)}
+.gzw[data-g="brain"] .mcard{background:linear-gradient(145deg,#0b1d14,#03100a);border:1px solid rgba(61,220,151,.35);border-radius:6px;box-shadow:inset 0 0 0 3px #03100a,0 0 0 2px rgba(226,180,75,.35)}
+.gzw[data-g="brain"] .mcard::after{content:"";position:absolute;inset:-6px 18%;border-top:3px dotted #E2B44B;border-bottom:3px dotted #E2B44B;pointer-events:none;opacity:.7}
+.gzw[data-g="brain"] .mcard{position:relative}
+.gzw[data-g="brain"] .mcard.f{background:linear-gradient(145deg,rgba(61,220,151,.35),rgba(15,107,68,.5))}
+.gzw[data-g="brain"] .mcard.m{border-color:#3DDC97;box-shadow:0 0 22px -4px #3DDC97}
+
+/* ⚡ إكس أو — «آركيد ريترو»: خطوط شاشة قديمة، إطار بكسل، وأزرار آركيد دائرية */
+.gzw[data-g="g-xo"] .gzw-box{background:#08060f!important;border:3px solid #9B5CFF!important;border-radius:6px!important;box-shadow:0 0 0 3px #08060f,0 0 0 6px #3EFFA0,0 40px 90px -30px #000!important}
+.gzw[data-g="g-xo"] .gzw-box::before{background:repeating-linear-gradient(rgba(255,255,255,.035) 0 2px,transparent 2px 4px)}
+.gzw[data-g="g-xo"] h3{font-family:'Bebas Neue','Changa',var(--font);letter-spacing:1px;font-size:22px}
+.gzw[data-g="g-xo"] .xo-c{border-radius:50%;background:radial-gradient(circle at 40% 35%,#2b2140,#0d0a17 70%);border:3px solid #2a2140;box-shadow:inset 0 -6px 0 rgba(0,0,0,.5),0 6px 0 #000}
+.gzw[data-g="g-xo"] .xo-c:active{transform:translateY(3px)}
+.gzw[data-g="g-xo"] .xo-c.w{border-color:#3EFFA0;box-shadow:0 0 24px #3EFFA0,inset 0 -6px 0 rgba(0,0,0,.5)}
+.gzw[data-g="g-xo"] .xo-msg{font-family:'Changa',var(--font);color:#3EFFA0;text-shadow:0 0 12px rgba(62,255,160,.6)}
+
+/* 🎯 اصطد المكعب — «رادار»: دوائر رادار وخط مسح يدور */
+.gzw[data-g="g-catch"] .gzw-box{background:radial-gradient(circle at 50% 55%,#0b2a3c,#03101a 70%)!important;border:1px solid rgba(79,224,255,.45)!important;border-radius:28px!important}
+.gzw[data-g="g-catch"] .gzw-box::before{inset:-40%;background:repeating-radial-gradient(circle at 50% 50%,transparent 0 58px,rgba(79,224,255,.14) 59px 60px),conic-gradient(from 0deg,rgba(79,224,255,.32),transparent 60deg 360deg);animation:thSweep 4s linear infinite;border-radius:50%}
+@keyframes thSweep{to{transform:rotate(360deg)}}
+.gzw[data-g="g-catch"] .cc-c{border-radius:50%;background:radial-gradient(circle,#0d3a52 0 30%,#07202f 31% 55%,#0d3a52 56% 58%,#04141f 59%);border:1px solid rgba(79,224,255,.35)}
+.gzw[data-g="g-catch"] h3{font-family:'Changa',var(--font)}
+
+/* 🐍 Neon Snake — «سينث ويف»: سماء غروب وردية وأرضية شبكية بالمنظور */
+.gzw[data-g="g-snake"] .gzw-box{background:linear-gradient(#1b0633 0%,#3a0b4f 45%,#0a0a24 100%)!important;border:1px solid rgba(255,62,165,.5)!important}
+.gzw[data-g="g-snake"] .gzw-box::before{top:auto;height:45%;background:linear-gradient(rgba(255,62,165,.55) 2px,transparent 2px) 0 0/100% 26px,linear-gradient(90deg,rgba(255,62,165,.55) 2px,transparent 2px) 50% 0/48px 100%;transform:perspective(260px) rotateX(58deg);transform-origin:50% 0;animation:thGrid 1.6s linear infinite;opacity:.6}
+@keyframes thGrid{to{background-position:0 26px,50% 0}}
+.gzw[data-g="g-snake"] .gzw-box::after{content:"";position:absolute;left:50%;top:38%;width:180px;height:180px;margin-left:-90px;border-radius:50%;z-index:0;pointer-events:none;opacity:.45;background:repeating-linear-gradient(transparent 0 14px,#1b0633 14px 18px),linear-gradient(#FFD24A,#FF3EA5)}
+.gzw[data-g="g-snake"] #snake{border:2px solid #FF3EA5;box-shadow:0 0 30px rgba(255,62,165,.5);background:rgba(7,6,20,.92)}
+.gzw[data-g="g-snake"] h3{font-family:'Orbitron',var(--font)}
+
+/* ---------- catalog covers: each game its own scene ---------- */
+.gzc[data-g] .gzc-art::after{content:attr(data-cap);position:absolute;bottom:9px;inset-inline-start:12px;font-size:11px;font-weight:800;letter-spacing:.3px;padding:3px 10px;border-radius:999px;background:rgba(0,0,0,.45);color:#fff;backdrop-filter:blur(6px);z-index:1}
+.gzc[data-g="guess"] .gzc-art{background:radial-gradient(circle at 82% 22%,transparent 0 34px,rgba(95,212,234,.5) 35px 38px,transparent 39px),linear-gradient(rgba(95,212,234,.12) 1px,transparent 1px) 0 0/18px 18px,linear-gradient(90deg,rgba(95,212,234,.12) 1px,transparent 1px) 0 0/18px 18px,linear-gradient(160deg,#0B2466,#06123a)}
+.gzc[data-g="g-lahad"] .gzc-art{background:radial-gradient(5px 5px at 15% 25%,#FF3EA5 50%,transparent 52%),radial-gradient(4px 8px at 80% 30%,#FFD24A 50%,transparent 52%),radial-gradient(6px 4px at 25% 78%,#3EE6FF 50%,transparent 52%),radial-gradient(5px 5px at 70% 75%,#9B5CFF 50%,transparent 52%),radial-gradient(90% 80% at 100% 0%,rgba(255,62,165,.55),transparent 60%),radial-gradient(90% 80% at 0% 100%,rgba(123,47,247,.6),transparent 60%),#16041f}
+.gzc[data-g="g-family"] .gzc-art{background:linear-gradient(135deg,#B8862A 25%,transparent 25%) -8px 100%/16px 16px repeat-x,linear-gradient(225deg,#B8862A 25%,transparent 25%) -8px 100%/16px 16px repeat-x,radial-gradient(90% 60% at 50% -10%,rgba(240,194,94,.4),transparent 60%),linear-gradient(170deg,#0a4a2e,#03170e)}
+.gzc[data-g="g-bahar"] .gzc-art{background:radial-gradient(2.5px 2.5px at 20% 30%,#F2A541 60%,transparent 62%) 0 0/26px 26px,radial-gradient(2.5px 2.5px at 70% 60%,#E2492F 60%,transparent 62%) 0 0/34px 34px,radial-gradient(90% 80% at 100% 0%,rgba(226,73,47,.5),transparent 60%),linear-gradient(170deg,#4a170b,#1a0703)}
+.gzc[data-g="g-mashaer"] .gzc-art{background:radial-gradient(90% 80% at 90% 0%,rgba(255,143,177,.5),transparent 60%),radial-gradient(90% 80% at 0% 100%,rgba(180,140,255,.45),transparent 60%),linear-gradient(170deg,#3a1440,#12061a)}
+.gzc[data-g="g-nisf"] .gzc-art{background:radial-gradient(1px 1px at 10% 15%,#fff 98%,transparent) 0 0/60px 60px,radial-gradient(1.5px 1.5px at 60% 40%,#fff 98%,transparent) 0 0/90px 90px,radial-gradient(circle at 84% 22%,#0a1238 0 15px,transparent 16px),radial-gradient(circle at 80% 25%,#e9edff 0 16px,transparent 17px),linear-gradient(#050816,#0f1a4a)}
+.gzc[data-g="memory"] .gzc-art{background:linear-gradient(90deg,transparent 30%,rgba(61,220,151,.22) 30% 31.5%,transparent 31.5% 70%,rgba(61,220,151,.22) 70% 71.5%,transparent 71.5%) 0 0/80px 40px,radial-gradient(circle,rgba(226,180,75,.6) 1.5px,transparent 2.5px) 0 0/40px 40px,linear-gradient(170deg,#06281a,#020d08)}
+.gzc[data-g="xo"] .gzc-art{background:repeating-linear-gradient(rgba(255,255,255,.04) 0 2px,transparent 2px 4px),radial-gradient(70% 60% at 50% 50%,rgba(155,92,255,.35),transparent 70%),#08060f;box-shadow:inset 0 0 0 3px #9B5CFF}
+.gzc[data-g="catch"] .gzc-art{background:repeating-radial-gradient(circle at 50% 55%,transparent 0 26px,rgba(79,224,255,.2) 27px 28px),radial-gradient(circle at 50% 55%,#0b2a3c,#03101a 75%)}
+.gzc[data-g="snake"] .gzc-art{background:linear-gradient(transparent 62%,rgba(255,62,165,.5) 62% 63%,transparent 63% 72%,rgba(255,62,165,.4) 72% 73%,transparent 73% 84%,rgba(255,62,165,.35) 84% 85%,transparent 85%),radial-gradient(circle at 50% 62%,#FFD24A 0 22px,#FF3EA5 34px,transparent 35px),linear-gradient(#1b0633,#3a0b4f 60%,#0a0a24)}
+.gzc[data-g="jawib"] .gzc-art{background:radial-gradient(90% 80% at 85% 0%,rgba(74,42,143,.65),transparent 60%),radial-gradient(90% 80% at 0% 100%,rgba(15,107,68,.6),transparent 60%),radial-gradient(70% 60% at 50% 50%,rgba(30,68,200,.45),transparent 75%),#07080C}
+.gzc[data-g] .gzc-art::before{opacity:.35}

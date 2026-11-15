@@ -65,6 +65,26 @@ button{background:none;border:0;cursor:pointer}
 .pend{display:inline-block;background:#fff3c4;color:#6b5200;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:700}
 @media (max-width:899px){#panel{top:auto;bottom:74px;left:8px;right:8px;width:auto;max-height:46vh}#panel.closed{transform:translateY(120%)}.views{top:60px}}
 @media (max-width:560px){.ib .lb{display:none}.brand small{display:none}}
+/* pieces tray & explanation */
+#tray{position:fixed;z-index:5;left:50%;transform:translateX(-50%);bottom:76px;width:min(720px,calc(100% - 24px));display:flex;flex-direction:column;gap:6px;align-items:center;pointer-events:none}
+#tray>*{pointer-events:auto}
+.tmode{display:flex;background:rgba(15,18,30,.8);border:1px solid rgba(216,255,230,.16);border-radius:999px;padding:3px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.tmode button{height:32px;padding:0 14px;border-radius:999px;font-size:13px;font-weight:700;color:#C9CEDD}
+.tmode button.on{background:var(--mint);color:var(--night)}
+#tmsg{font-size:13.5px;line-height:1.6;text-align:center;background:rgba(15,18,30,.82);border:1px solid rgba(216,255,230,.14);padding:7px 14px;border-radius:14px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);max-width:100%}
+#tmsg.stop{background:rgba(120,25,20,.85);border-color:#ff8a7a}#tmsg.ok{background:rgba(7,52,31,.9);border-color:#7fc4a0}
+.tchips{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.chip{height:36px;padding:0 14px;border-radius:999px;font-size:13.5px;font-weight:700;background:#F6F1E4;color:#23252E;box-shadow:0 6px 16px rgba(0,0,0,.35)}
+.chip.ess{background:#fff3c4}
+.chip.next{background:var(--mint);animation:pulse 1.2s ease-in-out infinite}
+@keyframes pulse{50%{transform:scale(1.08);box-shadow:0 0 0 6px rgba(216,255,230,.25)}}
+#dhint{position:fixed;z-index:7;top:112px;left:50%;transform:translateX(-50%);max-width:min(560px,92vw);text-align:center;font-size:14px;font-weight:700;background:#F6F1E4;color:#23252E;padding:9px 16px;border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.45);pointer-events:none}
+.pexp{font-size:14px;line-height:1.8;color:#2b2d36;margin-top:12px;border-top:1px dashed rgba(0,0,0,.15);padding-top:6px}
+.pexp .xh{font-weight:900;color:var(--purple);margin:10px 0 2px;font-size:14px}
+.pexp ul,.pexp ol{margin:2px 18px 4px;padding:0}.pexp li{margin:2px 0}
+.pexp .fx{direction:ltr;unicode-bidi:isolate;font-family:'Times New Roman',serif;font-style:italic;color:#14286f;display:inline-block}
+.pexp p{margin:4px 0}
+@media (max-width:899px){#tray{bottom:auto;top:100px}#dhint{top:auto;bottom:84px}}
 /* sheets */
 #veil{position:fixed;inset:0;z-index:20;background:rgba(5,6,10,.6);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 .sheet{position:fixed;z-index:21;left:50%;top:50%;transform:translate(-50%,-50%);width:min(640px,94vw);max-height:86vh;display:flex;flex-direction:column;background:#11142a;border:1px solid rgba(216,255,230,.14);border-radius:20px;box-shadow:0 30px 70px rgba(0,0,0,.6);overflow:hidden}
@@ -114,9 +134,9 @@ form select option{background:#11142a}
   <div class="pb">
     <div class="pn" id="pn"></div>
     <div class="pf" id="pf"></div>
-    <div class="pd" id="pd"></div>
     <div class="ch">🧮 <span data-t="calc"></span></div>
     <div id="calc"></div>
+    <div class="pexp" id="pexp"></div>
     <div id="pby"></div>
   </div>
 </aside>
@@ -124,10 +144,12 @@ form select option{background:#11142a}
 <div class="bot">
   <button class="nav" id="prev" aria-label="previous">→</button>
   <span class="num" id="num"></span>
-  <button class="ib" id="ptog">🧮 <span class="lb" data-t="calc"></span></button>
+  <button class="ib" id="ptog">📘 <span class="lb" data-t="explain"></span></button>
   <button class="nav" id="next" aria-label="next">←</button>
 </div>
 <div id="hint" data-t="drag"></div>
+<div id="tray" class="hide"><div id="tmode" class="tmode"></div><div id="tmsg"></div><div id="tchips" class="tchips"></div></div>
+<div id="dhint" class="hide"></div>
 
 <div id="veil" class="hide"></div>
 <section class="sheet hide" id="s-search"><div class="sh"><h3>🔍 <span data-t="title"></span></h3><button class="ib" data-close>✕</button></div><div class="sb"><input class="search" id="q" type="search" autocomplete="off"><div id="sres"></div></div></section>
@@ -154,16 +176,16 @@ form select option{background:#11142a}
 window.addEventListener('DOMContentLoaded',()=>{const en=(localStorage.getItem('eb-lang')||'ar')==='en'||new URLSearchParams(location.search).get('lang')==='en';if(!en)return;const T={addH:'✍️ Do you have an equation?',addIntro:'If your equation is not in the Eilan book yet, add it here with your own way of explaining it. Eilan designs the interactive explanation; the idea and explanation stay yours.',lN:'Equation name *',lF:'Formula *',lS:'Field',lH:'Your explanation (what does it mean? what is each symbol? an example?) *',lBy:'Name to show in the book',lC:'Contact (optional — never shown)',addNote:'You will see your equation at the end of the book right away. Everyone else sees it after the Eilan team reviews it.',addBtnT:'Add my equation',ldT:'Opening the book…'};for(const k in T){const el=document.getElementById(k);if(el)el.textContent=T[k]}document.getElementById('lShow').innerHTML='<b>Do you want your name shown in the Eilan book?</b><br>If you agree, your name appears at the bottom of the equation page — “Idea & explanation: your name” — for everyone who opens the book.'});
 </script>
 <script type="importmap">{"imports":{"three":"/vendor/three/three.module.min.js"}}</script>
-<script src="/books/eq/core.js?v=1"></script>
-<script src="/books/eq/data-physics.js?v=1"></script>
-<script src="/books/eq/data-physics2.js?v=1"></script>
-<script src="/books/eq/data-chemistry.js?v=1"></script>
-<script src="/books/eq/data-math.js?v=1"></script>
-<script src="/books/eq/data-math2.js?v=1"></script>
-<script src="/books/eq/data-stats.js?v=1"></script>
-<script src="/books/eq/data-life.js?v=1"></script>
-<script src="/books/eq/data-more.js?v=1"></script>
-<script src="/books/eq/community.js?v=1"></script>
-<script type="module" src="/books/eq/app.js?v=1"></script>
+<script src="/books/eq/core.js?v=2"></script>
+<script src="/books/eq/data-physics.js?v=2"></script>
+<script src="/books/eq/data-physics2.js?v=2"></script>
+<script src="/books/eq/data-chemistry.js?v=2"></script>
+<script src="/books/eq/data-math.js?v=2"></script>
+<script src="/books/eq/data-math2.js?v=2"></script>
+<script src="/books/eq/data-stats.js?v=2"></script>
+<script src="/books/eq/data-life.js?v=2"></script>
+<script src="/books/eq/data-more.js?v=2"></script>
+<script src="/books/eq/community.js?v=2"></script>
+<script type="module" src="/books/eq/app.js?v=2"></script>
 </body>
 </html>

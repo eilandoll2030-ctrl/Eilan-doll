@@ -1,6 +1,7 @@
 /* موسوعة معادلات إيلان — محرك الكتاب ثلاثي الأبعاد (Three.js) */
 import * as THREE from 'three';
 import {kit,SCENES} from './scenes.js';
+import {PARTS} from './parts.js';
 const EQ=window.EQ,$=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 let lang='ar';try{lang=localStorage.getItem('eb-lang')||'ar'}catch(e){}
 {const q=new URLSearchParams(location.search).get('lang');if(q==='ar'||q==='en')lang=q}
@@ -11,7 +12,11 @@ const UI={title:['موسوعة معادلات إيلان','Eilan Equations Encyc
  eqOf:['معادلة','Equation'],of:['من','of'],drag:['اسحب لتدوير الكتاب · قرّب بإصبعين · اضغط على المجسمات','Drag to turn the book · pinch to zoom · tap the models'],
  vBook:['الكتاب','Book'],vText:['الصفحة','Page'],vModel:['المجسم','Model'],by:['✍️ الفكرة والشرح:','✍️ Idea & explanation:'],design:['🎨 التصميم التفاعلي: إيلان دول','🎨 Interactive design: Eilan Doll'],
  pending:['⏳ بانتظار المراجعة — تظهر لك أنت فقط الحين','⏳ Awaiting review — only you can see it for now'],fig:['شكل','Fig.'],tapHint:['حرّك القيم في الحاسبة وشوف المجسم يتغيّر','Change the values and watch the model respond'],
- count:['معادلة في الموسوعة','equations in the encyclopedia'],close:['إغلاق','Close'],none:['ما لقينا معادلة بهذا الاسم. تقدر تضيفها أنت! ✍️','No equation found. You can add it yourself! ✍️'],loading:['جاري فتح الكتاب…','Opening the book…']};
+ count:['معادلة في الموسوعة','equations in the encyclopedia'],explain:['الشرح والحاسبة','Explanation & calculator'],
+ auto:['⚡ تلقائي','⚡ Automatic'],build:['🧩 ابنِها خطوة بخطوة','🧩 Build it step by step'],dragHint:['✋ اسحب أي قطعة برّا الصفحة لتشيلها، أو اضغط عليها لتعرف دورها','✋ Drag any piece off the page to remove it, or tap it to see what it does'],
+ step:['الخطوة','Step'],add2:['أضف','Add'],done:['✅ اكتملت! المعادلة تشتغل الحين — جرّب تشيل أي قطعة وشوف وش يصير','✅ Complete! The equation is running — try removing a piece and see what happens'],
+ stopped:['⛔ المعادلة توقفت: شلت','⛔ The equation stopped: you removed'],putBack:['رجّعها لتشتغل','put it back to restart'],removed:['القطع المشالة','Removed pieces'],stopRes:['⛔ متوقفة','⛔ stopped'],
+ noPart:['ما تنحسب بدون','Cannot be computed without'],what:['وش تقول المعادلة؟','What does it say?'],how:['كيف تتغيّر النتيجة؟','How does the result change?'],solve:['الحل خطوة بخطوة','Solving it step by step'],try:['جرّب بنفسك','Try it yourself'],close:['إغلاق','Close'],none:['ما لقينا معادلة بهذا الاسم. تقدر تضيفها أنت! ✍️','No equation found. You can add it yourself! ✍️'],loading:['جاري فتح الكتاب…','Opening the book…']};
 const t=k=>L(UI[k]);
 
 /* ---------- list ---------- */
@@ -29,7 +34,9 @@ const sym=k=>EQ.sym[k]||{d:k,n:[k,k],u:'',v:1};
 const fmt=v=>{if(v===undefined||v===null||Number.isNaN(v))return '—';if(!isFinite(v))return v>0?'∞':'−∞';const a=Math.abs(v);if(a!==0&&(a>=1e6||a<1e-3))return v.toExponential(3).replace('e','×10^').replace('+','');return (+v.toPrecision(5)).toLocaleString('en-US',{maximumFractionDigits:6})};
 function values(e){const st=VALS[e.id]||(VALS[e.id]={});e.ins.forEach(k=>{if(st[k]===undefined)st[k]=sym(k).v});return st}
 const VALS={};
-function evalEq(e){const f=compile(e);const v=values(e);const out={...v};if(f){try{out[e.out]=f(...e.ins.map(k=>+v[k]))}catch(err){out[e.out]=NaN}}return out}
+const PS={kids:[],removed:new Set(),build:false,stopped:false,why:null};try{PS.build=localStorage.getItem('eq-build')==='1'}catch(e){}
+function partsState(e){const zero=new Set();let stop=null;PS.removed.forEach(i=>{const pt=PS.kids[i]&&PS.kids[i].userData.part;if(!pt)return;(pt.s||[]).forEach(k=>{if(e.ins.includes(k))zero.add(k)});if(pt.e&&!stop)stop=pt});return{zero,stop}}
+function evalEq(e,raw){const f=compile(e);const v=values(e);const out={...v};const ps=raw?{zero:new Set(),stop:null}:partsState(e);ps.zero.forEach(k=>out[k]=0);if(f){try{out[e.out]=f(...e.ins.map(k=>+out[k]))}catch(err){out[e.out]=NaN}}if(ps.stop&&e.out)out[e.out]=0;out.__stop=ps.stop;out.__zero=ps.zero;return out}
 function graphFn(e){const f=compile(e);if(!f||!e.ins.length)return null;const v=values(e);const k0=e.ins[0];return{key:k0,x0:+v[k0],xl:sym(k0).d,yl:sym(e.out).d,f:x=>{try{return f(...e.ins.map(k=>k===k0?x:+v[k]))}catch(err){return NaN}}}}
 
 /* ---------- renderer ---------- */
@@ -81,6 +88,7 @@ function drawText(c,e,idx){const x=c.getContext('2d'),W=c.width,H=c.height,P=86;
  x.save();const fz=e.f.length>34?54:e.f.length>24?66:82;x.font=`italic ${fz}px 'Cambria Math','Times New Roman',serif`;x.direction='ltr';x.textAlign='center';const fl=wrap(x,e.f,maxW-60);const bh=fl.length*(fz+18)+40;x.fillStyle='rgba(30,68,200,.07)';x.strokeStyle='rgba(30,68,200,.45)';x.setLineDash([10,8]);x.lineWidth=3;const rx=P,ry=y,rw=maxW;x.beginPath();x.roundRect?x.roundRect(rx,ry,rw,bh,22):x.rect(rx,ry,rw,bh);x.fill();x.stroke();x.fillStyle='#14286f';const FF=px=>`italic ${px}px 'Cambria Math','Times New Roman',serif`;fl.forEach((l,i)=>richDraw(x,l,W/2,ry+40+fz*.75+i*(fz+18),FF,fz,'center'));x.restore();y+=bh+44;
  // note
  x.font=BODY(46);x.fillStyle='#1d1f27';wrap(x,strip(L(e.d)),maxW).forEach(l=>{x.fillText(l,X0,y);y+=64});y+=18;
+ const rl=relations(e);if(rl.length){x.font=BODY(40);x.fillStyle='#0F6B44';rl.slice(0,2).forEach(l=>{wrap(x,'• '+l.replace(/[«»“”]/g,''),maxW).forEach(w=>{x.fillText(w,X0,y);y+=54})});y+=12}
  // symbols
  const all=[...(e.out?[e.out]:[]),...e.ins];if(all.length){x.font=UIF(34,true);x.fillStyle='#4A2A8F';x.fillText(t('syms'),X0,y);y+=52;x.font=UIF(35);all.slice(0,8).forEach(k=>{const s=sym(k);x.fillStyle='#1E44C8';x.save();const SF=px=>`italic 700 ${px}px 'Times New Roman',serif`;x.direction='ltr';const sw=richW(x,s.d,SF,40);richDraw(x,s.d,X0,y,SF,40,ar?'right':'left');x.restore();x.font=UIF(35);x.textAlign=ar?'right':'left';x.fillStyle='#2b2d36';x.fillText('  '+L(s.n)+(s.u?'  ('+s.u+')':''),ar?X0-sw-8:X0+sw+8,y);y+=52})}
  // worked example
@@ -100,8 +108,16 @@ function popAll(root,dir,dur=900,done){const kids=root.children.filter(c=>c.user
  tween(dur+kids.length*60,el=>{kids.forEach((k,i)=>{let p=K.clamp((el-i*60)/dur,0,1);p=dir>0?back(p):1-ease(p);k.scale.set(1,Math.max(.001,p),1);k.rotation.x=(1-K.clamp(p,0,1))*-1.25});},done)}
 function mountModel(e){if(cur){modelAnchor.remove(cur.root);cur.root.traverse(o=>{if(o.geometry)o.geometry.dispose()})}
  const fnB=SCENES[e.sc]||SCENES.energy;let s;try{s=fnB(K,e)}catch(err){console.error('scene',e.sc,err);s=SCENES.energy(K,e)}cur=s;
- const side=-textSide();modelAnchor.position.set(side*PW/2,TOPY+.004,-.02);modelAnchor.scale.setScalar(1.18);modelAnchor.add(s.root);s.root.traverse(o=>{if(o.isMesh){o.castShadow=o.castShadow!==false}});refreshModel();s.root.children.forEach(k=>{if(k.userData.pop){k.scale.set(1,.001,1);k.rotation.x=-1.25}})}
-function refreshModel(){const e=LIST[idx];if(!cur||!e)return;const v=evalEq(e);try{cur.update&&cur.update(v,graphFn(e))}catch(err){console.error(err)}}
+ const side=-textSide();modelAnchor.position.set(side*PW/2,TOPY+.004,-.02);modelAnchor.scale.setScalar(1.18);modelAnchor.add(s.root);s.root.traverse(o=>{if(o.isMesh){o.castShadow=o.castShadow!==false}});
+ const kids=s.root.children.filter(k=>k.userData.pop);const spec=(PARTS[e.sc]||(()=>[]))(e);kids.forEach((k,i)=>{k.userData.part=spec[i]||{n:['قطعة','Piece'],r:['جزء من المجسم','part of the model']};k.userData.home=k.position.clone();k.userData.idx=i});PS.kids=kids;PS.removed=new Set();dimMap.clear();
+ if(PS.build)kids.forEach((k,i)=>{if(!k.userData.part.b){PS.removed.add(i);k.visible=false}});
+ refreshModel();s.root.children.forEach(k=>{if(k.userData.pop){k.scale.set(1,.001,1);k.rotation.x=-1.25}})}
+const dimMap=new Map();
+function refreshModel(){const e=LIST[idx];if(!cur||!e)return;const v=evalEq(e);PS.stopped=!!v.__stop;try{cur.update&&cur.update(v,graphFn(e))}catch(err){console.error(err)}
+ // stopped: lights and glows go dark; restored when running again
+ cur.root.traverse(o=>{if(o.isLight){if(!dimMap.has(o))dimMap.set(o,o.intensity);if(PS.stopped)o.intensity=0;else if(o.intensity===0)o.intensity=dimMap.get(o)}
+  else if(o.isMesh&&o.material&&o.material.emissive&&!o.material.emissiveMap){const m=o.material;if(!dimMap.has(m))dimMap.set(m,m.emissiveIntensity);if(PS.stopped)m.emissiveIntensity=0;else if(m.emissiveIntensity===0&&e.sc!=='circuit')m.emissiveIntensity=dimMap.get(m)}});
+ tray();updRes()}
 function paint(e){drawText(textMesh().material.map.image,e,idx);textMesh().material.map.needsUpdate=true;drawModelPage(modelMesh().material.map.image,e,idx);modelMesh().material.map.needsUpdate=true}
 function show(i,{flip=0}={}){if(!LIST.length)return;i=(i+LIST.length)%LIST.length;const e=LIST[i];
  if(!flip||busy){idx=i;paint(e);mountModel(e);popAll(cur.root,1);ui();return}
@@ -122,14 +138,34 @@ function setMode(m){rig.mode=m;const s=textSide();if(m==='book'){rig.ttx=0;rig.t
 function updCam(dt){const k=Math.min(1,dt*5);rig.tx+=(rig.ttx-rig.tx)*k;rig.r+=(rig.tr-rig.r)*k;rig.th+=(rig.tth-rig.th)*k;rig.ph+=(rig.tph-rig.ph)*k;const sp=Math.sin(rig.ph);camera.position.set(rig.tx+rig.r*sp*Math.sin(rig.th),rig.ty+rig.r*Math.cos(rig.ph),rig.tz+rig.r*sp*Math.cos(rig.th));camera.lookAt(rig.tx,rig.ty,rig.tz)}
 /* pointer: drag rotate, pinch zoom, tap pick */
 {const pts=new Map();let down=null,pinch0=0,r0=0;
- cv.addEventListener('pointerdown',e=>{cv.setPointerCapture(e.pointerId);pts.set(e.pointerId,{x:e.clientX,y:e.clientY});if(pts.size===1)down={x:e.clientX,y:e.clientY,th:rig.tth,ph:rig.tph,moved:false};if(pts.size===2){const[a,b]=[...pts.values()];pinch0=Math.hypot(a.x-b.x,a.y-b.y);r0=rig.tr}});
- cv.addEventListener('pointermove',e=>{if(!pts.has(e.pointerId))return;pts.set(e.pointerId,{x:e.clientX,y:e.clientY});if(pts.size===2){const[a,b]=[...pts.values()];const d=Math.hypot(a.x-b.x,a.y-b.y);rig.tr=K.clamp(r0*pinch0/Math.max(20,d),1.1,6);if(down)down.moved=true;return}if(!down)return;const dx=e.clientX-down.x,dy=e.clientY-down.y;if(Math.abs(dx)+Math.abs(dy)>6)down.moved=true;rig.tth=K.clamp(down.th-dx*.006,-1.1,1.1);rig.tph=K.clamp(down.ph-dy*.005,.18,1.3)});
- const up=e=>{const wasTap=down&&!down.moved&&pts.size===1;pts.delete(e.pointerId);if(wasTap)pick(e);if(!pts.size)down=null};cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',e=>{pts.delete(e.pointerId);down=null});
+ cv.addEventListener('pointerdown',e=>{cv.setPointerCapture(e.pointerId);pts.set(e.pointerId,{x:e.clientX,y:e.clientY});if(pts.size===1){down={x:e.clientX,y:e.clientY,th:rig.tth,ph:rig.tph,moved:false};startDrag(e)}else{endDrag(null,true)}if(pts.size===2){const[a,b]=[...pts.values()];pinch0=Math.hypot(a.x-b.x,a.y-b.y);r0=rig.tr}});
+ cv.addEventListener('pointermove',e=>{if(!pts.has(e.pointerId))return;pts.set(e.pointerId,{x:e.clientX,y:e.clientY});if(pts.size===2){const[a,b]=[...pts.values()];const d=Math.hypot(a.x-b.x,a.y-b.y);rig.tr=K.clamp(r0*pinch0/Math.max(20,d),1.1,6);if(down)down.moved=true;return}if(!down)return;const dx=e.clientX-down.x,dy=e.clientY-down.y;if(Math.abs(dx)+Math.abs(dy)>6)down.moved=true;if(drag){if(down.moved)moveDrag(e);return}rig.tth=K.clamp(down.th-dx*.006,-1.1,1.1);rig.tph=K.clamp(down.ph-dy*.005,.18,1.3)});
+ const up=e=>{const wasTap=down&&!down.moved&&pts.size===1;pts.delete(e.pointerId);if(drag)endDrag(e,wasTap);if(wasTap)pick(e);if(!pts.size)down=null};cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',e=>{pts.delete(e.pointerId);down=null});
  cv.addEventListener('wheel',e=>{e.preventDefault();rig.tr=K.clamp(rig.tr*(1+e.deltaY*.0012),1.1,6)},{passive:false});
  cv.addEventListener('dblclick',()=>setMode(rig.mode))}
 const ray=new THREE.Raycaster(),ndc=new THREE.Vector2();
+let drag=null;const dragPlane=new THREE.Plane(new THREE.Vector3(0,1,0),0),tmpV=new THREE.Vector3();
+function rayAt(e){const r=cv.getBoundingClientRect();ndc.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);ray.setFromCamera(ndc,camera)}
+function planePt(e){rayAt(e);dragPlane.constant=-(TOPY+.004);if(!ray.ray.intersectPlane(dragPlane,tmpV))return null;return modelAnchor.worldToLocal(tmpV.clone())}
+function partOf(o){while(o&&!o.userData.pop)o=o.parent;return o}
+function startDrag(e){if(!cur||busy)return;rayAt(e);const hit=ray.intersectObjects(cur.root.children,true).find(h=>h.object.isMesh&&h.object.visible);if(!hit)return;const k=partOf(hit.object);if(!k||!k.userData.part||k.userData.part.b)return;const p=planePt(e);if(!p)return;drag={k,ox:k.position.x-p.x,oz:k.position.z-p.z}}
+function moveDrag(e){const p=planePt(e);if(!p||!drag)return;drag.k.position.x=p.x+drag.ox;drag.k.position.z=p.z+drag.oz;const off=Math.abs(drag.k.position.x)>.47||Math.abs(drag.k.position.z)>.6;drag.k.traverse(o=>{if(o.isMesh&&o.material&&o.material.transparent===false)o.material.opacity=1});cv.style.cursor=off?'not-allowed':'grabbing';hint(off?(rtl()?'🗑️ أفلتها هنا لتشيلها':'🗑️ Let go to remove it'):'')}
+function endDrag(e,tap){if(!drag)return;const k=drag.k;drag=null;cv.style.cursor='';hint('');if(tap){k.position.y=0;return}const off=Math.abs(k.position.x)>.47||Math.abs(k.position.z)>.6;if(off){removePart(k.userData.idx)}else{tween(250,el=>{k.position.y=.035*(1-K.clamp(el/250,0,1))})}}
+function removePart(i){const k=PS.kids[i];if(!k||k.userData.part.b)return;PS.removed.add(i);tween(300,el=>{const q=K.clamp(el/300,0,1);k.scale.setScalar(Math.max(.001,1-q))},()=>{k.visible=false;k.scale.set(1,1,1)});refreshModel()}
+function addPart(i){const k=PS.kids[i];if(!k)return;PS.removed.delete(i);k.position.copy(k.userData.home);k.visible=true;k.scale.set(1,.001,1);tween(700,el=>{const p=back(K.clamp(el/700,0,1));k.scale.set(1,Math.max(.001,p),1)},()=>k.scale.set(1,1,1));refreshModel()}
+let hintT=null;function hint(msg){const h=$('#dhint');if(!h)return;h.textContent=msg;h.classList.toggle('hide',!msg)}
+function tray(){const box=$('#tray');if(!box||!PS.kids.length){box&&box.classList.add('hide');return}box.classList.remove('hide');const e=LIST[idx];
+ const rem=[...PS.removed].map(i=>PS.kids[i]).filter(Boolean).sort((a,b)=>(b.userData.part.e?1:0)-(a.userData.part.e?1:0)||a.userData.idx-b.userData.idx);
+ const ess=PS.kids.filter(k=>k.userData.part.e),missE=rem.filter(k=>k.userData.part.e);let msg;
+ if(PS.build&&missE.length){const n=ess.length-missE.length+1,pt=missE[0].userData.part;msg=`<b>${t('step')} ${n} / ${ess.length}:</b> ${t('add2')} «${L(pt.n)}» — ${L(pt.r)}`}
+ else if(PS.stopped){const pt=evalEq(e).__stop;msg=`<b>${t('stopped')} «${L(pt.n)}»</b> — ${L(pt.r)}. ${t('putBack')}`}
+ else if(PS.build&&(ess.length||!rem.length))msg=t('done');else msg=t('dragHint');
+ $('#tmode').innerHTML=`<button class="${PS.build?'':'on'}" data-mode="auto">${t('auto')}</button><button class="${PS.build?'on':''}" data-mode="build">${t('build')}</button>`;
+ $('#tmsg').innerHTML=msg;$('#tmsg').className=PS.stopped&&!PS.build?'stop':(PS.build&&!missE.length&&ess.length?'ok':'');
+ $('#tchips').innerHTML=rem.map((k,j)=>`<button class="chip ${k.userData.part.e?'ess':''} ${(PS.build&&j===0&&k.userData.part.e)||(!PS.build&&PS.stopped&&k.userData.part.e&&j===0)?'next':''}" data-addpart="${k.userData.idx}">＋ ${esc(L(k.userData.part.n))}</button>`).join('')}
+document.addEventListener('click',ev=>{const a=ev.target.closest('[data-addpart]');if(a){addPart(+a.dataset.addpart);return}const m=ev.target.closest('[data-mode]');if(m){PS.build=m.dataset.mode==='build';try{localStorage.setItem('eq-build',PS.build?'1':'0')}catch(e){}if(cur){PS.removed=new Set();PS.kids.forEach((k,i)=>{k.visible=true;k.position.copy(k.userData.home);k.scale.set(1,1,1);if(PS.build&&!k.userData.part.b){PS.removed.add(i);k.visible=false}})}refreshModel()}});
 function pick(e){if(!cur||busy)return;const r=cv.getBoundingClientRect();ndc.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);ray.setFromCamera(ndc,camera);const hit=ray.intersectObjects(cur.root.children,true).find(h=>h.object.isMesh);
- if(hit){let handled=cur.tap&&cur.tap(hit.object);let p=hit.object;while(p&&!p.userData.pop)p=p.parent;if(p){const s0=p.scale.y;tween(500,el=>{const q=K.clamp(el/500,0,1);p.position.y=(p.userData.y0??(p.userData.y0=p.position.y))+Math.sin(q*Math.PI)*.05})}return}
+ if(hit){let handled=cur.tap&&cur.tap(hit.object);let p=hit.object;while(p&&!p.userData.pop)p=p.parent;if(p&&p.userData.part&&!handled){const pt=p.userData.part;hint(`${L(pt.n)} — ${L(pt.r)}${pt.b?'':(rtl()?' · اسحبها برّا الصفحة لتشيلها':' · drag it off the page to remove it')}`);clearTimeout(hintT);hintT=setTimeout(()=>hint(''),3200)}if(p){const s0=p.scale.y;tween(500,el=>{const q=K.clamp(el/500,0,1);p.position.y=(p.userData.y0??(p.userData.y0=p.position.y))+Math.sin(q*Math.PI)*.05})}return}
  const hp=ray.intersectObject(textMesh())[0];if(hp&&rig.mode==='book')setMode('text');else if(rig.mode!=='book'&&!hp)setMode('book')}
 
 /* ---------- resize & loop ---------- */
@@ -137,25 +173,48 @@ let panelW=0,panelH=0;
 function resize(){const W=window.innerWidth,H=window.innerHeight;R3.setSize(W,H,false);camera.aspect=W/H;
  const p=$('#panel');const open=!p.classList.contains('closed');const wide=W>=900;panelW=open&&wide?p.offsetWidth+24:0;panelH=open&&!wide?Math.min(p.offsetHeight,H*.5):0;
  if(panelW||panelH){const offX=(rtl()?panelW/2:-panelW/2),offY=panelH/2-30;camera.setViewOffset(W,H,offX,offY,W,H)}else camera.setViewOffset(W,H,0,-20,W,H);
- camera.updateProjectionMatrix();if(rig.mode==='book')rig.tr=fitR()*(panelW?1+panelW/W*1.5:1)*(panelH?1+panelH/H*.6:1);else setMode(rig.mode)}
+ const tr=$('#tray');if(tr){const avail=W-panelW;tr.style.left=(rtl()?avail/2:panelW+avail/2)+'px';tr.style.width=Math.min(720,avail-24)+'px'}
+ camera.updateProjectionMatrix();if(rig.mode==='book')rig.tr=fitR()*(panelW?1+panelW/W*2.1:1)*(panelH?1+panelH/H*.6:1);else setMode(rig.mode)}
 window.addEventListener('resize',resize);
 let last=performance.now();function loop(now){const dt=Math.min(.05,(now-last)/1000);last=now;
  for(let i=tweens.length-1;i>=0;i--){const tw=tweens[i];const el=now-tw.t0;tw.fn(el);if(el>=tw.dur){tweens.splice(i,1);tw.done&&tw.done()}}
- if(cur&&cur.tick)try{cur.tick(now/1000,dt)}catch(err){}
+ if(cur&&cur.tick&&!PS.stopped)try{cur.tick(now/1000,dt)}catch(err){}
+ if(drag)drag.k.position.y+=((.035)-drag.k.position.y)*Math.min(1,dt*10);
  updCam(dt);R3.render(scene,camera);requestAnimationFrame(loop)}
 
 /* ---------- UI ---------- */
 function ui(){const e=LIST[idx];if(!e)return;const cat=EQ.cats[e.cat];
  $('#num').textContent=`${t('eqOf')} ${idx+1} ${t('of')} ${LIST.length.toLocaleString('en-US')}`;$('#prog').style.width=((idx+1)/LIST.length*100)+'%';
- $('#pk').textContent=L(cat.n);$('#pn').textContent=strip(L(e.n));$('#pf').innerHTML=htmlF(e.f);$('#pd').textContent=strip(L(e.d));
+ $('#pk').textContent=L(cat.n);$('#pn').textContent=strip(L(e.n));$('#pf').innerHTML=htmlF(e.f);
  $('#pby').innerHTML=e.mine?`<span class="pend">${t('pending')}</span>`:'';if(e.by&&e.show!==false)$('#pby').innerHTML+=`<div><b>${t('by')}</b> ${esc(e.by)}</div><small>${t('design')}</small>`;
  const box=$('#calc');const f=compile(e);
  if(!f){box.innerHTML=`<p class="mu">${t('noCalc')}</p>`}
  else{const v=values(e);box.innerHTML=e.ins.map(k=>{const s=sym(k);return `<label><span><i>${htmlF(s.d)}</i> ${esc(L(s.n))}${s.u?` <em>(${esc(s.u)})</em>`:''}</span><input type="number" inputmode="decimal" step="any" data-k="${k}" value="${v[k]}"></label>`}).join('')+`<div class="res"><span>${t('result')}: <i>${htmlF(sym(e.out).d)}</i></span><b id="resv"></b></div>`;
   $$('#calc input').forEach(inp=>inp.addEventListener('input',()=>{const val=parseFloat(inp.value);if(!isNaN(val)){values(e)[inp.dataset.k]=val;updRes();refreshModel()}}));updRes()}
+ updRes();
  try{history.replaceState(null,'','#'+e.id)}catch(er){}
  try{localStorage.setItem('eq-pos',e.id)}catch(er){}}
-function updRes(){const e=LIST[idx];const v=evalEq(e);const r=v[e.out];const el=$('#resv');if(el)el.textContent=fmt(r)+(sym(e.out).u?' '+sym(e.out).u:'')}
+function updRes(){const e=LIST[idx];if(!e)return;const v=evalEq(e);const r=v[e.out];const el=$('#resv');if(el){if(v.__stop)el.textContent=t('stopRes');else if(!isFinite(r)&&v.__zero.size){const k=[...PS.removed].map(i=>PS.kids[i].userData.part).find(p=>(p.s||[]).some(s=>v.__zero.has(s)));el.textContent=t('noPart')+' '+(k?L(k.n):'')}else el.textContent=fmt(r)+(sym(e.out).u?' '+sym(e.out).u:'')}const x=$('#pexp');if(x)x.innerHTML=explainHTML(e)}
+/* auto explanation: built from the equation itself */
+function relations(e){const f=compile(e);if(!f)return[];const v=values(e);const base=e.ins.map(k=>+v[k]);let f0;try{f0=f(...base)}catch(er){return[]}if(!isFinite(f0)||f0===0)return[];const out=[];const on=L(sym(e.out).n);
+ e.ins.forEach((k,i)=>{const s=sym(k);if(s.u==='°'||s.u==='rad'){out.push(rtl()?`«${L(s.n)}» تؤثر عبر دالة مثلثية (جيب أو جيب تمام)، فالتغيير مو بنسبة ثابتة.`:`“${L(s.n)}” acts through a trig function, so the change isn’t a fixed ratio.`);return}
+  const b2=base.slice();if(b2[i]===0)return;b2[i]*=2;let f1;try{f1=f(...b2)}catch(er){return}if(!isFinite(f1))return;const r=f1/f0;const near=(a)=>Math.abs(r-a)<1e-3*Math.max(1,Math.abs(a));const nm=L(s.n);let txt=null;
+  if(near(1))return;else if(near(2))txt=rtl()?`إذا ضاعفت «${nm}» يتضاعف «${on}» — علاقة طردية.`:`Double “${nm}” and “${on}” doubles — directly proportional.`;
+  else if(near(.5))txt=rtl()?`إذا ضاعفت «${nm}» يقل «${on}» للنصف — علاقة عكسية.`:`Double “${nm}” and “${on}” halves — inversely proportional.`;
+  else if(near(4))txt=rtl()?`إذا ضاعفت «${nm}» يصير «${on}» 4 أضعاف — لأنه مربّع.`:`Double “${nm}” and “${on}” becomes 4× — it is squared.`;
+  else if(near(.25))txt=rtl()?`إذا ضاعفت «${nm}» يقل «${on}» للربع — عكسي مع المربع.`:`Double “${nm}” and “${on}” drops to a quarter — inverse square.`;
+  else if(near(8))txt=rtl()?`إذا ضاعفت «${nm}» يصير «${on}» 8 أضعاف — لأنه مكعّب.`:`Double “${nm}” and “${on}” becomes 8× — it is cubed.`;
+  else if(near(Math.SQRT2))txt=rtl()?`إذا ضاعفت «${nm}» يزيد «${on}» حوالي 1.41 مرة — تحت جذر.`:`Double “${nm}” and “${on}” grows about 1.41× — it is under a square root.`;
+  else if(near(Math.SQRT1_2))txt=rtl()?`إذا ضاعفت «${nm}» يقل «${on}» إلى حوالي 0.71 — عكسي مع الجذر.`:`Double “${nm}” and “${on}” falls to about 0.71 — inverse square root.`;
+  else if(near(-1))txt=rtl()?`إذا ضاعفت «${nm}» تنعكس إشارة «${on}».`:`Doubling “${nm}” flips the sign of “${on}”.`;
+  else txt=rtl()?`إذا ضاعفت «${nm}» ${r>1?'يزيد':'يقل'} «${on}» (×${(+r.toPrecision(3))}).`:`Double “${nm}” and “${on}” ${r>1?'rises':'falls'} (×${(+r.toPrecision(3))}).`;
+  out.push(txt)});return out}
+function explainHTML(e){const f=compile(e);const ins=e.ins;const v=values(e);let h=`<div class="xh">📌 ${t('what')}</div><p>${esc(strip(L(e.d)))}</p>`;
+ if(f&&e.out){h+=`<p>${rtl()?`المعادلة تحسب <b>${esc(L(sym(e.out).n))}</b> (<i>${htmlF(sym(e.out).d)}</i>) من: ${ins.map(k=>`<b>${esc(L(sym(k).n))}</b>`).join('، ')}.`:`It finds <b>${esc(L(sym(e.out).n))}</b> (<i>${htmlF(sym(e.out).d)}</i>) from ${ins.map(k=>`<b>${esc(L(sym(k).n))}</b>`).join(', ')}.`}</p>`;
+  const rel=relations(e);if(rel.length)h+=`<div class="xh">📈 ${t('how')}</div><ul>${rel.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+  const r=evalEq(e,true)[e.out];h+=`<div class="xh">✍️ ${t('solve')}</div><ol><li>${rtl()?'اكتب المعادلة:':'Write the equation:'} <span class="fx">${htmlF(e.f)}</span></li><li>${rtl()?'عوّض بالقيم:':'Substitute the values:'} <span class="fx">${ins.map(k=>`${htmlF(sym(k).d)} = ${fmt(+v[k])}${sym(k).u?' '+esc(sym(k).u):''}`).join('  ·  ')}</span></li><li>${rtl()?'احسب:':'Calculate:'} <span class="fx"><b>${htmlF(sym(e.out).d)} = ${fmt(r)}${sym(e.out).u?' '+esc(sym(e.out).u):''}</b></span></li></ol>`}
+ else h+=`<p class="mu">${rtl()?'هذي معادلة وصفية (تفاعل أو قانون عام) — اقرأ الرموز وشوف المجسم.':'This is a descriptive equation (a reaction or general law) — read the symbols and explore the model.'}</p>`;
+ const ess=PS.kids.map(k=>k.userData.part).filter(p=>p&&p.e);h+=`<div class="xh">🧪 ${t('try')}</div><ul>${ess.slice(0,2).map(p=>`<li>${rtl()?`شيل «${esc(L(p.n))}» من الصفحة وشوف وش يصير للمعادلة.`:`Remove the “${esc(L(p.n))}” from the page and see what happens.`}</li>`).join('')}${f?`<li>${rtl()?'غيّر الأرقام في الحاسبة وراقب المجسم.':'Change the numbers and watch the model.'}</li>`:''}<li>${rtl()?'جرّب وضع «ابنِها خطوة بخطوة» وركّب المعادلة قطعة قطعة.':'Try “Build it step by step” and assemble the equation piece by piece.'}</li></ul>`;return h}
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function texts(){document.documentElement.lang=lang;document.documentElement.dir=rtl()?'rtl':'ltr';$$('[data-t]').forEach(el=>el.textContent=t(el.dataset.t));$('#q').placeholder=t('search');$('#lang').textContent=rtl()?'EN':'عربي';$('#cnt').textContent=`${EQ.list.length.toLocaleString('en-US')} ${t('count')}`}
 function setLang(l){lang=l;try{localStorage.setItem('eb-lang',l)}catch(e){}K=kit(lang);texts();show(idx);resize();setMode(rig.mode)}
@@ -193,4 +252,5 @@ async function boot(){try{await Promise.race([Promise.all([document.fonts.load('
  show(st);resize();setMode(narrow?'model':'book');rig.r=rig.tr+1.2;rig.ph=.5;$('#loading').classList.add('hide');requestAnimationFrame(loop);
  setTimeout(()=>{const h=$('#hint');h.classList.add('hide')},5000)}
 window.addEventListener('hashchange',()=>{const h=decodeURIComponent(location.hash.slice(1));const i=LIST.findIndex(e=>e.id===h);if(i>=0&&i!==idx)show(i,{flip:i>idx?1:-1})});
+window.__eq={PS,removePart,addPart,screenOf:i=>{const k=PS.kids[i];const v=new THREE.Vector3();k.getWorldPosition(v);v.y+=.03;v.project(camera);const r=cv.getBoundingClientRect();return{x:(v.x+1)/2*r.width+r.left,y:(1-v.y)/2*r.height+r.top}}};
 boot();

@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>مكتبة الكتب التفاعلية | أكاديمية إيلان دول</title>
+<meta name="description" content="مكتبة الكتب التفاعلية في أكاديمية إيلان دول: كتب ثلاثية الأبعاد تتقلب صفحاتها، فيها شرح ومعادلات وتجارب تتحكم فيها بنفسك — فيزياء، رياضيات، كيمياء، أحياء، إحصاء.">
+<meta name="theme-color" content="#07080C">
+<link rel="icon" href="/favicon-96.png" sizes="96x96" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Reem+Kufi:wght@500;700&family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --night:#07080C;--blue:#1E44C8;--blue-d:#0B1F5E;--green:#0F6B44;--green-d:#07341F;--purple:#4A2A8F;--purple-d:#251147;--mint:#D8FFE6;--gold:#C9A227;
+  --paper:#F6F1E4;--paper2:#EDE5D2;--ink:#23252E;--ink2:#5A5C66;
+  --ui:'Tajawal',system-ui,-apple-system,sans-serif;--body:'Amiri',Georgia,serif;--head:'Reem Kufi','Tajawal',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:radial-gradient(1200px 700px at 80% -10%,rgba(30,68,200,.22),transparent 60%),radial-gradient(900px 600px at 0% 110%,rgba(15,107,68,.22),transparent 60%),radial-gradient(700px 500px at 50% 50%,rgba(74,42,143,.12),transparent 70%),var(--night);color:#EDEFF6;font-family:var(--ui);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+[dir=ltr] body,body[dir=ltr]{font-family:var(--ui)}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+a{color:inherit}
+.hide{display:none!important}
+
+/* ---------- top bar ---------- */
+.topbar{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:10px;padding:10px 16px;padding-top:max(10px,env(safe-area-inset-top));background:rgba(7,8,12,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(216,255,230,.08)}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.brand img{width:34px;height:34px}
+.brand b{display:block;font-size:15px;letter-spacing:.3px}
+.brand small{display:block;font-size:11px;color:#9FA6BC}
+.sp{flex:1}
+.pill{display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 14px;border-radius:999px;border:1px solid rgba(216,255,230,.16);background:rgba(255,255,255,.04);font-size:14px;font-weight:700;white-space:nowrap;text-decoration:none}
+.pill:hover{background:rgba(255,255,255,.09)}
+.pill.g{background:linear-gradient(135deg,var(--green),var(--green-d));border-color:transparent}
+
+/* ---------- library ---------- */
+.lib{max-width:1180px;margin:0 auto;padding:26px 18px 60px}
+.hero{display:grid;grid-template-columns:1.2fr 1fr;gap:26px;align-items:center;margin-bottom:26px}
+.eyebrow{font-size:12px;letter-spacing:2px;color:var(--mint);opacity:.8;font-weight:700}
+.hero h1{font-family:var(--head);font-size:clamp(28px,4.4vw,46px);line-height:1.25;margin:8px 0 10px}
+.grad{background:linear-gradient(90deg,#8FB2FF,var(--mint),#C9B5FF);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{color:#B9BFD0;font-size:16px;line-height:1.9}
+.hero-feats{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.hero-feats span{font-size:13px;padding:6px 12px;border-radius:999px;background:rgba(216,255,230,.06);border:1px solid rgba(216,255,230,.12)}
+.hero-book{perspective:1200px;display:flex;justify-content:center}
+.hb{width:min(360px,80vw);aspect-ratio:1.5;position:relative;transform:rotateX(42deg) rotateZ(-6deg);transform-style:preserve-3d;animation:float 6s ease-in-out infinite}
+.hb::before,.hb::after{content:"";position:absolute;top:0;bottom:0;width:50%;background:linear-gradient(90deg,#efe7d4,var(--paper));border-radius:4px 10px 10px 4px;box-shadow:0 30px 50px rgba(0,0,0,.5)}
+.hb::before{right:0;background:linear-gradient(270deg,#e6dcc5,var(--paper) 30%)}
+.hb::after{left:0;background:linear-gradient(90deg,#e6dcc5,var(--paper) 30%);border-radius:10px 4px 4px 10px}
+.hb-pop{position:absolute;left:8%;bottom:28%;width:36%;height:70%;transform-origin:50% 100%;transform:rotateX(-70deg);z-index:2;display:flex;align-items:flex-end;justify-content:center}
+.hb-pop svg{width:100%;height:100%;overflow:visible}
+.hb-lines{position:absolute;right:6%;top:14%;width:36%;z-index:2}
+.hb-lines i{display:block;height:6px;border-radius:3px;background:#cfc5ae;margin:0 0 10px}
+.hb-lines i:nth-child(1){width:70%;height:10px;background:#9b917c}
+.hb-lines i:nth-child(4){width:60%;background:var(--blue);opacity:.5}
+@keyframes float{50%{transform:rotateX(40deg) rotateZ(-4deg) translateY(-8px)}}
+
+.toolrow{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:8px 0 22px}
+.search{flex:1;min-width:220px;height:44px;border-radius:14px;border:1px solid rgba(216,255,230,.16);background:rgba(255,255,255,.04);color:#fff;padding:0 16px;font:inherit;font-size:15px}
+.search:focus{outline:2px solid rgba(216,255,230,.35)}
+.cats{display:flex;gap:6px;flex-wrap:wrap}
+.cat{height:36px;padding:0 14px;border-radius:999px;font-size:14px;border:1px solid rgba(216,255,230,.12);background:rgba(255,255,255,.03)}
+.cat.on{background:var(--mint);color:var(--night);font-weight:700}
+
+.shelf{margin-bottom:34px}
+.shelf h2{font-family:var(--head);font-size:21px;margin-bottom:6px;display:flex;align-items:center;gap:10px}
+.shelf h2 small{font-family:var(--ui);font-size:13px;color:#9FA6BC;font-weight:400}
+.shelf-row{display:flex;gap:22px;overflow-x:auto;padding:22px 6px 0;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}
+.shelf-row::-webkit-scrollbar{height:6px}.shelf-row::-webkit-scrollbar-thumb{background:rgba(255,255,255,.15);border-radius:3px}
+.plank{height:16px;margin-top:-2px;border-radius:4px;background:linear-gradient(180deg,#2a2f45,#141726);box-shadow:0 14px 26px rgba(0,0,0,.55),inset 0 1px 0 rgba(216,255,230,.18)}
+.bk{flex:0 0 auto;width:150px;scroll-snap-align:start;perspective:900px;text-align:center;padding-bottom:8px;position:relative}
+.bk-3d{width:132px;height:184px;margin:0 auto;position:relative;transform-style:preserve-3d;transform:rotateY(-24deg);transition:transform .45s cubic-bezier(.2,.8,.2,1)}
+[dir=ltr] .bk-3d{transform:rotateY(24deg)}
+.bk:hover .bk-3d,.bk:focus-visible .bk-3d{transform:rotateY(-8deg) translateY(-8px)}
+[dir=ltr] .bk:hover .bk-3d{transform:rotateY(8deg) translateY(-8px)}
+.bk-cover{position:absolute;inset:0;border-radius:4px 10px 10px 4px;padding:14px 12px;display:flex;flex-direction:column;justify-content:space-between;text-align:start;overflow:hidden;box-shadow:inset 6px 0 10px rgba(0,0,0,.35),0 18px 28px rgba(0,0,0,.5)}
+[dir=rtl] .bk-cover{border-radius:10px 4px 4px 10px;box-shadow:inset -6px 0 10px rgba(0,0,0,.35),0 18px 28px rgba(0,0,0,.5)}
+.bk-cover::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,rgba(255,255,255,.18),transparent 40%);pointer-events:none}
+.bk-cover .ic{font-size:40px;line-height:1}
+.bk-cover b{font-family:var(--head);font-size:18px;line-height:1.3}
+.bk-cover small{font-size:11px;opacity:.85}
+.bk-cover .sig{display:flex;align-items:center;gap:5px;font-size:9px;letter-spacing:1px;opacity:.85}
+.bk-cover .sig img{width:14px;height:14px}
+.bk-pages{position:absolute;top:4px;bottom:4px;width:16px;background:repeating-linear-gradient(90deg,#f3ecdc 0 2px,#ddd3bd 2px 3px);transform:rotateY(90deg) translateZ(-8px);transform-origin:center}
+[dir=rtl] .bk-pages{left:-8px}
+[dir=ltr] .bk-pages{right:-8px}
+.bk .meta{margin-top:12px;font-size:13px;color:#B9BFD0}
+.bk .meta b{display:block;color:#fff;font-size:14px}
+.badge{position:absolute;top:2px;inset-inline-start:6px;z-index:3;font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px;background:var(--gold);color:#201a05}
+.badge.soon{background:rgba(255,255,255,.12);color:#D7DBE6}
+.bk.soon .bk-3d{filter:saturate(.55) brightness(.75)}
+.empty{padding:30px;text-align:center;color:#9FA6BC}
+
+.howto{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:10px}
+.howto div{padding:16px;border-radius:16px;background:rgba(255,255,255,.035);border:1px solid rgba(216,255,230,.1);font-size:14px;line-height:1.8;color:#C3C8D6}
+.howto b{display:block;color:#fff;font-size:15px;margin-bottom:4px}
+.foot{margin-top:40px;text-align:center;font-size:12px;color:#7D839A}
+
+/* ---------- reader ---------- */
+#reader{position:fixed;inset:0;z-index:40;display:flex;flex-direction:column;background:radial-gradient(900px 500px at 50% 20%,rgba(30,68,200,.18),transparent 70%),linear-gradient(180deg,#0b0d15,#07080C)}
+.rd-top{display:flex;align-items:center;gap:8px;padding:10px 14px;padding-top:max(10px,env(safe-area-inset-top))}
+.rd-title{font-weight:700;font-size:15px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.rd-title small{display:block;font-weight:400;color:#9FA6BC;font-size:12px}
+.ib{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;border:1px solid rgba(216,255,230,.14);background:rgba(255,255,255,.04);font-size:17px;flex:0 0 auto}
+.ib:hover{background:rgba(255,255,255,.1)}
+.ib.on{background:var(--mint);color:var(--night)}
+.ib.txt{width:auto;padding:0 12px;font-size:14px;font-weight:700;white-space:nowrap}
+.desk{flex:1;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;perspective:2000px;perspective-origin:50% 20%}
+.desk::after{content:"";position:absolute;left:10%;right:10%;bottom:4%;height:30px;background:radial-gradient(closest-side,rgba(0,0,0,.6),transparent);pointer-events:none}
+.book{position:relative;display:flex;transform-style:preserve-3d;transition:transform .8s cubic-bezier(.2,.8,.2,1)}
+.book.d3{transform:rotateX(34deg) translateY(-2%)}
+.page{position:relative;width:var(--pw);height:var(--ph);background:var(--paper);color:var(--ink);transform-style:preserve-3d}
+.page::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:0}
+.book[dir=rtl] .page.start,.book[dir=ltr] .page.end{border-radius:4px 2px 2px 4px}
+.book[dir=rtl] .page.start{border-radius:2px 8px 8px 2px;box-shadow:inset 22px 0 30px -18px rgba(60,40,10,.35)}
+.book[dir=rtl] .page.end{border-radius:8px 2px 2px 8px;box-shadow:inset -22px 0 30px -18px rgba(60,40,10,.35)}
+.book[dir=ltr] .page.start{border-radius:8px 2px 2px 8px;box-shadow:inset -22px 0 30px -18px rgba(60,40,10,.35)}
+.book[dir=ltr] .page.end{border-radius:2px 8px 8px 2px;box-shadow:inset 22px 0 30px -18px rgba(60,40,10,.35)}
+.book.single .page{border-radius:6px!important;box-shadow:none}
+.book-shadow{position:absolute;inset:-2px -10px -14px;border-radius:12px;background:#d8ccb1;transform:translateZ(-3px);box-shadow:0 40px 60px rgba(0,0,0,.65),0 0 0 1px rgba(0,0,0,.25)}
+.book.single .book-shadow{inset:-2px -6px -10px}
+.book-shadow::after{content:"";position:absolute;inset:6px 4px 4px;border-radius:10px;background:repeating-linear-gradient(0deg,#efe6d1 0 2px,#d7caad 2px 3px)}
+.pg{position:absolute;inset:0;padding:calc(var(--pw)*.075) calc(var(--pw)*.08) calc(var(--pw)*.1);display:flex;flex-direction:column;font-family:var(--body);font-size:calc(var(--pw)*.038);line-height:1.75;transform-style:preserve-3d;z-index:1}
+.book[dir=ltr] .pg{font-family:Georgia,'Times New Roman',serif;line-height:1.6}
+.pg-scroll{flex:1;overflow:auto;min-height:0;scrollbar-width:thin}
+.kicker{font-family:var(--ui);font-size:.68em;letter-spacing:.5px;color:var(--green);font-weight:700;text-transform:uppercase}
+.pg h2{font-family:var(--head);font-weight:700;font-size:1.55em;line-height:1.3;margin:.15em 0 .45em;color:#16181f}
+.book[dir=ltr] .pg h2{font-family:Georgia,serif}
+.pg p{margin-bottom:.55em}
+.pg ul{margin:.2em 1.1em .7em;padding:0}
+.pg li{margin-bottom:.25em}
+.pg li::marker{color:var(--blue)}
+.eq{direction:ltr;unicode-bidi:isolate;font-family:'Cambria Math','Times New Roman',serif;font-style:italic;font-size:1.35em;text-align:center;margin:.35em 0 .5em;padding:.35em .6em;border-radius:10px;background:rgba(30,68,200,.06);border:1px dashed rgba(30,68,200,.35);color:#14286f}
+.eq-note{font-size:.78em;color:var(--ink2);text-align:center;margin:-.2em 0 .6em}
+.flapbox{position:relative;margin-top:.4em;perspective:900px;min-height:5.2em}
+.answer{padding:.7em .9em;border-radius:12px;background:#E3F1E7;border:1px solid #9cc8ad;color:#0d3d26;font-size:.92em}
+.answer b{color:var(--green)}
+.flap{position:absolute;inset:0;width:100%;text-align:start;padding:.6em .9em;border-radius:12px;background:linear-gradient(180deg,#fffaf0,#efe4cc);border:1px solid #cbbd9c;box-shadow:0 6px 12px rgba(70,50,10,.18);transform-origin:50% 0;transition:transform .7s cubic-bezier(.3,.9,.3,1.1),box-shadow .5s;color:var(--ink);font-family:inherit;font-size:.92em;line-height:1.55;backface-visibility:hidden;overflow:hidden}
+.flap small{display:block;margin-top:.3em;font-family:var(--ui);font-size:.72em;color:var(--purple);font-weight:700}
+.flap.up{transform:rotateX(-165deg);box-shadow:none}
+.flap b{color:var(--purple)}
+.pg-foot{display:flex;justify-content:space-between;align-items:center;font-family:var(--ui);font-size:.6em;color:#8b8571;padding-top:.5em;border-top:1px solid rgba(90,80,50,.15);margin-top:.5em}
+.pg-foot span{display:flex;align-items:center;gap:5px;letter-spacing:.8px}
+.pg-foot img{width:1.4em;height:1.4em}
+
+/* sim page */
+.stage{position:relative;flex:1;min-height:0;display:flex;align-items:flex-end;justify-content:center;transform-style:preserve-3d;margin-bottom:.4em}
+.pop{position:relative;width:100%;height:100%;transform-origin:50% 100%;transform-style:preserve-3d;transition:transform 1.1s cubic-bezier(.25,1.4,.4,1) .15s}
+.book.d3 .pop{transform:rotateX(0deg);height:78%}
+.book.d3 .stage{margin-top:.2em}
+.book.d3.ready .pop{transform:rotateX(-34deg)}
+.pop canvas{position:absolute;inset:0;width:100%;height:100%;display:block;border-radius:10px}
+.book.d3 .pop canvas{background:linear-gradient(180deg,rgba(255,255,255,.55),rgba(255,255,255,.15));box-shadow:0 1px 0 rgba(0,0,0,.05)}
+.pop-floor{position:absolute;left:6%;right:6%;bottom:-6px;height:16px;border-radius:50%;background:radial-gradient(closest-side,rgba(60,40,10,.28),transparent);opacity:0;transition:opacity .8s .5s}
+.book.d3.ready .pop-floor{opacity:1}
+.sim-h{font-family:var(--ui);font-size:.68em;font-weight:700;color:var(--blue);display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:.3em}
+.sim-h button{font-size:1em;color:var(--purple);padding:.25em .6em;border-radius:999px;border:1px solid rgba(74,42,143,.35);background:#fff8}
+.ctl{font-family:var(--ui);font-size:max(11.5px,.66em);display:grid;grid-template-columns:1fr 1fr;gap:.35em .9em;color:var(--ink)}
+.ctl label{display:flex;flex-direction:column;gap:.1em}
+.ctl label span{display:flex;justify-content:space-between;gap:4px}
+.ctl label span b{direction:ltr;unicode-bidi:isolate;color:var(--blue)}
+.ctl input[type=range]{width:100%;accent-color:var(--blue);height:1.8em;direction:ltr}
+.ctl .btns{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:.4em}
+.ctl .btns button{padding:.35em .9em;border-radius:999px;background:var(--ink);color:#fff;font-weight:700;font-size:1em}
+.ctl .btns button.alt{background:transparent;color:var(--ink);border:1px solid rgba(35,37,46,.35)}
+.ctl .btns button.on{background:var(--green)}
+
+/* cover / toc / end pages */
+.cover{position:absolute;inset:0;border-radius:inherit;color:#fff;display:flex;flex-direction:column;justify-content:space-between;padding:calc(var(--pw)*.09);overflow:hidden;z-index:1}
+.cover::after{content:"";position:absolute;inset:0;background:linear-gradient(120deg,rgba(255,255,255,.18),transparent 45%),radial-gradient(circle at 80% 90%,rgba(0,0,0,.35),transparent 60%);pointer-events:none}
+.cover .ic{font-size:calc(var(--pw)*.2);line-height:1}
+.cover h1{font-family:var(--head);font-size:calc(var(--pw)*.1);line-height:1.2;margin:.2em 0}
+.cover p{font-size:calc(var(--pw)*.04);opacity:.9;line-height:1.7}
+.cover .sig{display:flex;align-items:center;gap:8px;font-family:var(--ui);font-size:calc(var(--pw)*.032);letter-spacing:2px}
+.cover .sig img{width:calc(var(--pw)*.09);height:calc(var(--pw)*.09)}
+.cover .grid-dec{position:absolute;inset:0;opacity:.12;background-image:linear-gradient(rgba(255,255,255,.6) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.6) 1px,transparent 1px);background-size:calc(var(--pw)*.08) calc(var(--pw)*.08)}
+.toc li{list-style:none;margin:0;padding:0}
+.toc ul{margin:.4em 0}
+.toc button{width:100%;display:flex;gap:.6em;align-items:baseline;text-align:start;padding:.42em .2em;border-bottom:1px dotted rgba(90,80,50,.35);font-family:inherit;font-size:1em;color:var(--ink)}
+.toc button:hover{color:var(--blue)}
+.toc button i{font-style:normal;font-family:var(--ui);font-weight:700;color:var(--green);min-width:1.6em}
+.toc button em{margin-inline-start:auto;font-style:normal;font-family:var(--ui);font-size:.75em;color:var(--ink2)}
+.end-c{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:.6em}
+.end-c img{width:30%}
+.end-c .big{font-family:var(--head);font-size:1.6em}
+.end-c button{font-family:var(--ui);font-size:.8em;font-weight:700;padding:.5em 1.2em;border-radius:999px;background:var(--ink);color:#fff}
+
+/* flip leaf */
+.leaf{position:absolute;top:0;width:var(--pw);height:var(--ph);transform-style:preserve-3d;z-index:20;pointer-events:none}
+.leaf .face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:var(--paper);overflow:hidden}
+.leaf .face.back{transform:rotateY(180deg)}
+.leaf .face::after{content:"";position:absolute;inset:0;pointer-events:none;animation:shade .75s ease-in-out forwards}
+@keyframes shade{0%{background:rgba(0,0,0,0)}50%{background:rgba(40,30,10,.25)}100%{background:rgba(0,0,0,0)}}
+
+.rd-bot{display:flex;align-items:center;justify-content:center;gap:10px;padding:10px 14px;padding-bottom:max(12px,env(safe-area-inset-bottom))}
+.nav-btn{height:46px;min-width:46px;padding:0 18px;border-radius:999px;background:var(--mint);color:var(--night);font-weight:900;font-size:16px}
+.nav-btn:disabled{opacity:.3;cursor:default}
+.pgnum{min-width:110px;text-align:center;font-size:13px;color:#B9BFD0}
+.prog{height:3px;background:rgba(255,255,255,.08)}
+.prog i{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--mint));transition:width .5s}
+.hint{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);font-size:12px;color:#9FA6BC;pointer-events:none;white-space:nowrap}
+
+/* zoom modal */
+#zoom{position:fixed;inset:0;z-index:60;background:rgba(5,6,10,.86);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:14px}
+.zbox{width:min(1100px,100%);max-height:100%;background:var(--paper);color:var(--ink);border-radius:18px;padding:14px;display:flex;flex-direction:column;gap:10px;font-size:18px}
+.zbox .zh{display:flex;align-items:center;justify-content:space-between;font-family:var(--head);font-size:20px}
+.zbox .zcv{position:relative;width:100%;aspect-ratio:16/10;max-height:62vh}
+.zbox .zcv canvas{position:absolute;inset:0;width:100%;height:100%;border-radius:12px;background:#fffdf7}
+.zbox .ctl{font-size:15px}
+.zbox .ib{border-color:rgba(0,0,0,.15);color:var(--ink);background:#fff}
+
+@media (max-width:860px){.hero{grid-template-columns:1fr}.hero-book{display:none}.howto{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.howto{grid-template-columns:1fr}.brand small{display:none}.rd-title small{display:none}.ib.txt span{display:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="/" title="إيلان دول"><img src="/assets/logo/eilan-icon.svg" alt=""><div><b data-t="brand"></b><small data-t="brandSub"></small></div></a>
+  <span class="sp"></span>
+  <button class="pill" id="langBtn">EN</button>
+  <a class="pill g" href="/" data-t="backSite"></a>
+</header>
+
+<main class="lib" id="lib">
+  <section class="hero">
+    <div>
+      <div class="eyebrow">EILAN ACADEMY · INTERACTIVE LIBRARY</div>
+      <h1 data-t="heroH" data-html></h1>
+      <p data-t="heroP"></p>
+      <div class="hero-feats"><span data-t="f1"></span><span data-t="f2"></span><span data-t="f3"></span><span data-t="f4"></span></div>
+    </div>
+    <div class="hero-book" aria-hidden="true"><div class="hb"><div class="hb-lines"><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="hb-pop"><svg viewBox="0 0 100 120"><g fill="none" stroke="#23252E" stroke-width="1.6"><path d="M10 112h80"/><path d="M28 112V40M72 112V40M24 40h52"/><path d="M50 40v34"/></g><circle cx="50" cy="84" r="9" fill="#1E44C8"/><circle cx="50" cy="20" r="7" fill="#C9A227"/><path d="M38 98q12 8 24 0" stroke="#0F6B44" stroke-width="2" fill="none"/></svg></div></div></div>
+  </section>
+
+  <div class="toolrow">
+    <input class="search" id="q" type="search" autocomplete="off">
+    <div class="cats" id="cats"></div>
+  </div>
+  <div id="shelves"></div>
+
+  <h2 style="font-family:var(--head);font-size:21px;margin:10px 0 8px" data-t="howH"></h2>
+  <div class="howto"><div><b data-t="h1t"></b><span data-t="h1"></span></div><div><b data-t="h2t"></b><span data-t="h2"></span></div><div><b data-t="h3t"></b><span data-t="h3"></span></div><div><b data-t="h4t"></b><span data-t="h4"></span></div></div>
+  <div class="foot">© إيلان دول · EILAN DOLL — THE DIGITAL WORLD</div>
+</main>
+
+<section id="reader" class="hide" aria-live="polite">
+  <div class="rd-top">
+    <button class="ib" id="rdClose" title="">✕</button>
+    <div class="rd-title" id="rdTitle"></div>
+    <span class="sp"></span>
+    <button class="ib" id="rdToc" title="">☰</button>
+    <button class="ib txt on" id="rd3d"><span data-t="v3d"></span> 3D</button>
+    <button class="ib txt" id="rdLang">EN</button>
+  </div>
+  <div class="prog"><i id="rdProg"></i></div>
+  <div class="desk" id="desk"></div>
+  <div class="rd-bot">
+    <button class="nav-btn" id="rdPrev" aria-label="prev"></button>
+    <div class="pgnum" id="rdNum"></div>
+    <button class="nav-btn" id="rdNext" aria-label="next"></button>
+  </div>
+</section>
+
+<div id="zoom" class="hide"></div>
+
+<script>
+/* ============ Eilan Interactive Books — engine ============ */
+const EB=window.EB={books:{},lang:'ar'};
+try{EB.lang=localStorage.getItem('eb-lang')||'ar'}catch(e){}
+{const q=new URLSearchParams(location.search).get('lang');if(q==='en'||q==='ar')EB.lang=q}
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const L=(o)=>o==null?'':(typeof o==='string'?o:(o[EB.lang]??o.ar??''));
+EB.L=(a,e)=>(a&&typeof a==='object'&&e===undefined)?(a[EB.lang]??a.ar):(EB.lang==='ar'?a:e);
+const LOGO='/assets/logo/eilan-icon.svg';
+
+const UI={
+ brand:{ar:'إيلان دول',en:'EILAN DOLL'},brandSub:{ar:'أكاديمية التعلّم · مكتبة الكتب التفاعلية',en:'Academy · Interactive Library'},
+ backSite:{ar:'← الموقع',en:'Main site →'},
+ heroH:{ar:'مكتبة <span class="grad">الكتب التفاعلية</span>',en:'The <span class="grad">Interactive Books</span> Library'},
+ heroP:{ar:'كل مادة كتاب ثلاثي الأبعاد تفتحه وتقلّب صفحاته: صفحة فيها الشرح والمعادلة، وصفحة تطلع منها التجربة وتتحكم فيها بنفسك. ارفع البطاقة وشوف الإجابة، وغيّر الأرقام وشوف العلم يتحرك قدامك.',en:'Every subject is a 3D book you open and flip: one page explains the idea and its equation, the facing page pops up a live experiment you control. Lift the flap for the answer, change the numbers and watch science move.'},
+ f1:{ar:'📖 تقليب صفحات حقيقي',en:'📖 Real page turns'},f2:{ar:'🧪 تجارب تتحكم فيها',en:'🧪 Hands-on experiments'},f3:{ar:'🔢 معادلات وأمثلة محلولة',en:'🔢 Equations & solved examples'},f4:{ar:'🌐 عربي و English',en:'🌐 Arabic & English'},
+ search:{ar:'ابحث عن مادة أو درس… مثل: الطاقة، الذرة، المتجهات',en:'Search a subject or lesson… e.g. energy, atom, vectors'},
+ all:{ar:'الكل',en:'All'},ready:{ar:'متاح الآن',en:'Available'},soon:{ar:'قريباً',en:'Coming soon'},lessons:{ar:'درس',en:'lessons'},
+ howH:{ar:'كيف تستخدم الكتاب؟',en:'How to use a book'},
+ h1t:{ar:'١. افتح الكتاب',en:'1. Open a book'},h1:{ar:'اضغط على أي كتاب من الرفوف، وينفتح قدامك على المكتب.',en:'Tap any book on the shelves and it opens on the desk.'},
+ h2t:{ar:'٢. قلّب الصفحات',en:'2. Turn the pages'},h2:{ar:'بالأسهم تحت، أو اسحب بإصبعك على الآيباد والجوال، أو أسهم الكيبورد.',en:'Use the arrows, swipe on iPad/phone, or the keyboard arrows.'},
+ h3t:{ar:'٣. جرّب بنفسك',en:'3. Experiment'},h3:{ar:'حرّك المؤشرات في صفحة التجربة، واضغط «تكبير» لتشوفها بالشاشة كاملة.',en:'Move the sliders on the experiment page; tap “Zoom” for full screen.'},
+ h4t:{ar:'٤. اختبر نفسك',en:'4. Test yourself'},h4:{ar:'حل السؤال في آخر كل درس، وبعدين ارفع البطاقة وشوف الإجابة.',en:'Solve the question, then lift the flap to check the answer.'},
+ v3d:{ar:'عرض',en:'View'},contents:{ar:'المحتويات',en:'Contents'},close:{ar:'إغلاق',en:'Close'},
+ lesson:{ar:'الدرس',en:'Lesson'},exp:{ar:'التجربة',en:'Experiment'},zoom:{ar:'⤢ تكبير',en:'⤢ Zoom'},
+ q:{ar:'سؤال',en:'Question'},lift:{ar:'ارفع البطاقة لترى الإجابة ↗',en:'Lift the flap to see the answer ↗'},ans:{ar:'الإجابة:',en:'Answer:'},
+ page:{ar:'صفحة',en:'Page'},of:{ar:'من',en:'of'},swipe:{ar:'اسحب أو استخدم الأسهم لتقليب الصفحة',en:'Swipe or use the arrows to turn the page'},
+ endBig:{ar:'أحسنت! خلّصت الكتاب 🎉',en:'Well done! You finished the book 🎉'},endP:{ar:'ارجع لأي درس من المحتويات، أو افتح كتاب ثاني من المكتبة.',en:'Revisit any lesson from the contents, or open another book.'},
+ backLib:{ar:'رجوع للمكتبة',en:'Back to library'},toToc:{ar:'المحتويات',en:'Contents'},
+ coverBy:{ar:'كتاب تفاعلي من أكاديمية إيلان دول',en:'An interactive book by Eilan Doll Academy'},
+ soonMsg:{ar:'هذا الكتاب قيد التأليف وبيكون متاح قريباً في المكتبة ✨',en:'This book is being written and will be on the shelf soon ✨'},
+ notFound:{ar:'ما لقينا شي بهذا الاسم. جرّب كلمة ثانية.',en:'Nothing found. Try another word.'},
+};
+const t=k=>L(UI[k]);
+
+/* ---------- drawing helpers for experiments ---------- */
+const C=EB.C={ink:'#23252E',ink2:'#6b6d78',paper:'#F6F1E4',blue:'#1E44C8',blueL:'#8FA7F0',green:'#0F6B44',greenL:'#7FC4A0',purple:'#4A2A8F',purpleL:'#B4A0E6',gold:'#C9A227',red:'#C8463C',grid:'rgba(35,37,46,.09)'};
+const D=EB.D={
+ font(c,size,bold){c.font=`${bold?'700 ':''}${size}px ${EB.lang==='ar'?'Tajawal':'system-ui,-apple-system,Segoe UI'},sans-serif`},
+ line(c,x1,y1,x2,y2,col=C.ink,w=2,dash){c.save();c.strokeStyle=col;c.lineWidth=w;c.lineCap='round';if(dash)c.setLineDash(dash);c.beginPath();c.moveTo(x1,y1);c.lineTo(x2,y2);c.stroke();c.restore()},
+ arrow(c,x1,y1,x2,y2,col=C.ink,w=2.4,head=10){const a=Math.atan2(y2-y1,x2-x1),len=Math.hypot(x2-x1,y2-y1);if(len<1)return;head=Math.min(head,len*.6);c.save();c.strokeStyle=c.fillStyle=col;c.lineWidth=w;c.lineCap='round';c.beginPath();c.moveTo(x1,y1);c.lineTo(x2-Math.cos(a)*head*.7,y2-Math.sin(a)*head*.7);c.stroke();c.beginPath();c.moveTo(x2,y2);c.lineTo(x2-head*Math.cos(a-.42),y2-head*Math.sin(a-.42));c.lineTo(x2-head*Math.cos(a+.42),y2-head*Math.sin(a+.42));c.closePath();c.fill();c.restore()},
+ text(c,s,x,y,o={}){c.save();D.font(c,o.size||13,o.bold);c.fillStyle=o.col||C.ink;c.textAlign=o.align||'center';c.textBaseline=o.base||'middle';if(o.ltr){c.direction='ltr'}else c.direction=EB.lang==='ar'?'rtl':'ltr';if(o.bg){const m=c.measureText(s),w=m.width+10,h=(o.size||13)+8;let bx=o.align==='left'?x-5:o.align==='right'?x-w+5:x-w/2;c.fillStyle=o.bg;D.rr(c,bx,y-h/2,w,h,6);c.fill();c.fillStyle=o.col||C.ink}c.fillText(s,x,y);c.restore()},
+ circle(c,x,y,r,fill,stroke,w=2){c.beginPath();c.arc(x,y,Math.max(0,r),0,Math.PI*2);if(fill){c.fillStyle=fill;c.fill()}if(stroke){c.strokeStyle=stroke;c.lineWidth=w;c.stroke()}},
+ rr(c,x,y,w,h,r){r=Math.min(r,Math.abs(w)/2,Math.abs(h)/2);c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath()},
+ box(c,x,y,w,h,fill,stroke=C.ink,r=6,lw=2){D.rr(c,x,y,w,h,r);if(fill){c.fillStyle=fill;c.fill()}if(stroke){c.strokeStyle=stroke;c.lineWidth=lw;c.stroke()}},
+ grid(c,x,y,w,h,step){c.save();c.strokeStyle=C.grid;c.lineWidth=1;c.beginPath();for(let gx=x;gx<=x+w+.1;gx+=step){c.moveTo(gx,y);c.lineTo(gx,y+h)}for(let gy=y;gy<=y+h+.1;gy+=step){c.moveTo(x,gy);c.lineTo(x+w,gy)}c.stroke();c.restore()},
+ bar(c,x,y,w,h,frac,col,label,val){D.box(c,x,y,w,h,'rgba(255,255,255,.7)',C.ink,4,1.5);const f=Math.max(0,Math.min(1,frac));c.fillStyle=col;D.rr(c,x+2,y+2+(h-4)*(1-f),w-4,(h-4)*f,3);c.fill();if(label)D.text(c,label,x+w/2,y+h+12,{size:11,bold:true});if(val)D.text(c,val,x+w/2,y-10,{size:11,col,ltr:true,bold:true})},
+ axes(c,ox,oy,x0,y0,x1,y1,sx,sy,opt={}){// world->screen: X=ox+x*sx, Y=oy-y*sy
+  c.save();c.strokeStyle=C.grid;c.lineWidth=1;c.beginPath();for(let i=Math.ceil(x0);i<=x1;i++){c.moveTo(ox+i*sx,oy-y0*sy);c.lineTo(ox+i*sx,oy-y1*sy)}for(let j=Math.ceil(y0);j<=y1;j++){c.moveTo(ox+x0*sx,oy-j*sy);c.lineTo(ox+x1*sx,oy-j*sy)}c.stroke();c.restore();
+  D.arrow(c,ox+x0*sx,oy,ox+x1*sx+8,oy,C.ink,1.6,8);D.arrow(c,ox,oy-y0*sy,ox,oy-y1*sy-8,C.ink,1.6,8);
+  D.text(c,opt.xl||'x',ox+x1*sx+4,oy+14,{size:12,ltr:true,col:C.ink2});D.text(c,opt.yl||'y',ox+12,oy-y1*sy-6,{size:12,ltr:true,col:C.ink2,align:'left'});
+  if(opt.ticks!==false){const st=opt.tick||1;for(let i=Math.ceil(x0/st)*st;i<=x1;i+=st){if(Math.abs(i)<1e-9)continue;D.text(c,String(+i.toFixed(2)),ox+i*sx,oy+12,{size:10,col:C.ink2,ltr:true})}for(let j=Math.ceil(y0/st)*st;j<=y1;j+=st){if(Math.abs(j)<1e-9)continue;D.text(c,String(+j.toFixed(2)),ox-6,oy-j*sy,{size:10,col:C.ink2,ltr:true,align:'right'})}}},
+ plot(c,f,x0,x1,ox,oy,sx,sy,col,w=3,ymin=-1e9,ymax=1e9){c.save();c.strokeStyle=col;c.lineWidth=w;c.lineJoin='round';c.beginPath();let pen=false;const n=240;for(let i=0;i<=n;i++){const x=x0+(x1-x0)*i/n,y=f(x);if(!isFinite(y)||y<ymin||y>ymax){pen=false;continue}const X=ox+x*sx,Y=oy-y*sy;pen?c.lineTo(X,Y):c.moveTo(X,Y);pen=true}c.stroke();c.restore()},
+ fmt(v,d=1){return (Math.round(v*10**d)/10**d).toLocaleString('en-US',{maximumFractionDigits:d})},
+};
+EB.rand=seed=>{let s=seed>>>0||1;return()=>(s=(s*1664525+1013904223)>>>0)/4294967296};
+
+/* ---------- simulation runtime ---------- */
+const SIMS=[];let rafOn=false;
+function loop(ts){
+ for(let i=SIMS.length-1;i>=0;i--){const m=SIMS[i];if(!m.cv.isConnected){SIMS.splice(i,1);continue}
+  const W=m.cv.clientWidth,H=m.cv.clientHeight;if(!W||!H)continue;
+  const dpr=Math.min(2,window.devicePixelRatio||1);if(m.cv.width!==Math.round(W*dpr)||m.cv.height!==Math.round(H*dpr)){m.cv.width=Math.round(W*dpr);m.cv.height=Math.round(H*dpr)}
+  const dt=Math.min(.05,m.last?(ts-m.last)/1000:0);m.last=ts;m.t+=dt;
+  const c=m.ctx;c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,W,H);
+  try{m.def.draw(c,W,H,dt,m.s,m.p,m.t)}catch(e){console.error(e);SIMS.splice(i,1)}}
+ if(SIMS.length)requestAnimationFrame(loop);else rafOn=false}
+function startSim(cv,def,p){const m={cv,ctx:cv.getContext('2d'),def,p,s:{},t:0,last:0};if(def.init)def.init(m.s,m.p);SIMS.push(m);if(!rafOn){rafOn=true;requestAnimationFrame(loop)}return m}
+function ctlHTML(def,p,id){let h='';(def.ctl||[]).forEach(k=>{const v=p[k.k];h+=`<label><span>${L(k.lab)} <b data-o="${k.k}">${fmtCtl(k,v)}</b></span><input type="range" min="${k.min}" max="${k.max}" step="${k.step||1}" value="${v}" data-k="${k.k}"></label>`});
+ if(def.btns&&def.btns.length)h+=`<div class="btns">${def.btns.map(b=>`<button data-b="${b.k}" class="${b.alt?'alt':''}">${L(b.lab)}</button>`).join('')}</div>`;return h}
+function fmtCtl(k,v){const s=k.fmt?k.fmt(+v):(+v).toLocaleString('en-US',{maximumFractionDigits:3});return s+(k.unit?(' '+L(k.unit)):'')}
+function bindCtl(root,def,m){$$('input[type=range]',root).forEach(inp=>{inp.addEventListener('input',()=>{const k=def.ctl.find(x=>x.k===inp.dataset.k);m.p[k.k]=+inp.value;const o=$(`b[data-o="${k.k}"]`,root);if(o)o.textContent=fmtCtl(k,+inp.value);if(def.change)def.change(m.s,m.p,k.k)});['pointerdown','touchstart','mousedown'].forEach(ev=>inp.addEventListener(ev,e=>e.stopPropagation(),{passive:true}))});
+ $$('[data-b]',root).forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();def.act&&def.act(b.dataset.b,m.s,m.p)}))}
+function defaults(def){const p={};(def.ctl||[]).forEach(k=>p[k.k]=k.v);return p}
+
+/* ---------- library ---------- */
+let CAT='all';
+function catalog(){return window.EB_CATALOG||{cats:[],books:[]}}
+function renderLib(){
+ document.documentElement.lang=EB.lang;document.documentElement.dir=EB.lang==='ar'?'rtl':'ltr';
+ $$('[data-t]').forEach(el=>{const v=t(el.dataset.t);el.hasAttribute('data-html')?el.innerHTML=v:el.textContent=v});
+ $('#q').placeholder=t('search');$('#langBtn').textContent=EB.lang==='ar'?'EN':'عربي';
+ const cat=catalog();
+ $('#cats').innerHTML=[['all',UI.all],...cat.cats.map(c=>[c.id,c.n])].map(([id,n])=>`<button class="cat ${CAT===id?'on':''}" data-cat="${id}">${L(n)}</button>`).join('');
+ const q=$('#q').value.trim().toLowerCase();
+ const match=b=>{if(!q)return true;const hay=[L(b.n),b.n.ar,b.n.en,...(b.kw||[]),...(b.toc||[]).flatMap(x=>[x.ar,x.en])].join(' ').toLowerCase();return hay.includes(q)};
+ let html='';cat.cats.forEach(c=>{if(CAT!=='all'&&CAT!==c.id)return;const bs=cat.books.filter(b=>b.cat===c.id&&match(b));if(!bs.length)return;
+  bs.sort((a,b)=>(b.ready?1:0)-(a.ready?1:0));
+  html+=`<section class="shelf"><h2>${c.ic||''} ${L(c.n)} <small>${bs.filter(b=>b.ready).length} ${t('ready')} · ${bs.filter(b=>!b.ready).length} ${t('soon')}</small></h2><div class="shelf-row">${bs.map(bookHTML).join('')}</div><div class="plank"></div></section>`});
+ $('#shelves').innerHTML=html||`<div class="empty">${t('notFound')}</div>`}
+function bookHTML(b){return `<button class="bk ${b.ready?'':'soon'}" data-book="${b.id}" aria-label="${L(b.n)}">${b.ready?`<span class="badge">${t('ready')}</span>`:`<span class="badge soon">${t('soon')}</span>`}<div class="bk-3d"><div class="bk-pages"></div><div class="bk-cover" style="background:linear-gradient(150deg,${b.c[0]},${b.c[1]})"><div class="ic">${b.ic}</div><div><b>${L(b.n)}</b><small>${L(b.sub||'')}</small></div><div class="sig"><img src="${LOGO}" alt="">EILAN DOLL</div></div></div><div class="meta"><b>${L(b.n)}</b>${b.ready?`${(b.toc||[]).length} ${t('lessons')}`:t('soon')}</div></button>`}
+document.addEventListener('click',e=>{const c=e.target.closest('[data-cat]');if(c){CAT=c.dataset.cat;renderLib();return}
+ const b=e.target.closest('[data-book]');if(b){const meta=catalog().books.find(x=>x.id===b.dataset.book);if(!meta)return;if(!meta.ready){toast(t('soonMsg'));return}openBook(meta.id)}});
+$('#q').addEventListener('input',renderLib);
+$('#langBtn').onclick=()=>setLang(EB.lang==='ar'?'en':'ar');
+function setLang(l){EB.lang=l;try{localStorage.setItem('eb-lang',l)}catch(e){}renderLib();if(R.book)renderReader(true)}
+function toast(msg){const d=document.createElement('div');d.textContent=msg;d.style.cssText='position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#14172a;border:1px solid rgba(216,255,230,.2);color:#fff;padding:12px 18px;border-radius:14px;z-index:99;font-size:14px;max-width:90vw;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.5)';document.body.appendChild(d);setTimeout(()=>d.remove(),2600)}
+
+/* ---------- reader ---------- */
+const R={book:null,pages:[],idx:0,d3:true,busy:false};
+function loadBook(id){return new Promise((res,rej)=>{if(EB.books[id])return res(EB.books[id]);const s=document.createElement('script');s.src=`/books/${id}.js?v=1`;s.onload=()=>EB.books[id]?res(EB.books[id]):rej();s.onerror=rej;document.head.appendChild(s)})}
+EB.register=b=>{EB.books[b.id]=b};
+async function openBook(id,fromHash){
+ let b;try{b=await loadBook(id)}catch(e){toast('⚠️');return}
+ R.book=b;R.pages=buildPages(b);let saved=0;try{saved=+localStorage.getItem('eb-pos-'+id)||0}catch(e){}
+ R.idx=Math.min(saved,R.pages.length-1);R.d3=window.innerWidth>=700&&!matchMedia('(prefers-reduced-motion:reduce)').matches;
+ $('#reader').classList.remove('hide');document.body.style.overflow='hidden';
+ if(!fromHash)history.pushState({b:id},'',`#${id}`);renderReader(true)}
+function closeBook(push=true){R.book=null;$('#reader').classList.add('hide');document.body.style.overflow='';$('#desk').innerHTML='';if(push&&location.hash)history.pushState({},'',location.pathname)}
+function buildPages(b){const P=[{type:'cover'},{type:'toc'}];b.lessons.forEach((l,i)=>{P.push({type:'text',l,i});P.push({type:'sim',l,i})});P.push({type:'end'},{type:'back'});return P}
+const single=()=>window.innerWidth<700||(window.innerWidth<window.innerHeight*0.95&&window.innerWidth<820);
+function view(){const s=single();if(s)return [R.idx];const a=R.idx-(R.idx%2);return [a,a+1]}
+function sizeBook(){const s=single(),desk=$('#desk'),W=desk.clientWidth-(s?20:40),H=desk.clientHeight-(s?16:30);const ratio=1.36;
+ if(s){const pw=Math.min(W,520);return{pw,ph:Math.min(H,pw*1.7)}}let pw=W/2;let ph=pw*ratio;const k=R.d3?1.18:1;if(ph>H*k){ph=H*k;pw=ph/ratio}pw=Math.min(pw,560);ph=pw*ratio;return{pw,ph}}
+function renderReader(reset){
+ const b=R.book;if(!b)return;const desk=$('#desk');desk.innerHTML='';
+ $('#rdTitle').innerHTML=`${b.ic} ${L(b.n)}<small>${t('coverBy')}</small>`;
+ $('#rdLang').textContent=EB.lang==='ar'?'EN':'عربي';$('#rdToc').title=t('contents');$('#rdClose').title=t('close');
+ $$('#reader [data-t]').forEach(el=>el.textContent=t(el.dataset.t));
+ $('#rd3d').classList.toggle('on',R.d3);$('#rd3d').style.display=single()?'none':'';
+ const{pw,ph}=sizeBook();const s=single();
+ const book=document.createElement('div');book.className='book'+(R.d3&&!s?' d3':'')+(s?' single':'');book.dir=EB.lang==='ar'?'rtl':'ltr';book.style.setProperty('--pw',pw+'px');book.style.setProperty('--ph',ph+'px');
+ book.innerHTML='<div class="book-shadow"></div>';
+ view().forEach((pi,k)=>{const pg=pageEl(pi);pg.classList.add(s?'start':(k===0?'start':'end'));book.appendChild(pg)});
+ desk.appendChild(book);
+ if(!s&&R.idx<2&&reset){const h=document.createElement('div');h.className='hint';h.textContent=t('swipe');desk.appendChild(h);setTimeout(()=>h.remove(),4000)}
+ requestAnimationFrame(()=>requestAnimationFrame(()=>book.classList.add('ready')));
+ updNav()}
+function updNav(){const n=R.pages.length,v=view(),last=v[v.length-1];
+ const pr=$('#rdPrev'),nx=$('#rdNext');const rtl=EB.lang==='ar';
+ pr.textContent=rtl?'→':'←';nx.textContent=rtl?'←':'→';pr.disabled=v[0]<=0;nx.disabled=last>=n-1;
+ $('#rdNum').textContent=`${t('page')} ${v.map(x=>x+1).join('–')} ${t('of')} ${n}`;$('#rdProg').style.width=((last+1)/n*100)+'%';
+ try{localStorage.setItem('eb-pos-'+R.book.id,R.idx)}catch(e){}}
+function pageEl(pi){const P=R.pages[pi],b=R.book,el=document.createElement('div');el.className='page';el.dataset.pi=pi;
+ const foot=`<div class="pg-foot"><span><img src="${LOGO}" alt="">إيلان دول · EILAN DOLL</span><span>${pi+1}</span></div>`;
+ if(!P){el.innerHTML='';return el}
+ if(P.type==='cover'){el.innerHTML=`<div class="cover" style="background:linear-gradient(155deg,${b.c[0]},${b.c[1]})"><div class="grid-dec"></div><div class="ic">${b.ic}</div><div><h1>${L(b.n)}</h1><p>${L(b.desc)}</p></div><div class="sig"><img src="${LOGO}" alt="">EILAN DOLL · ${EB.lang==='ar'?'أكاديمية التعلّم':'ACADEMY'}</div></div>`}
+ else if(P.type==='toc'){el.innerHTML=`<div class="pg toc"><div class="pg-scroll"><div class="kicker">${L(b.n)}</div><h2>${t('contents')}</h2><ul>${b.lessons.map((l,i)=>`<li><button data-goto="${2+i*2}"><i>${i+1}</i>${L(l.t)}<em>${3+i*2}</em></button></li>`).join('')}</ul></div>${foot}</div>`}
+ else if(P.type==='text'){const l=P.l;el.innerHTML=`<div class="pg"><div class="pg-scroll"><div class="kicker">${t('lesson')} ${P.i+1} · ${L(b.n)}</div><h2>${L(l.t)}</h2><p>${L(l.p)}</p>${l.pts?`<ul>${l.pts.map(x=>`<li>${L(x)}</li>`).join('')}</ul>`:''}${l.eq?`<div class="eq">${l.eq}</div>`:''}${l.eqn?`<div class="eq-note">${L(l.eqn)}</div>`:''}${l.q?`<div class="flapbox"><div class="answer"><b>${t('ans')}</b> ${L(l.a)}</div><button class="flap"><b>${t('q')}:</b> ${L(l.q)}<small>${t('lift')}</small></button></div>`:''}</div>${foot}</div>`}
+ else if(P.type==='sim'){const l=P.l,def=b.sims[l.sim];const p=Object.assign(defaults(def),R.simState?.[l.sim]||{});
+  el.innerHTML=`<div class="pg"><div class="sim-h"><span>🧪 ${t('exp')}: ${L(def.name||l.t)}</span><button data-zoom="${l.sim}">${t('zoom')}</button></div><div class="stage"><div class="pop"><canvas></canvas></div><div class="pop-floor"></div></div><div class="ctl">${ctlHTML(def,p)}</div>${foot}</div>`;
+  const m=startSim($('canvas',el),def,p);(R.simState||(R.simState={}))[l.sim]=p;bindCtl(el,def,m)}
+ else if(P.type==='end'){el.innerHTML=`<div class="pg"><div class="end-c"><img src="${LOGO}" alt=""><div class="big">${t('endBig')}</div><p>${t('endP')}</p><button data-goto="1">${t('toToc')}</button><button data-close="1">${t('backLib')}</button></div>${foot}</div>`}
+ else if(P.type==='back'){el.innerHTML=`<div class="cover" style="background:linear-gradient(205deg,${b.c[0]},${b.c[1]})"><div class="grid-dec"></div><div></div><div style="text-align:center;position:relative"><img src="${LOGO}" alt="" style="width:34%"><h1 style="font-size:calc(var(--pw)*.07)">إيلان دول</h1><p>EILAN DOLL — THE DIGITAL WORLD</p></div><div></div></div>`}
+ return el}
+function snapshot(el){const c=el.cloneNode(true);const src=$$('canvas',el),dst=$$('canvas',c);src.forEach((cv,i)=>{try{const im=new Image();im.src=cv.toDataURL();im.style.cssText='position:absolute;inset:0;width:100%;height:100%';dst[i].replaceWith(im)}catch(e){}});c.classList.remove('start','end');c.style.cssText='position:absolute;inset:0;width:auto;height:auto;border-radius:inherit';return c}
+function go(dir){if(R.busy)return;const s=single(),step=s?1:2,n=R.pages.length;let ni=s?R.idx+dir:(R.idx-(R.idx%2))+dir*2;if(ni<0||ni>=n)return;flipTo(ni,dir)}
+function gotoPage(pi){if(R.busy||pi===R.idx)return;const s=single();const cur=view()[0];const target=s?pi:pi-(pi%2);if(target===cur){return}flipTo(target,target>cur?1:-1)}
+function flipTo(ni,dir){const book=$('#desk .book');if(!book||matchMedia('(prefers-reduced-motion:reduce)').matches){R.idx=ni;renderReader();return}
+ R.busy=true;const s=single(),rtl=EB.lang==='ar';const pages=$$('.page',book);
+ // the turning leaf: forward → the "end" page turns over; backward → the "start" page turns back
+ const turning=s?pages[0]:(dir>0?pages[pages.length-1]:pages[0]);
+ const oldIdx=R.idx;R.idx=ni;const nv=view();
+ const backPi=s?ni:(dir>0?nv[0]:nv[nv.length-1]);
+ const leaf=document.createElement('div');leaf.className='leaf';
+ const front=document.createElement('div');front.className='face front';front.appendChild(snapshot(turning));
+ const back=document.createElement('div');back.className='face back';const bp=pageEl(backPi);bp.style.cssText='position:absolute;inset:0;width:auto;height:auto';back.appendChild(bp);
+ leaf.append(front,back);
+ // geometry
+ const pw=turning.offsetWidth,left=turning.offsetLeft;leaf.style.left=left+'px';
+ let origin,angle;
+ if(s){origin=rtl?'right center':'left center';angle=rtl?180:-180}
+ else{const turnIsLeft=turning.offsetLeft<pw/2;origin=turnIsLeft?'right center':'left center';angle=turnIsLeft?180:-180}
+ leaf.style.transformOrigin=origin;book.appendChild(leaf);
+ // underneath: show the page that will be revealed
+ if(!s){const revealPi=dir>0?nv[nv.length-1]:nv[0];const rv=pageEl(revealPi);rv.className=turning.className;rv.style.position='absolute';rv.style.left=left+'px';rv.style.top='0';rv.style.zIndex=5;book.insertBefore(rv,leaf);turning.style.visibility='hidden'}
+ else{turning.style.visibility='hidden';const rv=pageEl(ni);rv.className=turning.className;rv.style.cssText=`position:absolute;left:${left}px;top:0;z-index:5;opacity:0;transition:opacity .4s .35s`;book.insertBefore(rv,leaf);requestAnimationFrame(()=>rv.style.opacity=1)}
+ leaf.animate([{transform:'rotateY(0deg)'},{transform:`rotateY(${angle}deg)`}],{duration:750,easing:'cubic-bezier(.45,.05,.3,1)'}).onfinish=()=>{R.busy=false;renderReader();if(R.idx!==oldIdx)updNav()}}
+document.addEventListener('click',e=>{
+ const f=e.target.closest('.flap');if(f){f.classList.toggle('up');return}
+ const g=e.target.closest('[data-goto]');if(g){gotoPage(+g.dataset.goto);return}
+ if(e.target.closest('[data-close]')){closeBook();return}
+ const z=e.target.closest('[data-zoom]');if(z){openZoom(z.dataset.zoom);return}});
+$('#rdPrev').onclick=()=>go(-1);$('#rdNext').onclick=()=>go(1);$('#rdClose').onclick=()=>closeBook();
+$('#rdToc').onclick=()=>gotoPage(1);$('#rd3d').onclick=()=>{R.d3=!R.d3;renderReader()};$('#rdLang').onclick=()=>setLang(EB.lang==='ar'?'en':'ar');
+document.addEventListener('keydown',e=>{if(!R.book||!$('#zoom').classList.contains('hide'))return;if(e.target.tagName==='INPUT')return;const rtl=EB.lang==='ar';if(e.key==='ArrowLeft')go(rtl?1:-1);else if(e.key==='ArrowRight')go(rtl?-1:1);else if(e.key==='Escape')closeBook()});
+(()=>{let x0=null,y0=0;const d=$('#desk');d.addEventListener('touchstart',e=>{if(e.target.closest('input,.ctl,.pg-scroll canvas'))return;x0=e.touches[0].clientX;y0=e.touches[0].clientY},{passive:true});d.addEventListener('touchend',e=>{if(x0==null)return;const dx=e.changedTouches[0].clientX-x0,dy=e.changedTouches[0].clientY-y0;x0=null;if(Math.abs(dx)<50||Math.abs(dx)<Math.abs(dy)*1.3)return;const rtl=EB.lang==='ar';go((dx>0)===rtl?1:-1)},{passive:true})})();
+let rz;window.addEventListener('resize',()=>{clearTimeout(rz);rz=setTimeout(()=>{if(R.book&&!R.busy)renderReader()},150)});
+window.addEventListener('popstate',()=>{const id=location.hash.slice(1);if(id&&catalog().books.find(b=>b.id===id&&b.ready))openBook(id,true);else if(R.book)closeBook(false)});
+
+/* ---------- zoom ---------- */
+function openZoom(simId){const b=R.book,def=b.sims[simId],p=R.simState[simId];const z=$('#zoom');
+ z.innerHTML=`<div class="zbox" dir="${EB.lang==='ar'?'rtl':'ltr'}"><div class="zh"><span>🧪 ${L(def.name)}</span><button class="ib" id="zClose">✕</button></div><div class="zcv"><canvas></canvas></div><div class="ctl">${ctlHTML(def,p)}</div></div>`;
+ z.classList.remove('hide');const m=startSim($('canvas',z),def,p);bindCtl(z,def,m);
+ const close=()=>{z.classList.add('hide');z.innerHTML='';renderReader()};$('#zClose').onclick=close;z.onclick=e=>{if(e.target===z)close()}}
+
+/* ---------- boot ---------- */
+renderLib();
+const s=document.createElement('script');s.src='/books/catalog.js?v=1';s.onload=()=>{renderLib();const id=location.hash.slice(1);if(id&&catalog().books.find(b=>b.id===id&&b.ready))openBook(id,true)};document.head.appendChild(s);
+</script>
+</body>
+</html>

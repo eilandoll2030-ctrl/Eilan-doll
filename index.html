@@ -16758,6 +16758,19 @@ window.RC=(function(){
 .el-body p{font-size:13px;line-height:1.7;margin:0}
 .el-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}.el-tags span{font-size:11.5px;padding:2px 8px;border-radius:999px;background:rgba(216,255,230,.08);border:1px solid rgba(216,255,230,.14)}
 .el-act{margin-top:10px}
+.el-shelves{grid-template-columns:repeat(4,minmax(0,1fr));align-items:stretch}
+@media (max-width:1000px){.el-shelves{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.el-shelves{grid-template-columns:minmax(0,1fr)}}
+.el-shelf{flex-direction:column;align-items:stretch;height:100%}
+.el-shelf .el-spine{width:46px;height:62px;font-size:22px}
+.el-shelf .el-body{display:flex;flex-direction:column;flex:1}
+.el-shelf .el-act{margin-top:auto;padding-top:14px}
+.el-shelf .el-act .btn{width:100%;justify-content:center;text-align:center}
+.el-shelf.el-soon{grid-column:1/-1;flex-direction:row;align-items:center;padding:12px 16px}
+.el-shelf.el-soon .el-spine{width:38px;height:50px;font-size:18px}
+.el-shelf.el-soon .el-body{flex-direction:row;align-items:center;gap:6px 14px;flex-wrap:wrap}
+.el-shelf.el-soon .el-body h3{margin:0}
+.el-shelf.el-soon .el-act{margin:0;margin-inline-start:auto;padding:0}
 #elOpen,#eduSec{scroll-margin-top:80px}
 .ew{margin:20px 0}
 .ew .ew-h{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px}
@@ -16972,7 +16985,7 @@ window.RC=(function(){
  /* «مكتبة إيلان»: one library page inside the academy that holds every library (grows over time) */
  if(typeof P!=='undefined'){P.elib={icon:'📚',title:()=>T('مكتبة إيلان','Eilan Library'),
   html:()=>{const q=en()?'?lang=en':'';
-   const shelf=(ic,c1,c2,eb,t,d,tags,btn)=>`<article class="card el-shelf no-ei" style="--c1:${c1};--c2:${c2}"><div class="el-spine">${ic}</div><div class="el-body"><div class="eyebrow">${eb}</div><h3>${t}</h3><p class="mu">${d}</p>${tags?`<div class="el-tags">${tags.map(x=>`<span>${x}</span>`).join('')}</div>`:''}<div class="el-act">${btn}</div></div></article>`;
+   const shelf=(ic,c1,c2,eb,t,d,tags,btn,cls)=>`<article class="card el-shelf no-ei${cls?' '+cls:''}" style="--c1:${c1};--c2:${c2}"><div class="el-spine">${ic}</div><div class="el-body"><div class="eyebrow">${eb}</div><h3>${t}</h3><p class="mu">${d}</p>${tags?`<div class="el-tags">${tags.map(x=>`<span>${x}</span>`).join('')}</div>`:''}<div class="el-act">${btn}</div></div></article>`;
    return `<div class="el-page"><button class="btn sm" data-go="eilan://learn">→ ${T('أكاديمية التعلّم','Learning Academy')}</button>
    <header class="el-hero"><div class="el-books" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div><div><div class="eyebrow">EILAN LIBRARY</div><h1>📚 ${T('مكتبة إيلان','Eilan Library')}</h1><p class="mu">${T('كل مكتبات إيلان في مكان واحد — اختر الرف اللي تبيه.','Every Eilan library in one place — pick a shelf.')}</p></div></header>
    <div class="el-shelves">
@@ -16980,7 +16993,7 @@ window.RC=(function(){
     ${shelf('∑','#4A2A8F','#251147','3D EQUATIONS',T('موسوعة المعادلات 3D','3D Equations Encyclopedia'),T('أكثر من 1400 معادلة كنماذج ثلاثية الأبعاد تبنيها قطعة قطعة، مع شرح لكل معادلة.','1400+ equations as 3D models you build piece by piece, each with an explanation.'),null,`<a class="btn g" href="/equations.html${q}">${T('افتح الموسوعة','Open the encyclopedia')}</a>`)}
     ${shelf('📘','#0F6B44','#07341F','LEARNING FILES',T('ملفات تعلّم وتطوير','Learning & Growth Files'),T('أدلة عملية بصيغة PDF من إعداد إيلان دول: تجارة رقمية، تسويق، تصميم ومشاريع.','Practical PDF guides by Eilan Doll: digital commerce, marketing, design and projects.'),null,`<button class="btn g" type="button" data-el-to="eduSec">${T('تصفّح الملفات','Browse the files')}</button>`)}
     ${shelf('🌐','#0B1F5E','#07341F','OPEN LIBRARY',T('المكتبة المفتوحة','Open Library'),T('ملايين الكتب الحقيقية، كلاسيكيات تُقرأ مجانًا، قاموس إنجليزي وحاسبة معادلات.','Millions of real books, free classics, an English dictionary and an equation solver.'),null,`<button class="btn g" type="button" data-el-to="elOpen">${T('افتح المكتبة المفتوحة','Open it')}</button>`)}
-    ${shelf('🎧','#3a3f52','#15171f','SOON',T('مكتبة الكورسات الصوتية','Audio Courses Library'),T('رف جديد يُضاف قريبًا.','A new shelf, coming soon.'),null,`<span class="tag">${T('قريبًا','Coming soon')}</span>`)}
+    ${shelf('🎧','#3a3f52','#15171f','SOON',T('مكتبة الكورسات الصوتية','Audio Courses Library'),T('رف جديد يُضاف قريبًا.','A new shelf, coming soon.'),null,`<span class="tag">${T('قريبًا','Coming soon')}</span>`,'el-soon')}
    </div>
    ${typeof eduSectionHTML==='function'?eduSectionHTML():''}
    <div id="elOpen">${B.learn()}</div></div>`},

@@ -16806,5 +16806,36 @@ window.RC=(function(){
   return h};if(typeof rerender==='function'&&document.querySelector('#tpGrid'))try{rerender()}catch(e){}}}
 </script>
 <!-- /EILAN WORKSHOP -->
+<!-- EILAN WINDOWS (free open APIs) -->
+<style>
+.ow-sec{padding:16px 18px;margin:18px 0;border:1px solid rgba(226,180,80,.4);border-radius:16px;background:linear-gradient(120deg,rgba(74,42,143,.2),rgba(11,31,94,.16) 55%,rgba(15,107,68,.14))}
+.ow-sec h2{margin:0 0 4px;font-size:18px}
+.ow-sec p.mu{margin:0 0 10px;font-size:13px}
+.ow-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
+.ow-item{display:flex;gap:10px;align-items:center;padding:10px 12px;border-radius:13px;border:1px solid rgba(216,255,230,.14);background:rgba(7,8,12,.45);text-decoration:none;color:inherit}
+.ow-item:hover{border-color:rgba(226,180,80,.6)}
+.ow-item .ow-ic{font-size:22px;flex:0 0 auto}
+.ow-item b{display:block;font-size:14px}.ow-item small{display:block;font-size:12px;opacity:.75;line-height:1.5}
+</style>
+<script>
+{const en=()=>typeof isEN==='function'&&isEN();const T=(a,e)=>en()?e:a;const q=()=>en()?'?lang=en':'';
+ const IT={books:['📚','كتب حقيقية','Real books','ملايين الكتب بأغلفتها + كلاسيكيات مجانية للقراءة','Millions of books + free classics to read'],
+  dict:['🔤','القاموس الإنجليزي','English dictionary','معاني وأمثلة ونطق بالصوت','Meanings, examples, spoken pronunciation'],
+  math:['➗','حاسبة المعادلات','Equation solver','تبسيط وتحليل واشتقاق وتكامل','Simplify, factor, derive, integrate'],
+  wiki:['📖','ويكيبيديا','Wikipedia','ملخص وصورة لأي موضوع بالعربي والإنجليزي','Summary & picture for any topic'],
+  flags:['🏳️','خمّن الدولة','Guess the country','علم وأربع خيارات — أول 3 مجانًا','A flag, four choices — first 3 free'],
+  trivia:['🧠','تحدّي المعلومات','Trivia challenge','أسئلة إنجليزية — أول 3 مجانًا','English questions — first 3 free'],
+  country:['🌍','بطاقة دولة','Country card','العلم والعاصمة والعملة والإجازات','Flag, capital, currency & holidays'],
+  holidays:['🗓️','الإجازات الرسمية','Public holidays','إجازات أكثر من 100 دولة','Holidays of 100+ countries'],
+  fx:['💱','محوّل العملات','Currency converter','كم يساوي مبلغك في بلد سفرك','Your money in the local currency'],
+  art:['🖼️','معرض اللوحات العالمية','World art gallery','لوحات متاحف عالمية ملكية عامة للإلهام','Public-domain museum art for inspiration'],
+  price:['💳','الأسعار بعملتك','Prices in your currency','كم تساوي أسعار إيلان بعملة بلدك','Eilan prices in your currency']};
+ const SEC={learn:['books','dict','math'],library:['books'],wiki:['wiki'],pedia:['wiki'],play:['flags','trivia'],places:['country','holidays','fx'],cities:['country','holidays','fx'],studio:['art'],store:['price']};
+ const box=keys=>`<section class="ow-sec" data-ow><h2>🪟 ${T('نوافذ إيلان','Eilan Windows')}</h2><p class="mu">${T('بيانات حقيقية من مصادر مفتوحة ومجانية.','Real data from free, open sources.')}</p><div class="ow-list">${keys.map(k=>{const i=IT[k];return `<a class="ow-item" href="/open.html${q()}#${k}"><span class="ow-ic">${i[0]}</span><span><b>${T(i[1],i[2])}</b><small>${T(i[3],i[4])}</small></span></a>`}).join('')}</div></section>`;
+ Object.keys(SEC).forEach(pg=>{const o=typeof P!=='undefined'&&P[pg];if(!o||typeof o.html!=='function')return;const f=o.html;
+  o.html=function(){const h=f.apply(this,arguments);if(typeof h!=='string'||h.indexOf('data-ow')>-1)return h;return h+box(SEC[pg])}});
+ try{if(typeof rerender==='function'&&document.querySelector('#view'))rerender()}catch(e){}}
+</script>
+<!-- /EILAN WINDOWS -->
 </body>
 </html>

@@ -16786,14 +16786,14 @@ window.RC=(function(){
 .ws-item b{display:block;font-size:15px}.ws-item small{display:block;font-size:12px;opacity:.75;line-height:1.5}
 .ws-item.soon{opacity:.6;border-style:dashed;justify-content:center;text-align:center;min-height:88px}
 .tp-card.ws-card .tp-thumb{display:block;padding:0;overflow:hidden}
-.tp-card.ws-card .tp-thumb img{display:block;width:100%;height:100%;object-fit:cover}
+.tp-card.ws-card .tp-thumb img{display:block;width:100%;height:100%;object-fit:cover;object-position:18% center;filter:brightness(1.2) saturate(1.15)}
 </style>
 <script>
 {const en=()=>typeof isEN==='function'&&isEN();const T=(a,e)=>(typeof gzL==='function'?gzL(a,e):a);const q=()=>en()?'?lang=en':'';
  const wsSec=()=>`<section class="ws-sec card" aria-label="${T('ورشة إيلان','Eilan Workshop')}"><div class="ws-h"><div class="ws-cubes" aria-hidden="true"><i style="background:#0F6B44"></i><i style="background:#1E44C8"></i><i style="background:#E2B450;transform:translateY(-7px)"></i><i style="background:#4A2A8F"></i><i style="background:#07341F"></i><i style="background:#0B1F5E"></i></div><div><div class="eyebrow">EILAN WORKSHOP</div><h2>🛠️ ${T('ورشة إيلان','Eilan Workshop')}</h2><p class="mu" style="margin:0">${T('منتجات تكتب فيها بياناتك، وإيلان تبنيها لك باسمك على طول وتشوفها وهي تتكوّن. وكل منتج له قالب كانفا لو تحب تعدّل بنفسك.','Products you personalise: type your details and Eilan builds them for you instantly. Each one also comes as a Canva template if you prefer editing yourself.')}</p></div></div>
   <div class="ws-list"><a class="ws-item" href="/workshop.html${q()}"><img src="/workshop/kashta/cover.jpg" alt="" loading="lazy"><span><b>🔥 ${T('باقة الكشتة','Kashta Kit')}</b><small>${T('٥ صفحات: غلاف، دعوة، برنامج الليلة، بطاقات المهام وشهادة','5 pages: cover, invitation, night plan, task cards, certificate')}</small></span></a>
   <div class="ws-item soon"><small>${T('منتجات جديدة تنضاف للورشة قريبًا ✨','More workshop products coming soon ✨')}</small></div></div></section>`;
- const wsCard=()=>`<article class="tp-card card ws-card" data-cat="invite"><a class="tp-thumb rw" href="/workshop.html${q()}" aria-label="${T('شوف باقة الكشتة','See the Kashta Kit')}"><img src="/workshop/kashta/cover.jpg" alt="" loading="lazy"></a>
+ const wsCard=()=>`<article class="tp-card card ws-card" data-cat="invite"><a class="tp-thumb rw" href="/workshop.html${q()}" aria-label="${T('شوف باقة الكشتة','See the Kashta Kit')}"><img src="/workshop/kashta/cover-canva.jpg" alt="" loading="lazy"></a>
   <div class="tp-cbody"><div class="tp-meta"><span class="tag">${T('دعوات','Invitations')}</span><span class="mu">${T('٥ صفحات · PDF وقالب كانفا','5 pages · PDF & Canva')}</span></div><h3>${T('باقة الكشتة — دعوة وبرنامج وشهادة','Kashta Kit — invitation, plan & certificate')}</h3><p class="mu">${T('دعوة كشتة باسمكم مع برنامج الليلة وبطاقات المهام وشهادة نجم الكشتة','A desert-night invitation with your names, night plan, task cards and a star certificate')}</p>
   <div class="tp-foot"><b class="tp-price">${T('قريبًا','Soon')}</b><a class="btn sm" href="/workshop.html${q()}">👀 ${T('شوف المثال','See sample')}</a><a class="btn sm g" href="/workshop.html${q()}#make">✍️ ${T('صمّم باقتك','Design yours')}</a></div></div></article>`;
  const o=P.templates;if(o&&o.html){const f=o.html;o.html=r=>{let h=f(r);

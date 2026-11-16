@@ -3587,7 +3587,7 @@ function resolve(input){
   if(hit)return 'eilan://'+hit.u;
   return 'eilan://search?q='+enc(input);
 }
-const SEO_T={"places": "الأماكن والخرائط — كافيهات ومطاعم وحدائق وأسواق ترفيهية | إيلان دول", "cities": "المدن والعالم — معالم وجداول سياحية وجدول مالي | إيلان دول", "store": "متجر إيلان دول — منتجات رقمية وألعاب تفاعلية", "learn": "أكاديمية التعلّم — دورات من جهات حقيقية وملفات تعلّم | إيلان دول", "books": "دفاتر التلوين — إيلان دول", "watch": "إيلانتيوب — قنوات ومقاطع مختارة للمشاهدة والتعلّم | إيلان دول", "play": "منطقة الترفيه — ألعاب عائلية تفاعلية | إيلان دول", "studio": "استوديو التصميم — صمّم صورك وفيديوهاتك | إيلان دول", "templates": "قوالب جاهزة وتصميم حسب الطلب | إيلان دول", "projects": "المشاريع والمواقع — استبيان ومواقع وإعلانات | إيلان دول", "ai": "Eilan AI — مساعدك الذكي | إيلان دول", "community": "مجتمع Westred على ديسكورد | إيلان دول", "rewards": "المكافآت والنقاط | إيلان دول"},SEO_PAGES=Object.keys(SEO_T);
+const SEO_T={"places": "الأماكن والخرائط — كافيهات ومطاعم وحدائق وأسواق ترفيهية | إيلان دول", "cities": "المدن والعالم — معالم وجداول سياحية وجدول مالي | إيلان دول", "store": "متجر إيلان دول — منتجات رقمية وألعاب تفاعلية", "learn": "أكاديمية التعلّم — دورات من جهات حقيقية وملفات تعلّم | إيلان دول", "books": "دفاتر التلوين — إيلان دول", "watch": "إيلانتيوب — قنوات ومقاطع مختارة للمشاهدة والتعلّم | إيلان دول", "play": "منطقة الترفيه — ألعاب عائلية تفاعلية | إيلان دول", "studio": "استوديو التصميم — صمّم صورك وفيديوهاتك | إيلان دول", "templates": "قوالب جاهزة وتصميم حسب الطلب | إيلان دول", "projects": "المشاريع والمواقع — استبيان ومواقع وإعلانات | إيلان دول", "ai": "Eilan AI — مساعدك الذكي | إيلان دول", "community": "مجتمع Westred على ديسكورد | إيلان دول", "rewards": "المكافآت والنقاط | إيلان دول", "elib": "مكتبة إيلان — الكتب التفاعلية وموسوعة المعادلات وملفات التعلّم | إيلان دول"},SEO_PAGES=Object.keys(SEO_T);
 function pathRoute(){try{if(/^#\/?owner$/i.test(location.hash)||/(^|[?&])owner(=|&|$)/i.test(location.search))return 'eilan://admin';const pathname=location.pathname.replace(/\/+$/,'');if(!pathname||pathname==='/'){const section=new URLSearchParams(location.search).get('section');return ['projects','templates'].includes(section)?'eilan://'+section:'eilan://home'}const parts=pathname.replace(/^\/+|\/+$/g,'').split('/');const p=parts[0];if(p==='owner')return 'eilan://admin';if(p==='places'&&parts[1])return 'eilan://places/'+parts[1];if(p==='projects'&&parts[1]==='care')return 'eilan://projects/care';if(p==='projects'&&parts[1]==='neb')return 'eilan://projects/neb';if(p==='watch'&&/^#yt\?/.test(location.hash)&&typeof wYtFromHash==='function'){const y=wYtFromHash(location.hash);if(y)return y}if(p&&SEO_PAGES.includes(p)&&P[p])return 'eilan://'+p}catch(e){}return 'eilan://places'}
 function syncPath(page,id,q){try{if(/access_token|refresh_token|[?&]code=|error=/.test(location.search+location.hash))return;const want=page==='projectfile'?'/projects/care/':page==='projectfileneb'?'/projects/neb/':page==='provider'?'/learn/':(SEO_PAGES.includes(page)?'/'+page+(page==='places'&&id?'/'+id:'')+'/':'/');let h=location.hash;const yh=page==='watch'&&id==='yt'&&typeof wYtHash==='function'?wYtHash(q||{}):'';if(yh)h=yh;else if(/^#yt\?/.test(h))h='';if(location.pathname!==want||location.hash!==h)history.replaceState(history.state,'',want+location.search+h)}catch(e){}}
 function newTab(url='eilan://home'){tabs.push({hist:[url],i:0,title:'',icon:'🌐'});act=tabs.length-1;loadbar();render()}
@@ -14925,7 +14925,7 @@ function eduSectionHTML(){return `<section class="edu-sec" id="eduSec"><div clas
   <div class="edu-cats">${EDU_CATS.map(c=>`<button class="chip ${c===eduCat?'on':''}" data-act="educat" data-c="${esc(c)}">${esc(c)}</button>`).join('')}</div>
   <div class="edu-grid" id="eduGrid">${eduCardsHTML()}</div></section>`}
 /* inject into the academy page — right after the level card, before the courses from real providers */
-{const pg=P.learn,h=pg.html;pg.html=r=>{const x=h(r),i=x.indexOf('<section class="xsec"');return i<0?x+eduSectionHTML():x.slice(0,i)+eduSectionHTML()+x.slice(i)}}
+/* the learning files now live inside «مكتبة إيلان» (P.elib), not directly on the academy page */
 ACT.educat=d=>{eduCat=d.c;const g=$('#eduGrid');if(!g)return rerender();g.innerHTML=eduCardsHTML();$$('.edu-cats .chip').forEach(b=>b.classList.toggle('on',b.dataset.c===eduCat))};
 ACT.edupromo=d=>{const f=eduById(d.id);if(!f)return;openModal(eduPromoHTML(f),true);const box=$('#modal .mbox');if(box)box.classList.add('edu-promo-modal')};
 ACT.edupromodetails=d=>{const f=eduById(d.id);closeModal();if(f)go('eilan://edu/'+f.id)};
@@ -14933,7 +14933,7 @@ ACT.eduzoom=d=>openModal(`<div class="mh"><h3>معاينة</h3><button class="ic
 /* detail page: eilan://edu/<id> */
 P.edu={icon:'📘',title:r=>eduById(r.id)?.title||'مكتبة إيلان',html:r=>{const f=eduById(r.id);if(!f)return P.notfound.html();
   const others=EDU_FILES.filter(x=>x.id!==f.id&&x.cat===f.cat).concat(EDU_FILES.filter(x=>x.id!==f.id&&x.cat!==f.cat)).slice(0,3);
-  return `<div class="edu-page" style="--ea:${f.c[0]}"><button class="btn sm" data-go="eilan://learn?sec=edu">→ مكتبة إيلان</button>
+  return `<div class="edu-page" style="--ea:${f.c[0]}"><button class="btn sm" data-go="eilan://elib?sec=edu">→ مكتبة إيلان</button>
   <div class="edu-top"><div class="edu-side card"><img class="edu-bigcv" src="${eduImg(f.id,'cover')}" alt="${esc(f.title)}" data-act="eduzoom" data-src="${eduImg(f.id,'cover')}">
     <div class="edu-pricebox"><b>${f.price}<small> ر.س</small></b><span>سعر رمزي · دفعة واحدة</span></div>${eduBuyHTML(f,1)}
     <ul class="edu-facts"><li>📄 ملف PDF · ${f.pages} صفحة</li><li>⚡ تحميل فوري بعد الشراء</li><li>📱 يُقرأ على الجوال والآيباد ويُطبع</li><li>✨ محتوى أصلي من إعداد إيلان دول · إصدار 2026</li></ul></div>
@@ -14947,7 +14947,7 @@ P.edu={icon:'📘',title:r=>eduById(r.id)?.title||'مكتبة إيلان',html:r
   <h3 class="edu-h">ملفات أخرى قد تفيدك</h3><div class="edu-grid">${others.map(o=>`<article class="edu-card card" data-go="eilan://edu/${o.id}" style="--ea:${o.c[0]}"><div class="edu-cv">${eduMotionHTML(o,true,'card')}<span class="edu-price">${o.price} ر.س</span><button class="edu-promo-btn" data-act="edupromo" data-id="${o.id}">▶ اعرف ماذا يقدم</button></div><div class="edu-cb"><h4>${esc(o.title)}</h4><p>${esc(o.sub)}</p></div></article>`).join('')}</div></div>`},
   mount:()=>{}};
 /* jump to the library when coming back from a file page */
-{const pg=P.learn,m=pg.mount;pg.mount=r=>{if(m)m(r);if(r&&r.q&&r.q.sec==='edu'){const s=$('#eduSec');if(s)setTimeout(()=>s.scrollIntoView({behavior:'smooth'}),80)}}}
+{const pg=P.learn,m=pg.mount;pg.mount=r=>{if(m)m(r);if(r&&r.q&&r.q.sec==='edu')setTimeout(()=>go('eilan://elib?sec=edu'),20)}}
 /* site search: library files show up in results */
 {const ps=P.search,h=ps.html;ps.html=r=>{let x=h(r);const q=norm(r.q.q||'');if(!q)return x;
   const hits=EDU_FILES.filter(f=>norm([f.title,f.sub,f.cat,f.desc,...f.learn,...f.chapters].join(' ')).includes(q)||q.split(' ').filter(w=>w.length>2).some(w=>norm(f.title+' '+f.cat).includes(w)));
@@ -16414,7 +16414,9 @@ VL_PRODUCTS.forEach(p=>{if(!S.products.some(x=>x.id===p.id)&&!(S.custom&&S.custo
  const i=h.indexOf('<div class="acts">');return i>-1?h.slice(0,i)+v+h.slice(i):h+v}}
 /* promo on learning page + search entry */
 {const _l=P.learn&&P.learn.html;if(_l)P.learn.html=r=>{const h=_l(r);const promo=`<div class="vl-promo card no-ei"><div><div class="eyebrow">NEW · EILAN VISUAL LAB</div><h3>🎨 ${gzL('مختبر إيلان البصري','Eilan Visual Lab')}</h3><p class="mu" style="margin:0">${gzL('١٤ شكل يحوّل أي درس لرسمة تنحفظ: شجرة، جبل جليد، خط زمني، خريطة طريق… جرّب تحميلتين مجاناً.','14 formats that turn any lesson into a visual. Try 2 free exports.')}</p></div><button class="btn g" data-go="eilan://visual">${gzL('افتح المختبر','Open the lab')}</button></div>`;
- const i=h.indexOf('<div class="level-card');return i>-1?h.slice(0,i)+promo+h.slice(i):promo+h}}
+ const i=h.indexOf('<div class="level-card');return i>-1?h.slice(0,i)+promo+h.slice(i):promo+h};
+ /* the academy may already be on screen (direct visit to /learn/): redraw it once so the library entry shows */
+ const fix=()=>{try{const v=document.getElementById('view');if(typeof rerender==='function'&&v&&!v.querySelector('.ib-promo')&&v.querySelector('.level-card,.src-strip,.vl-promo,.src-card'))rerender()}catch(e){}};fix();setTimeout(fix,0);addEventListener('load',fix,{once:true})}
 </script>
 <!-- /EILAN VISUAL LAB -->
 <!-- EILAN DRAWN (source: visual/src/drawn.html, data: visual/packs/samples.json) -->
@@ -16718,96 +16720,45 @@ window.RC=(function(){
 })();
 (function(){let p=0;const run=()=>{p=0;RC.mountAll()};new MutationObserver(()=>{if(!p){p=1;requestAnimationFrame(run)}}).observe(document.body,{childList:true,subtree:true});run()})();
 </script>
-<script>
-/* ================= INIT ================= */
-(function init(){
-  $$('[data-logo]').forEach(i=>i.src=LOGO);$('#favicon').href=LOGO;
-  applyTheme();
-  $('#bBack').innerHTML=I.back;$('#bFwd').innerHTML=I.fwd;$('#bReload').innerHTML=I.reload;$('#bHome').innerHTML=I.home;
-  $('#bAI').innerHTML=I.spark;$('#bCart').insertAdjacentHTML('afterbegin',I.cart);$('#lockI').innerHTML=I.lock+' eilan';
-  $('#aiClose').innerHTML=I.x;$('#cartClose').innerHTML=I.x;$('#aiSend').innerHTML=I.send;
-  $('#bookmarks').innerHTML=NAV.map((n,i)=>(i===NAV.length-2?'<span class="bm-sep"></span>':'')+`<span class="bm" data-go="eilan://${n.u}" ${n.u==='places'?'data-act="placeshome" onclick="ACT.placeshome();event.stopPropagation()"':''}><span class="e">${n.e}</span>${n.n}</span>`).join('');
-  $('#aiSugs').innerHTML=AI_SUGS.slice(0,4).map(s=>`<button class="chip" data-act="aisug" data-q="${esc(s)}">${esc(s)}</button>`).join('');
-  $('#bBack').onclick=back;$('#bFwd').onclick=fwd;$('#bReload').onclick=()=>{loadbar();render()};$('#bHome').onclick=()=>go('eilan://home');
-  $('#bNew').onclick=()=>newTab();$('#bAI').onclick=()=>openAI();$('#aiFab').onclick=()=>openAI();$('#bCart').onclick=openCart;
-  $('#aiClose').onclick=closeAll;$('#cartClose').onclick=closeAll;$('#overlay').onclick=closeAll;
-  const addr=$('#addr');
-  addr.onfocus=()=>addr.select();
-  addr.oninput=()=>suggest(addr.value);
-  addr.onkeydown=e=>{const items=$$('#suggest .sg');
-    if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();if(!items.length)return;sgIdx=(sgIdx+(e.key==='ArrowDown'?1:-1)+items.length)%items.length;items.forEach((x,i)=>x.classList.toggle('hl',i===sgIdx))}
-    else if(e.key==='Enter'){e.preventDefault();const u=sgIdx>=0&&items[sgIdx]?items[sgIdx].dataset.go:addr.value;$('#suggest').classList.remove('show');addr.blur();go(u)}
-    else if(e.key==='Escape'){$('#suggest').classList.remove('show');addr.value=curUrl();addr.blur()}};
-  const tick=()=>$('#clock').textContent=new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});tick();setInterval(tick,30000);
-  newTab(pathRoute());
-  checkRoutines();processQueue();
-  (function(){const boot=$('#boot'),img=$('.boot-logo'),cv=$('#bootCube');if(!boot||!img||!cv)return;
-    const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches||document.body.classList.contains('no-motion');
-    const done=()=>{img.classList.add('on');cv.style.display='none';boot.classList.add('show-t')};
-    if(reduce||!window.RC){done();return}
-    try{const c=RC.make(cv);c.play(6,330,-450,true).then(()=>boot.classList.add('show-t'));setTimeout(()=>boot.classList.add('show-t'),3600)}catch(e){done()}})();
-  const logs=['loading digital world…','connecting eilan network…','syncing westred servers…','waking up the tech team…','welcome, explorer ✦'];
-  logs.forEach((l,i)=>setTimeout(()=>{const b=$('#bootLog');if(b)b.textContent=l},600*(i+1)));
-  setTimeout(()=>$('#boot').classList.add('hide'),4500);
-})();
-</script>
-
-
-<form aria-hidden='true' hidden method='POST' name='place-request'><input type='hidden' name='form-name' value='place-request' />
-<input name="bot-field"><input name="order"><input name="name"><input name="cat"><input name="city"><input name="location"><input name="whatsapp"><input name="ig"><textarea name="desc"></textarea><input name="plan"><input name="account">
-</form>
-<form aria-hidden='true' enctype='multipart/form-data' hidden method='POST' name='design-request'><input type='hidden' name='form-name' value='design-request' />
-<input name="bot-field"><input name="order"><input name="kind"><input name="template"><input name="size"><input name="options"><input name="price"><input name="name"><input name="contact"><input name="account"><textarea name="details"></textarea><textarea name="plan"></textarea><input name="palette"><input type="file" name="attachment">
-</form>
-<!-- EILAN INTERACTIVE BOOKS (library: /interactive-books.html, books: /books/*.js) -->
-<style>
-.ib-promo{position:relative;overflow:hidden;display:grid;grid-template-columns:auto 1fr auto;gap:18px;align-items:center;padding:18px 20px;margin-bottom:18px;border-color:var(--bd2);background:linear-gradient(120deg,rgba(30,68,200,.18),rgba(15,107,68,.14) 55%,rgba(74,42,143,.18))}
-.ib-promo h3{font-size:19px;margin:4px 0}
-.ib-promo .ib-bk{width:64px;height:86px;border-radius:4px 10px 10px 4px;background:linear-gradient(150deg,#1E44C8,#0B1F5E);box-shadow:inset 5px 0 8px rgba(0,0,0,.35),0 10px 20px rgba(0,0,0,.45);display:grid;place-items:center;font-size:30px;transform:perspective(400px) rotateY(-18deg)}
-.ib-promo .ib-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.ib-promo .ib-tags span{font-size:12px;padding:3px 9px;border-radius:999px;background:rgba(216,255,230,.08);border:1px solid rgba(216,255,230,.14)}
-@media (max-width:560px){.ib-promo{grid-template-columns:1fr}.ib-promo .ib-bk{display:none}}
-</style>
-<script>
-{const _l=P.learn&&P.learn.html;if(_l)P.learn.html=r=>{const h=_l(r);const T=(a,e)=>(typeof gzL==='function'?gzL(a,e):a);const en=typeof isEN==='function'&&isEN();
- const promo=`<div class="ib-promo card no-ei"><div class="ib-bk">📖</div><div><div class="eyebrow">NEW · INTERACTIVE LIBRARY</div><h3>📚 ${T('مكتبة الكتب التفاعلية','Interactive Books Library')}</h3><p class="mu" style="margin:0">${T('كتب ثلاثية الأبعاد تتقلب صفحاتها: شرح ومعادلات في صفحة، وتجربة تطلع من الصفحة وتتحكم فيها بنفسك.','3D books you flip: the lesson and its equation on one page, a live pop-up experiment on the other.')}</p><div class="ib-tags"><span>⚡ ${T('فيزياء','Physics')}</span><span>📐 ${T('رياضيات','Math')}</span><span>⚗️ ${T('كيمياء','Chemistry')}</span><span>🧬 ${T('أحياء','Biology')}</span><span>📊 ${T('إحصاء','Statistics')}</span><span>∑ ${T('+1400 معادلة','1400+ equations')}</span></div></div><div style="display:flex;flex-direction:column;gap:8px"><a class="btn g" href="/interactive-books.html${en?'?lang=en':''}">${T('افتح المكتبة','Open the library')}</a><a class="btn" href="/equations.html${en?'?lang=en':''}">∑ ${T('موسوعة المعادلات 3D','3D Equations Encyclopedia')}</a></div></div>`;
- let i=h.indexOf('<section class="src-strip');if(i<0)i=h.indexOf('<div class="vl-promo');if(i<0)i=h.indexOf('<div class="level-card');return i>-1?h.slice(0,i)+promo+h.slice(i):promo+h}}
-</script>
-<!-- /EILAN INTERACTIVE BOOKS -->
-<!-- EILAN WORKSHOP -->
-<style>
-.ws-sec{padding:18px 20px;margin:18px 0;border-color:rgba(226,180,80,.45);background:linear-gradient(120deg,rgba(74,42,143,.22),rgba(11,31,94,.18) 55%,rgba(15,107,68,.16))}
-.ws-sec .ws-h{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
-.ws-sec h2{margin:2px 0}
-.ws-cubes{display:grid;grid-template-columns:repeat(3,16px);gap:4px;flex:0 0 auto}
-.ws-cubes i{display:block;width:16px;height:16px;border-radius:5px}
-.ws-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;margin-top:14px}
-.ws-item{display:flex;gap:12px;align-items:center;padding:10px;border-radius:14px;border:1px solid rgba(216,255,230,.14);background:rgba(7,8,12,.45);text-decoration:none;color:inherit}
-.ws-item img{width:96px;height:68px;object-fit:cover;border-radius:10px;flex:0 0 auto}
-.ws-item b{display:block;font-size:15px}.ws-item small{display:block;font-size:12px;opacity:.75;line-height:1.5}
-.ws-item.soon{opacity:.6;border-style:dashed;justify-content:center;text-align:center;min-height:88px}
-.tp-card.ws-card .tp-thumb{display:block;padding:0;overflow:hidden}
-.tp-card.ws-card .tp-thumb img{display:block;width:100%;height:100%;object-fit:cover;object-position:18% center;filter:brightness(1.2) saturate(1.15)}
-</style>
-<script>
-{const en=()=>typeof isEN==='function'&&isEN();const T=(a,e)=>(typeof gzL==='function'?gzL(a,e):a);const q=()=>en()?'?lang=en':'';
- const wsSec=()=>`<section class="ws-sec card" aria-label="${T('ورشة إيلان','Eilan Workshop')}"><div class="ws-h"><div class="ws-cubes" aria-hidden="true"><i style="background:#0F6B44"></i><i style="background:#1E44C8"></i><i style="background:#E2B450;transform:translateY(-7px)"></i><i style="background:#4A2A8F"></i><i style="background:#07341F"></i><i style="background:#0B1F5E"></i></div><div><div class="eyebrow">EILAN WORKSHOP</div><h2>🛠️ ${T('ورشة إيلان','Eilan Workshop')}</h2><p class="mu" style="margin:0">${T('منتجات تكتب فيها بياناتك، وإيلان تبنيها لك باسمك على طول وتشوفها وهي تتكوّن. وكل منتج له قالب كانفا لو تحب تعدّل بنفسك.','Products you personalise: type your details and Eilan builds them for you instantly. Each one also comes as a Canva template if you prefer editing yourself.')}</p></div></div>
-  <div class="ws-list"><a class="ws-item" href="/workshop.html${q()}"><img src="/workshop/kashta/cover.jpg" alt="" loading="lazy"><span><b>🔥 ${T('باقة الكشتة','Kashta Kit')}</b><small>${T('٥ صفحات: غلاف، دعوة، برنامج الليلة، بطاقات المهام وشهادة','5 pages: cover, invitation, night plan, task cards, certificate')}</small></span></a>
-  <a class="ws-item" href="/ghabga.html${q()}"><img src="/workshop/ghabga/cover.jpg" alt="" loading="lazy"><span><b>🌙 ${T('باقة الغبقة الرمضانية','Ramadan Ghabga Kit')}</b><small>${T('٥ صفحات: غلاف، دعوة، سفرة الغبقة، بطاقات المهام وبطاقة شكر','5 pages: cover, invitation, menu, task cards, thank-you card')}</small></span></a>
-  <div class="ws-item soon"><small>${T('منتجات جديدة تنضاف للورشة قريبًا ✨','More workshop products coming soon ✨')}</small></div></div></section>`;
- const wsCard=()=>`<article class="tp-card card ws-card" data-cat="invite"><a class="tp-thumb rw" href="/workshop.html${q()}" aria-label="${T('شوف باقة الكشتة','See the Kashta Kit')}"><img src="/workshop/kashta/cover-canva.jpg" alt="" loading="lazy"></a>
-  <div class="tp-cbody"><div class="tp-meta"><span class="tag">${T('دعوات','Invitations')}</span><span class="mu">${T('٥ صفحات · PDF وقالب كانفا','5 pages · PDF & Canva')}</span></div><h3>${T('باقة الكشتة — دعوة وبرنامج وشهادة','Kashta Kit — invitation, plan & certificate')}</h3><p class="mu">${T('دعوة كشتة باسمكم مع برنامج الليلة وبطاقات المهام وشهادة نجم الكشتة','A desert-night invitation with your names, night plan, task cards and a star certificate')}</p>
-  <div class="tp-foot"><b class="tp-price">${T('قريبًا','Soon')}</b><a class="btn sm" href="/workshop.html${q()}">👀 ${T('شوف المثال','See sample')}</a><a class="btn sm g" href="/workshop.html${q()}#make">✍️ ${T('صمّم باقتك','Design yours')}</a></div></div></article>`;
- const ghCard=()=>`<article class="tp-card card ws-card" data-cat="invite"><a class="tp-thumb rw" href="/ghabga.html${q()}" aria-label="${T('شوف باقة الغبقة','See the Ghabga Kit')}"><img src="/workshop/ghabga/cover.jpg" alt="" loading="lazy" style="object-position:center"></a>
-  <div class="tp-cbody"><div class="tp-meta"><span class="tag">${T('دعوات','Invitations')}</span><span class="mu">${T('٥ صفحات · PDF وقالب كانفا','5 pages · PDF & Canva')}</span></div><h3>${T('باقة الغبقة الرمضانية — دعوة وسفرة وشكر','Ramadan Ghabga Kit — invitation, menu & thanks')}</h3><p class="mu">${T('دعوة غبقة باسمكم مع سفرة الغبقة وبطاقات المهام وبطاقة شكر','A ghabga invitation with your names, the menu, task cards and a thank-you card')}</p>
-  <div class="tp-foot"><b class="tp-price">${T('قريبًا','Soon')}</b><a class="btn sm" href="/ghabga.html${q()}">👀 ${T('شوف المثال','See sample')}</a><a class="btn sm g" href="/ghabga.html${q()}#make">✍️ ${T('صمّم باقتك','Design yours')}</a></div></div></article>`;
- const o=P.templates;if(o&&o.html){const f=o.html;o.html=r=>{let h=f(r);
-  const c=h.indexOf('<div class="tp-coll">');h=c>-1?h.slice(0,c)+wsSec()+h.slice(c):wsSec()+h;
-  const g=h.indexOf('<div class="tp-grid" id="tpGrid">');if(g>-1){const k=g+'<div class="tp-grid" id="tpGrid">'.length;h=h.slice(0,k)+ghCard()+wsCard()+h.slice(k)}
-  return h};if(typeof rerender==='function'&&document.querySelector('#tpGrid'))try{rerender()}catch(e){}}}
-</script>
-<!-- /EILAN WORKSHOP -->
 <!-- EILAN OPEN DATA (free public APIs inside existing sections) -->
 <style>
+/* «مكتبة إيلان» learning files — 3D voyage slider */
+.ev-wrap{position:relative;margin-top:6px;padding:6px 0 2px}
+.ev-stage{position:relative;perspective:1400px;perspective-origin:50% 40%;touch-action:pan-y;user-select:none;-webkit-user-select:none;overflow:hidden;padding:10px 0 4px;transition:height .35s ease}
+#eduGrid.edu-voyage{display:block;position:relative;height:100%;transform-style:preserve-3d}
+#eduGrid.edu-voyage{pointer-events:none}#eduGrid.edu-voyage>.edu-card{pointer-events:auto}
+#evStage img{-webkit-user-drag:none;user-drag:none}
+#eduGrid.edu-voyage>.edu-card{position:absolute;top:0;left:50%;width:var(--ev-w);margin-left:calc(var(--ev-w) / -2);transition:transform .6s cubic-bezier(.22,.8,.24,1),opacity .45s,filter .45s,box-shadow .45s;will-change:transform;backface-visibility:hidden}
+#eduGrid.edu-voyage>.edu-card:hover{transform:var(--ev-t)}
+#eduGrid.edu-voyage>.edu-card:not(.ev-on){filter:brightness(.55) saturate(.8);cursor:pointer}
+#eduGrid.edu-voyage>.edu-card:not(.ev-on) .edu-promo-btn,#eduGrid.edu-voyage>.edu-card:not(.ev-on) .edu-more{opacity:0;pointer-events:none}
+#eduGrid.edu-voyage>.edu-card:not(.ev-on) .edu-cb p{opacity:.0}
+#eduGrid.edu-voyage>.edu-card.ev-on{box-shadow:0 26px 60px -18px var(--ea),0 0 0 1px color-mix(in srgb,var(--ea) 55%,transparent)}
+#eduGrid.edu-voyage>.edu-card.ev-far{opacity:0;pointer-events:none}
+.ev-nav{position:absolute;top:calc(var(--ev-h,420px) * .42);z-index:30;width:46px;height:46px;border-radius:50%;border:1px solid rgba(216,255,230,.28);background:rgba(7,8,12,.72);color:#fff;font-size:22px;display:grid;place-items:center;cursor:pointer;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.ev-nav:hover{border-color:#E2B450}
+.ev-prev{right:6px}.ev-next{left:6px}
+.ev-foot{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:10px}
+.ev-dots{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+.ev-dots button{width:8px;height:8px;border-radius:999px;border:0;padding:0;background:rgba(216,255,230,.25);cursor:pointer;transition:width .3s,background .3s}
+.ev-dots button.on{width:24px;background:linear-gradient(90deg,#E2B450,#0F6B44)}
+.ev-count{font-size:13px;opacity:.75;font-variant-numeric:tabular-nums}
+@media (prefers-reduced-motion:reduce){#eduGrid.edu-voyage>.edu-card{transition-duration:.01s}}
+.el-page{max-width:1100px;margin:0 auto}
+.el-hero{display:flex;gap:18px;align-items:center;margin:14px 0 18px}
+.el-hero h1{font-size:28px;margin:2px 0 4px}
+.el-books{display:flex;align-items:flex-end;gap:4px;flex:0 0 auto}
+.el-books i{display:block;width:13px;border-radius:3px 3px 2px 2px;box-shadow:inset -2px 0 3px rgba(0,0,0,.35)}
+.el-books i:nth-child(1){height:46px;background:#1E44C8}.el-books i:nth-child(2){height:58px;background:#4A2A8F}.el-books i:nth-child(3){height:40px;background:#0F6B44}.el-books i:nth-child(4){height:52px;background:#E2B450;transform:rotate(-8deg);transform-origin:bottom}.el-books i:nth-child(5){height:36px;background:#0B1F5E}
+.el-shelves{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;margin-bottom:22px}
+.el-shelf{display:flex;gap:14px;padding:16px;align-items:flex-start;background:linear-gradient(140deg,color-mix(in srgb,var(--c1) 22%,transparent),rgba(7,8,12,.4))}
+.el-spine{flex:0 0 auto;width:54px;height:74px;border-radius:4px 10px 10px 4px;background:linear-gradient(150deg,var(--c1),var(--c2));box-shadow:inset 5px 0 8px rgba(0,0,0,.35),0 8px 18px rgba(0,0,0,.4);display:grid;place-items:center;font-size:26px;color:#fff}
+.el-body{min-width:0;flex:1}
+.el-body h3{font-size:17px;margin:3px 0 4px}
+.el-body p{font-size:13px;line-height:1.7;margin:0}
+.el-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}.el-tags span{font-size:11.5px;padding:2px 8px;border-radius:999px;background:rgba(216,255,230,.08);border:1px solid rgba(216,255,230,.14)}
+.el-act{margin-top:10px}
+#elOpen,#eduSec{scroll-margin-top:80px}
 .ew{margin:20px 0}
 .ew .ew-h{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px}
 .ew .ew-h h2,.ew .ew-h h3{margin:0}
@@ -17018,7 +16969,50 @@ window.RC=(function(){
 
  /* ===== wrap the existing pages ===== */
  const wrap=(pg,fn)=>{const o=typeof P!=='undefined'&&P[pg];if(!o||typeof o.html!=='function')return;const f=o.html;o.html=function(r){const h=f.apply(this,arguments);if(typeof h!=='string'||h.indexOf('data-ew')>-1)return h;return fn(h,r)}};
- wrap('learn',h=>h+`<div data-ew-after="#eduSec">${B.learn()}</div>`);
+ /* «مكتبة إيلان»: one library page inside the academy that holds every library (grows over time) */
+ if(typeof P!=='undefined'){P.elib={icon:'📚',title:()=>T('مكتبة إيلان','Eilan Library'),
+  html:()=>{const q=en()?'?lang=en':'';
+   const shelf=(ic,c1,c2,eb,t,d,tags,btn)=>`<article class="card el-shelf no-ei" style="--c1:${c1};--c2:${c2}"><div class="el-spine">${ic}</div><div class="el-body"><div class="eyebrow">${eb}</div><h3>${t}</h3><p class="mu">${d}</p>${tags?`<div class="el-tags">${tags.map(x=>`<span>${x}</span>`).join('')}</div>`:''}<div class="el-act">${btn}</div></div></article>`;
+   return `<div class="el-page"><button class="btn sm" data-go="eilan://learn">→ ${T('أكاديمية التعلّم','Learning Academy')}</button>
+   <header class="el-hero"><div class="el-books" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div><div><div class="eyebrow">EILAN LIBRARY</div><h1>📚 ${T('مكتبة إيلان','Eilan Library')}</h1><p class="mu">${T('كل مكتبات إيلان في مكان واحد — اختر الرف اللي تبيه.','Every Eilan library in one place — pick a shelf.')}</p></div></header>
+   <div class="el-shelves">
+    ${shelf('📖','#1E44C8','#0B1F5E','INTERACTIVE BOOKS',T('مكتبة الكتب التفاعلية','Interactive Books Library'),T('كتب ثلاثية الأبعاد تتقلب صفحاتها: الدرس والمعادلة في صفحة، وتجربة حيّة تطلع من الصفحة وتتحكم فيها.','3D books you flip: the lesson and equation on one page, a live pop-up experiment on the other.'),[T('فيزياء','Physics'),T('رياضيات','Math'),T('كيمياء','Chemistry'),T('أحياء','Biology'),T('إحصاء','Statistics')],`<a class="btn g" href="/interactive-books.html${q}">${T('افتح الكتب','Open the books')}</a>`)}
+    ${shelf('∑','#4A2A8F','#251147','3D EQUATIONS',T('موسوعة المعادلات 3D','3D Equations Encyclopedia'),T('أكثر من 1400 معادلة كنماذج ثلاثية الأبعاد تبنيها قطعة قطعة، مع شرح لكل معادلة.','1400+ equations as 3D models you build piece by piece, each with an explanation.'),null,`<a class="btn g" href="/equations.html${q}">${T('افتح الموسوعة','Open the encyclopedia')}</a>`)}
+    ${shelf('📘','#0F6B44','#07341F','LEARNING FILES',T('ملفات تعلّم وتطوير','Learning & Growth Files'),T('أدلة عملية بصيغة PDF من إعداد إيلان دول: تجارة رقمية، تسويق، تصميم ومشاريع.','Practical PDF guides by Eilan Doll: digital commerce, marketing, design and projects.'),null,`<button class="btn g" type="button" data-el-to="eduSec">${T('تصفّح الملفات','Browse the files')}</button>`)}
+    ${shelf('🌐','#0B1F5E','#07341F','OPEN LIBRARY',T('المكتبة المفتوحة','Open Library'),T('ملايين الكتب الحقيقية، كلاسيكيات تُقرأ مجانًا، قاموس إنجليزي وحاسبة معادلات.','Millions of real books, free classics, an English dictionary and an equation solver.'),null,`<button class="btn g" type="button" data-el-to="elOpen">${T('افتح المكتبة المفتوحة','Open it')}</button>`)}
+    ${shelf('🎧','#3a3f52','#15171f','SOON',T('مكتبة الكورسات الصوتية','Audio Courses Library'),T('رف جديد يُضاف قريبًا.','A new shelf, coming soon.'),null,`<span class="tag">${T('قريبًا','Coming soon')}</span>`)}
+   </div>
+   ${typeof eduSectionHTML==='function'?eduSectionHTML():''}
+   <div id="elOpen">${B.learn()}</div></div>`},
+  mount:r=>{if(r&&r.q&&r.q.sec==='edu'){const x=document.getElementById('eduSec');if(x)setTimeout(()=>x.scrollIntoView({behavior:'smooth'}),80)}}};
+  document.addEventListener('click',ev=>{const b=ev.target.closest('[data-el-to]');if(!b)return;const x=document.getElementById(b.dataset.elTo);if(x)x.scrollIntoView({behavior:'smooth',block:'start'})});}
+
+ /* ===== «ملفات تعلّم وتطوير» as a 3D voyage slider (inside مكتبة إيلان) ===== */
+ if(typeof eduSectionHTML==='function'){const _edu=eduSectionHTML;let evI=0;
+  eduSectionHTML=function(){return _edu().replace('<div class="edu-grid" id="eduGrid">','<div class="ev-wrap"><button class="ev-nav ev-prev" type="button" data-ev="-1" aria-label="السابق">›</button><div class="ev-stage" id="evStage"><div class="edu-grid edu-voyage" id="eduGrid">').replace(/(<div class="edu-grid edu-voyage" id="eduGrid">[\s\S]*?<\/article>)(<\/div><\/section>)$/,'$1</div></div><button class="ev-nav ev-next" type="button" data-ev="1" aria-label="التالي">‹</button></div><div class="ev-foot"><div class="ev-dots" id="evDots"></div><span class="ev-count" id="evCount"></span></div></section>')};
+  const lay=()=>{const g=document.getElementById('eduGrid'),st=document.getElementById('evStage');if(!g||!st)return;const cs=[...g.children].filter(c=>c.classList.contains('edu-card'));const n=cs.length;if(!n)return;
+   evI=((evI%n)+n)%n;const W=st.clientWidth,w=Math.max(200,Math.min(310,W*.62));st.style.setProperty('--ev-w',w+'px');const step=Math.min(w*.62,W*.3);const rtl=getComputedStyle(st).direction==='rtl';
+   let h=0;cs.forEach((c,i)=>{let d=i-evI;if(n>2){d=((d%n)+n)%n;if(d>n/2)d-=n}const a=Math.abs(d),x=(rtl?-d:d)*step,ry=(rtl?d:-d)*32,sc=1-Math.min(a,3)*.14;
+    const t=`translateX(${x}px) translateZ(${-a*120}px) rotateY(${ry}deg) scale(${sc})`;c.style.setProperty('--ev-t',t);c.style.transform=t;c.style.zIndex=String(20-a);
+    c.classList.toggle('ev-on',d===0);c.classList.toggle('ev-far',a>2);c.dataset.evI=String(i);
+    if(d===0){if(c.dataset.evGo)c.setAttribute('data-go',c.dataset.evGo);h=c.offsetHeight}else{if(c.getAttribute('data-go')){c.dataset.evGo=c.getAttribute('data-go');c.removeAttribute('data-go')}}});
+   if(h){st.style.height=(h+18)+'px';st.parentElement.style.setProperty('--ev-h',h+'px')}
+   const dots=document.getElementById('evDots');if(dots)dots.innerHTML=cs.map((_,i)=>`<button type="button" class="${i===evI?'on':''}" data-ev-to="${i}" aria-label="${i+1}"></button>`).join('');
+   const ct=document.getElementById('evCount');if(ct)ct.textContent=(evI+1)+' / '+n};
+  const move=k=>{evI+=k;lay()};
+  document.addEventListener('click',ev=>{const n=ev.target.closest('[data-ev]');if(n&&n.closest('.ev-wrap')){ev.preventDefault();move(+n.dataset.ev);return}
+   const d=ev.target.closest('[data-ev-to]');if(d){evI=+d.dataset.evTo;lay();return}
+   const c=ev.target.closest('#eduGrid.edu-voyage>.edu-card:not(.ev-on)');if(c){ev.preventDefault();ev.stopPropagation();evI=+c.dataset.evI;lay()}},true);
+  let sx=null,sy=0;
+  document.addEventListener('dragstart',e=>{if(e.target.closest&&e.target.closest('#evStage'))e.preventDefault()});
+  document.addEventListener('pointerdown',e=>{if(e.target.closest('#evStage')){sx=e.clientX;sy=e.clientY}},{passive:true});
+  document.addEventListener('pointerup',e=>{if(sx==null)return;const dx=e.clientX-sx,dy=e.clientY-sy;sx=null;if(Math.abs(dx)>45&&Math.abs(dx)>Math.abs(dy)){const rtl=getComputedStyle(document.getElementById('evStage')||document.body).direction==='rtl';const k=dx<0?1:-1;move(rtl?-k:k);
+   const blk=x=>{x.stopPropagation();x.preventDefault();document.removeEventListener('click',blk,true)};document.addEventListener('click',blk,true);setTimeout(()=>document.removeEventListener('click',blk,true),60)}},{passive:true});
+  document.addEventListener('keydown',e=>{if(!document.getElementById('evStage')||/INPUT|TEXTAREA|SELECT/.test((e.target.tagName||'')))return;if(e.key==='ArrowLeft')move(getComputedStyle(document.getElementById('evStage')).direction==='rtl'?1:-1);if(e.key==='ArrowRight')move(getComputedStyle(document.getElementById('evStage')).direction==='rtl'?-1:1)});
+  if(typeof ACT!=='undefined'&&ACT.educat){const _c=ACT.educat;ACT.educat=d=>{evI=0;_c(d);lay()}}
+  addEventListener('resize',()=>lay());
+  const vv=document.getElementById('view');if(vv)new MutationObserver(()=>{const g=document.getElementById('eduGrid');if(g&&g.classList.contains('edu-voyage')&&!g.dataset.evOn){g.dataset.evOn='1';evI=0;requestAnimationFrame(lay);setTimeout(lay,400)}}).observe(vv,{childList:true,subtree:true});
+  document.addEventListener('load',e=>{if(e.target.closest&&e.target.closest('#eduGrid.edu-voyage'))lay()},true)}
  wrap('wiki',h=>h+`<div data-ew-after=".pd-hero">${B.wiki()}</div>`);
  wrap('pedia',(h,r)=>h+B.pedia(r));
  wrap('play',h=>h+`<div data-ew-into=".games" hidden>${GAMES()}</div>`);
@@ -17038,5 +17032,93 @@ window.RC=(function(){
 }
 </script>
 <!-- /EILAN OPEN DATA -->
+<script>
+/* ================= INIT ================= */
+(function init(){
+  $$('[data-logo]').forEach(i=>i.src=LOGO);$('#favicon').href=LOGO;
+  applyTheme();
+  $('#bBack').innerHTML=I.back;$('#bFwd').innerHTML=I.fwd;$('#bReload').innerHTML=I.reload;$('#bHome').innerHTML=I.home;
+  $('#bAI').innerHTML=I.spark;$('#bCart').insertAdjacentHTML('afterbegin',I.cart);$('#lockI').innerHTML=I.lock+' eilan';
+  $('#aiClose').innerHTML=I.x;$('#cartClose').innerHTML=I.x;$('#aiSend').innerHTML=I.send;
+  $('#bookmarks').innerHTML=NAV.map((n,i)=>(i===NAV.length-2?'<span class="bm-sep"></span>':'')+`<span class="bm" data-go="eilan://${n.u}" ${n.u==='places'?'data-act="placeshome" onclick="ACT.placeshome();event.stopPropagation()"':''}><span class="e">${n.e}</span>${n.n}</span>`).join('');
+  $('#aiSugs').innerHTML=AI_SUGS.slice(0,4).map(s=>`<button class="chip" data-act="aisug" data-q="${esc(s)}">${esc(s)}</button>`).join('');
+  $('#bBack').onclick=back;$('#bFwd').onclick=fwd;$('#bReload').onclick=()=>{loadbar();render()};$('#bHome').onclick=()=>go('eilan://home');
+  $('#bNew').onclick=()=>newTab();$('#bAI').onclick=()=>openAI();$('#aiFab').onclick=()=>openAI();$('#bCart').onclick=openCart;
+  $('#aiClose').onclick=closeAll;$('#cartClose').onclick=closeAll;$('#overlay').onclick=closeAll;
+  const addr=$('#addr');
+  addr.onfocus=()=>addr.select();
+  addr.oninput=()=>suggest(addr.value);
+  addr.onkeydown=e=>{const items=$$('#suggest .sg');
+    if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();if(!items.length)return;sgIdx=(sgIdx+(e.key==='ArrowDown'?1:-1)+items.length)%items.length;items.forEach((x,i)=>x.classList.toggle('hl',i===sgIdx))}
+    else if(e.key==='Enter'){e.preventDefault();const u=sgIdx>=0&&items[sgIdx]?items[sgIdx].dataset.go:addr.value;$('#suggest').classList.remove('show');addr.blur();go(u)}
+    else if(e.key==='Escape'){$('#suggest').classList.remove('show');addr.value=curUrl();addr.blur()}};
+  const tick=()=>$('#clock').textContent=new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});tick();setInterval(tick,30000);
+  newTab(pathRoute());
+  checkRoutines();processQueue();
+  (function(){const boot=$('#boot'),img=$('.boot-logo'),cv=$('#bootCube');if(!boot||!img||!cv)return;
+    const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches||document.body.classList.contains('no-motion');
+    const done=()=>{img.classList.add('on');cv.style.display='none';boot.classList.add('show-t')};
+    if(reduce||!window.RC){done();return}
+    try{const c=RC.make(cv);c.play(6,330,-450,true).then(()=>boot.classList.add('show-t'));setTimeout(()=>boot.classList.add('show-t'),3600)}catch(e){done()}})();
+  const logs=['loading digital world…','connecting eilan network…','syncing westred servers…','waking up the tech team…','welcome, explorer ✦'];
+  logs.forEach((l,i)=>setTimeout(()=>{const b=$('#bootLog');if(b)b.textContent=l},600*(i+1)));
+  setTimeout(()=>$('#boot').classList.add('hide'),4500);
+})();
+</script>
+
+
+<form aria-hidden='true' hidden method='POST' name='place-request'><input type='hidden' name='form-name' value='place-request' />
+<input name="bot-field"><input name="order"><input name="name"><input name="cat"><input name="city"><input name="location"><input name="whatsapp"><input name="ig"><textarea name="desc"></textarea><input name="plan"><input name="account">
+</form>
+<form aria-hidden='true' enctype='multipart/form-data' hidden method='POST' name='design-request'><input type='hidden' name='form-name' value='design-request' />
+<input name="bot-field"><input name="order"><input name="kind"><input name="template"><input name="size"><input name="options"><input name="price"><input name="name"><input name="contact"><input name="account"><textarea name="details"></textarea><textarea name="plan"></textarea><input name="palette"><input type="file" name="attachment">
+</form>
+<!-- EILAN INTERACTIVE BOOKS (library: /interactive-books.html, books: /books/*.js) -->
+<style>
+.ib-promo{position:relative;overflow:hidden;display:grid;grid-template-columns:auto 1fr auto;gap:18px;align-items:center;padding:18px 20px;margin-bottom:18px;border-color:var(--bd2);background:linear-gradient(120deg,rgba(30,68,200,.18),rgba(15,107,68,.14) 55%,rgba(74,42,143,.18))}
+.ib-promo h3{font-size:19px;margin:4px 0}
+.ib-promo .ib-bk{width:64px;height:86px;border-radius:4px 10px 10px 4px;background:linear-gradient(150deg,#1E44C8,#0B1F5E);box-shadow:inset 5px 0 8px rgba(0,0,0,.35),0 10px 20px rgba(0,0,0,.45);display:grid;place-items:center;font-size:30px;transform:perspective(400px) rotateY(-18deg)}
+.ib-promo .ib-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.ib-promo .ib-tags span{font-size:12px;padding:3px 9px;border-radius:999px;background:rgba(216,255,230,.08);border:1px solid rgba(216,255,230,.14)}
+@media (max-width:560px){.ib-promo{grid-template-columns:1fr}.ib-promo .ib-bk{display:none}}
+</style>
+<script>
+{const _l=P.learn&&P.learn.html;if(_l)P.learn.html=r=>{const h=_l(r);const T=(a,e)=>(typeof gzL==='function'?gzL(a,e):a);const en=typeof isEN==='function'&&isEN();
+ const promo=`<div class="ib-promo card no-ei" data-go="eilan://elib" style="cursor:pointer"><div class="ib-bk">📚</div><div><div class="eyebrow">EILAN LIBRARY</div><h3>📚 ${T('مكتبة إيلان','Eilan Library')}</h3><p class="mu" style="margin:0">${T('كل مكتبات إيلان في مكان واحد: الكتب التفاعلية، موسوعة المعادلات، ملفات التعلّم، والكتب والقاموس المفتوح.','All Eilan libraries in one place: interactive books, the equations encyclopedia, learning files, and open books & dictionary.')}</p><div class="ib-tags"><span>📖 ${T('الكتب التفاعلية','Interactive books')}</span><span>∑ ${T('موسوعة المعادلات','Equations')}</span><span>📘 ${T('ملفات التعلّم','Learning files')}</span><span>🌐 ${T('المكتبة المفتوحة','Open library')}</span></div></div><div><button class="btn g" data-go="eilan://elib">${T('ادخل المكتبة','Enter the library')}</button></div></div>`;
+ let i=h.indexOf('<section class="src-strip');if(i<0)i=h.indexOf('<div class="vl-promo');if(i<0)i=h.indexOf('<div class="level-card');return i>-1?h.slice(0,i)+promo+h.slice(i):promo+h}}
+</script>
+<!-- /EILAN INTERACTIVE BOOKS -->
+<!-- EILAN WORKSHOP -->
+<style>
+.ws-sec{padding:18px 20px;margin:18px 0;border-color:rgba(226,180,80,.45);background:linear-gradient(120deg,rgba(74,42,143,.22),rgba(11,31,94,.18) 55%,rgba(15,107,68,.16))}
+.ws-sec .ws-h{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.ws-sec h2{margin:2px 0}
+.ws-cubes{display:grid;grid-template-columns:repeat(3,16px);gap:4px;flex:0 0 auto}
+.ws-cubes i{display:block;width:16px;height:16px;border-radius:5px}
+.ws-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;margin-top:14px}
+.ws-item{display:flex;gap:12px;align-items:center;padding:10px;border-radius:14px;border:1px solid rgba(216,255,230,.14);background:rgba(7,8,12,.45);text-decoration:none;color:inherit}
+.ws-item img{width:96px;height:68px;object-fit:cover;border-radius:10px;flex:0 0 auto}
+.ws-item b{display:block;font-size:15px}.ws-item small{display:block;font-size:12px;opacity:.75;line-height:1.5}
+.ws-item.soon{opacity:.6;border-style:dashed;justify-content:center;text-align:center;min-height:88px}
+.tp-card.ws-card .tp-thumb{display:block;padding:0;overflow:hidden}
+.tp-card.ws-card .tp-thumb img{display:block;width:100%;height:100%;object-fit:cover;object-position:18% center;filter:brightness(1.2) saturate(1.15)}
+</style>
+<script>
+{const en=()=>typeof isEN==='function'&&isEN();const T=(a,e)=>(typeof gzL==='function'?gzL(a,e):a);const q=()=>en()?'?lang=en':'';
+ const wsSec=()=>`<section class="ws-sec card" aria-label="${T('ورشة إيلان','Eilan Workshop')}"><div class="ws-h"><div class="ws-cubes" aria-hidden="true"><i style="background:#0F6B44"></i><i style="background:#1E44C8"></i><i style="background:#E2B450;transform:translateY(-7px)"></i><i style="background:#4A2A8F"></i><i style="background:#07341F"></i><i style="background:#0B1F5E"></i></div><div><div class="eyebrow">EILAN WORKSHOP</div><h2>🛠️ ${T('ورشة إيلان','Eilan Workshop')}</h2><p class="mu" style="margin:0">${T('منتجات تكتب فيها بياناتك، وإيلان تبنيها لك باسمك على طول وتشوفها وهي تتكوّن. وكل منتج له قالب كانفا لو تحب تعدّل بنفسك.','Products you personalise: type your details and Eilan builds them for you instantly. Each one also comes as a Canva template if you prefer editing yourself.')}</p></div></div>
+  <div class="ws-list"><a class="ws-item" href="/workshop.html${q()}"><img src="/workshop/kashta/cover.jpg" alt="" loading="lazy"><span><b>🔥 ${T('باقة الكشتة','Kashta Kit')}</b><small>${T('٥ صفحات: غلاف، دعوة، برنامج الليلة، بطاقات المهام وشهادة','5 pages: cover, invitation, night plan, task cards, certificate')}</small></span></a>
+  <a class="ws-item" href="/ghabga.html${q()}"><img src="/workshop/ghabga/cover.jpg" alt="" loading="lazy"><span><b>🌙 ${T('باقة الغبقة الرمضانية','Ramadan Ghabga Kit')}</b><small>${T('٥ صفحات: غلاف، دعوة، سفرة الغبقة، بطاقات المهام وبطاقة شكر','5 pages: cover, invitation, menu, task cards, thank-you card')}</small></span></a>
+  <div class="ws-item soon"><small>${T('منتجات جديدة تنضاف للورشة قريبًا ✨','More workshop products coming soon ✨')}</small></div></div></section>`;
+ const wsCard=()=>`<article class="tp-card card ws-card" data-cat="invite"><a class="tp-thumb rw" href="/workshop.html${q()}" aria-label="${T('شوف باقة الكشتة','See the Kashta Kit')}"><img src="/workshop/kashta/cover-canva.jpg" alt="" loading="lazy"></a>
+  <div class="tp-cbody"><div class="tp-meta"><span class="tag">${T('دعوات','Invitations')}</span><span class="mu">${T('٥ صفحات · PDF وقالب كانفا','5 pages · PDF & Canva')}</span></div><h3>${T('باقة الكشتة — دعوة وبرنامج وشهادة','Kashta Kit — invitation, plan & certificate')}</h3><p class="mu">${T('دعوة كشتة باسمكم مع برنامج الليلة وبطاقات المهام وشهادة نجم الكشتة','A desert-night invitation with your names, night plan, task cards and a star certificate')}</p>
+  <div class="tp-foot"><b class="tp-price">${T('قريبًا','Soon')}</b><a class="btn sm" href="/workshop.html${q()}">👀 ${T('شوف المثال','See sample')}</a><a class="btn sm g" href="/workshop.html${q()}#make">✍️ ${T('صمّم باقتك','Design yours')}</a></div></div></article>`;
+ const ghCard=()=>`<article class="tp-card card ws-card" data-cat="invite"><a class="tp-thumb rw" href="/ghabga.html${q()}" aria-label="${T('شوف باقة الغبقة','See the Ghabga Kit')}"><img src="/workshop/ghabga/cover.jpg" alt="" loading="lazy" style="object-position:center"></a>
+  <div class="tp-cbody"><div class="tp-meta"><span class="tag">${T('دعوات','Invitations')}</span><span class="mu">${T('٥ صفحات · PDF وقالب كانفا','5 pages · PDF & Canva')}</span></div><h3>${T('باقة الغبقة الرمضانية — دعوة وسفرة وشكر','Ramadan Ghabga Kit — invitation, menu & thanks')}</h3><p class="mu">${T('دعوة غبقة باسمكم مع سفرة الغبقة وبطاقات المهام وبطاقة شكر','A ghabga invitation with your names, the menu, task cards and a thank-you card')}</p>
+  <div class="tp-foot"><b class="tp-price">${T('قريبًا','Soon')}</b><a class="btn sm" href="/ghabga.html${q()}">👀 ${T('شوف المثال','See sample')}</a><a class="btn sm g" href="/ghabga.html${q()}#make">✍️ ${T('صمّم باقتك','Design yours')}</a></div></div></article>`;
+ const o=P.templates;if(o&&o.html){const f=o.html;o.html=r=>{let h=f(r);
+  const c=h.indexOf('<div class="tp-coll">');h=c>-1?h.slice(0,c)+wsSec()+h.slice(c):wsSec()+h;
+  const g=h.indexOf('<div class="tp-grid" id="tpGrid">');if(g>-1){const k=g+'<div class="tp-grid" id="tpGrid">'.length;h=h.slice(0,k)+ghCard()+wsCard()+h.slice(k)}
+  return h};if(typeof rerender==='function'&&document.querySelector('#tpGrid'))try{rerender()}catch(e){}}}
+</script>
+<!-- /EILAN WORKSHOP -->
 </body>
 </html>

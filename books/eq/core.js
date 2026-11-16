@@ -11,6 +11,7 @@ window.EQ=(function(){
   {id:'stat',ic:'📊',n:['الإحصاء والاحتمالات','Statistics & Probability']},
   {id:'life',ic:'🧬',n:['الأحياء والطب وعلوم الأرض','Life & Earth Sciences']},
   {id:'more',ic:'💼',n:['المال والهندسة والحاسب','Finance, Engineering & Computing']},
+  {id:'day',ic:'🌍',n:['الحياة اليومية والتطبيقات','Everyday life & applications']},
   {id:'comm',ic:'✍️',n:['إضافات المجتمع','Community additions']}
  ];
  // [id, group, ar, en, default scene]
@@ -67,6 +68,19 @@ window.EQ=(function(){
   ['eng','more','الهندسة والمواد','Engineering & materials','wheel'],
   ['ele','more','الإلكترونيات','Electronics','circuit'],
   ['cs','more','الحاسب والمعلومات','Computing & information','blocks'],
+  ['crd','chem','تفاعلات من حياتنا والصناعة','Everyday & industrial reactions','molecule'],
+  ['spt','day','الرياضة واللياقة','Sport & fitness','motion'],
+  ['hlt','day','الصحة والتغذية','Health & nutrition','plant'],
+  ['ckn','day','المطبخ والطبخ','Kitchen & cooking','heat'],
+  ['mus','day','الموسيقى والصوت','Music & audio','wave'],
+  ['car','day','السيارات والمواصلات','Cars & transport','motion'],
+  ['hom','day','البيت والكهرباء المنزلية','Home & household energy','circuit'],
+  ['env','day','الطاقة المتجددة والبيئة','Renewable energy & environment','energy'],
+  ['spc','day','الفضاء والصواريخ','Space & rockets','orbit'],
+  ['civ','day','البناء والتشييد','Building & construction','solids'],
+  ['pho','day','التصوير والشاشات','Photography & screens','optics'],
+  ['wth','day','الطقس والمناخ','Weather & climate','gas'],
+  ['unt','day','تحويل الوحدات','Unit conversions','blocks'],
   ['com','comm','معادلات أضافها المجتمع','Equations added by the community','energy']
  ].forEach(([id,g,ar,en,sc])=>E.cats[id]={id,g,n:[ar,en],sc});
 

@@ -135,8 +135,8 @@ function refreshModel(){const e=LIST[idx];if(!cur||!e)return;if(allNeeded())PS.d
  tray();updRes()}
 function paint(e){drawText(textMesh().material.map.image,e,idx);textMesh().material.map.needsUpdate=true;drawModelPage(modelMesh().material.map.image,e,idx);modelMesh().material.map.needsUpdate=true}
 function show(i,{flip=0}={}){if(!LIST.length)return;if(TOUR.on){stopSpeech();TOUR.on=false;tourUI()}i=(i+LIST.length)%LIST.length;const e=LIST[i];
- if(!isFree(e,i)){idx=i;showLock(e);ui();return}hideLock();
- if(!flip||busy){idx=i;paint(e);mountModel(e);popAll(cur.root,1);ui();return}
+ if(!isFree(e,i)){idx=i;showLock(e);ui();return}const wasLk=document.body.classList.contains('locked');hideLock();
+ if(!flip||busy||!cur||wasLk){idx=i;paint(e);mountModel(e);popAll(cur.root,1);ui();return}
  busy=true;popAll(cur.root,-1,380,()=>{doFlip(flip,()=>{idx=i;paint(e);mountModel(e);popAll(cur.root,1);ui();busy=false})})}
 function doFlip(dir,done){// dir>0 forward. RTL forward: left page turns over to the right.
  const fromSide=(dir>0)===rtl()?-1:1;const pv=new THREE.Group();pv.position.set(0,TOPY+.006,0);book.add(pv);

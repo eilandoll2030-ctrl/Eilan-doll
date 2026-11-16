@@ -105,7 +105,7 @@ EQ.add('agr',`
 معامل تحويل العلف|Feed conversion ratio|FCR = feed / gain|fcr|feed/gainw|feed gainw|كم كيلو علف لكل كيلو لحم.|Kilograms of feed per kilogram of growth.
 `);
 
-EQ.add('alg',`
+EQ.add('algo',`
 التعقيد الخطي|Linear complexity O(n)|ops = n|ops|nalg|nalg|ضاعف المدخلات تتضاعف العمليات.|Double the input, double the work.
 التعقيد التربيعي|Quadratic complexity O(n²)|ops = n²|ops|nalg*nalg|nalg|ترتيب الفقاعات بطيء مع البيانات الكبيرة.|Bubble sort gets slow with big data.
 تعقيد n log n|n log n complexity|ops = n log₂ n|ops|nalg*log2(nalg)|nalg|سرعة أفضل خوارزميات الترتيب.|The speed of the best sorting algorithms.

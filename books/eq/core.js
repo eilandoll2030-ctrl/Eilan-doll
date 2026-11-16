@@ -84,7 +84,7 @@ window.EQ=(function(){
   ['me','more','الهندسة الميكانيكية','Mechanical engineering','wheel'],
   ['biz','more','الأعمال والمحاسبة','Business & accounting','coins'],
   ['sea','life','البحار والمحيطات','Seas & oceans','wave'],
-  ['alg','more','الخوارزميات والأمن الرقمي','Algorithms & digital security','blocks'],
+  ['algo','more','الخوارزميات والأمن الرقمي','Algorithms & digital security','blocks'],
   ['dig','more','المنطق الرقمي والمعالجات','Digital logic & processors','circuit'],
   ['avi','day','الطيران والملاحة','Aviation & navigation','motion'],
   ['agr','day','الزراعة والثروة الحيوانية','Farming & livestock','plant'],

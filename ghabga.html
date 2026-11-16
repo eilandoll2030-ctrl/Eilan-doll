@@ -432,7 +432,7 @@ var D=[
  function(c){bg(c,4);txt(c,EN?'Thank you for coming':'شكراً لحضوركم',491,399,EN?80:101,'#94E8BA','center',700,690,1,1);txt(c,EN?'Ramadan Kareem to you all':'رمضان كريم وكل عام وأنتم بخير',491,588,42,WHITE,'center',400,690,.8);
   txt(c,EN?'With love from':'مع تحيات',481,701,37,GOLD,'center',400,440);txt(c,EN?'Host name':'اسم المستضيف',481,760,37,'#94E8BA','center',400,440)}
 ];
-function render(){var box=document.getElementById('galC');if(!box)return;box.innerHTML='';PG.forEach(function(p,i){var fig=document.createElement('figure');if(i===0)fig.className='big';var cv=store[i];if(!cv){cv=document.createElement('canvas');cv.width=W;cv.height=H;store[i]=cv}
+function render(){var box=document.getElementById('galC');if(!box)return;if(!BG.some(Boolean)){box.style.display='none';return}box.style.display='';box.innerHTML='';PG.forEach(function(p,i){var fig=document.createElement('figure');if(i===0)fig.className='big';var cv=store[i];if(!cv){cv=document.createElement('canvas');cv.width=W;cv.height=H;store[i]=cv}
  cv.setAttribute('role','img');cv.setAttribute('aria-label',EN?p[1]:p[0]);var c=cv.getContext('2d');c.clearRect(0,0,W,H);D[i](c);fig.appendChild(cv);var cap=document.createElement('figcaption');cap.textContent=(i+1)+' · '+(EN?p[1]:p[0]);fig.appendChild(cap);
  if(i===0){var sm=document.createElement('span');sm.className='smp';sm.textContent=T('مثال|Sample');fig.appendChild(sm)}box.appendChild(fig)})}
 window.renderGalleryC=function(en){EN=!!en;render()};

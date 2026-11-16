@@ -15220,7 +15220,7 @@ applyMode();applyLang();
 .gzc-tags{display:flex;gap:6px;flex-wrap:wrap}
 .gzc-meta{display:flex;gap:12px;font-size:12px;color:var(--mu2);flex-wrap:wrap}
 .gzc-meta span{display:inline-flex;align-items:center;gap:4px}.gzc-meta svg{width:13px;height:13px}
-.gzc-btns{display:flex;gap:7px;flex-wrap:wrap;margin-top:auto;padding-top:4px}
+.gzi{padding:4px 18px 18px;display:flex;flex-direction:column;gap:12px}.gzi p{font-size:14px;line-height:1.8;color:var(--mu);margin:0}.gzi .gzc-tags,.gzi .gzc-meta{display:flex!important}.gzi .gzc-tags .gzc-tag{display:inline-flex!important}.gzc-btns{display:flex;gap:7px;flex-wrap:wrap;margin-top:auto;padding-top:4px}
 .gzc-btns .btn{height:36px;padding:0 13px;font-size:13px;border-radius:11px}
 .gzc-btns .btn svg{width:15px;height:15px}
 .gzc-tips{margin-top:22px;padding:18px 20px;display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
@@ -15517,7 +15517,7 @@ const GZC_LIST=()=>{
   arc('catch',{id:'catch',k:'g-catch',vid:'catch',n:gzL('اصطد المكعب','Cube Catch'),en:'Cube Catch',d:gzL('المكعبات تولّع وتختفي بسرعة — اصطدها قبل لا تطفي خلال ٣٠ ثانية!','Cubes light up and vanish — catch as many as you can in 30 seconds!'),pl:gzL('لاعب واحد','1 player'),tm:gzL('٣٠ ثانية','30 sec'),local:'catch'}),
   arc('snake',{id:'snake',k:'g-snake',vid:'snake',n:'Neon Snake',en:gzL('الثعبان','Snake'),d:gzL('الأسهم أو الأزرار — كل نقطة = 1 XP عند انتهاء الجولة.','Arrows or on-screen pad — every point = 1 XP.'),pl:gzL('لاعب واحد','1 player'),tm:gzL('حر','Endless'),local:'snake'})];
  return L.filter(Boolean)};
-function gzcCard(g){
+function gzcCard(g,i){
  const pr=g.print;
  const tags=`<span class="gzc-tag dv">${GZI.web}${gzL('تنلعب داخل الموقع','Plays in the site')}</span>`+(pr?`<span class="gzc-tag pr">${GZI.print}${g.paid?gzL('PDF للطباعة مع الشراء','Print PDF with purchase'):gzL('تنطبع · PDF مجاني','Printable · free PDF')}</span>`:`<span class="gzc-tag on">${GZI.dev}${gzL('على الجهاز فقط','Device only')}</span>`);
  const price=g.paid?(g.un?`<span class="gzc-price own">${gzL('مفعّلة ✓','Unlocked ✓')}</span>`:`<span class="gzc-price">${g.price} ${gzL('ر.س','SAR')}</span>`):`<span class="gzc-price free">${gzL('مجانية','Free')}</span>`;
@@ -15531,13 +15531,16 @@ function gzcCard(g){
  if(g.show)btns+=`<a class="btn" href="${g.show}" target="_blank" rel="noopener" title="${gzL('PDF للعرض على الشاشة مثل البريزنتيشن','Slideshow PDF for any screen')}">🖥️ ${gzL('عرض','Slides')}</a>`;
  if(g.ppt)btns+=`<a class="btn" href="${g.ppt}" download title="${gzL('عرض باوربوينت بحركات — يشتغل في PowerPoint وKeynote','Animated PowerPoint — works in PowerPoint & Keynote')}">🎬 ${gzL('عرض متحرك','Animated PPT')}</a>`;
  if(g.vid)btns+=`<button class="btn" data-act="gzvid" data-v="${g.vid}" data-t="${esc(g.n)}" title="${gzL('شرح اللعبة بالفيديو','Video: how to play')}">${GZI.play}${gzL('الشرح','How to')}</button>`;
- const artAct=g.local&&(!g.paid||g.un||g.left>0)?`data-act="gzplay" data-g="${g.local}"`:g.paid?(g.un||!g.arc||g.left>0?`data-act="${g.open}" data-m="${g.un?'play':'trial'}"`:`data-act="gztrialover" data-k="${g.tk}"`):`data-act="guessopen" data-m="party"`;
+ const mm=btns.match(/^\s*<(button|a)\b[\s\S]*?<\/\1>/);const main=mm?mm[0]:'';
+ g._btns=btns;g._tags=tags;
  return `<article class="gzc card" data-print="${pr?1:0}">
-  <div class="gzc-art" ${artAct} role="button" aria-label="${esc(g.n)}">${price}${gzCube(g.k)}</div>
-  <div class="gzc-b"><h3>${esc(g.n)} <bdi dir="ltr">${esc(g.en)}</bdi></h3><p>${esc(g.d)}</p>
-   <div class="gzc-tags no-ei">${tags}</div>
-   <div class="gzc-meta no-ei"><span>${GZI.ppl}${esc(g.pl)}</span><span>${GZI.time}${esc(g.tm)}</span></div>
-   <div class="gzc-btns no-ei">${btns}</div></div></article>`}
+  <div class="gzc-art" data-act="gzinfo" data-i="${i}" role="button" aria-label="${esc(g.n)}">${price}${gzCube(g.k)}</div>
+  <div class="gzc-b"><h3 data-act="gzinfo" data-i="${i}" style="cursor:pointer">${esc(g.n)} <bdi dir="ltr">${esc(g.en)}</bdi></h3>
+   <div class="gzc-btns no-ei">${main}<button class="btn" data-act="gzinfo" data-i="${i}">${gzL('التفاصيل','Details')}</button></div></div></article>`}
+ACT.gzinfo=d=>{const g=GZC_LIST()[+d.i];if(!g)return;gzcCard(g,+d.i);
+ gzwOpen(g.k,esc(g.n),esc(g.en),`<div class="gzi no-ei"><p>${esc(g.d)}</p><div class="gzc-tags">${g._tags}</div>
+  <div class="gzc-meta"><span>${GZI.ppl}${esc(g.pl)}</span><span>${GZI.time}${esc(g.tm)}</span></div>
+  <div class="gzc-btns">${g._btns}</div></div>`)};
 const GZS={f:'all',el:null,clean:[]};
 ACT.gztrialover=d=>gzTrialOver(d.k);
 P.play={icon:'🎮',title:()=>gzL('منطقة الترفيه','Entertainment Zone'),html:()=>{const L=GZC_LIST();return `
@@ -15551,7 +15554,7 @@ P.play={icon:'🎮',title:()=>gzL('منطقة الترفيه','Entertainment Zon
    <div class="lg"><span class="gzc-tag on">${GZI.dev}${gzL('جهاز فقط','Device only')}</span><div><b>${gzL('ألعاب سرعة','Speed games')}</b>${gzL('تحتاج شاشة، ما تنطبع.','Need a screen — not printable.')}</div></div>
 </div></div>
  <div class="gzc-bar no-ei"><span class="chip on">${gzL('كل الألعاب','All games')} · ${L.length}</span><span class="sp"></span><span class="mu" style="font-size:12.5px">${gzL('أفضل نتيجة بالذاكرة','Best memory')}: <b>${S.hi.memory||'—'}</b> · Snake: <b>${S.hi.snake||0}</b> · ${gzL('المكعب','Catch')}: <b>${S.hi.catch||0}</b></span></div>
- <div class="gzc-grid" id="gzcGrid" data-f="${GZS.f}">${L.map(gzcCard).join('')}</div>
+ <div class="gzc-grid" id="gzcGrid" data-f="${GZS.f}">${L.map((g,i)=>gzcCard(g,i)).join('')}</div>
   ${(()=>{const ex=S.products.filter(p=>(p.cat==='entertainment'||p.cat==='experiences')&&!/^g-/.test(p.id));return ex.length?`<section class="sec"><div class="sec-h"><h2>🎟️ ${gzL('تجارب ترفيهية من المتجر','Fun experiences from the store')}</h2></div><div class="pgrid">${ex.map(pcard).join('')}</div></section>`:''})()}`},
  mount(){CLEAN.push(gzwClose)}};
 {const _pp=P.product.html;P.product.html=r=>{let h=_pp(r);const p=S.products.find(x=>x.id===r.id);const k=p&&p.game&&GZ_PAID[p.game]?p.game:null;

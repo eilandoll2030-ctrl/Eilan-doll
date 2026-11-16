@@ -207,7 +207,7 @@ body.locked .top,body.locked .bot,body.locked .prog{z-index:10}body.locked #pane
 window.addEventListener('DOMContentLoaded',()=>{const en=(localStorage.getItem('eb-lang')||'ar')==='en'||new URLSearchParams(location.search).get('lang')==='en';if(!en)return;const T={addH:'✍️ Do you have an equation?',addIntro:'If your equation is not in the Eilan book yet, add it here with your own way of explaining it. Eilan designs the interactive explanation; the idea and explanation stay yours.',lN:'Equation name *',lF:'Formula *',lS:'Field',lH:'Your explanation (what does it mean? what is each symbol? an example?) *',lBy:'Name to show in the book',lC:'Contact (optional — never shown)',tourLb:'Explain it with voice',addNote:'You will see your equation at the end of the book right away. Everyone else sees it after the Eilan team reviews it.',addBtnT:'Add my equation',ldT:'Opening the book…'};for(const k in T){const el=document.getElementById(k);if(el)el.textContent=T[k]}document.getElementById('lShow').innerHTML='<b>Do you want your name shown in the Eilan book?</b><br>If you agree, your name appears at the bottom of the equation page — “Idea & explanation: your name” — for everyone who opens the book.'});
 </script>
 <script type="importmap">{"imports":{"three":"/vendor/three/three.module.min.js"}}</script>
-<script src="/books/eq/core.js?v=7"></script>
+<script src="/books/eq/core.js?v=8"></script>
 <script src="/books/eq/data-physics.js?v=5"></script>
 <script src="/books/eq/data-physics2.js?v=5"></script>
 <script src="/books/eq/data-chemistry.js?v=5"></script>
@@ -221,7 +221,8 @@ window.addEventListener('DOMContentLoaded',()=>{const en=(localStorage.getItem('
 <script src="/books/eq/data-reactions.js?v=1"></script>
 <script src="/books/eq/data-elements.js?v=1"></script>
 <script src="/books/eq/data-batch3.js?v=1"></script>
+<script src="/books/eq/data-batch4.js?v=1"></script>
 <script src="/books/eq/community.js?v=5"></script>
-<script type="module" src="/books/eq/app.js?v=7"></script>
+<script type="module" src="/books/eq/app.js?v=8"></script>
 </body>
 </html>

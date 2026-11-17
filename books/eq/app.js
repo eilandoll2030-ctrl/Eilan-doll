@@ -20,7 +20,7 @@ const UI={title:['موسوعة معادلات إيلان','Eilan Equations Encyc
 const t=k=>L(UI[k]);
 
 /* ---------- subject books (same 3D engine, filtered) ---------- */
-const BOOKS={physics:{g:['phys'],ic:'⚡',n:['كتاب الفيزياء','Physics book']},chemistry:{g:['chem'],ic:'⚗️',n:['كتاب الكيمياء','Chemistry book']},biology:{c:['bio','med','gen','ecl','hum','phk'],grp:'life',ic:'🧬',n:['كتاب الأحياء','Biology book']},math:{g:['math'],ic:'📐',n:['كتاب الرياضيات','Mathematics book']},statistics:{g:['stat'],ic:'📊',n:['كتاب الإحصاء','Statistics book']}};
+const BOOKS={physics:{g:['phys'],ic:'⚡',n:['كتاب الفيزياء','Physics book']},chemistry:{g:['chem'],ic:'⚗️',n:['كتاب الكيمياء','Chemistry book']},biology:{c:['bio','med','gen','ecl','hum','phk','mic'],grp:'life',ic:'🧬',n:['كتاب الأحياء','Biology book']},math:{g:['math'],ic:'📐',n:['كتاب الرياضيات','Mathematics book']},statistics:{g:['stat'],ic:'📊',n:['كتاب الإحصاء','Statistics book']}};
 const BOOK=new URLSearchParams(location.search).get('book'),BK=BOOKS[BOOK]||null;const POSK='eq-pos'+(BK?'-'+BOOK:'');
 const SIMMAP={pe:'energy',coaster:'motion',newton:'motion',pendulum:'pendulum',wave:'wave',ohm:'circuit',linear:'graph',quad:'graph',pyth:'solids',unit:'graph',vectors:'graph',circle:'solids',atom:'atom',states:'heat',gas:'gas',ph:'beaker',react:'molecule',cell:'plant',eye:'optics',heart:'plant',photo:'plant',pop:'plant',mean:'dice',normal:'dice',lln:'dice',corr:'graph',clt:'dice'};
 let LESSONS=[];

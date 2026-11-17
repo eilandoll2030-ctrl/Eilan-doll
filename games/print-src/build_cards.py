@@ -149,7 +149,7 @@ def cfg_couples():
                 f'<div style="font-weight:900;font-size:19pt;line-height:1.55;margin-top:4mm;max-width:118mm;font-family:Cairo,{E}">{q[2]}</div>')
 
     def pb(i, q):
-        return (f'<div style="font-size:30pt">💜💛</div><div style="font-weight:900;font-size:16pt;margin-top:2mm;font-family:Cairo">بيني وبينك</div>'
+        return (f'<div style="font-size:30pt;font-family:{E}">💍</div><div style="font-size:14pt;font-family:{E}">💜 💛</div><div style="font-weight:900;font-size:16pt;margin-top:1mm;font-family:Cairo">بيني وبينك</div>'
                 f'<div style="font-weight:800;font-size:10pt;color:#FFD97A;margin-top:1mm;font-family:Cairo,{E}">المستوى: {LV[q[0]]}</div>')
 
     def sl(i, q, c):
@@ -164,8 +164,38 @@ def cfg_couples():
                 rules=["طفّوا الجوالات وولّعوا شمعة 🕯️", "تبادلوا الدور: 💜 مرة و💛 مرة.",
                        "لكل واحد <b>جوكرين</b> يتخطى فيهم سؤال ما يبي يجاوبه.", "ابدأوا من «دافي» وكملوا لين «جريء جدًا»."],
                 steps=["تبادلوا الدور 💜💛", "جاوب أو نفّذ التحدّي", "لكل واحد جوكرين 🃏"],
-                end=("💍", "بيني وبينك… وبس", "العبوها أونلاين — منطقة الترفيه في إيلان دول"),
-                pf=pf, pb=pb, sl=sl, bg="#7B2F7E")
+                end=("💞", "بيني وبينك… وبس", "العبوها أونلاين — منطقة الترفيه في إيلان دول"),
+                pf=pf, pb=pb, sl=sl, **ROMANCE)
+
+
+# ---- romantic theme («بيني وبينك»): blush/rose/burgundy + hearts and rings instead of cubes
+_HE = ["💕", "💍", "❤️", "🌹", "💞", "🤍"]
+
+
+def _hearts():
+    spots = [(3, 4, 12, -14), (88, 6, 10, 12), (5, 82, 9, 10), (90, 80, 11, -8)]
+    return "".join(f'<span style="position:absolute;left:{x}%;top:{y}%;font-size:{z}pt;transform:rotate({r}deg);opacity:.75;font-family:{E}">{_HE[k % len(_HE)]}</span>'
+                   for k, (x, y, z, r) in enumerate(spots))
+
+
+def _rdeco(name, top, left, size, rot):
+    em = "💍" if name == "d1" else "💕"
+    return f'<div data-el="{name}" class="deco" style="top:{top}px;left:{left}px;width:{size}px;height:{size}px;font-size:{int(size*.82)}px;line-height:1;transform:rotate({rot}deg);font-family:{E}">{em}</div>'
+
+
+def _float(scale):
+    pts = [(6, 10, 1.0, -12, "💕"), (14, 70, .7, 8, "🌹"), (82, 14, .8, 14, "💍"), (90, 62, .9, -6, "❤️"), (48, 88, .6, 0, "🤍"), (70, 6, .55, 10, "💞")]
+    return "".join(f'<span style="position:absolute;left:{x}%;top:{y}%;font-size:{s*scale:.0f}px;transform:rotate({r}deg);opacity:.55;font-family:{E}">{e}</span>' for x, y, s, r, e in pts)
+
+
+ROMANCE = dict(
+    bg="#C2185B", bg2="#5A0F2E", bg3="#1E0610",
+    fun=[("#FFE4EC", "#FFC2D4", "#C2185B", "#5A0F2E"), ("#FDE8E4", "#F8C9C1", "#B23A48", "#4A1020"),
+         ("#F9E3F1", "#EEC3E2", "#9C2A7E", "#45103A"), ("#FFF1EA", "#FBD3C6", "#C2410C", "#4D1F12")],
+    night=[("#9C1E4A", "#3A0718"), ("#7A1F5C", "#2B0722"), ("#A3243B", "#36070F"), ("#6E1A3F", "#22050F")],
+    rulesc=("#FFE4EC", "#FFC2D4", "#C2185B", "#5A0F2E"), plainc=("#9C1E4A", "#3A0718"),
+    cubes=_hearts, deco=_rdeco, coverdeco=_float(48).replace("px", "pt"), slidedeco=_float(110),
+    howbg="linear-gradient(160deg,#FFF5F8,#FFE4EC)", howink="#5A0F2E")
 
 
 GAMES = {"lawkunt": cfg_lawkunt, "jawib": cfg_jawib, "qulha": cfg_qulha, "couples": cfg_couples}
@@ -175,18 +205,21 @@ GAMES = {"lawkunt": cfg_lawkunt, "jawib": cfg_jawib, "qulha": cfg_qulha, "couple
 def print_pages(C):
     T = C["title"]; items = C["items"]
 
+    FUN, NIGHT = C.get("fun", bp.FUN), C.get("night", bp.NIGHT); cubes = C.get("cubes", bp.cubes)
     def front(i, q):
-        c = bp.FUN[i % len(bp.FUN)]
-        return f'<div class="card front" dir="rtl" style="--b1:{c[0]};--b2:{c[1]};--ac:{c[2]};--ink:{c[3]};color:{c[3]}">{bp.cubes()}<div class="no">{num(i+1)}</div>{C["pf"](i, q, c)}{bp.brand(T)}</div>'
+        c = FUN[i % len(FUN)]
+        return f'<div class="card front" dir="rtl" style="--b1:{c[0]};--b2:{c[1]};--ac:{c[2]};--ink:{c[3]};color:{c[3]}">{cubes()}<div class="no">{num(i+1)}</div>{C["pf"](i, q, c)}{bp.brand(T)}</div>'
 
     def back(i, q):
-        n1, n2 = bp.NIGHT[i % len(bp.NIGHT)]
+        n1, n2 = NIGHT[i % len(NIGHT)]
         return f'<div class="card backc" dir="rtl" style="--n1:{n1};--n2:{n2}"><div class="no">{num(i+1)}</div>{C["pb"](i, q)}{bp.brand(T)}</div>'
 
-    rules = (f'<div class="card front" dir="rtl" style="--b1:#FFF3C9;--b2:#FFE08A;--ac:#E0A100;--ink:#5A3D00;color:#5A3D00">{bp.cubes()}<div style="font-weight:900;font-size:15pt;font-family:Cairo">طريقة اللعب</div>'
+    rc = C.get("rulesc", ("#FFF3C9", "#FFE08A", "#E0A100", "#5A3D00"))
+    rules = (f'<div class="card front" dir="rtl" style="--b1:{rc[0]};--b2:{rc[1]};--ac:{rc[2]};--ink:{rc[3]};color:{rc[3]}">{cubes()}<div style="font-weight:900;font-size:15pt;font-family:Cairo">طريقة اللعب</div>'
              f'<ol style="text-align:right;font-size:9.6pt;line-height:1.8;padding-inline-start:5mm;margin-top:2mm;max-width:115mm;font-family:Cairo,{E}">'
              + "".join(f"<li>{r}</li>" for r in C["rules"]) + f'</ol>{bp.brand(T)}</div>')
-    plain = (f'<div class="card backc" style="--n1:#4A2A8F;--n2:#0B1F5E"><img src="{LOGO}" style="width:30mm;height:30mm"><div style="font-family:Poppins;font-weight:800;letter-spacing:3px;font-size:10pt;margin-top:2mm">EILAN DOLL</div>'
+    pn = C.get("plainc", ("#4A2A8F", "#0B1F5E"))
+    plain = (f'<div class="card backc" style="--n1:{pn[0]};--n2:{pn[1]}"><img src="{LOGO}" style="width:30mm;height:30mm"><div style="font-family:Poppins;font-weight:800;letter-spacing:3px;font-size:10pt;margin-top:2mm">EILAN DOLL</div>'
              f'<div style="font-size:9.5pt;color:rgba(255,248,234,.75);margin-top:1mm;font-family:Cairo">{C["end"][2]}</div></div>')
     fronts = [front(i, q) for i, q in enumerate(items)] + [rules]
     backs = [back(i, q) for i, q in enumerate(items)] + [plain]
@@ -194,7 +227,7 @@ def print_pages(C):
         fronts.append(plain); backs.append(plain)
     total = 1 + len(fronts) // 4
     lab = lambda n, s: f"<b>ورقة {num(n)}/{num(total)}</b> · {s}"
-    cover = f'''<section class="pg" dir="rtl" style="background:radial-gradient(60% 70% at 85% 10%,rgba(255,143,177,.35),transparent 60%),radial-gradient(60% 70% at 10% 100%,rgba(61,220,151,.3),transparent 60%),radial-gradient(70% 80% at 50% 50%,{C["bg"]} 0,#251147 60%,#07080C 100%);color:#FFF8EA">
+    cover = f'''<section class="pg" dir="rtl" style="background:radial-gradient(60% 70% at 85% 10%,rgba(255,143,177,.35),transparent 60%),radial-gradient(60% 70% at 10% 100%,rgba(61,220,151,.3),transparent 60%),radial-gradient(70% 80% at 50% 50%,{C["bg"]} 0,{C.get("bg2","#251147")} 60%,{C.get("bg3","#07080C")} 100%);color:#FFF8EA">{C.get("coverdeco","")}
 <div class="lbl" style="color:rgba(255,248,234,.6)">{lab(1, "الوجه")}</div>
 <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:16mm;padding:0 20mm">
 <img src="{LOGO}" style="width:80mm;height:80mm;transform:rotate(-8deg);filter:drop-shadow(0 8mm 10mm rgba(0,0,0,.45))">
@@ -220,9 +253,9 @@ def print_pages(C):
 
 
 def slides(C):
-    T = C["title"]; deco = ba.deco
+    T = C["title"]; deco = C.get("deco", ba.deco); FUN = C.get("fun", bp.FUN)
     brand = f'<div class="brand" data-el="brand"><img src="{LOGO}"><span>EILAN DOLL · {T}</span></div>'
-    S = [(f'''<section class="sl" dir="rtl" style="background:radial-gradient(60% 70% at 85% 10%,rgba(255,143,177,.35),transparent 60%),radial-gradient(60% 70% at 10% 100%,rgba(61,220,151,.3),transparent 60%),radial-gradient(70% 80% at 50% 50%,{C["bg"]} 0,#251147 60%,#07080C 100%);color:#FFF8EA;flex-direction:row;gap:110px">
+    S = [(f'''<section class="sl" dir="rtl" style="background:radial-gradient(60% 70% at 85% 10%,rgba(255,143,177,.35),transparent 60%),radial-gradient(60% 70% at 10% 100%,rgba(61,220,151,.3),transparent 60%),radial-gradient(70% 80% at 50% 50%,{C["bg"]} 0,{C.get("bg2","#251147")} 60%,{C.get("bg3","#07080C")} 100%);color:#FFF8EA;flex-direction:row;gap:110px">{C.get("slidedeco","")}
 <img data-el="cube" src="{LOGO}" style="width:440px;height:440px;transform:rotate(-8deg);filter:drop-shadow(0 40px 50px rgba(0,0,0,.45))">
 <div style="text-align:right;max-width:1050px"><div data-el="kick" style="font-family:Cairo;font-weight:800;font-size:34px;color:#FFD97A">EILAN GAMES · {C["kick"]}</div>
 <div data-el="title" style="font-weight:900;font-size:180px;line-height:1.15;font-family:Cairo">{T}</div>
@@ -231,22 +264,22 @@ def slides(C):
           [('auto', [('cube', 'pop', 900, 0), ('kick', 'fade', 600, 300)]), ('after', [('title', 'zoom', 700, 0)]),
            ('after', [('sub', 'rise', 600, 0), ('brand', 'fade', 600, 200)]), ('after', [('cube', 'spin', 1600, 0)])])]
     cards = "".join(f'<div data-el="c{k}" style="width:470px;height:330px;border-radius:48px;background:linear-gradient(160deg,{c[0]},{c[1]});border:3px solid {c[2]};color:{c[3]};display:flex;flex-direction:column;align-items:center;justify-content:center;padding:36px;gap:22px;font-family:Cairo,{E}"><div style="width:96px;height:96px;border-radius:28px;background:{c[2]};color:#fff;display:grid;place-items:center;font-size:52px;font-weight:900">{num(k+1)}</div><div style="font-size:40px;font-weight:900;line-height:1.4">{s}</div></div>'
-                    for k, (s, c) in enumerate(zip(C["steps"], bp.FUN[:3])))
-    S.append((f'''<section class="sl" dir="rtl" style="background:#FFFFFF;color:#0B1F5E"><div data-el="title" style="font-weight:900;font-size:96px;font-family:Cairo;margin-bottom:60px">طريقة اللعب</div>
+                    for k, (s, c) in enumerate(zip(C["steps"], FUN[:3])))
+    S.append((f'''<section class="sl" dir="rtl" style="background:{C.get("howbg","#FFFFFF")};color:{C.get("howink","#0B1F5E")}"><div data-el="title" style="font-weight:900;font-size:96px;font-family:Cairo;margin-bottom:60px">طريقة اللعب</div>
 <div style="display:flex;gap:48px">{cards}</div>{deco('d1', 60, 80, 120, -12)}{deco('d2', 830, 1690, 140, 14)}{brand}</section>''',
               '<p:cover dir="l"/>',
               [('auto', [('title', 'rise', 600, 0), ('d1', 'pop', 700, 100), ('d2', 'pop', 700, 250)]),
                ('after', [('c0', 'rise', 550, 0), ('c1', 'rise', 550, 250), ('c2', 'rise', 550, 500)]),
                ('after', [('brand', 'fade', 500, 0), ('d1', 'wiggle', 900, 0), ('d2', 'wiggle', 900, 0)])]))
     for i, q in enumerate(C["items"]):
-        c = bp.FUN[i % len(bp.FUN)]
+        c = FUN[i % len(FUN)]
         body, st, pul = C["sl"](i, q, c)
         steps = [('auto', [('no', 'pop', 600, 0), ('d1', 'pop', 600, 200), ('d2', 'pop', 600, 300)])] + st + \
                 [('after', [(pul, 'pulse', 700, 0), ('d1', 'wiggle', 900, 0), ('d2', 'wiggle', 900, 0)])]
         S.append((f'''<section class="sl front" dir="rtl" style="--b1:{c[0]};--b2:{c[1]};--ac:{c[2]};--ink:{c[3]};color:{c[3]};background:linear-gradient(160deg,{c[0]},{c[1]});border:0"><div class="dots"></div><div class="no" data-el="no">{num(i+1)}</div>
 {body}{deco('d1', 60, 80, 120, -12)}{deco('d2', 830, 1690, 140, 14)}{brand}</section>''', ba.QTRANS[i % len(ba.QTRANS)], steps))
     ic, t1, t2 = C["end"]
-    S.append((f'''<section class="sl" dir="rtl" style="background:radial-gradient(70% 80% at 50% 40%,{C["bg"]},#0B1F5E 60%,#07080C);color:#FFF8EA">
+    S.append((f'''<section class="sl" dir="rtl" style="background:radial-gradient(70% 80% at 50% 40%,{C["bg"]},{C.get("bg2","#0B1F5E")} 60%,{C.get("bg3","#07080C")});color:#FFF8EA">{C.get("slidedeco","")}
 <div data-el="cup" style="font-size:170px">{ic}</div><div data-el="title" style="font-weight:900;font-size:120px;font-family:Cairo">{t1}</div>
 <div data-el="sub" style="font-size:44px;opacity:.85;margin-top:20px;font-family:Cairo">{t2}</div>
 {deco('d1', 60, 80, 120, -12)}{deco('d2', 830, 1690, 140, 14)}{brand}</section>''',

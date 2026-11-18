@@ -20,7 +20,7 @@ const UI={title:['موسوعة معادلات إيلان','Eilan Equations Encyc
 const t=k=>L(UI[k]);
 
 /* ---------- subject books (same 3D engine, filtered) ---------- */
-const BOOKS={physics:{g:['phys'],ic:'⚡',n:['كتاب الفيزياء','Physics book']},chemistry:{g:['chem'],ic:'⚗️',n:['كتاب الكيمياء','Chemistry book']},biology:{c:['bio','med'],grp:'life',ic:'🧬',n:['كتاب الأحياء','Biology book']},math:{g:['math'],ic:'📐',n:['كتاب الرياضيات','Mathematics book']},statistics:{g:['stat'],ic:'📊',n:['كتاب الإحصاء','Statistics book']}};
+const BOOKS={physics:{g:['phys'],ic:'⚡',n:['كتاب الفيزياء','Physics book']},chemistry:{g:['chem'],ic:'⚗️',n:['كتاب الكيمياء','Chemistry book']},biology:{c:['bio','med','gen','ecl','hum','phk','mic'],grp:'life',ic:'🧬',n:['كتاب الأحياء','Biology book']},math:{g:['math'],ic:'📐',n:['كتاب الرياضيات','Mathematics book']},statistics:{g:['stat'],ic:'📊',n:['كتاب الإحصاء','Statistics book']}};
 const BOOK=new URLSearchParams(location.search).get('book'),BK=BOOKS[BOOK]||null;const POSK='eq-pos'+(BK?'-'+BOOK:'');
 const SIMMAP={pe:'energy',coaster:'motion',newton:'motion',pendulum:'pendulum',wave:'wave',ohm:'circuit',linear:'graph',quad:'graph',pyth:'solids',unit:'graph',vectors:'graph',circle:'solids',atom:'atom',states:'heat',gas:'gas',ph:'beaker',react:'molecule',cell:'plant',eye:'optics',heart:'plant',photo:'plant',pop:'plant',mean:'dice',normal:'dice',lln:'dice',corr:'graph',clt:'dice'};
 let LESSONS=[];
@@ -34,6 +34,7 @@ function loadLessons(){if(!BK)return Promise.resolve();window.EB=window.EB||{reg
 let LIST=[];
 function buildList(){const order=EQ.groups.map(g=>g.id);const cats=Object.values(EQ.cats).filter(c=>c.id!=='les'&&(!BK||(BK.g?BK.g.includes(c.g):BK.c.includes(c.id))));LIST=[...LESSONS];
  order.forEach(g=>cats.filter(c=>c.g===g).forEach(c=>{const items=EQ.list.filter(e=>e.cat===c.id);items.forEach((e,i)=>{e.id=e.id||c.id+'-'+(i+1);LIST.push(e)})}));
+ const rk={};LIST.forEach(e=>{rk[e.cat]=(rk[e.cat]||0)+1;e.__r=rk[e.cat]});
  mine().forEach((m,i)=>{if(!BK||(BK.g||[BK.grp]).includes(m.subj))LIST.push({...m,cat:'com',id:'mine-'+(i+1),mine:true})})}
 function mine(){try{return JSON.parse(localStorage.getItem('eq-mine')||'[]')}catch(e){return[]}}
 
@@ -134,7 +135,8 @@ function refreshModel(){const e=LIST[idx];if(!cur||!e)return;if(allNeeded())PS.d
  tray();updRes()}
 function paint(e){drawText(textMesh().material.map.image,e,idx);textMesh().material.map.needsUpdate=true;drawModelPage(modelMesh().material.map.image,e,idx);modelMesh().material.map.needsUpdate=true}
 function show(i,{flip=0}={}){if(!LIST.length)return;if(TOUR.on){stopSpeech();TOUR.on=false;tourUI()}i=(i+LIST.length)%LIST.length;const e=LIST[i];
- if(!flip||busy){idx=i;paint(e);mountModel(e);popAll(cur.root,1);ui();return}
+ if(!isFree(e,i)){idx=i;showLock(e);ui();return}const wasLk=document.body.classList.contains('locked');hideLock();
+ if(!flip||busy||!cur||wasLk){idx=i;paint(e);mountModel(e);popAll(cur.root,1);ui();return}
  busy=true;popAll(cur.root,-1,380,()=>{doFlip(flip,()=>{idx=i;paint(e);mountModel(e);popAll(cur.root,1);ui();busy=false})})}
 function doFlip(dir,done){// dir>0 forward. RTL forward: left page turns over to the right.
  const fromSide=(dir>0)===rtl()?-1:1;const pv=new THREE.Group();pv.position.set(0,TOPY+.006,0);book.add(pv);
@@ -272,6 +274,36 @@ async function boot(){try{await Promise.race([Promise.all([document.fonts.load('
  setTimeout(()=>{const h=$('#hint');h.classList.add('hide')},5000)}
 window.addEventListener('hashchange',()=>{const h=decodeURIComponent(location.hash.slice(1));const i=LIST.findIndex(e=>e.id===h);if(i>=0&&i!==idx)show(i,{flip:i>idx?1:-1})});
 
+
+/* ---------- free pages + book paywall ---------- */
+/* أول 3 صفحات مجانية في كل كتاب (وفي الموسوعة: أول 3 من كل قسم). معادلات الزوار مجانية دايمًا. */
+const FREE_N=3;
+const PRICE={book:15,enc:29,all:49};
+function isFree(e,i){if(e.mine||e.cat==='com')return true;return BK?i<FREE_N:(e.__r||1)<=FREE_N}
+function nextFree(from){for(let k=1;k<=LIST.length;k++){const j=(from+k)%LIST.length;if(isFree(LIST[j],j)&&LIST[j].cat!==LIST[from].cat)return j}return 0}
+function showLock(e){const ar=rtl();const nm=BK?L(BK.n):(ar?'موسوعة المعادلات':'Equation encyclopedia');const one=BK?PRICE.book:PRICE.enc;
+ const T=(a,b)=>ar?a:b;
+ $('#lkbox').innerHTML=`<div class="lkic">📘✨</div>
+ <h2 id="lkt">${T('عجبك الكتاب؟ كمّل الرحلة','Enjoying the book? Keep going')}</h2>
+ <p>${BK?T('جرّبت أول 3 صفحات مجانًا.','You tried the first 3 pages for free.'):T('جرّبت أول 3 معادلات من هذا القسم مجانًا.','You tried the first 3 equations of this section for free.')}
+ ${T('افتح الكتاب كامل، وخلّ كل معادلة تطلع قدامك ثلاثية الأبعاد، تبنيها قطعة قطعة لين تفهمها.','Unlock the full book and watch every equation pop up in 3D, building it piece by piece until it clicks.')}</p>
+ <div class="lkp">
+  <div class="lkc"><b>${esc(nm)}</b><div class="pr">${one} <small>${T('ريال','SAR')}</small></div><div class="mu" style="font-size:12px">${T('دفعة وحدة','One-time payment')}</div>
+   <ul><li>✓ ${T('كل صفحات هذا الكتاب','Every page of this book')}</li><li>✓ ${T('المجسمات ثلاثية الأبعاد والحاسبة','3D models and calculator')}</li></ul>
+   <button class="buy" disabled>${T('قريبًا','Coming soon')}</button></div>
+  <div class="lkc best"><span class="tag">⭐ ${T('الأوفر','Best value')}</span><b>${T('باقة المكتبة الكاملة','Full library bundle')}</b><div class="pr">${PRICE.all} <small>${T('ريال','SAR')}</small></div><div class="mu" style="font-size:12px">${T('دفعة وحدة','One-time payment')}</div>
+   <ul><li>✓ ${T('الكتب الخمسة: فيزياء، كيمياء، أحياء، رياضيات، إحصاء','All 5 books: physics, chemistry, biology, math, statistics')}</li><li>✓ ${T('موسوعة المعادلات كاملة','The full equation encyclopedia')}</li><li>✓ ${T('كل كتاب جديد ينضاف للمكتبة','Every new book added to the library')}</li></ul>
+   <button class="buy" disabled>${T('قريبًا','Coming soon')}</button></div>
+ </div>
+ <p class="lknote">🛒 ${T('الشراء يفتح قريبًا في متجر إيلان. وإلى ذلك الوقت تقدر تتصفح الصفحات المجانية.','Purchasing opens soon in the Eilan store. Until then, enjoy the free pages.')}</p>
+ <div class="lkact">${BK?`<button class="ib" data-lk="first">↩ ${T('ارجع لأول صفحة','Back to page 1')}</button>`:`<button class="ib g" data-lk="next">➜ ${T('جرّب القسم اللي بعده مجانًا','Try the next section free')}</button><button class="ib" data-lk="first">↩ ${T('ارجع لأول القسم','Back to section start')}</button>`}
+  <a class="ib" href="/interactive-books.html${ar?'':'?lang=en'}">📚 ${T('المكتبة','Library')}</a></div>
+ <div class="lksig">${T('صُمم بواسطة إيلان دول','Designed by Eilan Doll')}</div>`;
+ $('#lock').classList.remove('hide');document.body.classList.add('locked');try{clearModel()}catch(er){}}
+function hideLock(){$('#lock').classList.add('hide');document.body.classList.remove('locked')}
+document.addEventListener('click',ev=>{const b=ev.target.closest('[data-lk]');if(!b)return;const e=LIST[idx];
+ if(b.dataset.lk==='next')show(nextFree(idx));
+ else if(b.dataset.lk==='first'){show(BK?0:Math.max(0,LIST.findIndex(x=>x.cat===e.cat)))}});
 /* ---------- Eilan voice tour: narrated, build-along explanation ---------- */
 const TOUR={on:false,steps:[],i:0,paused:false,timer:null,voice:null,gen:0,audio:null,cloud:true,cache:new Map()};
 let VMODE='m';try{VMODE=localStorage.getItem('eq-voice')||'m'}catch(e){}

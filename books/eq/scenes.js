@@ -2,6 +2,7 @@
    كل مشهد: build(K, eq) يرجّع {root, update(vals), tick(t,dt), tap(obj)}.
    الإحداثيات: مركز الصفحة (0,0,0)، x بين −0.44 و 0.44، z بين −0.62 و 0.62، y لفوق. */
 import * as THREE from 'three';
+import {MORE} from './scenes2.js';
 
 export function kit(lang){
  const K={THREE};
@@ -293,3 +294,4 @@ blocks(K,eq){const T=K.THREE,root=new T.Group();const cols=[K.blueL,K.greenL,K.M
  const build=(terms)=>{while(grp.children.length)grp.remove(grp.children[0]);const n=terms.length,mx=Math.max(...terms.map(Math.abs),1);terms.forEach((v,i)=>{const h=Math.max(1,Math.round(Math.abs(v)/mx*7));for(let k=0;k<h;k++){const b=K.box(.06,.06,.06,cols[i%4]);b.position.set(-((n-1)*.075)/2+i*.075,k*.061,0);grp.add(b)}const t=new T.Mesh(new T.PlaneGeometry(.06,.06),new T.MeshBasicMaterial({map:lab(String(Math.round(v*100)/100))}));t.rotation.x=-Math.PI/2;t.position.set(-((n-1)*.075)/2+i*.075,.001,.075);grp.add(t)})};
  return{root,update(v,fn){let terms=[1,2,3,4,5,6];if(fn&&fn.key){const x0=fn.x0;const base=Math.max(1,Math.round(Math.abs(x0)))||1;terms=[];for(let i=1;i<=6;i++){const y=fn.f(i*(base/3||1));terms.push(isFinite(y)?y:0)}}build(terms);card.userData.redraw((c,W,H)=>K.fit(c,eq.f,W,H))},tick(t){grp.rotation.y=Math.sin(t*.5)*.12}}}
 };
+Object.assign(SCENES,MORE);

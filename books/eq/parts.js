@@ -1,3 +1,4 @@
+import {PARTS2} from './parts2.js';
 /* قطع المجسمات: لكل مشهد قائمة بقطعه بنفس ترتيب ظهورها في scenes.js.
    n: الاسم [عربي، إنجليزي] · r: دورها (يظهر في خطوات البناء ورسالة التوقف)
    e: أساسية (بدونها تتوقف المعادلة) · b: قاعدة ثابتة لا تُشال · s: رموز تصير صفرًا عند إزالتها */
@@ -44,3 +45,4 @@ export const PARTS={
  plant:()=>[P('النبتة','Plant','الكائن الحي في المعادلة','the living thing in the equation',{e:1}),P('الخلية','Cell','وحدة بناء الكائن الحي','the building block of life'),P('الشمس','Sun','مصدر الضوء والطاقة','the source of light and energy'),CARD],
  blocks:()=>[P('المكعبات','Blocks','تمثل حدود المتتالية أو البيانات','stand for the terms or the data',{e:1}),CARD]
 };
+Object.assign(PARTS,PARTS2);

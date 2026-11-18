@@ -279,7 +279,13 @@ window.addEventListener('hashchange',()=>{const h=decodeURIComponent(location.ha
 /* أول 3 صفحات مجانية في كل كتاب (وفي الموسوعة: أول 3 من كل قسم). معادلات الزوار مجانية دايمًا. */
 const FREE_N=3;
 const PRICE={book:15,enc:29,all:49};
-function isFree(e,i){if(e.mine||e.cat==='com')return true;return BK?i<FREE_N:(e.__r||1)<=FREE_N}
+/* المالكة تشوف كل الصفحات: نفس جلسة دخولها في لوحة الموقع (eilan_owner_session) */
+let OWNER=false;
+(async()=>{try{const st=JSON.parse(localStorage.getItem('eilan_doll_world_v2')||'null');const h=st&&st.owner&&st.owner.hash;if(!h||!crypto.subtle)return;
+ let tok=null;try{tok=sessionStorage.getItem('eilan_owner_session')}catch(e){}if(!tok)try{tok=localStorage.getItem('eilan_owner_session')}catch(e){}if(!tok)return;
+ const d=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('tok|'+h));const hex=[...new Uint8Array(d)].map(b=>b.toString(16).padStart(2,'0')).join('');
+ if(hex===tok){OWNER=true;document.body.classList.add('owner');const b=document.createElement('div');b.className='ownerbadge';b.textContent=rtl()?'👑 وضع المالكة: كل الصفحات مفتوحة':'👑 Owner mode: all pages unlocked';document.body.appendChild(b);if(document.body.classList.contains('locked'))show(idx)}}catch(e){}})();
+function isFree(e,i){if(OWNER||e.mine||e.cat==='com')return true;return BK?i<FREE_N:(e.__r||1)<=FREE_N}
 function nextFree(from){for(let k=1;k<=LIST.length;k++){const j=(from+k)%LIST.length;if(isFree(LIST[j],j)&&LIST[j].cat!==LIST[from].cat)return j}return 0}
 function showLock(e){const ar=rtl();const nm=BK?L(BK.n):(ar?'موسوعة المعادلات':'Equation encyclopedia');const one=BK?PRICE.book:PRICE.enc;
  const T=(a,b)=>ar?a:b;

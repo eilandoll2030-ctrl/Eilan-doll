@@ -1,0 +1,30 @@
+:root{--bg:#100e17;--line:#f6dfff24;--rose:#ffc6dc;--muted:#bcb0c4;--blue:#704581;--pur:#80395f}
+body{background:radial-gradient(ellipse at 85% 0%,#2c1632,transparent 42rem),var(--bg);color:#fff5fc}
+.wrap{max-width:1280px;padding:22px clamp(16px,4vw,44px) 52px}
+header{border-bottom:1px solid var(--line);padding-bottom:20px;margin-bottom:26px}
+.hero{display:grid;grid-template-columns:1fr 1fr;align-items:center;overflow:hidden;border:1px solid var(--line);border-radius:30px;background:radial-gradient(ellipse at 20% 46%,#51213f,#211329 60%,#18121f);margin-block-end:44px}
+.hero-copy{padding:clamp(24px,5vw,66px)}
+.kicker{color:var(--rose);font-size:11px;font-weight:800;letter-spacing:.18em}
+.hero h1{font-size:clamp(32px,4.6vw,64px);line-height:1.2;margin:14px 0}
+.hero h1 span{display:block;color:var(--rose);background:none}
+.lead{color:#e5d6e6;opacity:1}
+.hero-links{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.hero-links .primary{background:var(--rose);color:#36162b;border-color:transparent;font-weight:800}
+.hero-art{display:grid;place-items:center;position:relative;min-width:0;padding:0 18px 18px}
+.hero-art img{width:min(100%,470px);display:block;filter:drop-shadow(0 0 19px #ff569877)}
+.hero-art small{font-size:10px;color:#f8c6de;letter-spacing:.25em}
+.collection{scroll-margin-top:18px}.collection h2{margin:6px 0;font-size:clamp(25px,4vw,38px)}
+.collection p{color:var(--muted);margin:0 0 18px}.grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.card{display:flex;flex-direction:column;background:#1b1524;border-radius:18px}.card:hover{border-color:var(--rose)}
+.card .th{width:100%;height:auto;object-fit:contain;background:#090710}.card .meta{width:100%;flex:1;padding:13px 14px 16px}.card b{font-size:17px}.card .o{opacity:1;color:var(--muted)}
+.card .cta{display:block;margin-top:12px;color:var(--rose);font-size:12px}.badge{background:#3f2949;color:#ffd4ed}
+.occ button.on{background:var(--rose);color:#36162b;border-color:transparent}.occ button{opacity:1}
+.panel{padding:clamp(16px,3vw,28px);background:#1b1524}.panel h2{color:var(--rose);font-size:27px}.stage{border-color:#ce90bc58}.ed{gap:24px}
+:focus-visible{outline:2px solid var(--rose);outline-offset:3px}
+@media(max-width:870px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:640px){.hero{grid-template-columns:1fr;margin-bottom:30px}.hero-art img{max-width:285px}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.stage{max-height:440px}.hero-copy{padding-bottom:0}}
+@media(prefers-reduced-motion:reduce){.card,.toast{transition:none}}
+/* Give gift artwork priority over catalogue density. */
+@media(min-width:871px){.grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}}
+.card .th{aspect-ratio:1;background:radial-gradient(ellipse,#261326,#090710);border-bottom:1px solid var(--line)}
+.card[data-g="heart"] .th{padding:6%;background:radial-gradient(ellipse,#412039,#100a19)}

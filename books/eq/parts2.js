@@ -28,4 +28,10 @@ export const PARTS2={
  ,music:()=>[P('البيانو','Piano','آلة النوتات والترددات','the instrument of notes and frequencies',{e:1,s:['key','f1','bpm']}),P('الجيتار','Guitar','أوتار تهتز وتصنع الصوت','vibrating strings that make sound',{s:['Lsc','fret']}),CARD]
  ,sport:()=>[P('مضمار الجري','Running track','المكان اللي يجري فيه اللاعب','where the athlete runs',{b:1}),P('العدّاء','Runner','الجسم اللي يتحرك ويصرف طاقة','the moving body that burns energy',{e:1,s:['massKg','dkm','m']}),P('الكرة','Ball','تنرمي وتنركل','gets thrown and kicked',{s:['v']}),P('ساعة الإيقاف','Stopwatch','تقيس الزمن','measures the time',{s:['tmin','t']}),CARD]
  ,kitchen:()=>[P('الموقد','Stove','مصدر الحرارة للطبخ','the heat source for cooking',{e:1,s:['pkettle','P']}),P('القدر','Pot','فيه الأكل والماء','holds the food and water',{e:1,s:['mw']}),P('الميزان','Kitchen scale','يقيس المقادير','weighs the ingredients',{s:['q1k','flour','grams']}),CARD]
+ ,reaction:()=>[P('طاولة المختبر','Lab bench','مكان التجربة','where the experiment happens',{b:1}),
+  P('الكأس','Beaker','فيه المادة الأولى ويصير فيه التفاعل','holds the first substance and the reaction',{e:1}),
+  P('الدورق','Flask','فيه المادة الثانية ويصبها في الكأس','holds the second substance and pours it in',{e:1}),
+  P('الموقد','Burner','يعطي حرارة للتفاعلات اللي تحتاجها','heats reactions that need it'),
+  P('صندوق الجزيئات','Particle box','تكبير يبيّن الجزيئات وهي تتحرك وتتصادم','a zoom-in showing particles moving and colliding'),
+  P('الترمومتر','Thermometer','يبيّن إذا التفاعل يطلع حرارة','shows whether the reaction gives off heat'),CARD]
 };

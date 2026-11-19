@@ -81,7 +81,6 @@
     <a class="brand" href="/"><img src="/assets/logo/eilan-icon.svg" alt=""><div><b>EILAN DOLL</b><small>THE DIGITAL WORLD</small></div></a>
     <a class="pill" href="/" id="toStore"></a>
   </header>
-  <div class="langs" id="langs"></div>
 
   <section id="gallery">
     <h1>🎁 <span id="title"></span></h1>
@@ -97,6 +96,7 @@
       <div class="stage"><iframe id="prev" title="preview"></iframe></div>
       <div class="panel">
         <h2 id="dName"></h2><div class="o" id="dOcc"></div>
+        <label id="lLang">🌍 لغة الهدية</label><div class="langs" id="langs" style="margin-top:0"></div>
         <label id="lFill"></label>
         <div class="seg" id="mode"><button data-m="w" id="mW"></button><button data-m="m" id="mM"></button><button data-m="s" id="mS"></button></div>
         <div id="boxW"><label id="lWord"></label><input id="fW" maxlength="16"></div>
@@ -129,35 +129,34 @@
 <script>
 (function(){
   const I=EilanI18N,G=EilanGift,D=G.DESIGNS,T=G.TINTS,$=id=>document.getElementById(id);
-  let lang='ar';try{lang=localStorage.getItem('eilanGiftLang')||'ar';}catch(e){}
+  let lang='ar';
   const qs=new URLSearchParams(location.search);if(I.ORDER.includes(qs.get('l')))lang=qs.get('l');
   let cur=null,color='',mode='w',sym=G.SYMBOLS[0],occF='all';
-  const t=k=>I.t(k,lang),nm=g=>I.NAMES[g][lang],occ=g=>D[g].occ.map(o=>I.OCC[o][lang]).join(' · ');
+  const UI_L='ar',t=k=>I.t(k,UI_L),tg=k=>I.t(k,lang),nm=g=>I.NAMES[g][UI_L],occ=g=>D[g].occ.map(o=>I.OCC[o][UI_L]).join(' · ');
 
   /* ---------- language ---------- */
   $('langs').innerHTML=I.LANGS.map(([k,n])=>`<button data-l="${k}">${n}</button>`).join('');
   $('langs').onclick=e=>{const b=e.target.closest('button');if(!b)return;setLang(b.dataset.l);};
   function setLang(l){
-    const oldWord=cur?I.WORDS[D[cur].wk][lang]:null;lang=l;try{localStorage.setItem('eilanGiftLang',l);}catch(e){}
-    document.documentElement.lang=l;document.documentElement.dir=I.RTL(l)?'rtl':'ltr';
+    const oldWord=cur?I.WORDS[D[cur].wk][lang]:null;lang=l;
     [...$('langs').children].forEach(b=>b.classList.toggle('on',b.dataset.l===l));
     $('title').textContent=t('title');$('lead').textContent=t('lead');['s1','s2','s3'].forEach(k=>$(k).textContent=t(k));
-    $('toStore').textContent=(I.RTL(l)?'← ':'← ')+t('store');$('backBtn').textContent=(I.RTL(l)?'→ ':'← ')+t('back');
+    $('toStore').textContent='← '+t('store');$('backBtn').textContent='→ '+t('back');
     $('lFill').textContent=t('fill');$('mW').textContent=t('mWord');$('mM').textContent=t('mMix');$('mS').textContent=t('mSym');
     $('lWord').textContent=t('word');$('lMix').textContent=t('mixNote');$('lMsg').textContent=t('msg');$('lIdeas').textContent=t('ideas');
     $('lFrom').textContent=t('from');$('lColor').textContent=t('color');$('bPrev').textContent=t('preview');$('bCopy').textContent=t('copy');
     $('bQR').textContent=t('qr');$('bShare').textContent=t('share');$('bOpen').textContent=t('open');$('note').textContent=t('note');
     $('qrTip').textContent=t('saveTip');$('qrSave').textContent=t('save');$('qrClose').textContent=t('close');
     $('fC').querySelector('.def').textContent=t('orig');
-    drawOcc();drawGrid();
-    if(cur){$('dName').textContent=nm(cur);$('dOcc').textContent=occ(cur);
+    if(!$('grid').children.length){drawOcc();drawGrid();}
+    if(cur){
       if(!$('fW').value||$('fW').value===oldWord)$('fW').value=I.WORDS[D[cur].wk][lang];
-      $('lTo').textContent=D[cur].shape?t('toName'):t('to');drawIdeas();refresh();}
+      if(D[cur].shape&&/^(نور|Noor)$/.test($('fTo').value))$('fTo').value=lang==='ar'?'نور':'Noor';drawIdeas();refresh();}
   }
 
   /* ---------- gallery ---------- */
   function drawOcc(){const keys=[...new Set(Object.values(D).flatMap(d=>d.occ))];
-    $('occ').innerHTML=`<button data-o="all" class="${occF==='all'?'on':''}">✦ ${t('all')}</button>`+keys.map(k=>`<button data-o="${k}" class="${occF===k?'on':''}">${I.OCC[k][lang]}</button>`).join('');}
+    $('occ').innerHTML=`<button data-o="all" class="${occF==='all'?'on':''}">✦ ${t('all')}</button>`+keys.map(k=>`<button data-o="${k}" class="${occF===k?'on':''}">${I.OCC[k][UI_L]}</button>`).join('');}
   $('occ').onclick=e=>{const b=e.target.closest('button');if(!b)return;occF=b.dataset.o;drawOcc();drawGrid();};
   function drawGrid(){$('grid').innerHTML=Object.keys(D).filter(g=>occF==='all'||D[g].occ.includes(occF)).map(g=>`<button class="card" data-g="${g}"><span class="th" style="background-image:url(thumbs/${g}.jpg)"></span><div class="meta"><b>${nm(g)}</b><div class="o">${occ(g)}</div></div></button>`).join('');}
   $('grid').onclick=e=>{const c=e.target.closest('.card');if(c)open(c.dataset.g,true);};
@@ -199,7 +198,7 @@
   ['fW','fTo','fM','fFrom'].forEach(id=>$(id).addEventListener('change',refresh));
   function toast(x){const e=$('toast');e.textContent=x;e.classList.add('on');setTimeout(()=>e.classList.remove('on'),2200);}
   $('bCopy').onclick=()=>{const l=link();(navigator.clipboard?navigator.clipboard.writeText(l):Promise.reject()).then(()=>toast(t('copied')),()=>prompt('',l));};
-  $('bShare').onclick=()=>{const l=link();if(navigator.share)navigator.share({title:'🎁 '+t('got'),url:l}).catch(()=>{});else $('bCopy').click();};
+  $('bShare').onclick=()=>{const l=link();if(navigator.share)navigator.share({title:'🎁 '+tg('got'),url:l}).catch(()=>{});else $('bCopy').click();};
 
   /* ---------- QR card ---------- */
   $('bQR').onclick=()=>{
@@ -207,13 +206,13 @@
     const bg=x.createLinearGradient(0,0,W,H);bg.addColorStop(0,'#0B1F5E');bg.addColorStop(.55,'#07080C');bg.addColorStop(1,'#251147');x.fillStyle=bg;x.fillRect(0,0,W,H);
     const font=s=>`800 ${s}px "Segoe UI",Tahoma,"PingFang SC","Hiragino Sans","Apple SD Gothic Neo","Noto Sans CJK SC",system-ui,sans-serif`;
     x.textAlign='center';x.fillStyle='#fff';x.font=font(64);x.direction=I.RTL(lang)?'rtl':'ltr';
-    x.fillText('🎁 '+t('got'),W/2,150);
-    x.font=font(38);x.fillStyle='#D8FFE6';x.fillText(t('scan'),W/2,215);
+    x.fillText('🎁 '+tg('got'),W/2,150);
+    x.font=font(38);x.fillStyle='#D8FFE6';x.fillText(tg('scan'),W/2,215);
     const box=760,bx=(W-box)/2,by=280;x.fillStyle='#fff';
     x.beginPath();x.roundRect?x.roundRect(bx,by,box,box,48):x.rect(bx,by,box,box);x.fill();
     const px=Math.floor((box-80)/(q.size+8)),qs=px*(q.size+8),qx=bx+(box-qs)/2+px*4,qy=by+(box-qs)/2+px*4;
     EilanQR.draw(x,q,qx,qy,px,'#07080C');
-    const fin=()=>{x.font=font(44);x.fillStyle='#fff';x.fillText(nm(cur),W/2,by+box+95);
+    const fin=()=>{x.font=font(44);x.fillStyle='#fff';x.fillText(I.NAMES[cur][lang],W/2,by+box+95);
       const to=$('fTo').value.trim();if(to){x.font=font(36);x.fillStyle='#f5c242';x.fillText(to,W/2,by+box+150);}
       x.font=font(26);x.fillStyle='#ffffff88';x.direction='ltr';x.fillText('إيلان دول · EILAN DOLL',W/2,H-50);
       const url=c.toDataURL('image/png');$('qrImg').src=url;$('qrSave').href=url;$('qrModal').style.display='flex';};

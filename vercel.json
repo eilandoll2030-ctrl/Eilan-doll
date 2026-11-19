@@ -1,8 +1,9 @@
 {
   "version": 2,
   "rewrites": [
+    {"source": "/gifts/", "destination": "/gifts/index.html"},
     {
-      "source": "/((?!api/).*)",
+      "source": "/((?!api/|gifts(?:/|$)).*)",
       "destination": "/index.html"
     }
   ],

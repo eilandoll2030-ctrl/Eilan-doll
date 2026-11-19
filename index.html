@@ -3353,6 +3353,7 @@ let storeQ='',storeCat='all',storeSort='pop';
 P.store={icon:'🛍️',title:()=>'متجر إيلان دول',html:r=>{storeCat=r.q.cat||storeCat;return `
   <div class="page-h"><div><div class="eyebrow">EILAN DOLL STORE</div><h1>🛍️ متجر <span class="grad-t">إيلان دول</span></h1><p>منتجات رقمية تفصلك عن الروتين — تسليم فوري بعد الدفع.</p></div>
    <div style="display:flex;gap:8px;flex-wrap:wrap">${S.settings.sallaStore?`<a class="btn salla" href="${esc(S.settings.sallaStore)}" target="_blank" rel="noopener">🛍️ متجرنا في سلة</a>`:''}<button class="btn" data-act="opencart">${I.cart} السلة</button><button class="btn g" data-act="newproduct">${I.plus} أضف منتج</button></div></div>
+  <p><a class="btn" href="/gifts/">✦ هدايا إيلان الحيّة</a></p>
   <div class="store-bar"><div class="srch">${I.search}<input class="input" id="sQ" placeholder="ابحث في المتجر…" value="${esc(storeQ)}"></div>
    <select class="select" id="sSort" style="width:200px"><option value="pop">الأكثر مبيعاً</option><option value="rate">الأعلى تقييماً</option><option value="low">السعر: من الأقل</option><option value="high">السعر: من الأعلى</option><option value="new">الأحدث</option></select></div>
   <div class="cats">${[['all','✦ الكل'],...Object.entries(CATS).map(([k,v])=>[k,`${v.i} ${v.n} · ${v.e}`])].map(([k,n])=>`<button class="chip ${storeCat===k?'on':''}" data-act="cat" data-c="${k}">${n}</button>`).join('')}</div>

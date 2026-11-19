@@ -31,17 +31,18 @@
 <div id="brand"><img src="/assets/logo/eilan-icon.svg" alt="">إيلان دول · EILAN DOLL</div>
 <script src="i18n.js"></script>
 <script src="engine.js"></script>
+<script src="story.js"></script>
 <script>
 (function(){
-  const P=new URLSearchParams(location.search),I=EilanI18N,G=EilanGift;
+  const P=new URLSearchParams(location.search),I=EilanI18N,G=EilanGift,ST=EilanStory,ALL=Object.assign({},ST.STORIES,G.DESIGNS);
   // new short links (?d=…) or the older readable ones (?g=…&to=…)
   let o=P.get('d')?G.decode(P.get('d')):null;
   if(!o)o={g:P.get('g'),w:P.get('w')||'',to:P.get('to')||'',m:P.get('m')||'',f:P.get('from')||'',c:P.get('c')||'',l:P.get('l')||'ar',k:P.get('k')||'w',s:P.get('s')||''};
-  const g=G.DESIGNS[o.g]?o.g:'heart',D=G.DESIGNS[g],l=I.ORDER.includes(o.l)?o.l:'ar';
+  const g=ALL[o.g]?o.g:'heart',D=ALL[g],isStory=!!D.story,l=I.ORDER.includes(o.l)?o.l:'ar';
   document.documentElement.lang=l;document.documentElement.dir=I.RTL(l)?'rtl':'ltr';
   const words=I.WORDS[D.wk]||I.WORDS.love;
   const list=o.k==='m'?I.ORDER.map(x=>words[x]):o.k==='s'&&o.s?[o.s]:[o.w||words[l]];
-  const cfg={g,list,to:o.to||'',c:o.c||'',bare:P.get('bare')==='1'};
+  const cfg={g,list,word:list[0],to:o.to||'',c:o.c||'',bare:P.get('bare')==='1',seek:+P.get('seek')||0};
   document.getElementById('got').textContent=I.t('got',l);
   document.getElementById('tap').textContent=I.t('tap',l);
   document.getElementById('hint').textContent=I.t('replay',l);
@@ -49,15 +50,17 @@
   msg.querySelector('.to').textContent=o.to||'';
   msg.querySelector('.note').textContent=o.m||'';
   msg.querySelector('.from').textContent=o.f?('— '+o.f):'';
-  msg.querySelector('.to').style.color=(G.TINTS[o.c]||G.TINTS[D.tint])[0];
-  if(cfg.bare)['msg','hint','brand'].forEach(id=>document.getElementById(id).remove());
-  else cfg.onFormed=()=>{msg.classList.add('on');setTimeout(()=>{const h=document.getElementById('hint');h.style.opacity=.55;setTimeout(()=>h.style.opacity=0,3500);},1800);};
+  msg.querySelector('.to').style.color=(G.TINTS[o.c]||G.TINTS[D.tint]||['#fff'])[0];
+  const hint=document.getElementById('hint');
+  if(D.tap)cfg.onLit=()=>{hint.textContent=I.t('blow',l);hint.style.opacity=.85;};
+  if(cfg.bare){['msg','hint','brand'].forEach(id=>document.getElementById(id).style.display='none');}
+  else cfg.onFormed=()=>{msg.classList.add('on');hint.style.opacity=0;setTimeout(()=>{const h=hint;h.textContent=I.t('replay',l);h.style.opacity=.55;setTimeout(()=>h.style.opacity=0,3500);},1800);};
   let player=null;
-  const begin=()=>{player=G.start(document.getElementById('c'),cfg);};
+  const begin=()=>{player=(isStory?ST:G).start(document.getElementById('c'),cfg);};
   if(P.get('auto')==='1'||cfg.bare){document.getElementById('open').remove();begin();}
   else document.getElementById('open').addEventListener('click',()=>{const e=document.getElementById('open');e.style.opacity=0;setTimeout(()=>e.remove(),800);begin();},{once:true});
   addEventListener('resize',()=>msg.classList.remove('on'));
-  document.getElementById('c').addEventListener('click',()=>{if(player&&player.formed()){msg.classList.remove('on');player.restart();}});
+  document.getElementById('c').addEventListener('click',()=>{if(player&&player.tap&&!player.formed()&&player.tap()){hint.style.opacity=0;return;}if(player&&player.formed()){msg.classList.remove('on');player.restart();}});
 })();
 </script>
 </body>

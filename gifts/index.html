@@ -33,7 +33,7 @@
   .card:hover{transform:translateY(-4px);border-color:#ffffff40}
   .card .th{aspect-ratio:1/1;background:#05040a center/cover no-repeat;display:block}
   .card .meta{padding:10px 12px 12px}
-  .card b{font-size:15px}.card .o{font-size:11px;opacity:.65;margin-top:5px}
+  .card b{font-size:15px}.badge{display:table;font-size:10px;background:linear-gradient(90deg,#b98a12,#f5c242);color:#1a1204;border-radius:999px;padding:2px 8px;margin-bottom:5px;font-weight:800}.card .o{font-size:11px;opacity:.65;margin-top:5px}
   #editor{display:none}
   .ed{display:grid;grid-template-columns:minmax(260px,420px) 1fr;gap:20px;align-items:start;margin-top:16px}
   @media (max-width:780px){.ed{grid-template-columns:1fr}}
@@ -125,10 +125,11 @@
 <div class="toast" id="toast"></div>
 <script src="i18n.js"></script>
 <script src="engine.js"></script>
+<script src="story.js"></script>
 <script src="qr.js"></script>
 <script>
 (function(){
-  const I=EilanI18N,G=EilanGift,D=G.DESIGNS,T=G.TINTS,$=id=>document.getElementById(id);
+  const I=EilanI18N,G=EilanGift,D=Object.assign({},EilanStory.STORIES,G.DESIGNS),T=G.TINTS,$=id=>document.getElementById(id);
   let lang='ar';
   const qs=new URLSearchParams(location.search);if(I.ORDER.includes(qs.get('l')))lang=qs.get('l');
   let cur=null,color='',mode='w',sym=G.SYMBOLS[0],occF='all';
@@ -158,7 +159,7 @@
   function drawOcc(){const keys=[...new Set(Object.values(D).flatMap(d=>d.occ))];
     $('occ').innerHTML=`<button data-o="all" class="${occF==='all'?'on':''}">✦ ${t('all')}</button>`+keys.map(k=>`<button data-o="${k}" class="${occF===k?'on':''}">${I.OCC[k][UI_L]}</button>`).join('');}
   $('occ').onclick=e=>{const b=e.target.closest('button');if(!b)return;occF=b.dataset.o;drawOcc();drawGrid();};
-  function drawGrid(){$('grid').innerHTML=Object.keys(D).filter(g=>occF==='all'||D[g].occ.includes(occF)).map(g=>`<button class="card" data-g="${g}"><span class="th" style="background-image:url(thumbs/${g}.jpg)"></span><div class="meta"><b>${nm(g)}</b><div class="o">${occ(g)}</div></div></button>`).join('');}
+  function drawGrid(){$('grid').innerHTML=Object.keys(D).filter(g=>occF==='all'||D[g].occ.includes(occF)).map(g=>`<button class="card" data-g="${g}"><span class="th" style="background-image:url(thumbs/${g}.jpg)"></span><div class="meta">${D[g].story?'<span class="badge">✨ قصة حيّة</span>':''}<b>${nm(g)}</b><div class="o">${occ(g)}</div></div></button>`).join('');}
   $('grid').onclick=e=>{const c=e.target.closest('.card');if(c)open(c.dataset.g,true);};
 
   /* ---------- editor ---------- */
@@ -186,7 +187,7 @@
     $('dName').textContent=nm(cur);$('dOcc').textContent=occ(cur);
     $('fW').value=I.WORDS[d.wk][lang];$('lTo').textContent=d.shape?t('toName'):t('to');
     if(!$('fTo').value&&d.shape)$('fTo').value=lang==='ar'?'نور':'Noor';
-    mode=d.shape?'s':'w';if(d.shape)sym='✨';color='';markC();markS();markM();drawIdeas();
+    mode=d.story?'w':(d.shape?'s':'w');if(d.shape&&!d.story)sym='✨';$('lFill').style.display=$('mode').style.display=d.story?'none':'';color='';markC();markS();markM();drawIdeas();
     $('gallery').style.display='none';$('editor').style.display='block';scrollTo(0,0);
     if(push)history.pushState(null,'','?g='+cur);
     refresh();

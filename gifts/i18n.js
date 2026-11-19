@@ -28,11 +28,15 @@ const WORDS={
  forever:row(['للأبد','Forever','永远','永遠に','영원히','Sonsuza dek','Para siempre','Per sempre']),
  treasure:row(['تاج راسي','My treasure','宝贝','宝物','보물','Hazinem','Mi tesoro','Tesoro mio']),
  shine:row(['تألّق','Shine','闪耀','輝いて','빛나','Parla','Brilla','Brilla']),
- star:row(['✦','✦','✦','✦','✦','✦','✦','✦'])
+ star:row(['✦','✦','✦','✦','✦','✦','✦','✦']),
+ wish:row(['تمنّ أمنية','Make a wish','许个愿','願いごとを','소원 빌어','Dilek tut','Pide un deseo','Esprimi un desiderio'])
 };
 
 /* ---- shape names ---- */
 const NAMES={
+ letter:row(['رسالة تتحوّل وردة','Letter to Rose','信变玫瑰','バラになる手紙','장미가 되는 편지','Güle Dönüşen Mektup','Carta que se vuelve rosa','Lettera che diventa rosa']),
+ candle:row(['شمعة الأمنية','Wish Candle','许愿蜡烛','願いのキャンドル','소원 촛불','Dilek Mumu','Vela de los deseos','Candela dei desideri']),
+ fireworks:row(['ألعاب نارية باسمك','Fireworks with Your Name','烟花写名字','名前の花火','이름 불꽃놀이','Adınla Havai Fişek','Fuegos artificiales con tu nombre','Fuochi d’artificio col tuo nome']),
  heart:row(['قلب الكلمات','Heart of Words','文字之心','言葉のハート','글자 하트','Kelimelerden Kalp','Corazón de palabras','Cuore di parole']),
  roses:row(['باقة الورد','Rose Bouquet','玫瑰花束','バラの花束','장미 꽃다발','Gül Buketi','Ramo de rosas','Mazzo di rose']),
  palm:row(['نخلة الشكر','Palm of Thanks','感恩棕榈','感謝のヤシの木','감사의 야자수','Teşekkür Palmiyesi','Palmera de gracias','Palma del grazie']),
@@ -135,6 +139,7 @@ const UI={
  got:row(['وصلتك هدية','You got a gift','你收到一份礼物','ギフトが届きました','선물이 도착했어요','Bir hediyen var','Tienes un regalo','Hai un regalo']),
  tap:row(['اضغط لفتحها','Tap to open','点击打开','タップして開く','눌러서 열기','Açmak için dokun','Toca para abrir','Tocca per aprire']),
  replay:row(['اضغط على الشاشة لإعادة الهدية ✨','Tap the screen to replay ✨','点击屏幕重播 ✨','画面をタップでもう一度 ✨','화면을 눌러 다시 보기 ✨','Tekrar için ekrana dokun ✨','Toca la pantalla para repetir ✨','Tocca lo schermo per rivedere ✨']),
+ blow:row(['اضغط على الشاشة لتطفي الشمعة وتتمنّى 🕯️','Tap the screen to blow out the candle and make a wish 🕯️','点击屏幕吹灭蜡烛，许个愿 🕯️','画面をタップしてろうそくを消し、願いごとを 🕯️','화면을 눌러 촛불을 끄고 소원을 빌어요 🕯️','Mumu üflemek ve dilek tutmak için ekrana dokun 🕯️','Toca la pantalla para soplar la vela y pedir un deseo 🕯️','Tocca lo schermo per spegnere la candela ed esprimere un desiderio 🕯️']),
  from_:row(['من','From','来自','より','보낸 사람','Gönderen','De','Da'])
 };
 

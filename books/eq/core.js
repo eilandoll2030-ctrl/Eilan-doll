@@ -155,8 +155,10 @@ window.EQ=(function(){
  ].forEach(([id,g,ar,en,sc])=>E.cats[id]={id,g,n:[ar,en],sc});
 
  E.syms=txt=>txt.split('\n').forEach(l=>{l=l.trim();if(!l||l.startsWith('#'))return;const p=l.split('|');E.sym[p[0]]={d:p[1],n:[p[2],p[3]],u:p[4]||'',v:p[5]===undefined||p[5]===''?1:+p[5]}});
- E.add=(cat,txt,extra)=>{txt.split('\n').forEach(l=>{l=l.trim();if(!l||l.startsWith('#'))return;const p=l.split('|');if(p.length<8){console.warn('EQ bad line',l);return}
-  E.list.push({cat,n:[p[0],p[1]],f:p[2],out:p[3]||'',x:p[4]||'',ins:(p[5]||'').trim()?p[5].trim().split(/\s+/):[],d:[p[6],p[7]],sc:(p[8]||'').trim()||E.cats[cat].sc,...(extra||{})})})};
+ /* أي تفاعل كيميائي (فيه سهم وصيغ كيميائية) يطلع في مختبر التفاعل خطوة بخطوة */
+E.isRx=(cat,f)=>{f=String(f||'');if(!/→|⇌|⇄/.test(f))return false;if(['nuc','prt','gen','ecl','geo','las','cat','thm','alg','seq'].includes(cat))return false;return /(?:^|[\s(+])\d*(?:[A-Z][a-z]?[₀-₉⁺⁻²³]*){1,}(?:\([A-Za-z₀-₉]+\)[₀-₉]*)?/.test(f)&&/[A-Z]/.test(f)};
+E.add=(cat,txt,extra)=>{txt.split('\n').forEach(l=>{l=l.trim();if(!l||l.startsWith('#'))return;const p=l.split('|');if(p.length<8){console.warn('EQ bad line',l);return}
+  E.list.push({cat,n:[p[0],p[1]],f:p[2],out:p[3]||'',x:p[4]||'',ins:(p[5]||'').trim()?p[5].trim().split(/\s+/):[],d:[p[6],p[7]],sc:(p[8]||'').trim()||(E.isRx(cat,p[2])?'reaction':E.cats[cat].sc),...(extra||{})})})};
 
  E.syms(`
 # ---- mechanics

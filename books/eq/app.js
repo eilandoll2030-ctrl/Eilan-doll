@@ -123,7 +123,7 @@ function popAll(root,dir,dur=900,done){const kids=root.children.filter(c=>c.user
 function mountModel(e){if(cur){modelAnchor.remove(cur.root);cur.root.traverse(o=>{if(o.geometry)o.geometry.dispose()})}
  const fnB=SCENES[e.sc]||SCENES.energy;let s;try{s=fnB(K,e)}catch(err){console.error('scene',e.sc,err);s=SCENES.energy(K,e)}cur=s;
  const side=-textSide();modelAnchor.position.set(side*PW/2,TOPY+.004,-.02);modelAnchor.scale.setScalar(1.18);modelAnchor.add(s.root);s.root.traverse(o=>{if(o.isMesh){o.castShadow=o.castShadow!==false}});
- const kids=s.root.children.filter(k=>k.userData.pop);const spec=(PARTS[e.sc]||(()=>[]))(e);kids.forEach((k,i)=>{k.userData.part=spec[i]||{n:['قطعة','Piece'],r:['جزء من المجسم','part of the model']};k.userData.home=k.position.clone();k.userData.idx=i});PS.kids=kids;PS.removed=new Set();dimMap.clear();
+ const kids=s.root.children.filter(k=>k.userData.pop);const spec=(PARTS[e.sc]||(()=>[]))(e);kids.forEach((k,i)=>{k.userData.part=spec[i]||{n:['قطعة','Piece'],r:['جزء من المجسم','part of the model']};k.userData.home=k.position.clone();k.userData.idx=i});PS.kids=kids;PS.removed=new Set();GL.step=0;dimMap.clear();
  PS.strays=s.root.children.filter(k=>!k.userData.pop);PS.done=false;
  if(PS.build)kids.forEach((k,i)=>{PS.removed.add(i);k.visible=false});
  refreshModel();s.root.children.forEach(k=>{if(k.userData.pop){k.scale.set(1,.001,1);k.rotation.x=-1.25}})}
@@ -171,12 +171,23 @@ function endDrag(e,tap){if(!drag)return;const k=drag.k;drag=null;cv.style.cursor
 function removePart(i){const k=PS.kids[i];if(!k||(k.userData.part.b&&!PS.build))return;PS.removed.add(i);tween(300,el=>{const q=K.clamp(el/300,0,1);k.scale.setScalar(Math.max(.001,1-q))},()=>{k.visible=false;k.scale.set(1,1,1)});refreshModel()}
 function addPart(i){const k=PS.kids[i];if(!k)return;PS.removed.delete(i);k.position.copy(k.userData.home);k.visible=true;k.scale.set(1,.001,1);tween(700,el=>{const p=back(K.clamp(el/700,0,1));k.scale.set(1,Math.max(.001,p),1)},()=>k.scale.set(1,1,1));refreshModel()}
 let hintT=null;function hint(msg){const h=$('#dhint');if(!h)return;h.textContent=msg;h.classList.toggle('hide',!msg)}
-function liveBtn(){const b=$('#livebtn'),box=$('#livestep');if(!b||!box)return;const ok=cur&&cur.setStep&&(!PS.build||PS.done)&&!PS.stopped;
- if(!ok){b.classList.add('hide');box.classList.add('hide');if(cur&&cur.setStep&&cur.getStep()>0&&(PS.stopped||(PS.build&&!PS.done)))cur.setStep(0);return}
- const n=cur.getStep(),S=cur.steps(),N=S.length;if(n===0){box.classList.add('hide');b.classList.remove('hide');b.innerHTML=rtl()?'▶️ شاهد التفاعل خطوة بخطوة':'▶️ Watch the reaction step by step';return}
- b.classList.add('hide');box.classList.remove('hide');
- box.innerHTML=`<div class="lsdots">${S.map((_,i)=>`<i class="${i<n?'on':''}"></i>`).join('')}</div><div class="lstxt"><b>${rtl()?'الخطوة':'Step'} ${n} / ${N}:</b> ${esc(S[n-1])}</div><div class="lsbtns">${n<N?`<button data-ls="next" class="g">${rtl()?'الخطوة التالية ⬅':'Next step ➜'}</button>`:''}<button data-ls="again">${rtl()?'↺ من البداية':'↺ Start again'}</button></div>`}
-document.addEventListener('click',ev=>{if(!cur||!cur.setStep)return;if(ev.target.closest('#livebtn')){cur.setStep(1);liveBtn();return}const x=ev.target.closest('[data-ls]');if(!x)return;if(x.dataset.ls==='next')cur.setStep(cur.getStep()+1);else{cur.setStep(0);setTimeout(()=>{cur.setStep(1);liveBtn()},300)}liveBtn()});
+/* «شاهد خطوة بخطوة» لكل المجسمات: التفاعلات لها خطواتها الخاصة، والباقي خطوات من رموز المعادلة ثم النتيجة والحركة */
+const GL={step:0,run:99};
+function genSteps(){const e=LIST[idx];if(!e)return[];const v=evalEq(e);const out=[];const fmt=x=>typeof x==='number'&&isFinite(x)?(+x.toPrecision(4)).toLocaleString('en-US'):'—';
+ (e.ins||[]).forEach(k=>{const s=sym(k);const pi=PS.kids.findIndex(kd=>kd.userData.part&&(kd.userData.part.s||[]).includes(k));const pt=pi>=0?PS.kids[pi].userData.part:null;
+  out.push({t:`«${L(s.n)}» = <b dir="ltr">${fmt(v[k])}${s.u?' '+esc(s.u):''}</b>`+(pt?(rtl()?` — في المجسم: «${L(pt.n)}»، ${L(pt.r)}`:` — in the model: “${L(pt.n)}”, ${L(pt.r)}`):''),glow:pi})});
+ if(e.out&&e.x){const s=sym(e.out);out.push({t:(rtl()?'نحط القيم في المعادلة: ':'Put the values into the formula: ')+`<span dir="ltr">${esc(e.f)}</span>`,glow:-1});out.push({t:(rtl()?'النتيجة: ':'Result: ')+`«${L(s.n)}» = <b dir="ltr">${fmt(v[e.out])}${s.u?' '+esc(s.u):''}</b> ✅ `+(rtl()?'— شوف المجسم وهو يشتغل':'— watch the model run'),glow:-1,run:1})}
+ else{out.unshift({t:(rtl()?'المعادلة: ':'The equation: ')+`<span dir="ltr">${esc(e.f)}</span>`,glow:-1});out.push({t:L(e.d)+(rtl()?' ✅ شوف المجسم وهو يشتغل':' ✅ Watch the model run'),glow:-1,run:1})}
+ return out}
+function LV(){if(!cur)return null;if(cur.setStep)return{steps:()=>cur.steps(),get:()=>cur.getStep(),set:n=>cur.setStep(n),html:false};
+ const S=genSteps();GL.run=S.findIndex(x=>x.run)+1||S.length;return{steps:()=>S.map(x=>x.t),get:()=>GL.step,set:n=>{GL.step=Math.max(0,Math.min(S.length,n));const g=S[GL.step-1];if(g&&g.glow>=0)glow(g.glow)},html:true}}
+function liveBtn(){const b=$('#livebtn'),box=$('#livestep');if(!b||!box)return;const A=LV();const ok=A&&(!PS.build||PS.done)&&!PS.stopped;
+ if(!ok){b.classList.add('hide');box.classList.add('hide');if(A&&A.get()>0&&(PS.stopped||(PS.build&&!PS.done)))A.set(0);return}
+ const n=A.get(),S=A.steps(),N=S.length;if(!N){b.classList.add('hide');box.classList.add('hide');return}
+ if(n===0){box.classList.add('hide');b.classList.remove('hide');b.innerHTML=cur.setStep?(rtl()?'▶️ شاهد التفاعل خطوة بخطوة':'▶️ Watch the reaction step by step'):(rtl()?'▶️ شاهد المعادلة تشتغل خطوة بخطوة':'▶️ Watch the equation work step by step');return}
+ b.classList.add('hide');box.classList.remove('hide');const txt=A.html?S[n-1]:esc(S[n-1]);
+ box.innerHTML=`<div class="lsdots">${S.map((_,i)=>`<i class="${i<n?'on':''}"></i>`).join('')}</div><div class="lstxt"><b>${rtl()?'الخطوة':'Step'} ${n} / ${N}:</b> ${txt}</div><div class="lsbtns">${n<N?`<button data-ls="next" class="g">${rtl()?'الخطوة التالية ⬅':'Next step ➜'}</button>`:''}<button data-ls="again">${rtl()?'↺ من البداية':'↺ Start again'}</button></div>`}
+document.addEventListener('click',ev=>{const A=LV();if(!A)return;if(ev.target.closest('#livebtn')){A.set(1);liveBtn();return}const x=ev.target.closest('[data-ls]');if(!x)return;if(x.dataset.ls==='next')A.set(A.get()+1);else{A.set(0);setTimeout(()=>{A.set(1);liveBtn()},300)}liveBtn()});
 function tray(){const box=$('#tray');if(!box||!PS.kids.length){box&&box.classList.add('hide');return}box.classList.remove('hide');const e=LIST[idx];
  const rem=[...PS.removed].map(i=>PS.kids[i]).filter(Boolean).sort((a,b)=>(need(b.userData.part)?1:0)-(need(a.userData.part)?1:0)||a.userData.idx-b.userData.idx);
  const ess=PS.kids.filter(k=>need(k.userData.part)),missE=rem.filter(k=>need(k.userData.part));let msg;
@@ -201,7 +212,7 @@ function resize(){const W=window.innerWidth,H=window.innerHeight;R3.setSize(W,H,
 window.addEventListener('resize',resize);
 let last=performance.now();function loop(now){const dt=Math.min(.05,(now-last)/1000);last=now;
  for(let i=tweens.length-1;i>=0;i--){const tw=tweens[i];const el=now-tw.t0;tw.fn(el);if(el>=tw.dur){tweens.splice(i,1);tw.done&&tw.done()}}
- if(cur&&cur.tick&&!PS.stopped)try{cur.tick(now/1000,dt)}catch(err){}
+ if(cur&&cur.tick&&!PS.stopped)try{if(cur.setStep||GL.step>=GL.run)cur.tick(now/1000,dt);else cur.tick(0,0)}catch(err){}
  if(drag)drag.k.position.y+=((.035)-drag.k.position.y)*Math.min(1,dt*10);
  updCam(dt);R3.render(scene,camera);requestAnimationFrame(loop)}
 

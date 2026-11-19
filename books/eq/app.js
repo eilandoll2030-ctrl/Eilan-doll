@@ -132,7 +132,7 @@ function refreshModel(){const e=LIST[idx];if(!cur||!e)return;if(allNeeded())PS.d
  // stopped: lights and glows go dark; restored when running again
  cur.root.traverse(o=>{if(o.isLight){if(!dimMap.has(o))dimMap.set(o,o.intensity);if(PS.stopped)o.intensity=0;else if(o.intensity===0)o.intensity=dimMap.get(o)}
   else if(o.isMesh&&o.material&&o.material.emissive&&!o.material.emissiveMap){const m=o.material;if(!dimMap.has(m))dimMap.set(m,m.emissiveIntensity);if(PS.stopped)m.emissiveIntensity=0;else if(m.emissiveIntensity===0&&e.sc!=='circuit')m.emissiveIntensity=dimMap.get(m)}});
- tray();updRes()}
+ tray();updRes();liveBtn()}
 function paint(e){drawText(textMesh().material.map.image,e,idx);textMesh().material.map.needsUpdate=true;drawModelPage(modelMesh().material.map.image,e,idx);modelMesh().material.map.needsUpdate=true}
 function show(i,{flip=0}={}){if(!LIST.length)return;if(TOUR.on){stopSpeech();TOUR.on=false;tourUI()}i=(i+LIST.length)%LIST.length;const e=LIST[i];
  if(!isFree(e,i)){idx=i;showLock(e);ui();return}const wasLk=document.body.classList.contains('locked');hideLock();
@@ -171,6 +171,12 @@ function endDrag(e,tap){if(!drag)return;const k=drag.k;drag=null;cv.style.cursor
 function removePart(i){const k=PS.kids[i];if(!k||(k.userData.part.b&&!PS.build))return;PS.removed.add(i);tween(300,el=>{const q=K.clamp(el/300,0,1);k.scale.setScalar(Math.max(.001,1-q))},()=>{k.visible=false;k.scale.set(1,1,1)});refreshModel()}
 function addPart(i){const k=PS.kids[i];if(!k)return;PS.removed.delete(i);k.position.copy(k.userData.home);k.visible=true;k.scale.set(1,.001,1);tween(700,el=>{const p=back(K.clamp(el/700,0,1));k.scale.set(1,Math.max(.001,p),1)},()=>k.scale.set(1,1,1));refreshModel()}
 let hintT=null;function hint(msg){const h=$('#dhint');if(!h)return;h.textContent=msg;h.classList.toggle('hide',!msg)}
+function liveBtn(){const b=$('#livebtn'),box=$('#livestep');if(!b||!box)return;const ok=cur&&cur.setStep&&(!PS.build||PS.done)&&!PS.stopped;
+ if(!ok){b.classList.add('hide');box.classList.add('hide');if(cur&&cur.setStep&&cur.getStep()>0&&(PS.stopped||(PS.build&&!PS.done)))cur.setStep(0);return}
+ const n=cur.getStep(),S=cur.steps(),N=S.length;if(n===0){box.classList.add('hide');b.classList.remove('hide');b.innerHTML=rtl()?'▶️ شاهد التفاعل خطوة بخطوة':'▶️ Watch the reaction step by step';return}
+ b.classList.add('hide');box.classList.remove('hide');
+ box.innerHTML=`<div class="lsdots">${S.map((_,i)=>`<i class="${i<n?'on':''}"></i>`).join('')}</div><div class="lstxt"><b>${rtl()?'الخطوة':'Step'} ${n} / ${N}:</b> ${esc(S[n-1])}</div><div class="lsbtns">${n<N?`<button data-ls="next" class="g">${rtl()?'الخطوة التالية ⬅':'Next step ➜'}</button>`:''}<button data-ls="again">${rtl()?'↺ من البداية':'↺ Start again'}</button></div>`}
+document.addEventListener('click',ev=>{if(!cur||!cur.setStep)return;if(ev.target.closest('#livebtn')){cur.setStep(1);liveBtn();return}const x=ev.target.closest('[data-ls]');if(!x)return;if(x.dataset.ls==='next')cur.setStep(cur.getStep()+1);else{cur.setStep(0);setTimeout(()=>{cur.setStep(1);liveBtn()},300)}liveBtn()});
 function tray(){const box=$('#tray');if(!box||!PS.kids.length){box&&box.classList.add('hide');return}box.classList.remove('hide');const e=LIST[idx];
  const rem=[...PS.removed].map(i=>PS.kids[i]).filter(Boolean).sort((a,b)=>(need(b.userData.part)?1:0)-(need(a.userData.part)?1:0)||a.userData.idx-b.userData.idx);
  const ess=PS.kids.filter(k=>need(k.userData.part)),missE=rem.filter(k=>need(k.userData.part));let msg;

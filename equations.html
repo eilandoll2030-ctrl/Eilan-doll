@@ -124,6 +124,9 @@ form select option{background:#11142a}
 #addMsg{margin-top:10px;font-size:14px;line-height:1.7;color:var(--mint)}
 .intro{font-size:14px;color:#C3C8D6;line-height:1.8}
 .ownerbadge{position:fixed;top:64px;left:50%;transform:translateX(-50%);z-index:6;background:linear-gradient(135deg,#C9A227,#8a6d12);color:#07080C;font-weight:800;font-size:12px;padding:4px 12px;border-radius:99px;pointer-events:none;opacity:.92}
+#livebtn{position:fixed;left:50%;transform:translateX(-50%);top:118px;z-index:7;height:46px;padding:0 22px;border-radius:99px;border:0;font-weight:800;font-size:15px;color:#07080C;background:linear-gradient(135deg,#D8FFE6,#8cc7a6);box-shadow:0 8px 24px rgba(0,0,0,.35);animation:lvp 1.8s ease-in-out infinite}#livebtn.on{background:linear-gradient(135deg,#C9A227,#8a6d12);animation:none}@keyframes lvp{50%{transform:translateX(-50%) scale(1.06)}}
+#livestep{position:fixed;left:50%;transform:translateX(-50%);top:112px;z-index:7;width:min(560px,calc(100vw - 24px));background:rgba(11,31,94,.94);border:1px solid rgba(216,255,230,.25);border-radius:18px;padding:12px 14px;color:#fff;box-shadow:0 10px 30px rgba(0,0,0,.4)}#livestep .lsdots{display:flex;gap:6px;justify-content:center;margin-bottom:8px}#livestep .lsdots i{width:26px;height:5px;border-radius:9px;background:rgba(255,255,255,.25)}#livestep .lsdots i.on{background:#D8FFE6}#livestep .lstxt{font-size:15px;line-height:1.7;text-align:center}#livestep .lsbtns{display:flex;gap:8px;justify-content:center;margin-top:10px}#livestep button{height:40px;padding:0 16px;border-radius:12px;border:0;font-weight:800;background:rgba(255,255,255,.12);color:#fff}#livestep button.g{background:linear-gradient(135deg,#D8FFE6,#8cc7a6);color:#07080C}
+@media(min-width:900px){[dir=rtl] #livestep,[dir=rtl] #livebtn{left:calc(50% - 176px)}[dir=ltr] #livestep,[dir=ltr] #livebtn{left:calc(50% + 176px)}#livestep{width:min(520px,calc(100vw - 420px))}}
 #lock{position:fixed;inset:0;z-index:9;display:grid;place-items:center;padding:70px 14px 120px;background:rgba(7,8,12,.55);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);overflow:auto}
 body.locked .top,body.locked .bot,body.locked .prog{z-index:10}body.locked #panel,body.locked #tray,body.locked #dhint{visibility:hidden}
 .lk{width:min(560px,100%);background:linear-gradient(160deg,#0B1F5E,#251147 60%,#07341F);border:1px solid rgba(216,255,230,.18);border-radius:22px;padding:22px 18px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.5)}
@@ -179,6 +182,7 @@ body.locked .top,body.locked .bot,body.locked .prog{z-index:10}body.locked #pane
 </div>
 <div id="hint" data-t="drag"></div>
 <div id="lock" class="hide" role="dialog" aria-modal="true" aria-labelledby="lkt"><div class="lk" id="lkbox"></div></div>
+<button id="livebtn" class="hide" type="button"></button><div id="livestep" class="hide"></div>
 <div id="tray" class="hide"><div id="tmode" class="tmode"></div><div id="tmsg"></div><div id="tchips" class="tchips"></div></div>
 <div id="dhint" class="hide"></div>
 <div id="tour" class="hide"><div class="tavatar"><img src="/assets/logo/eilan-icon.svg" alt=""></div><div class="tbody"><div id="tsay"></div><div id="tdots"></div><div id="tvoice" class="tvoice"></div><div id="tnovoice" class="hide">🔇 الصوت غير متاح في هذا المتصفح — الشرح مكتوب ويمشي تلقائيًا</div></div><div class="tctl"><button data-tour="pause" id="tpause">⏸</button><button data-tour="next">⏭</button><button data-tour="stop">✕</button></div></div>
@@ -208,7 +212,7 @@ body.locked .top,body.locked .bot,body.locked .prog{z-index:10}body.locked #pane
 window.addEventListener('DOMContentLoaded',()=>{const en=(localStorage.getItem('eb-lang')||'ar')==='en'||new URLSearchParams(location.search).get('lang')==='en';if(!en)return;const T={addH:'✍️ Do you have an equation?',addIntro:'If your equation is not in the Eilan book yet, add it here with your own way of explaining it. Eilan designs the interactive explanation; the idea and explanation stay yours.',lN:'Equation name *',lF:'Formula *',lS:'Field',lH:'Your explanation (what does it mean? what is each symbol? an example?) *',lBy:'Name to show in the book',lC:'Contact (optional — never shown)',tourLb:'Explain it with voice',addNote:'You will see your equation at the end of the book right away. Everyone else sees it after the Eilan team reviews it.',addBtnT:'Add my equation',ldT:'Opening the book…'};for(const k in T){const el=document.getElementById(k);if(el)el.textContent=T[k]}document.getElementById('lShow').innerHTML='<b>Do you want your name shown in the Eilan book?</b><br>If you agree, your name appears at the bottom of the equation page — “Idea & explanation: your name” — for everyone who opens the book.'});
 </script>
 <script type="importmap">{"imports":{"three":"/vendor/three/three.module.min.js"}}</script>
-<script src="/books/eq/core.js?v=24"></script>
+<script src="/books/eq/core.js?v=25"></script>
 <script src="/books/eq/data-physics.js?v=5"></script>
 <script src="/books/eq/data-physics2.js?v=5"></script>
 <script src="/books/eq/data-chemistry.js?v=5"></script>
@@ -238,6 +242,6 @@ window.addEventListener('DOMContentLoaded',()=>{const en=(localStorage.getItem('
 <script src="/books/eq/data-batch17.js?v=1"></script>
 <script src="/books/eq/data-batch18.js?v=1"></script>
 <script src="/books/eq/community.js?v=5"></script>
-<script type="module" src="/books/eq/app.js?v=13"></script>
+<script type="module" src="/books/eq/app.js?v=16"></script>
 </body>
 </html>

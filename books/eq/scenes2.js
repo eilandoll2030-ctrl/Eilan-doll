@@ -216,5 +216,119 @@ reaction(K,eq){const T=K.THREE,root=new T.Group();const txt=(eq.f+' '+eq.n.join(
    const sp=(.02+st.temp*.1)*st.speed*(pbP.visible!==false?1:0);mols.forEach((m,i)=>{m.position.addScaledVector(m.userData.v,sp*dt);['x','z'].forEach(a=>{if(Math.abs(m.position[a])>.068){m.position[a]=Math.sign(m.position[a])*.068;m.userData.v[a]*=-1}});if(m.position.y<.013||m.position.y>.147){m.position.y=K.clamp(m.position.y,.013,.147);m.userData.v.y*=-1}
      if(S>=4&&i%2===1){const mate=mols[i-1];m.position.lerp(mate.position.clone().add(new T.Vector3(.02,0,0)),Math.min(1,dt*2))}});
    puffs.forEach(pf=>{pf.visible=okB&&(gas?st.fizz>.1:hotNow);pf.userData.k=(pf.userData.k+dt*.25)%1;const k=pf.userData.k;pf.position.set(-.08+Math.sin(k*7+t)*.03,.12+.2+k*.14,0);pf.scale.setScalar(.6+k*2)});
-   prodCard.visible=S>=4;if(S>=4){const k=Math.min(1,tt*1.5);prodCard.parent.position.y=.0+k*.02;prodCard.scale.setScalar(.6+.4*k)}}}}
+   prodCard.visible=S>=4;if(S>=4){const k=Math.min(1,tt*1.5);prodCard.parent.position.y=.0+k*.02;prodCard.scale.setScalar(.6+.4*k)}}}},
+/* ===== human body (realistic): skin, skeleton, beating heart, breathing lungs, blood flow ===== */
+body(K,eq){const T=K.THREE,root=new T.Group();
+ const PM=(o)=>new T.MeshPhysicalMaterial(o);
+ const skinM=PM({color:0xe0ac8a,roughness:.55,sheen:.6,sheenColor:new T.Color(0xffd2bf),sheenRoughness:.5,clearcoat:.15,transparent:true,opacity:.42,depthWrite:false,side:T.DoubleSide});
+ const boneM=PM({color:0xeee3cc,roughness:.6,clearcoat:.2});
+ const heartM=PM({color:0x8e1a1f,roughness:.35,clearcoat:.6,clearcoatRoughness:.3,sheen:.4,sheenColor:new T.Color(0xff6060)});
+ const lungM=PM({color:0xd88690,roughness:.75,sheen:.8,sheenColor:new T.Color(0xffc0c8),transparent:true,opacity:.9});
+ const artM=PM({color:0xb3121c,roughness:.3,clearcoat:.5}),veinM=PM({color:0x2a3f9e,roughness:.35,clearcoat:.4});
+ const mesh=(g,m,cast=true)=>{const o=new T.Mesh(g,m);o.castShadow=cast;o.receiveShadow=true;return o};
+ const stand=new T.Group();stand.add(mesh(new T.CylinderGeometry(.12,.13,.012,48),PM({color:0x2b2d36,roughness:.3,metalness:.6})));stand.children[0].position.y=.006;const pole=mesh(new T.CylinderGeometry(.005,.005,.12,12),PM({color:0xb9bcc6,metalness:.9,roughness:.25}));pole.position.y=.07;stand.add(pole);K.place(root,stand,-.1,.08);
+ /* skin silhouette */
+ const fig=new T.Group();const S=.9;
+ const torsoProf=[[0,0],[.045,.0],[.06,.02],[.064,.06],[.058,.1],[.052,.13],[.06,.17],[.072,.2],[.074,.215],[.05,.235],[.022,.245],[0,.248]].map(([x,y])=>new T.Vector2(x*S,y*S));
+ const torso=mesh(new T.LatheGeometry(torsoProf,40),skinM,false);torso.scale.set(1,1,.62);torso.position.y=.13;fig.add(torso);
+ const neck=mesh(new T.CylinderGeometry(.018,.021,.035,24),skinM,false);neck.position.y=.13+.245*S+.012;fig.add(neck);
+ const head=mesh(new T.SphereGeometry(.045,40,30),skinM,false);head.scale.set(.86,1.08,.98);head.position.y=.13+.245*S+.062;fig.add(head);
+ [-1,1].forEach(sx=>{const arm=mesh(new T.CapsuleGeometry(.015,.15,6,16),skinM,false);arm.position.set(sx*.082,.13+.14,0);arm.rotation.z=sx*.1;fig.add(arm);const fore=mesh(new T.CapsuleGeometry(.013,.12,6,16),skinM,false);fore.position.set(sx*.094,.13+.0,.01);fore.rotation.z=sx*.04;fig.add(fore);
+  const thigh=mesh(new T.CapsuleGeometry(.024,.13,6,16),skinM,false);thigh.position.set(sx*.03,.13-.06,0);fig.add(thigh);const shin=mesh(new T.CapsuleGeometry(.018,.12,6,16),skinM,false);shin.position.set(sx*.03,.13-.2,0);fig.add(shin)});
+ fig.scale.setScalar(.95);
+ /* skeleton */
+ const skull=mesh(new T.SphereGeometry(.036,32,24),boneM);skull.scale.set(.85,1,.95);skull.position.y=head.position.y+.004;fig.add(skull);
+ for(let i=0;i<14;i++){const v=mesh(new T.CylinderGeometry(.0065,.0065,.009,10),boneM);v.position.set(0,.14+i*.0145,-.026);fig.add(v)}
+ for(let i=0;i<7;i++){const w=(.05-.002*Math.abs(i-2))*S,y=.13+.19*S-i*.017;const rib=mesh(new T.TorusGeometry(1,.0035,6,40,Math.PI*1.65),boneM);rib.scale.set(w,w*.62,1);rib.rotation.set(Math.PI/2,0,Math.PI*.5+Math.PI*.175);rib.position.set(0,y,-.004);fig.add(rib)}
+ const sternum=mesh(new T.BoxGeometry(.008,.07,.005),boneM);sternum.position.set(0,.13+.17*S,.034);fig.add(sternum);
+ const pelvis=mesh(new T.TorusGeometry(.036,.008,8,30,Math.PI),boneM);pelvis.rotation.x=Math.PI/2+.3;pelvis.position.set(0,.135,.0);fig.add(pelvis);
+ const figP=K.place(root,fig,-.1,.08,0,.012);
+ /* heart (anatomical-ish) */
+ const heart=new T.Group();const hg=new T.SphereGeometry(.022,32,24);const hp=hg.attributes.position;for(let i=0;i<hp.count;i++){const y=hp.getY(i);const k=y<0?1+y/.022*.55:1;hp.setX(i,hp.getX(i)*k);hp.setZ(i,hp.getZ(i)*k*.85);hp.setY(i,y*(y<0?1.35:1))}hg.computeVertexNormals();const hm=mesh(hg,heartM);hm.rotation.z=-.45;heart.add(hm);
+ const aorta=mesh(new T.TubeGeometry(new T.CatmullRomCurve3([new T.Vector3(.004,.015,0),new T.Vector3(.006,.034,0),new T.Vector3(-.01,.042,-.004),new T.Vector3(-.02,.03,-.01),new T.Vector3(-.018,-.01,-.014)]),24,.0045,10),artM);heart.add(aorta);
+ const vc=mesh(new T.CylinderGeometry(.004,.004,.04,10),veinM);vc.position.set(-.014,.03,.004);heart.add(vc);
+ const heartP=K.place(root,heart,-.088,.09,0,.012+.95*(.13+.1*S));
+ /* lungs */
+ const lungs=new T.Group();[-1,1].forEach(sx=>{const lg=new T.SphereGeometry(.032,28,20);const p=lg.attributes.position;for(let i=0;i<p.count;i++){const y=p.getY(i),x=p.getX(i);p.setY(i,y*1.55);if(x*sx<0)p.setX(i,x*.45);p.setZ(i,p.getZ(i)*.7)}lg.computeVertexNormals();const l=mesh(lg,lungM);l.scale.setScalar(.78);l.position.set(sx*.03,0,-.004);lungs.add(l);
+  const br=mesh(new T.CylinderGeometry(.003,.004,.03,8),PM({color:0xe9d2c0,roughness:.6}));br.position.set(sx*.012,.035,0);br.rotation.z=sx*.7;lungs.add(br)});const trachea=mesh(new T.CylinderGeometry(.005,.005,.04,12),PM({color:0xe9d2c0,roughness:.6}));trachea.position.y=.06;lungs.add(trachea);
+ const lungsP=K.place(root,lungs,-.1,.08,0,.012+.95*(.13+.13*S));
+ /* blood vessels: arteries (red) and veins (blue) with moving cells */
+ const ves=new T.Group();const mkPath=(sx,dz)=>[[sx*.008,.2,dz],[sx*.03,.13,dz],[sx*.034,.04,dz],[sx*.03,-.04,dz],[sx*.03,-.13,dz]];
+ const curves=[];[[-1,.012,artM],[1,.012,artM],[-1,-.012,veinM],[1,-.012,veinM]].forEach(([sx,dz,m])=>{const pts=mkPath(sx,dz).map(p=>new T.Vector3(...p));const c=new T.CatmullRomCurve3(pts);curves.push({c,art:m===artM});ves.add(mesh(new T.TubeGeometry(c,40,.0028,8),m,false))});
+ const cells=[];curves.forEach((cv,ci)=>{for(let i=0;i<6;i++){const c=mesh(new T.SphereGeometry(.0045,10,8),cv.art?artM:veinM,false);c.scale.set(1,.5,1);c.userData={k:i/6,cv:cv.c,dir:cv.art?1:-1};ves.add(c);cells.push(c)}});
+ const vesP=K.place(root,ves,-.1,.08,0,.012+.95*.13);
+ /* ECG monitor */
+ const mon=new T.Group();const frame=mesh(new T.BoxGeometry(.17,.11,.012),PM({color:0x1b1d24,roughness:.35,metalness:.4}));frame.position.y=.12;mon.add(frame);const ecg=K.canvasTex(256,160,()=>{});const em=new T.Mesh(new T.PlaneGeometry(.15,.092),new T.MeshStandardMaterial({map:ecg,emissive:0xffffff,emissiveMap:ecg,emissiveIntensity:.85}));em.position.set(0,.12,.0065);mon.add(em);const leg=mesh(new T.CylinderGeometry(.005,.005,.07,12),PM({color:0xb9bcc6,metalness:.9,roughness:.3}));leg.position.y=.035;mon.add(leg);const ft=mesh(new T.CylinderGeometry(.03,.03,.006,24),PM({color:0x1b1d24,roughness:.4}));mon.add(ft);
+ K.place(root,mon,.26,-.04,-.35);
+ [figP,heartP,lungsP,vesP].forEach(p=>{p.scale.setScalar(1.25);p.position.x=-.12;p.position.y=.012+(p.position.y-.012)*1.25});root.children.forEach(c=>{if(c.children[0]===stand){c.scale.setScalar(1.25);c.position.x=-.12}});
+const card=K.card(.32,.1,()=>{});K.place(root,card,.05,-.4);
+ const st={bpm:72,br:14};const trace=[];
+ return{root,update(v){const val=has(v,eq.out)?v[eq.out]:72;st.bpm=K.clamp(has(v,'HR')?v.HR:50+K.lg(val,1)*60,40,180);st.br=10+K.lg(val,1)*10;card.userData.redraw((c,W,H)=>K.fit(c,eq.f,W,H))},
+  tick(t,dt){const beat=(t*st.bpm/60)%1;const pulse=beat<.12?1+Math.sin(beat/.12*Math.PI)*.16:beat<.24?1+Math.sin((beat-.12)/.12*Math.PI)*.07:1;heart.scale.setScalar(pulse);
+   const br=Math.sin(t*st.br/60*Math.PI*2)*.5+.5;lungs.scale.set(1+br*.08,1+br*.12,1+br*.1);torso.scale.set(1+br*.02,1,.62+br*.02);
+   const flow=heartP.visible!==false?st.bpm/60*.12:0;cells.forEach(c=>{const u=c.userData;u.k=(u.k+dt*flow)%1;c.position.copy(u.cv.getPointAt(u.dir>0?u.k:1-u.k))});
+   const {x}=ecg.userData;const y=beat<.04?0:beat<.07?-40:beat<.1?60:beat<.13?-20:beat<.3?Math.sin((beat-.13)/.17*Math.PI)*10:0;trace.push(y);if(trace.length>128)trace.shift();x.fillStyle='#04060a';x.fillRect(0,0,256,160);x.strokeStyle='rgba(70,224,122,.18)';x.lineWidth=1;for(let i=0;i<256;i+=16){x.beginPath();x.moveTo(i,0);x.lineTo(i,160);x.stroke()}x.strokeStyle='#46e07a';x.lineWidth=3;x.beginPath();trace.forEach((v,i)=>{const X=i*2,Y=95-v;i?x.lineTo(X,Y):x.moveTo(X,Y)});x.stroke();x.fillStyle='#D8FFE6';x.font='700 26px monospace';x.fillText('♥ '+Math.round(st.bpm),150,32);ecg.needsUpdate=true}}},
+
+/* ===== earth cut-away: layers, volcano, seismograph ===== */
+earth(K,eq){const T=K.THREE,root=new T.Group();
+ const globe=new T.Group();const layers=[[.15,0x3f8f5a,'crust'],[.14,0xd9733a,'mantle'],[.085,0xf0a030,'outer'],[.045,0xfff0a0,'inner']];
+ layers.forEach(([r,c],i)=>{const g=new T.SphereGeometry(r,32,22,0,Math.PI*1.5);const m=new T.Mesh(g,K.M(c,{ds:1,e:i>1?c:0,ei:i>1?.35:0}));m.castShadow=true;globe.add(m);
+  const cap=new T.Mesh(new T.CircleGeometry(r,32,Math.PI/2,Math.PI),K.M(c,{ds:1,e:i>1?c:0,ei:i>1?.35:0}));globe.add(cap);const cap2=cap.clone();cap2.rotation.y=-Math.PI/2;globe.add(cap2)});
+ globe.add(new T.LineSegments(new T.EdgesGeometry(new T.SphereGeometry(.15,12,8,0,Math.PI*1.5),30),K.inkSoft));
+ const globeP=K.place(root,globe,-.14,.05,0,.16);
+ const vol=new T.Group();vol.add(K.cyl(.02,.09,.09,K.M(0x7a5a40),{seg:24}));const lava=K.cyl(.018,.018,.004,K.M(0xff6a2a,{e:0xff4a1a,ei:1}),{edge:false});lava.position.y=.09;vol.add(lava);const volP=K.place(root,vol,.24,.3);
+ const fx=new T.Group();root.add(fx);const smoke=[];for(let i=0;i<8;i++){const sm=K.sph(.016,K.M(0x8a8c96,{op:.45}),{hull:false,edge:false,center:true});sm.userData.k=i/8;fx.add(sm);smoke.push(sm)}
+ const seis=new T.Group();seis.add(K.box(.18,.03,.1,K.paper2));const drum=K.cyl(.025,.025,.14,K.paper,{seg:24});drum.rotation.z=Math.PI/2;drum.position.y=.055;seis.add(drum);const paper=K.canvasTex(512,128,()=>{});const pm=new T.Mesh(new T.PlaneGeometry(.14,.04),new T.MeshStandardMaterial({map:paper,emissive:0xffffff,emissiveMap:paper,emissiveIntensity:.4}));pm.position.set(0,.082,0);pm.rotation.x=-Math.PI/2;seis.add(pm);const arm=K.box(.006,.006,.08,K.dark,{edge:false});arm.position.set(0,.09,-.04);seis.add(arm);
+ const seisP=K.place(root,seis,.02,.42);
+ const rings=[];for(let i=0;i<3;i++){const r=K.tor(.05,.002,K.red,{seg:40});r.rotation.x=Math.PI/2;fx.add(r);rings.push(r)}
+ const card=K.card(.32,.1,()=>{});K.place(root,card,-.1,-.4);
+ const st={A:.3};const sig=[];
+ return{root,update(v){const val=has(v,eq.out)?v[eq.out]:5;st.A=.15+K.lg(val,.5)*.85;card.userData.redraw((c,W,H)=>K.fit(c,eq.f,W,H))},
+  tick(t,dt){globe.rotation.y=Math.PI*.75+Math.sin(t*.25)*.3;const on=globeP.visible!==false;const quake=on&&Math.sin(t*.7)>.6;
+   smoke.forEach(sm=>{sm.visible=volP.visible!==false;sm.userData.k=(sm.userData.k+dt*.2)%1;const k=sm.userData.k;sm.position.set(.24+Math.sin(k*6+t)*.02,.1+k*.2,.3);sm.scale.setScalar(.6+k*1.6)});lava.scale.setScalar(1+Math.sin(t*4)*.15);
+   rings.forEach((r,i)=>{r.visible=quake;const k=((t*.8+i/3)%1);r.scale.setScalar(.5+k*2.2);r.position.set(-.14,.012,.05);r.material.opacity=1-k});
+   const y=quake?Math.sin(t*60)*40*st.A*(0.5+Math.random()*.5):Math.sin(t*20)*2;sig.push(y);if(sig.length>256)sig.shift();const {x}=paper.userData;x.fillStyle='#fbf8f0';x.fillRect(0,0,512,128);x.strokeStyle='#C8463C';x.lineWidth=3;x.beginPath();sig.forEach((v,i)=>{const X=i*2,Y=64-v;i?x.lineTo(X,Y):x.moveTo(X,Y)});x.stroke();paper.needsUpdate=true;drum.rotation.x=t;arm.position.x=K.clamp(y/400,-.03,.03)}}},
+
+/* ===== weather: cloud, rain, sun, wind ===== */
+weather(K,eq){const T=K.THREE,root=new T.Group();
+ const ground=new T.Group();ground.add(K.box(.8,.01,.46,K.greenL,{edge:false}));K.place(root,ground,0,.08);
+ const cloud=new T.Group();[[0,0,0,.06],[.06,-.01,0,.045],[-.06,-.01,0,.05],[.025,.03,0,.045],[-.03,.025,.01,.042]].forEach(([x,y,z,r])=>{const c=K.sph(r,K.M(0xf4f6fb),{center:true,hull:1.05,seg:18});c.position.set(x,y,z);cloud.add(c)});const cloudP=K.place(root,cloud,-.1,.05,0,.36);
+ const fx=new T.Group();root.add(fx);const drops=[];for(let i=0;i<30;i++){const d=K.cyl(.0025,.0025,.022,K.M(0x4f7fe0,{op:.85}),{edge:false,seg:6});d.userData.o=Math.random();d.userData.x=(Math.random()-.5)*.17;d.userData.z=(Math.random()-.5)*.08;fx.add(d);drops.push(d)}
+ const sun=new T.Group();const ball=K.sph(.045,K.M(0xfff3c4,{e:0xffd36b,ei:.8}),{center:true});sun.add(ball);for(let i=0;i<12;i++){const a=i/12*Math.PI*2;sun.add(K.line([[Math.cos(a)*.058,Math.sin(a)*.058,0],[Math.cos(a)*.08,Math.sin(a)*.08,0]]))}const sunP=K.place(root,sun,.28,-.16,0,.4);
+ const mill=new T.Group();mill.add(K.cyl(.004,.006,.2,K.paper,{edge:false}));const rotor=new T.Group();for(let i=0;i<3;i++){const b=K.box(.008,.07,.003,K.paper);b.position.y=.035;const bg=new T.Group();bg.add(b);bg.rotation.z=i*Math.PI*2/3;rotor.add(bg)}rotor.position.set(0,.2,.008);mill.add(rotor);const millP=K.place(root,mill,.3,.25);
+ const th=new T.Group();th.add(K.cyl(.01,.01,.18,K.glass,{soft:true}));const merc=K.cyl(.006,.006,.17,K.red,{edge:false});th.add(merc);th.add(K.sph(.016,K.red,{center:true}));const thP=K.place(root,th,-.33,.3);
+ const puddle=new T.Mesh(new T.CircleGeometry(.07,24),K.water);puddle.rotation.x=-Math.PI/2;puddle.position.set(-.1,.092,.06);root.add(puddle);
+ const card=K.card(.32,.1,()=>{});K.place(root,card,.05,-.4);
+ const st={rain:.5,wind:.5,temp:.5};
+ return{root,update(v){const val=has(v,eq.out)?v[eq.out]:10;st.rain=.3+K.lg(val,1)*.7;st.wind=has(v,'vkmh')?K.lg(v.vkmh,1):.4;st.temp=K.clamp(has(v,'Tair')?(v.Tair+20)/70:has(v,'Tair2')?(v.Tair2+20)/70:.5,.1,1);card.userData.redraw((c,W,H)=>K.fit(c,eq.f,W,H))},
+  tick(t,dt){const on=cloudP.visible!==false;cloudP.position.x=-.1+Math.sin(t*.3)*.04;drops.forEach(d=>{d.visible=on;const k=(t*(.6+st.rain)+d.userData.o)%1;d.position.set(cloudP.position.x+d.userData.x,.33-k*.24,d.userData.z);d.rotation.z=st.wind*.3});puddle.scale.setScalar(on?1+Math.sin(t*2)*.03:.001);
+   rotor.rotation.z-=dt*(1+st.wind*10)*(millP.visible!==false?1:0);ball.rotation.z=t*.2;merc.scale.y+=((sunP.visible!==false?st.temp:.2)-merc.scale.y)*Math.min(1,dt)}}},
+
+/* ===== pipes & pump: tank, pump impeller, flowing pipe, gauge ===== */
+pump(K,eq){const T=K.THREE,root=new T.Group();
+ const tank=new T.Group();tank.add(K.cyl(.08,.08,.2,K.glass,{soft:true,seg:28}));const wl=K.cyl(.076,.076,.13,K.water,{edge:false,seg:28});tank.add(wl);const tankP=K.place(root,tank,-.3,.05);
+ const pumpG=new T.Group();pumpG.add(K.cyl(.05,.05,.04,K.blue,{seg:28}));const imp=new T.Group();for(let i=0;i<6;i++){const b=K.box(.04,.03,.004,K.metal,{edge:false});b.position.set(.02,.005,0);const g=new T.Group();g.add(b);g.rotation.y=i*Math.PI/3;imp.add(g)}imp.position.y=.042;pumpG.add(imp);const motor=K.cyl(.03,.03,.06,K.dark,{seg:20});motor.rotation.z=Math.PI/2;motor.position.set(.07,.02,0);pumpG.add(motor);
+ const pumpP=K.place(root,pumpG,-.05,.05);
+ const path=[[-.22,.04,.05],[-.1,.04,.05],[-.05,.04,.05]];const path2=[[-.05,.04,.05],[.05,.04,.05],[.15,.04,.05],[.2,.04,.05],[.25,.15,.05],[.3,.25,.05]];const pipe=new T.Group();pipe.add(K.tube(path,.012,K.M(0xb9bcc6,{op:.45}),{seg:20}));pipe.add(K.tube(path2,.012,K.M(0xb9bcc6,{op:.45}),{seg:40}));
+ const curve=new T.CatmullRomCurve3([...path,...path2.slice(1)].map(p=>new T.Vector3(...p)));const dots=[];for(let i=0;i<22;i++){const d=K.sph(.007,K.M(0x4f7fe0),{hull:false,edge:false,center:true});d.userData.k=i/22;pipe.add(d);dots.push(d)}
+ const valve=K.tor(.02,.003,K.red,{seg:24});valve.position.set(.1,.075,.05);pipe.add(valve);const stem=K.cyl(.003,.003,.03,K.dark,{edge:false});stem.position.set(.1,.045,.05);pipe.add(stem);
+ const pipeP=K.place(root,pipe,0,0);
+ const gauge=new T.Group();gauge.add(K.cyl(.04,.04,.012,K.metal,{seg:28}));const face=K.canvasTex(200,200,()=>{});const fm=new T.Mesh(new T.CircleGeometry(.035,28),new T.MeshStandardMaterial({map:face,emissive:0xffffff,emissiveMap:face,emissiveIntensity:.5}));fm.rotation.x=-Math.PI/2;fm.position.y=.013;gauge.add(fm);const gaugeP=K.place(root,gauge,.15,.3);
+ const card=K.card(.32,.1,()=>{});K.place(root,card,-.05,-.36);
+ const st={q:.5,p:.5};
+ return{root,update(v){const val=has(v,eq.out)?v[eq.out]:1;st.q=.2+K.lg(val,.5)*.9;st.p=K.clamp(.2+K.lg(val,1)*.8,0,1);card.userData.redraw((c,W,H)=>K.fit(c,eq.f,W,H))},
+  tick(t,dt){const on=pumpP.visible!==false&&tankP.visible!==false;const sp=on?st.q:0;imp.rotation.y+=dt*sp*25;dots.forEach(d=>{d.visible=pipeP.visible!==false;d.userData.k=(d.userData.k+dt*sp*.25)%1;d.position.copy(curve.getPointAt(d.userData.k))});valve.rotation.z=t*.3*sp;
+   wl.scale.y=.6+.35*(on?(Math.sin(t*.4)*.5+.5):1);const ang=-2.3+(on?st.p:0)*4.6+Math.sin(t*8)*.03*sp;const {x}=face.userData;x.fillStyle='#fbf8f0';x.fillRect(0,0,200,200);x.strokeStyle='#26282f';x.lineWidth=5;x.beginPath();x.arc(100,100,92,0,7);x.stroke();for(let i=0;i<=10;i++){const a=-2.3+i*.46-Math.PI/2;x.beginPath();x.moveTo(100+Math.cos(a)*78,100+Math.sin(a)*78);x.lineTo(100+Math.cos(a)*90,100+Math.sin(a)*90);x.stroke()}x.strokeStyle='#C8463C';x.lineWidth=6;x.beginPath();x.moveTo(100,100);x.lineTo(100+Math.cos(ang-Math.PI/2)*72,100+Math.sin(ang-Math.PI/2)*72);x.stroke();face.needsUpdate=true}}},
+
+/* ===== study desk: books, notebook, clock, calendar ===== */
+desk(K,eq){const T=K.THREE,root=new T.Group();
+ const top=new T.Group();top.add(K.box(.62,.014,.3,K.M(0xd9b382)));K.place(root,top,0,.1);
+ const books=new T.Group();[[0x1E44C8,.03],[0x0F6B44,.025],[0x4A2A8F,.035],[0xC8463C,.022]].reduce((y,[c,h],i)=>{const b=K.box(.14,h,.1,K.M(c));b.position.set((i%2)*.008,y,0);b.rotation.y=(i-1.5)*.06;books.add(b);return y+h},0);const booksP=K.place(root,books,-.2,.1,0,.014);
+ const nb=new T.Group();const page=K.canvasTex(256,180,()=>{});const pg=new T.Mesh(new T.PlaneGeometry(.16,.11),new T.MeshStandardMaterial({map:page,roughness:.9}));pg.rotation.x=-Math.PI/2;pg.position.y=.004;nb.add(K.box(.17,.004,.12,K.paper));nb.add(pg);const pen=K.cyl(.004,.004,.12,K.gold,{edge:false,seg:8});pen.rotation.z=Math.PI/2;pen.position.set(0,.01,.07);nb.add(pen);const nbP=K.place(root,nb,.02,.14,0,.014);
+ const clk=new T.Group();clk.add(K.cyl(.05,.05,.014,K.paper,{seg:32}));clk.rotation.x=Math.PI/2;const hh=K.box(.004,.025,.002,K.dark,{edge:false});hh.position.z=-.008;const mh=K.box(.003,.038,.002,K.red,{edge:false});mh.position.z=-.009;const hg=new T.Group();hg.add(hh);const mg=new T.Group();mg.add(mh);hh.position.y=.012;mh.position.y=.019;clk.add(hg,mg);const clkW=new T.Group();clkW.add(clk);clk.position.y=.06;clkW.add(K.box(.03,.01,.03,K.dark));const clkP=K.place(root,clkW,.22,.02,0,.014);
+ const cal=K.card(.1,.12,()=>{},{bg:'#fbf8f0'});const calP=K.place(root,cal,.24,.22,-.4,.014);
+ const card=K.card(.32,.1,()=>{});K.place(root,card,-.05,-.36);
+ const st={sp:1,n:0};let lines=0;
+ return{root,update(v){const val=has(v,eq.out)?v[eq.out]:1;st.sp=.5+K.lg(val,1)*2;card.userData.redraw((c,W,H)=>K.fit(c,eq.f,W,H));cal.userData.redraw((c,W,H)=>{c.fillStyle='#C8463C';c.fillRect(6,6,W-12,H*.24);K.txt(c,K.L('يوم','DAY'),W/2,H*.15,56,'#fff');K.txt(c,K.num(Math.round(val%1000)),W/2,H*.62,150,'#26282f',true,'center',true)})},
+  tick(t,dt){mg.rotation.z=-t*st.sp*.6;hg.rotation.z=-t*st.sp*.05;const writing=nbP.visible!==false&&booksP.visible!==false;if(writing)lines+=dt*st.sp*.6;const {x}=page.userData;x.fillStyle='#fbf8f0';x.fillRect(0,0,256,180);x.strokeStyle='#8fa7f0';x.lineWidth=1;for(let i=1;i<9;i++){x.beginPath();x.moveTo(10,i*20);x.lineTo(246,i*20);x.stroke()}x.strokeStyle='#14286f';x.lineWidth=3;const L=lines%8;for(let i=0;i<Math.floor(L);i++){x.beginPath();x.moveTo(16,i*20+16);for(let k=0;k<20;k++)x.lineTo(16+k*11,i*20+16+Math.sin(k*1.7+i)*3);x.stroke()}const frac=L%1;x.beginPath();x.moveTo(16,Math.floor(L)*20+16);for(let k=0;k<20*frac;k++)x.lineTo(16+k*11,Math.floor(L)*20+16+Math.sin(k*1.7)*3);x.stroke();page.needsUpdate=true;pen.position.x=-.07+frac*.14}}}
 };

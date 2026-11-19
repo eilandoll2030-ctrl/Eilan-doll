@@ -181,24 +181,40 @@ reaction(K,eq){const T=K.THREE,root=new T.Group();const txt=(eq.f+' '+eq.n.join(
  const th=new T.Group();th.add(K.cyl(.01,.01,.2,K.glass,{soft:true}));const merc=K.cyl(.006,.006,.19,K.red,{edge:false});th.add(merc);const thb=K.sph(.016,K.red,{center:true});th.add(thb);for(let i=1;i<6;i++)th.add(K.line([[.011,i*.035,0],[.02,i*.035,0]]));const thP=K.place(root,th,-.3,.0,0,.012);
  const card=K.card(.34,.1,()=>{});K.place(root,card,-.08,-.4);
  const fx=new T.Group();root.add(fx);const puffs=[];if(gas||hot)for(let i=0;i<10;i++){const pf=K.sph(.014,K.M(0xffffff,{op:.35}),{hull:false,edge:false,center:true});pf.userData.k=Math.random();fx.add(pf);puffs.push(pf)}
- const st={rate:.5,phase:0,mix:0,temp:.35,live:false};
- return{root,update(v){const val=has(v,eq.out)?v[eq.out]:1;st.rate=.35+K.lg(val,.5)*.9;card.userData.redraw((c,W,H)=>K.fit(c,eq.f,W,H))},
-  setLive(on){st.live=!!on;if(on){st.phase=0;st.mix=0}},isLive:()=>st.live,
-  tick(t,dt){const okB=bkP.visible!==false,okF=flP.visible!==false,okH=burP.visible!==false;const run=okB&&okF&&st.live;if(!st.live){t=0;dt=0}
-   st.phase=(st.phase+dt*.12*st.rate)%1;const ph=st.phase;
-   const pour=run&&ph>.1&&ph<.45;const tilt=run?(ph<.1?ph/.1:ph<.45?1:ph<.55?1-(ph-.45)/.1:0):0;const e=tilt*tilt*(3-2*tilt);fpiv.rotation.z=e*1.75;fpiv.position.x=-e*.13;fpiv.position.y=.06+e*.2;
-   if(run&&ph<.05)st.mix=0;if(pour)st.mix=Math.min(1,st.mix+dt*.45*st.rate);else if(run&&ph>.55)st.mix=Math.min(1,st.mix+dt*.15);
-   const level=.06+(run?st.mix*.07:0);liq.scale.y=level;surf.position.y=level+.0005;
-   const col=colA.clone().lerp(colB,run?st.mix:0);liqM.color.copy(col);surf.material.color.copy(col);fliq.scale.y=run?1-st.mix*.8:1;
-   /* stream from flask lip to beaker */
-   stream.visible=pour&&tilt>.95;if(stream.visible){root.updateMatrixWorld(true);const lip=root.worldToLocal(lipM.getWorldPosition(new T.Vector3()));const dst=new T.Vector3(-.08+.02,.12+.012+level,0);const dir=lip.clone().sub(dst);const L=dir.length();stream.position.copy(dst);stream.scale.set(1+Math.sin(t*40)*.15,L,1);stream.quaternion.setFromUnitVectors(new T.Vector3(0,1,0),dir.normalize())}
-   /* wobbling surface */
-   const P=surfG.attributes.position;const amp=okB&&st.live?(.003+(pour?.006:0)+(gas?.002:0)):0;for(let i=0;i<P.count;i++){const x=base0[i*3],z=base0[i*3+2];P.setY(i,base0[i*3+1]+amp*Math.sin(x*70+t*9)+amp*.7*Math.sin(z*60-t*7)+(pour?amp*1.5*Math.sin(Math.hypot(x-.03,z)*120-t*20):0))}P.needsUpdate=true;surfG.computeVertexNormals();
-   bk.rotation.z=okB?Math.sin(t*3)*.01*(pour?2:1):0;stir.position.set(Math.cos(t*2)*.03,.02,Math.sin(t*2)*.03);stir.rotation.y=t*2;
-   bubs.forEach(b=>{b.visible=okB&&st.live;const k=(t*(.25+st.rate*.35)*(gas?1.4:.6)+b.userData.o)%1;const a=b.userData.a+t*.8;b.position.set(Math.cos(a)*b.userData.r,.005+k*level,Math.sin(a)*b.userData.r);b.scale.setScalar(.6+k*.8)});
-   ppts.forEach(q=>{q.visible=okB&&st.mix>.2;const k=(t*.12+q.userData.o)%1;q.position.set(q.userData.x+Math.sin(t+q.userData.o*9)*.006,Math.max(.004,level*(1-k)),q.userData.z)});
-   const hotNow=hot&&okH&&st.live;flames.forEach((f,i)=>{f.visible=hotNow;f.scale.y=.7+.5*Math.sin(t*22+i*2)});
-   st.temp+=(((hotNow?.95:.35)+(run?st.mix*.15:0))-st.temp)*Math.min(1,dt*.6);merc.scale.y=thP.visible!==false?st.temp:.2;
-   const sp=(.04+st.temp*.12)*(pbP.visible!==false?1:0)*st.rate;mols.forEach(m=>{m.position.addScaledVector(m.userData.v,sp*dt);['x','z'].forEach(a=>{if(Math.abs(m.position[a])>.068){m.position[a]=Math.sign(m.position[a])*.068;m.userData.v[a]*=-1}});if(m.position.y<.013||m.position.y>.147){m.position.y=K.clamp(m.position.y,.013,.147);m.userData.v.y*=-1}});
-   puffs.forEach(pf=>{pf.visible=st.live&&okB&&(gas?st.mix>.1:hotNow);pf.userData.k=(pf.userData.k+dt*.25)%1;const k=pf.userData.k;pf.position.set(-.08+Math.sin(k*7+t)*.03,.12+.2+k*.14,0);pf.scale.setScalar(.6+k*2)})}}}
+ const st={rate:.5,mix:0,temp:.35,step:0,tStep:0,tilt:0,speed:0,fizz:0,ppt:0,fire:0};
+ const parts=String(eq.f).split(/→|⇌|⇄|=>/);const R=(parts[0]||'').trim(),Pd=(parts[1]||'').trim();
+ const L=(a,b)=>K.L(a,b);
+ const STEPS=[
+  {ar:'نصبّ المادة الثانية في الكأس'+(R?' — المتفاعلات: '+R:''),en:'Pour the second substance into the beaker'+(R?' — reactants: '+R:'')},
+  {ar:'الجزيئات تتحرك أسرع وتتصادم ببعض — التصادمات هي اللي تكسر الروابط القديمة',en:'The particles speed up and collide — collisions break the old bonds'},
+  {ar:(gas?'تطلع فقاعات غاز':ppt?'يتكوّن راسب صلب وينزل لتحت':hot?'تطلع حرارة ويرتفع الترمومتر':'يتغير لون المحلول')+' — هذي علامة إن التفاعل صار',en:(gas?'Gas bubbles appear':ppt?'A solid precipitate forms and sinks':hot?'Heat is given off and the thermometer rises':'The solution changes colour')+' — a sign the reaction is happening'},
+  {ar:'تكوّنت النواتج ✅'+(Pd?' — '+Pd:''),en:'The products have formed ✅'+(Pd?' — '+Pd:'')}];
+ const prodCard=K.card(.34,.08,()=>{},{bg:'#eafbf0'});prodCard.visible=false;K.place(root,prodCard,-.08,-.28);root.remove(prodCard.parent);fx.add(prodCard.parent);
+ return{root,update(v){const val=has(v,eq.out)?v[eq.out]:1;st.rate=.6+K.lg(val,.5)*.6;card.userData.redraw((c,W,H)=>K.fit(c,eq.f,W,H));prodCard.userData.redraw((c,W,H)=>K.fit(c,'→ '+(Pd||eq.f),W,H,'#0F6B44'))},
+  steps:()=>STEPS.map(x=>L(x.ar,x.en)),getStep:()=>st.step,
+  setStep(n){st.step=K.clamp(n,0,STEPS.length);st.tStep=0;if(n===0){st.mix=0;st.speed=0;st.fizz=0;st.ppt=0;st.fire=0;st.tilt=0}},
+  tick(t,dt){const okB=bkP.visible!==false,okF=flP.visible!==false,okH=burP.visible!==false;const S=st.step;if(!okB||!okF)st.step=Math.min(st.step,0);st.tStep+=dt;
+   const ease=(x)=>x*x*(3-2*x);const tt=st.tStep;
+   /* step 1: pour (tilt up, pour, return) */
+   let tiltT=0,pour=false;if(S===1){if(tt<1.2)tiltT=tt/1.2;else if(tt<4.2){tiltT=1;pour=true}else if(tt<5.4)tiltT=1-(tt-4.2)/1.2;else tiltT=0}
+   st.tilt+=(tiltT-st.tilt)*Math.min(1,dt*6);const e=ease(K.clamp(st.tilt,0,1));fpiv.rotation.z=e*1.75;fpiv.position.x=-e*.13;fpiv.position.y=.06+e*.2;
+   if(pour)st.mix=Math.min(.35,st.mix+dt*.12);
+   const pouredLevel=S>=1?Math.min(1,(S>1?1:K.clamp((tt-1.2)/3,0,1))):0;
+   /* targets per step */
+   const tgtSpeed=S===0?0:S===1?.25:S===2?1:S===3?.8:.35;st.speed+=(tgtSpeed-st.speed)*Math.min(1,dt*1.5);
+   if(S>=3)st.mix=Math.min(1,st.mix+dt*.35);else if(S===2)st.mix=Math.min(.5,st.mix+dt*.08);
+   const tgtF=S===3?1:S===4?.35:0;st.fizz+=(tgtF-st.fizz)*Math.min(1,dt*2);st.ppt+=((S>=3?1:0)-st.ppt)*Math.min(1,dt*.8);st.fire+=(((S===3||S===4)&&hot?1:0)-st.fire)*Math.min(1,dt*2);
+   const level=.06+.07*pouredLevel;liq.scale.y=level;surf.position.y=level+.0005;
+   const col=colA.clone().lerp(colB,st.mix);liqM.color.copy(col);surf.material.color.copy(col);fliq.scale.y=1-pouredLevel*.8;
+   stream.visible=pour&&st.tilt>.95;if(stream.visible){root.updateMatrixWorld(true);const lip=root.worldToLocal(lipM.getWorldPosition(new T.Vector3()));const dst=new T.Vector3(-.08+.02,.12+.012+level,0);const dir=lip.clone().sub(dst);const Ln=dir.length();stream.position.copy(dst);stream.scale.set(1+Math.sin(t*40)*.15,Ln,1);stream.quaternion.setFromUnitVectors(new T.Vector3(0,1,0),dir.normalize())}
+   const P=surfG.attributes.position;const amp=okB?(.0008+st.speed*.003+(pour?.006:0)+st.fizz*(gas?.003:.001)):0;for(let i=0;i<P.count;i++){const x=base0[i*3],z=base0[i*3+2];P.setY(i,base0[i*3+1]+amp*Math.sin(x*70+t*9)+amp*.7*Math.sin(z*60-t*7)+(pour?amp*1.5*Math.sin(Math.hypot(x-.03,z)*120-t*20):0))}P.needsUpdate=true;surfG.computeVertexNormals();
+   bk.rotation.z=Math.sin(t*3)*.008*st.speed;stir.position.set(Math.cos(t*2*st.speed)*.03,.02,Math.sin(t*2*st.speed)*.03);
+   bubs.forEach((b,i)=>{const show=okB&&(gas?st.fizz>.05:st.speed>.3&&i<6);b.visible=show;const k=(t*(.25+st.fizz*.6)+b.userData.o)%1;const a=b.userData.a+t*.8;b.position.set(Math.cos(a)*b.userData.r,.005+k*level,Math.sin(a)*b.userData.r);b.scale.setScalar(.6+k*.8)});
+   ppts.forEach(q=>{q.visible=okB&&st.ppt>.15;const k=(t*.12+q.userData.o)%1;q.position.set(q.userData.x+Math.sin(t+q.userData.o*9)*.006,Math.max(.004,level*(1-k*st.ppt)),q.userData.z)});
+   const hotNow=hot&&okH&&st.fire>.05;flames.forEach((f,i)=>{f.visible=hotNow;f.scale.y=(.4+.6*st.fire)*(.7+.5*Math.sin(t*22+i*2))});
+   st.temp+=(((hotNow?.95:.35)+st.mix*.12)-st.temp)*Math.min(1,dt*.6);merc.scale.y=thP.visible!==false?st.temp:.2;
+   const sp=(.02+st.temp*.1)*st.speed*(pbP.visible!==false?1:0);mols.forEach((m,i)=>{m.position.addScaledVector(m.userData.v,sp*dt);['x','z'].forEach(a=>{if(Math.abs(m.position[a])>.068){m.position[a]=Math.sign(m.position[a])*.068;m.userData.v[a]*=-1}});if(m.position.y<.013||m.position.y>.147){m.position.y=K.clamp(m.position.y,.013,.147);m.userData.v.y*=-1}
+     if(S>=4&&i%2===1){const mate=mols[i-1];m.position.lerp(mate.position.clone().add(new T.Vector3(.02,0,0)),Math.min(1,dt*2))}});
+   puffs.forEach(pf=>{pf.visible=okB&&(gas?st.fizz>.1:hotNow);pf.userData.k=(pf.userData.k+dt*.25)%1;const k=pf.userData.k;pf.position.set(-.08+Math.sin(k*7+t)*.03,.12+.2+k*.14,0);pf.scale.setScalar(.6+k*2)});
+   prodCard.visible=S>=4;if(S>=4){const k=Math.min(1,tt*1.5);prodCard.parent.position.y=.0+k*.02;prodCard.scale.setScalar(.6+.4*k)}}}}
 };

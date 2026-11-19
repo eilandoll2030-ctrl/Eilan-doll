@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#05040a">
+<title>هدية لك 🎁 — إيلان دول</title>
+<link rel="icon" href="/favicon-96.png">
+<style>
+  html,body{margin:0;height:100%;background:#05040a;overflow:hidden;font-family:"Segoe UI",Tahoma,system-ui,sans-serif;color:#fff;-webkit-tap-highlight-color:transparent}
+  canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
+  #msg{position:fixed;left:0;right:0;bottom:8vh;text-align:center;opacity:0;transform:translateY(10px);transition:opacity 1.6s ease,transform 1.6s ease;pointer-events:none;padding:0 22px}
+  #msg.on{opacity:1;transform:none}
+  #msg .to{font-size:clamp(22px,5.4vw,40px);font-weight:800;text-shadow:0 0 18px currentColor}
+  #msg .note{font-size:clamp(14px,3.5vw,21px);opacity:.88;margin-top:8px;line-height:1.7}
+  #msg .from{font-size:clamp(12px,3vw,16px);opacity:.6;margin-top:6px}
+  #brand{position:fixed;bottom:max(10px,env(safe-area-inset-bottom));left:0;right:0;text-align:center;font-size:11px;letter-spacing:2px;opacity:.4;display:flex;gap:6px;justify-content:center;align-items:center}
+  #brand img{width:16px;height:16px}
+  #hint{position:fixed;top:max(14px,env(safe-area-inset-top));left:0;right:0;text-align:center;font-size:12px;opacity:0;transition:opacity 1s;pointer-events:none}
+  #open{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:#05040a;z-index:3;transition:opacity .8s}
+  #open .box{font-size:64px;animation:bob 1.8s ease-in-out infinite;filter:drop-shadow(0 0 22px #f5c24288)}
+  #open b{font-size:20px} #open span{font-size:13px;opacity:.6}
+  @keyframes bob{50%{transform:translateY(-10px) rotate(-4deg)}}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="open"><div class="box">🎁</div><b>وصلتك هدية</b><span>اضغط لفتحها · Tap to open</span></div>
+<div id="hint">اضغط على الشاشة لإعادة الهدية ✨</div>
+<div id="msg"><div class="to"></div><div class="note"></div><div class="from"></div></div>
+<div id="brand"><img src="/assets/logo/eilan-icon.svg" alt="">إيلان دول · EILAN DOLL</div>
+<script src="engine.js"></script>
+<script>
+(function(){
+  const P=new URLSearchParams(location.search);
+  const g=EilanGift.DESIGNS[P.get('g')]?P.get('g'):'heart';
+  const D=EilanGift.DESIGNS[g];
+  const cfg={g,w:P.get('w')||'',to:P.get('to')||'',m:P.get('m')||'',from:P.get('from')||'',c:P.get('c')||''};
+  const msg=document.getElementById('msg');
+  msg.querySelector('.to').textContent=cfg.to;
+  msg.querySelector('.note').textContent=cfg.m;
+  msg.querySelector('.from').textContent=cfg.from?('— '+cfg.from):'';
+  const tint=EilanGift.TINTS[cfg.c]||EilanGift.TINTS[D.tint];
+  msg.querySelector('.to').style.color=tint[0];
+  let player=null;
+  cfg.onFormed=()=>{msg.classList.add('on');setTimeout(()=>{const h=document.getElementById('hint');h.style.opacity=.55;setTimeout(()=>h.style.opacity=0,3500);},1800);};
+  function go(){
+    const o=document.getElementById('open');o.style.opacity=0;setTimeout(()=>o.remove(),800);
+    player=EilanGift.start(document.getElementById('c'),cfg);
+  }
+  if(P.get('bare')==='1'){['msg','hint','brand'].forEach(id=>document.getElementById(id).remove());cfg.onFormed=null;cfg.bare=1;}
+  // skip the "open" screen inside the maker preview / thumbnails
+  if(P.get('auto')==='1'){document.getElementById('open').remove();player=EilanGift.start(document.getElementById('c'),cfg);}
+  else document.getElementById('open').addEventListener('click',go,{once:true});
+  addEventListener('resize',()=>msg.classList.remove('on'));
+  document.getElementById('c').addEventListener('click',()=>{if(player&&player.formed()){msg.classList.remove('on');player.restart();}});
+})();
+</script>
+</body>
+</html>

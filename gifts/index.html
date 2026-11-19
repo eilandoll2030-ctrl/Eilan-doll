@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#07080C">
+<title>هدايا إيلان الحيّة — صانع الهدية | EILAN DOLL</title>
+<link rel="icon" href="/favicon-96.png">
+<style>
+  :root{--bg:#07080C;--blue:#1E44C8;--blue2:#0B1F5E;--green:#0F6B44;--green2:#07341F;--pur:#4A2A8F;--pur2:#251147;--mint:#D8FFE6;--gold:#f5c242;--line:#ffffff1c}
+  *{box-sizing:border-box}
+  body{margin:0;background:radial-gradient(1200px 600px at 80% -10%,#0B1F5E55,transparent),radial-gradient(900px 500px at 0% 110%,#25114755,transparent),var(--bg);color:#fff;font-family:"Segoe UI",Tahoma,system-ui,sans-serif;min-height:100vh}
+  a{color:inherit}
+  .wrap{max-width:1100px;margin:0 auto;padding:18px 16px 60px}
+  header{display:flex;align-items:center;gap:12px;justify-content:space-between;flex-wrap:wrap}
+  .brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+  .brand img{width:38px;height:38px}
+  .brand b{letter-spacing:2px;font-size:14px}.brand small{display:block;opacity:.55;font-size:10px;letter-spacing:3px}
+  .back{border:1px solid var(--line);background:#ffffff0d;border-radius:999px;padding:8px 14px;font-size:13px;text-decoration:none;cursor:pointer;color:#fff}
+  h1{font-size:clamp(26px,5vw,42px);margin:26px 0 6px}
+  h1 span{background:linear-gradient(90deg,var(--mint),#7fa2ff,#b79cff);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .lead{opacity:.75;line-height:1.8;margin:0 0 6px;max-width:680px}
+  .steps{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 22px}
+  .steps span{font-size:12px;border:1px solid var(--line);border-radius:999px;padding:6px 12px;background:#ffffff08}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
+  .card{background:linear-gradient(160deg,#ffffff10,#ffffff04);border:1px solid var(--line);border-radius:20px;overflow:hidden;cursor:pointer;transition:transform .25s,border-color .25s;text-align:right;color:#fff;padding:0;font:inherit}
+  .card:hover{transform:translateY(-4px);border-color:#ffffff40}
+  .card .th{aspect-ratio:1/1;background:#05040a center/cover no-repeat;display:block}
+  .card .meta{padding:12px 14px 14px}
+  .card b{font-size:17px}.card .en{font-size:11px;opacity:.5;letter-spacing:1px;margin-top:2px}
+  .card .occ{font-size:12px;opacity:.75;margin-top:8px}
+  #editor{display:none}
+  .ed{display:grid;grid-template-columns:minmax(260px,420px) 1fr;gap:20px;align-items:start;margin-top:20px}
+  @media (max-width:760px){.ed{grid-template-columns:1fr}}
+  .stage{position:relative;aspect-ratio:3/4;border-radius:24px;overflow:hidden;border:1px solid var(--line);background:#05040a;box-shadow:0 20px 60px #0008}
+  .stage iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+  .panel{background:#ffffff0a;border:1px solid var(--line);border-radius:22px;padding:18px}
+  .panel h2{margin:0 0 2px;font-size:22px}.panel .occ{opacity:.6;font-size:13px;margin-bottom:6px}
+  label{display:block;font-size:12px;opacity:.75;margin:14px 0 5px}
+  label small{opacity:.6}
+  input{width:100%;background:#00000055;border:1px solid #ffffff25;border-radius:12px;color:#fff;padding:11px 12px;font-size:16px;font-family:inherit}
+  input:focus{outline:none;border-color:#7fa2ff}
+  .colors{display:flex;gap:10px;flex-wrap:wrap}
+  .colors button{width:36px;height:36px;border-radius:50%;border:2px solid transparent;cursor:pointer;box-shadow:0 0 14px var(--c)}
+  .colors button.on{border-color:#fff}
+  .colors .def{width:auto;padding:0 12px;border-radius:999px;background:#ffffff12;color:#fff;font-size:12px;box-shadow:none;border:1px solid var(--line)}
+  .colors .def.on{border-color:#fff}
+  .btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+  .btn{padding:12px;border-radius:14px;border:1px solid var(--line);background:#ffffff10;color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;text-align:center;text-decoration:none}
+  .btn.p{background:linear-gradient(90deg,var(--blue),var(--pur));border:0}
+  .btn.g{background:linear-gradient(90deg,var(--green),#13995f);border:0}
+  .btn.full{grid-column:1/-1}
+  .note{font-size:12px;opacity:.6;line-height:1.8;margin-top:14px}
+  .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(30px);background:#0F6B44;padding:10px 18px;border-radius:999px;font-size:14px;opacity:0;transition:.3s;pointer-events:none;z-index:9}
+  .toast.on{opacity:1;transform:translateX(-50%)}
+  footer{text-align:center;opacity:.4;font-size:11px;letter-spacing:2px;margin-top:40px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a class="brand" href="/"><img src="/assets/logo/eilan-icon.svg" alt=""><div><b>EILAN DOLL</b><small>THE DIGITAL WORLD</small></div></a>
+    <a class="back" href="/" id="toStore">← متجر إيلان</a>
+  </header>
+
+  <section id="gallery">
+    <h1>🎁 هدايا إيلان <span>الحيّة</span></h1>
+    <p class="lead">هدية رقمية متحركة: كلمة تختارها تتطاير وتتجمّع لين تصير شكل يلمع، وبعدها تظهر رسالتك. تصمّمها هنا، وترسل رابطها للشخص اللي تحبه، ويفتحها من جواله.</p>
+    <div class="steps"><span>١ · اختر الشكل</span><span>٢ · اكتب الكلمة والاسم والرسالة</span><span>٣ · انسخ الرابط وأرسله</span></div>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <section id="editor">
+    <button class="back" id="backBtn">→ كل الهدايا</button>
+    <div class="ed">
+      <div class="stage"><iframe id="prev" title="معاينة الهدية" allow="autoplay"></iframe></div>
+      <div class="panel">
+        <h2 id="dName"></h2><div class="occ" id="dOcc"></div>
+        <label>الكلمة اللي يتكوّن منها الشكل <small id="wHint"></small></label><input id="fW" maxlength="16">
+        <label>إلى <small id="toHint"></small></label><input id="fTo" maxlength="30" placeholder="مثلاً: إلى سارة">
+        <label>رسالتك</label><input id="fM" maxlength="90" placeholder="جملة قصيرة من القلب">
+        <label>من <small>(اختياري)</small></label><input id="fFrom" maxlength="30">
+        <label>اللون</label><div class="colors" id="fC"></div>
+        <div class="btns">
+          <button class="btn p full" id="bPrev">✨ شوف الهدية بعد التعديل</button>
+          <button class="btn g" id="bCopy">🔗 انسخ الرابط</button>
+          <button class="btn" id="bShare">📤 أرسلها</button>
+          <a class="btn full" id="bOpen" target="_blank" rel="noopener">🎁 افتحها مثل ما بتوصل</a>
+        </div>
+        <p class="note">الرابط يحمل الهدية كاملة — أي أحد يفتحه يشوف نفس الشكل والرسالة. اضغط على الهدية لإعادتها من البداية.</p>
+      </div>
+    </div>
+  </section>
+  <footer>إيلان دول · EILAN DOLL</footer>
+</div>
+<div class="toast" id="toast"></div>
+<script src="engine.js"></script>
+<script>
+(function(){
+  const D=EilanGift.DESIGNS,T=EilanGift.TINTS,$=id=>document.getElementById(id);
+  const TN={pink:'وردي',gold:'ذهبي',purple:'بنفسجي',blue:'أزرق',green:'أخضر',red:'أحمر'};
+  let cur=null,color='';
+  $('grid').innerHTML=Object.entries(D).map(([k,d])=>`<button class="card" data-g="${k}"><span class="th" style="background-image:url(thumbs/${k}.jpg)"></span><div class="meta"><b>${d.name}</b><div class="en">${d.en}</div><div class="occ">${d.occ}</div></div></button>`).join('');
+  $('grid').onclick=e=>{const c=e.target.closest('.card');if(c)open(c.dataset.g,true);};
+  $('fC').innerHTML=`<button class="def" data-c="">الأصلي</button>`+Object.keys(T).map(k=>`<button data-c="${k}" title="${TN[k]}" style="background:${T[k][0]};--c:${T[k][0]}88"></button>`).join('');
+  $('fC').onclick=e=>{const b=e.target.closest('button');if(!b)return;color=b.dataset.c;mark();refresh();};
+  function mark(){[...$('fC').children].forEach(b=>b.classList.toggle('on',b.dataset.c===color));}
+  function params(auto){const q=new URLSearchParams({g:cur});
+    const w=$('fW').value.trim(),to=$('fTo').value.trim(),m=$('fM').value.trim(),f=$('fFrom').value.trim();
+    if(w&&w!==D[cur].word)q.set('w',w);if(to)q.set('to',to);if(m)q.set('m',m);if(f)q.set('from',f);if(color)q.set('c',color);if(auto)q.set('auto','1');return q.toString();}
+  const link=()=>location.origin+location.pathname.replace(/index\.html$/,'').replace(/\/?$/,'/')+'view.html?'+params(false);
+  function refresh(){$('prev').src='view.html?'+params(true);$('bOpen').href=link();}
+  function open(g,push){
+    cur=D[g]?g:'heart';const d=D[cur];
+    $('dName').textContent=d.name+' · '+d.en;$('dOcc').textContent=d.occ;
+    $('fW').value=d.word;$('wHint').textContent=d.shape?'(هنا الشكل هو الاسم نفسه، والكلمة نجمة صغيرة)':'(قصيرة أحلى: كلمة أو كلمتين)';
+    $('toHint').textContent=d.shape?'— الاسم اللي ينكتب بالنجوم':'';
+    if(!$('fTo').value)$('fTo').value=d.shape?'إلى نور':'';
+    color='';mark();
+    $('gallery').style.display='none';$('editor').style.display='block';scrollTo(0,0);
+    if(push)history.pushState(null,'','?g='+cur);
+    refresh();
+  }
+  function closeEd(){$('editor').style.display='none';$('gallery').style.display='block';$('prev').src='about:blank';}
+  $('backBtn').onclick=()=>{history.pushState(null,'',location.pathname);closeEd();};
+  addEventListener('popstate',()=>{const g=new URLSearchParams(location.search).get('g');g?open(g,false):closeEd();});
+  $('bPrev').onclick=refresh;
+  ['fW','fTo','fM','fFrom'].forEach(id=>$(id).addEventListener('change',refresh));
+  function toast(t){const e=$('toast');e.textContent=t;e.classList.add('on');setTimeout(()=>e.classList.remove('on'),2200);}
+  $('bCopy').onclick=()=>{const l=link();(navigator.clipboard?navigator.clipboard.writeText(l):Promise.reject()).then(()=>toast('تم نسخ رابط الهدية ✓'),()=>prompt('انسخ الرابط:',l));};
+  $('bShare').onclick=()=>{const l=link();if(navigator.share)navigator.share({title:'وصلتك هدية 🎁',text:'هدية لك من إيلان دول 🎁',url:l}).catch(()=>{});else $('bCopy').click();};
+  const g0=new URLSearchParams(location.search).get('g');if(g0)open(g0,false);
+})();
+</script>
+</body>
+</html>

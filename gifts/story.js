@@ -202,7 +202,7 @@ function start(cv,cfg){
   const lc=document.createElement('canvas'),lx=lc.getContext('2d',{willReadFrequently:true});
   let W,H,DPR,cw,ch,cols,rows,sprites={},t0=0,last=0,formedAt=0,raf=0,stopped=false,S;
   function resize(){DPR=Math.min(window.devicePixelRatio||1,2);W=cv.clientWidth||innerWidth;H=cv.clientHeight||innerHeight;cv.width=W*DPR;cv.height=H*DPR;ctx.setTransform(DPR,0,0,DPR,0,0);
-    cw=Math.max(6,Math.min(11,Math.round(Math.min(W,H)/68)));ch=Math.round(cw*1.45);cols=Math.ceil(W/cw);rows=Math.ceil(H/ch);lc.width=cols;lc.height=rows;sprites={};}
+    cw=Math.max(5,Math.min(10,Math.round(Math.min(W,H)/82)));ch=Math.round(cw*1.45);cols=Math.ceil(W/cw);rows=Math.ceil(H/ch);lc.width=cols;lc.height=rows;sprites={};}
   function reset(){S={cw,ch,W,H,m:cfg.bare?Math.min(W,H)*.8:Math.min(W,H*.78),word:(cfg.word||'✦').slice(0,18),to:cfg.to||'',tint:TINTS[cfg.c]||TINTS[D.tint],onLit:cfg.onLit};
     S.blow=tt=>{if(S.blowAt===null)S.blowAt=tt;};D.init(S);formedAt=0;t0=0;last=0;}
   const Q=v=>Math.min(5,Math.round(v/51));

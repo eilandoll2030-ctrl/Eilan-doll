@@ -296,7 +296,7 @@ function start(cv,cfg){
       const txt=p.useGlyph?(emo?list[0]:'✦'):(p.glyph||list[i%list.length]);
       return {tx,ty,sx,sy,role:p.role,size:Math.max(6,Math.round(p.size*sc)),txt,edge:!!p.edge,
         delay:(qr?1700:0)+ord*(qr?1500:2600)+rnd(0,350),dur:rnd(1400,2300),spin:rnd(-1.5,1.5),tw:Math.random()*TAU,
-        flick:p.flick||0,frond:p.frond,flap:p.flap,wave:p.wave||0,a:p.a||1,qr,qcol:qr?(Math.random()<.5?colorOf(p.role)[0]:'#ffffff'):null,show:qr?rnd(0,1400):0,S};
+        flick:p.flick||0,frond:p.frond,flap:p.flap,wave:p.wave||0,a:p.a||1,z:(p.z!=null?p.z:rnd(-1,1)*(p.glyph?1.5:3.4)),qr,qcol:qr?(Math.random()<.5?colorOf(p.role)[0]:'#ffffff'):null,show:qr?rnd(0,1400):0,S};
     });
     stars=Array.from({length:120},()=>({x:Math.random()*W,y:Math.random()*H,r:rnd(.2,1.4),p:Math.random()*TAU}));
     amb=Array.from({length:D.ambient==='stars'?0:(D.ambient==='snow'?70:38)},()=>newAmb(true));
@@ -323,6 +323,7 @@ function start(cv,cfg){
     if(formedAt&&D.beat){const b=((now-formedAt)/1100)%1;beat=1+.035*Math.max(0,Math.sin(b*TAU))*(b<.5?1:.4);}
     else if(formedAt){beat=1+.012*Math.sin((now-formedAt)/900);}
     const cx=W/2,cy=H*CY,live=formedAt?(now-formedAt):0,sw=D.sway&&formedAt?Math.sin(live/1300)*.05:0,flapF=formedAt?.72+.28*Math.cos(live/260):1;
+    const rot=Math.sin(el/2600)*.36*(D.flatOnly?0:1),ca=Math.cos(rot),sa=Math.sin(rot);
     ctx.globalCompositeOperation='lighter';
     for(const q of parts){
       let k=(el-q.delay)/q.dur;
@@ -334,10 +335,11 @@ function start(cv,cfg){
       if(q.flap&&k>=1)x=cx+(x-cx)*flapF;
       if(q.wave&&formedAt)x+=Math.sin(now/700+q.ty*.05)*q.wave*q.S*.6;
       x=cx+(x-cx)*beat;y=cy+(y-cy)*beat;
-      let al=Math.min(1,k*1.6)*(.74+.26*Math.sin(now/600+q.tw))*q.a;
+      const X=x-cx,Z=q.z*q.S,X2=X*ca+Z*sa,Z2=-X*sa+Z*ca,pf=1/(1+Z2/(Math.max(W,H)*1.4));x=cx+X2*pf;y=cy+(y-cy)*pf;
+      let al=Math.min(1,k*1.6)*(.74+.26*Math.sin(now/600+q.tw))*q.a*Math.max(.62,Math.min(1.12,1-Z2/(q.S*55)));
       if(q.flick)al*=1-q.flick*.45+q.flick*.45*Math.abs(Math.sin(now/140+q.tw*3));
       if(q.qr&&k<.35){ctx.globalAlpha=(1-k/.35)*.8;ctx.fillStyle=q.qcol;const s=Math.max(3,Math.min(W,H)*.009);ctx.fillRect(x-s/2,y-s/2,s,s);al*=k/.35;}
-      const sp=sprite(q.role,q.size,q.txt,q.edge);ctx.globalAlpha=al;ctx.drawImage(sp.c,x-sp.w/2,y-sp.h/2,sp.w,sp.h);
+      const sp=sprite(q.role,q.size,q.txt,q.edge);ctx.globalAlpha=al;ctx.drawImage(sp.c,x-sp.w*pf/2,y-sp.h*pf/2,sp.w*pf,sp.h*pf);
     }
     ctx.globalCompositeOperation='source-over';ctx.globalAlpha=1;
     if(!formedAt&&done===parts.length&&parts.length){formedAt=now;cfg.onFormed&&cfg.onFormed();}

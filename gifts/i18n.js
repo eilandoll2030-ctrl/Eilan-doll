@@ -34,6 +34,10 @@ const WORDS={
 
 /* ---- shape names ---- */
 const NAMES={
+ heart3d:row(['قلب ثلاثي الأبعاد','3D Spinning Heart','3D 旋转爱心','回転する3Dハート','회전하는 3D 하트','Dönen 3B Kalp','Corazón 3D giratorio','Cuore 3D rotante']),
+ stringheart:row(['قلب الخيوط','String-Art Heart','丝线爱心','糸のハート','실로 그린 하트','İp Sanatı Kalp','Corazón de hilos','Cuore di fili']),
+ tree3d:row(['شجرة الكريسمس ثلاثية الأبعاد','3D Christmas Tree','3D 圣诞树','3Dクリスマスツリー','3D 크리스마스 트리','3B Noel Ağacı','Árbol de Navidad 3D','Albero di Natale 3D']),
+ betta:row(['سمكة البيتا الحيّة','Living Betta Fish','灵动斗鱼','泳ぐベタ','살아있는 베타 물고기','Canlı Beta Balığı','Pez betta vivo','Pesce betta vivo']),
  letter:row(['رسالة تتحوّل وردة','Letter to Rose','信变玫瑰','バラになる手紙','장미가 되는 편지','Güle Dönüşen Mektup','Carta que se vuelve rosa','Lettera che diventa rosa']),
  candle:row(['شمعة الأمنية','Wish Candle','许愿蜡烛','願いのキャンドル','소원 촛불','Dilek Mumu','Vela de los deseos','Candela dei desideri']),
  fireworks:row(['ألعاب نارية باسمك','Fireworks with Your Name','烟花写名字','名前の花火','이름 불꽃놀이','Adınla Havai Fişek','Fuegos artificiales con tu nombre','Fuochi d’artificio col tuo nome']),

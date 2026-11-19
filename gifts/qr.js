@@ -83,5 +83,14 @@ function draw(ctx,qr,x0,y0,px,fg){
   ctx.fillStyle=fg||'#07080C';
   for(let y=0;y<qr.size;y++)for(let x=0;x<qr.size;x++)if(qr.get(x,y))ctx.fillRect(x0+x*px,y0+y*px,Math.ceil(px),Math.ceil(px));
 }
-window.EilanQR={make,draw};
+// coloured style (like the reference tree QR): finder eyes in one colour, modules in another, a few "ornament" modules
+// colours are darkened automatically so the code stays easy to scan on a light card
+function dk(h,t){const v=[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));return 'rgb('+v.map(c=>Math.round(c*(1-t))).join(',')+')';}
+function drawStyled(ctx,qr,x0,y0,px,o){const n=qr.size,eye=(x,y)=>(x<7&&y<7)||(x>=n-7&&y<7)||(x<7&&y>=n-7);
+  const main=dk(o.main||'#0F6B44',.45),fin=dk(o.finder||'#1E44C8',.35),acc=(o.accents||[]).map(c=>dk(c,.3));
+  for(let y=0;y<n;y++)for(let x=0;x<n;x++){if(!qr.get(x,y))continue;let c=eye(x,y)?fin:main;
+    if(!eye(x,y)&&acc.length){const h=Math.sin(x*12.9898+y*78.233)*43758.5453;if(h-Math.floor(h)<.09)c=acc[(x+y)%acc.length];}
+    ctx.fillStyle=c;const r=eye(x,y)?0:px*.18;
+    if(r&&ctx.roundRect){ctx.beginPath();ctx.roundRect(x0+x*px+.4,y0+y*px+.4,px-.8,px-.8,r);ctx.fill();}else ctx.fillRect(x0+x*px,y0+y*px,Math.ceil(px),Math.ceil(px));}}
+window.EilanQR={make,draw,drawStyled};
 })();

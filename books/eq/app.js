@@ -56,6 +56,10 @@ function graphFn(e){const f=compile(e);if(!f||!e.ins.length)return null;const v=
 const cv=$('#gl');const R3=new THREE.WebGLRenderer({canvas:cv,antialias:true,alpha:true,powerPreference:'high-performance'});
 R3.setPixelRatio(Math.min(2,window.devicePixelRatio||1));R3.shadowMap.enabled=true;R3.shadowMap.type=THREE.PCFSoftShadowMap;R3.outputColorSpace=THREE.SRGBColorSpace;R3.toneMapping=THREE.ACESFilmicToneMapping;R3.toneMappingExposure=1.08;
 const scene=new THREE.Scene();scene.fog=new THREE.Fog(0x080a12,5.5,13);
+/* إضاءة بيئية واقعية: انعكاسات طبيعية على الزجاج والمعادن والجلد */
+try{const env=new THREE.Scene();const room=new THREE.Mesh(new THREE.BoxGeometry(10,6,10),new THREE.MeshBasicMaterial({color:0x8a8f9c,side:THREE.BackSide}));env.add(room);
+ [[0,2.9,0,6,.1,3,0xffffff,3.2],[4.9,1,0,.1,2.5,4,0xfff2dc,1.8],[-4.9,1.2,0,.1,2,3,0xdde6ff,1.2],[0,-2.9,0,10,.1,10,0x3a3328,1]].forEach(([x,y,z,w,h,d,c,k])=>{const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),new THREE.MeshBasicMaterial({color:new THREE.Color(c).multiplyScalar(k)}));m.position.set(x,y,z);env.add(m)});
+ const pm=new THREE.PMREMGenerator(R3);scene.environment=pm.fromScene(env,.04).texture;scene.environmentIntensity=.32;pm.dispose()}catch(e){}
 const camera=new THREE.PerspectiveCamera(36,1,.05,40);
 scene.add(new THREE.HemisphereLight(0xe3e9ff,0x2a2216,.75));
 const key=new THREE.DirectionalLight(0xfff0d8,2.4);key.position.set(-1.8,4,2.2);key.castShadow=true;key.shadow.mapSize.set(2048,2048);Object.assign(key.shadow.camera,{left:-1.6,right:1.6,top:1.3,bottom:-1.3,near:1,far:9});key.shadow.bias=-.0004;key.shadow.normalBias=.015;key.shadow.radius=3;scene.add(key);

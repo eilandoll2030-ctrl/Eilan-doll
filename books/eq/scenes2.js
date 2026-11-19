@@ -217,27 +217,57 @@ reaction(K,eq){const T=K.THREE,root=new T.Group();const txt=(eq.f+' '+eq.n.join(
      if(S>=4&&i%2===1){const mate=mols[i-1];m.position.lerp(mate.position.clone().add(new T.Vector3(.02,0,0)),Math.min(1,dt*2))}});
    puffs.forEach(pf=>{pf.visible=okB&&(gas?st.fizz>.1:hotNow);pf.userData.k=(pf.userData.k+dt*.25)%1;const k=pf.userData.k;pf.position.set(-.08+Math.sin(k*7+t)*.03,.12+.2+k*.14,0);pf.scale.setScalar(.6+k*2)});
    prodCard.visible=S>=4;if(S>=4){const k=Math.min(1,tt*1.5);prodCard.parent.position.y=.0+k*.02;prodCard.scale.setScalar(.6+.4*k)}}}},
-/* ===== human body: beating heart, breathing lungs, blood flow ===== */
+/* ===== human body (realistic): skin, skeleton, beating heart, breathing lungs, blood flow ===== */
 body(K,eq){const T=K.THREE,root=new T.Group();
- const base=new T.Group();base.add(K.cyl(.13,.14,.012,K.paper2,{seg:40}));K.place(root,base,-.08,.08);
- const fig=new T.Group();const skin=K.M(0xf1d6bd,{op:.38});const torso=K.cyl(.07,.06,.2,skin,{seg:24,soft:true});torso.position.y=.15;fig.add(torso);const head=K.sph(.045,skin,{center:true,soft:true});head.position.y=.41;fig.add(head);const neck=K.cyl(.02,.02,.04,skin,{edge:false});neck.position.y=.35;fig.add(neck);
- [-1,1].forEach(sx=>{const leg=K.cyl(.022,.018,.14,skin,{edge:false,seg:14});leg.position.set(sx*.03,.012,0);fig.add(leg);const arm=K.cyl(.016,.014,.17,skin,{edge:false,seg:12});arm.position.set(sx*.088,.17,0);arm.rotation.z=sx*.12;fig.add(arm)});
- const figP=K.place(root,fig,-.08,.08,0,.012);
- const heart=new T.Group();const h1=K.sph(.02,K.red,{center:true,hull:false});h1.position.set(-.01,0,0);const h2=K.sph(.02,K.red,{center:true,hull:false});h2.position.set(.01,0,0);const h3=K.cyl(0,.026,.035,K.red,{edge:false,seg:16});h3.rotation.z=Math.PI;h3.position.y=-.006;heart.add(h1,h2,h3);
- const heartP=K.place(root,heart,-.065,.09,0,.27);
- const lungs=new T.Group();const lungM=K.M(0xe89aa0,{op:.85});[-1,1].forEach(sx=>{const l=K.sph(.032,lungM,{center:true,hull:false,seg:18});l.scale.set(.8,1.4,.7);l.position.set(sx*.035,0,0);lungs.add(l)});
- const lungsP=K.place(root,lungs,-.08,.08,0,.27);
- const vesselPts=[[-.06,.27,.03],[-.04,.15,.035],[-.03,.03,.02],[.0,.0,.0],[.03,.03,.02],[.04,.15,.035],[.06,.27,.03],[.0,.33,.03]];const ves=new T.Group();ves.add(K.tube(vesselPts.map(p=>[p[0],p[1],p[2]]),.004,K.M(0xC8463C,{op:.6}),{closed:true}));
- const cells=[];const curve=new T.CatmullRomCurve3(vesselPts.map(p=>new T.Vector3(...p)),true);for(let i=0;i<14;i++){const c=K.sph(.006,K.red,{hull:false,edge:false,center:true});c.userData.k=i/14;ves.add(c);cells.push(c)}
- const vesP=K.place(root,ves,-.08,.08,0,.012);
- const mon=new T.Group();mon.add(K.box(.16,.1,.012,K.dark));const ecg=K.canvasTex(256,160,()=>{});const em=new T.Mesh(new T.PlaneGeometry(.14,.085),new T.MeshStandardMaterial({map:ecg,emissive:0xffffff,emissiveMap:ecg,emissiveIntensity:.7}));em.position.set(0,.05,.0065);mon.add(em);mon.add(K.cyl(.006,.006,.06,K.dark,{edge:false}));const monP=K.place(root,mon,.27,-.06,-.3,.0);mon.children.forEach(c=>{if(c!==mon.children[2])c.position.y+=.06});
- const card=K.card(.32,.1,()=>{});K.place(root,card,.05,-.4);
+ const PM=(o)=>new T.MeshPhysicalMaterial(o);
+ const skinM=PM({color:0xe0ac8a,roughness:.55,sheen:.6,sheenColor:new T.Color(0xffd2bf),sheenRoughness:.5,clearcoat:.15,transparent:true,opacity:.42,depthWrite:false,side:T.DoubleSide});
+ const boneM=PM({color:0xeee3cc,roughness:.6,clearcoat:.2});
+ const heartM=PM({color:0x8e1a1f,roughness:.35,clearcoat:.6,clearcoatRoughness:.3,sheen:.4,sheenColor:new T.Color(0xff6060)});
+ const lungM=PM({color:0xd88690,roughness:.75,sheen:.8,sheenColor:new T.Color(0xffc0c8),transparent:true,opacity:.9});
+ const artM=PM({color:0xb3121c,roughness:.3,clearcoat:.5}),veinM=PM({color:0x2a3f9e,roughness:.35,clearcoat:.4});
+ const mesh=(g,m,cast=true)=>{const o=new T.Mesh(g,m);o.castShadow=cast;o.receiveShadow=true;return o};
+ const stand=new T.Group();stand.add(mesh(new T.CylinderGeometry(.12,.13,.012,48),PM({color:0x2b2d36,roughness:.3,metalness:.6})));stand.children[0].position.y=.006;const pole=mesh(new T.CylinderGeometry(.005,.005,.12,12),PM({color:0xb9bcc6,metalness:.9,roughness:.25}));pole.position.y=.07;stand.add(pole);K.place(root,stand,-.1,.08);
+ /* skin silhouette */
+ const fig=new T.Group();const S=.9;
+ const torsoProf=[[0,0],[.045,.0],[.06,.02],[.064,.06],[.058,.1],[.052,.13],[.06,.17],[.072,.2],[.074,.215],[.05,.235],[.022,.245],[0,.248]].map(([x,y])=>new T.Vector2(x*S,y*S));
+ const torso=mesh(new T.LatheGeometry(torsoProf,40),skinM,false);torso.scale.set(1,1,.62);torso.position.y=.13;fig.add(torso);
+ const neck=mesh(new T.CylinderGeometry(.018,.021,.035,24),skinM,false);neck.position.y=.13+.245*S+.012;fig.add(neck);
+ const head=mesh(new T.SphereGeometry(.045,40,30),skinM,false);head.scale.set(.86,1.08,.98);head.position.y=.13+.245*S+.062;fig.add(head);
+ [-1,1].forEach(sx=>{const arm=mesh(new T.CapsuleGeometry(.015,.15,6,16),skinM,false);arm.position.set(sx*.082,.13+.14,0);arm.rotation.z=sx*.1;fig.add(arm);const fore=mesh(new T.CapsuleGeometry(.013,.12,6,16),skinM,false);fore.position.set(sx*.094,.13+.0,.01);fore.rotation.z=sx*.04;fig.add(fore);
+  const thigh=mesh(new T.CapsuleGeometry(.024,.13,6,16),skinM,false);thigh.position.set(sx*.03,.13-.06,0);fig.add(thigh);const shin=mesh(new T.CapsuleGeometry(.018,.12,6,16),skinM,false);shin.position.set(sx*.03,.13-.2,0);fig.add(shin)});
+ fig.scale.setScalar(.95);
+ /* skeleton */
+ const skull=mesh(new T.SphereGeometry(.036,32,24),boneM);skull.scale.set(.85,1,.95);skull.position.y=head.position.y+.004;fig.add(skull);
+ for(let i=0;i<14;i++){const v=mesh(new T.CylinderGeometry(.0065,.0065,.009,10),boneM);v.position.set(0,.14+i*.0145,-.026);fig.add(v)}
+ for(let i=0;i<7;i++){const w=(.05-.002*Math.abs(i-2))*S,y=.13+.19*S-i*.017;const rib=mesh(new T.TorusGeometry(1,.0035,6,40,Math.PI*1.65),boneM);rib.scale.set(w,w*.62,1);rib.rotation.set(Math.PI/2,0,Math.PI*.5+Math.PI*.175);rib.position.set(0,y,-.004);fig.add(rib)}
+ const sternum=mesh(new T.BoxGeometry(.008,.07,.005),boneM);sternum.position.set(0,.13+.17*S,.034);fig.add(sternum);
+ const pelvis=mesh(new T.TorusGeometry(.036,.008,8,30,Math.PI),boneM);pelvis.rotation.x=Math.PI/2+.3;pelvis.position.set(0,.135,.0);fig.add(pelvis);
+ const figP=K.place(root,fig,-.1,.08,0,.012);
+ /* heart (anatomical-ish) */
+ const heart=new T.Group();const hg=new T.SphereGeometry(.022,32,24);const hp=hg.attributes.position;for(let i=0;i<hp.count;i++){const y=hp.getY(i);const k=y<0?1+y/.022*.55:1;hp.setX(i,hp.getX(i)*k);hp.setZ(i,hp.getZ(i)*k*.85);hp.setY(i,y*(y<0?1.35:1))}hg.computeVertexNormals();const hm=mesh(hg,heartM);hm.rotation.z=-.45;heart.add(hm);
+ const aorta=mesh(new T.TubeGeometry(new T.CatmullRomCurve3([new T.Vector3(.004,.015,0),new T.Vector3(.006,.034,0),new T.Vector3(-.01,.042,-.004),new T.Vector3(-.02,.03,-.01),new T.Vector3(-.018,-.01,-.014)]),24,.0045,10),artM);heart.add(aorta);
+ const vc=mesh(new T.CylinderGeometry(.004,.004,.04,10),veinM);vc.position.set(-.014,.03,.004);heart.add(vc);
+ const heartP=K.place(root,heart,-.088,.09,0,.012+.95*(.13+.1*S));
+ /* lungs */
+ const lungs=new T.Group();[-1,1].forEach(sx=>{const lg=new T.SphereGeometry(.032,28,20);const p=lg.attributes.position;for(let i=0;i<p.count;i++){const y=p.getY(i),x=p.getX(i);p.setY(i,y*1.55);if(x*sx<0)p.setX(i,x*.45);p.setZ(i,p.getZ(i)*.7)}lg.computeVertexNormals();const l=mesh(lg,lungM);l.scale.setScalar(.78);l.position.set(sx*.03,0,-.004);lungs.add(l);
+  const br=mesh(new T.CylinderGeometry(.003,.004,.03,8),PM({color:0xe9d2c0,roughness:.6}));br.position.set(sx*.012,.035,0);br.rotation.z=sx*.7;lungs.add(br)});const trachea=mesh(new T.CylinderGeometry(.005,.005,.04,12),PM({color:0xe9d2c0,roughness:.6}));trachea.position.y=.06;lungs.add(trachea);
+ const lungsP=K.place(root,lungs,-.1,.08,0,.012+.95*(.13+.13*S));
+ /* blood vessels: arteries (red) and veins (blue) with moving cells */
+ const ves=new T.Group();const mkPath=(sx,dz)=>[[sx*.008,.2,dz],[sx*.03,.13,dz],[sx*.034,.04,dz],[sx*.03,-.04,dz],[sx*.03,-.13,dz]];
+ const curves=[];[[-1,.012,artM],[1,.012,artM],[-1,-.012,veinM],[1,-.012,veinM]].forEach(([sx,dz,m])=>{const pts=mkPath(sx,dz).map(p=>new T.Vector3(...p));const c=new T.CatmullRomCurve3(pts);curves.push({c,art:m===artM});ves.add(mesh(new T.TubeGeometry(c,40,.0028,8),m,false))});
+ const cells=[];curves.forEach((cv,ci)=>{for(let i=0;i<6;i++){const c=mesh(new T.SphereGeometry(.0045,10,8),cv.art?artM:veinM,false);c.scale.set(1,.5,1);c.userData={k:i/6,cv:cv.c,dir:cv.art?1:-1};ves.add(c);cells.push(c)}});
+ const vesP=K.place(root,ves,-.1,.08,0,.012+.95*.13);
+ /* ECG monitor */
+ const mon=new T.Group();const frame=mesh(new T.BoxGeometry(.17,.11,.012),PM({color:0x1b1d24,roughness:.35,metalness:.4}));frame.position.y=.12;mon.add(frame);const ecg=K.canvasTex(256,160,()=>{});const em=new T.Mesh(new T.PlaneGeometry(.15,.092),new T.MeshStandardMaterial({map:ecg,emissive:0xffffff,emissiveMap:ecg,emissiveIntensity:.85}));em.position.set(0,.12,.0065);mon.add(em);const leg=mesh(new T.CylinderGeometry(.005,.005,.07,12),PM({color:0xb9bcc6,metalness:.9,roughness:.3}));leg.position.y=.035;mon.add(leg);const ft=mesh(new T.CylinderGeometry(.03,.03,.006,24),PM({color:0x1b1d24,roughness:.4}));mon.add(ft);
+ K.place(root,mon,.26,-.04,-.35);
+ [figP,heartP,lungsP,vesP].forEach(p=>{p.scale.setScalar(1.25);p.position.x=-.12;p.position.y=.012+(p.position.y-.012)*1.25});root.children.forEach(c=>{if(c.children[0]===stand){c.scale.setScalar(1.25);c.position.x=-.12}});
+const card=K.card(.32,.1,()=>{});K.place(root,card,.05,-.4);
  const st={bpm:72,br:14};const trace=[];
  return{root,update(v){const val=has(v,eq.out)?v[eq.out]:72;st.bpm=K.clamp(has(v,'HR')?v.HR:50+K.lg(val,1)*60,40,180);st.br=10+K.lg(val,1)*10;card.userData.redraw((c,W,H)=>K.fit(c,eq.f,W,H))},
-  tick(t,dt){const beat=(t*st.bpm/60)%1;const pulse=beat<.12?1+Math.sin(beat/.12*Math.PI)*.22:1;if(heartP.visible!==false)heart.scale.setScalar(pulse);
-   const br=Math.sin(t*st.br/60*Math.PI*2)*.5+.5;lungs.scale.set(1+br*.12,1+br*.18,1+br*.1);
-   const flow=heartP.visible!==false?st.bpm/60*.18:0;cells.forEach(c=>{c.userData.k=(c.userData.k+dt*flow)%1;c.position.copy(curve.getPointAt(c.userData.k))});
-   const {x}=ecg.userData;const y=beat<.04?0:beat<.07?-40:beat<.1?60:beat<.13?-20:0;trace.push(y);if(trace.length>128)trace.shift();x.fillStyle='#07080C';x.fillRect(0,0,256,160);x.strokeStyle='#46e07a';x.lineWidth=3;x.beginPath();trace.forEach((v,i)=>{const X=i*2,Y=90-v;i?x.lineTo(X,Y):x.moveTo(X,Y)});x.stroke();x.fillStyle='#D8FFE6';x.font='700 26px monospace';x.fillText('♥ '+Math.round(st.bpm),150,32);ecg.needsUpdate=true}}},
+  tick(t,dt){const beat=(t*st.bpm/60)%1;const pulse=beat<.12?1+Math.sin(beat/.12*Math.PI)*.16:beat<.24?1+Math.sin((beat-.12)/.12*Math.PI)*.07:1;heart.scale.setScalar(pulse);
+   const br=Math.sin(t*st.br/60*Math.PI*2)*.5+.5;lungs.scale.set(1+br*.08,1+br*.12,1+br*.1);torso.scale.set(1+br*.02,1,.62+br*.02);
+   const flow=heartP.visible!==false?st.bpm/60*.12:0;cells.forEach(c=>{const u=c.userData;u.k=(u.k+dt*flow)%1;c.position.copy(u.cv.getPointAt(u.dir>0?u.k:1-u.k))});
+   const {x}=ecg.userData;const y=beat<.04?0:beat<.07?-40:beat<.1?60:beat<.13?-20:beat<.3?Math.sin((beat-.13)/.17*Math.PI)*10:0;trace.push(y);if(trace.length>128)trace.shift();x.fillStyle='#04060a';x.fillRect(0,0,256,160);x.strokeStyle='rgba(70,224,122,.18)';x.lineWidth=1;for(let i=0;i<256;i+=16){x.beginPath();x.moveTo(i,0);x.lineTo(i,160);x.stroke()}x.strokeStyle='#46e07a';x.lineWidth=3;x.beginPath();trace.forEach((v,i)=>{const X=i*2,Y=95-v;i?x.lineTo(X,Y):x.moveTo(X,Y)});x.stroke();x.fillStyle='#D8FFE6';x.font='700 26px monospace';x.fillText('♥ '+Math.round(st.bpm),150,32);ecg.needsUpdate=true}}},
 
 /* ===== earth cut-away: layers, volcano, seismograph ===== */
 earth(K,eq){const T=K.THREE,root=new T.Group();

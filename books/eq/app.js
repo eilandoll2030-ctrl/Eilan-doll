@@ -128,7 +128,7 @@ function mountModel(e){if(cur){modelAnchor.remove(cur.root);cur.root.traverse(o=
  if(PS.build)kids.forEach((k,i)=>{PS.removed.add(i);k.visible=false});
  refreshModel();s.root.children.forEach(k=>{if(k.userData.pop){k.scale.set(1,.001,1);k.rotation.x=-1.25}})}
 const dimMap=new Map();
-function refreshModel(){const e=LIST[idx];if(!cur||!e)return;if(allNeeded())PS.done=true;(PS.strays||[]).forEach(o=>o.visible=!PS.build||PS.done);const v=evalEq(e);PS.stopped=!!v.__stop;try{cur.update&&cur.update(v,graphFn(e))}catch(err){console.error(err)}
+function refreshModel(){const e=LIST[idx];if(!cur||!e)return;if(allNeeded())PS.done=true;liveBtn();(PS.strays||[]).forEach(o=>o.visible=!PS.build||PS.done);const v=evalEq(e);PS.stopped=!!v.__stop;try{cur.update&&cur.update(v,graphFn(e))}catch(err){console.error(err)}
  // stopped: lights and glows go dark; restored when running again
  cur.root.traverse(o=>{if(o.isLight){if(!dimMap.has(o))dimMap.set(o,o.intensity);if(PS.stopped)o.intensity=0;else if(o.intensity===0)o.intensity=dimMap.get(o)}
   else if(o.isMesh&&o.material&&o.material.emissive&&!o.material.emissiveMap){const m=o.material;if(!dimMap.has(m))dimMap.set(m,m.emissiveIntensity);if(PS.stopped)m.emissiveIntensity=0;else if(m.emissiveIntensity===0&&e.sc!=='circuit')m.emissiveIntensity=dimMap.get(m)}});
@@ -171,6 +171,8 @@ function endDrag(e,tap){if(!drag)return;const k=drag.k;drag=null;cv.style.cursor
 function removePart(i){const k=PS.kids[i];if(!k||(k.userData.part.b&&!PS.build))return;PS.removed.add(i);tween(300,el=>{const q=K.clamp(el/300,0,1);k.scale.setScalar(Math.max(.001,1-q))},()=>{k.visible=false;k.scale.set(1,1,1)});refreshModel()}
 function addPart(i){const k=PS.kids[i];if(!k)return;PS.removed.delete(i);k.position.copy(k.userData.home);k.visible=true;k.scale.set(1,.001,1);tween(700,el=>{const p=back(K.clamp(el/700,0,1));k.scale.set(1,Math.max(.001,p),1)},()=>k.scale.set(1,1,1));refreshModel()}
 let hintT=null;function hint(msg){const h=$('#dhint');if(!h)return;h.textContent=msg;h.classList.toggle('hide',!msg)}
+function liveBtn(){const b=$('#livebtn');if(!b)return;const ok=cur&&cur.setLive&&(!PS.build||PS.done)&&!PS.stopped;if(!ok){b.classList.add('hide');if(cur&&cur.setLive&&!PS.done&&PS.build)cur.setLive(false);return}b.classList.remove('hide');const on=cur.isLive&&cur.isLive();b.classList.toggle('on',!!on);b.innerHTML=on?(rtl()?'⏸ أوقف التفاعل':'⏸ Pause the reaction'):(rtl()?'▶️ شاهد التفاعل الحي':'▶️ Watch it react live')}
+document.addEventListener('click',ev=>{const b=ev.target.closest('#livebtn');if(!b||!cur||!cur.setLive)return;cur.setLive(!(cur.isLive&&cur.isLive()));liveBtn()});
 function tray(){const box=$('#tray');if(!box||!PS.kids.length){box&&box.classList.add('hide');return}box.classList.remove('hide');const e=LIST[idx];
  const rem=[...PS.removed].map(i=>PS.kids[i]).filter(Boolean).sort((a,b)=>(need(b.userData.part)?1:0)-(need(a.userData.part)?1:0)||a.userData.idx-b.userData.idx);
  const ess=PS.kids.filter(k=>need(k.userData.part)),missE=rem.filter(k=>need(k.userData.part));let msg;

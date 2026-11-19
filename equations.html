@@ -124,6 +124,7 @@ form select option{background:#11142a}
 #addMsg{margin-top:10px;font-size:14px;line-height:1.7;color:var(--mint)}
 .intro{font-size:14px;color:#C3C8D6;line-height:1.8}
 .ownerbadge{position:fixed;top:64px;left:50%;transform:translateX(-50%);z-index:6;background:linear-gradient(135deg,#C9A227,#8a6d12);color:#07080C;font-weight:800;font-size:12px;padding:4px 12px;border-radius:99px;pointer-events:none;opacity:.92}
+#livebtn{position:fixed;left:50%;transform:translateX(-50%);top:118px;z-index:7;height:46px;padding:0 22px;border-radius:99px;border:0;font-weight:800;font-size:15px;color:#07080C;background:linear-gradient(135deg,#D8FFE6,#8cc7a6);box-shadow:0 8px 24px rgba(0,0,0,.35);animation:lvp 1.8s ease-in-out infinite}#livebtn.on{background:linear-gradient(135deg,#C9A227,#8a6d12);animation:none}@keyframes lvp{50%{transform:translateX(-50%) scale(1.06)}}
 #lock{position:fixed;inset:0;z-index:9;display:grid;place-items:center;padding:70px 14px 120px;background:rgba(7,8,12,.55);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);overflow:auto}
 body.locked .top,body.locked .bot,body.locked .prog{z-index:10}body.locked #panel,body.locked #tray,body.locked #dhint{visibility:hidden}
 .lk{width:min(560px,100%);background:linear-gradient(160deg,#0B1F5E,#251147 60%,#07341F);border:1px solid rgba(216,255,230,.18);border-radius:22px;padding:22px 18px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.5)}
@@ -179,6 +180,7 @@ body.locked .top,body.locked .bot,body.locked .prog{z-index:10}body.locked #pane
 </div>
 <div id="hint" data-t="drag"></div>
 <div id="lock" class="hide" role="dialog" aria-modal="true" aria-labelledby="lkt"><div class="lk" id="lkbox"></div></div>
+<button id="livebtn" class="hide" type="button"></button>
 <div id="tray" class="hide"><div id="tmode" class="tmode"></div><div id="tmsg"></div><div id="tchips" class="tchips"></div></div>
 <div id="dhint" class="hide"></div>
 <div id="tour" class="hide"><div class="tavatar"><img src="/assets/logo/eilan-icon.svg" alt=""></div><div class="tbody"><div id="tsay"></div><div id="tdots"></div><div id="tvoice" class="tvoice"></div><div id="tnovoice" class="hide">🔇 الصوت غير متاح في هذا المتصفح — الشرح مكتوب ويمشي تلقائيًا</div></div><div class="tctl"><button data-tour="pause" id="tpause">⏸</button><button data-tour="next">⏭</button><button data-tour="stop">✕</button></div></div>
@@ -238,6 +240,6 @@ window.addEventListener('DOMContentLoaded',()=>{const en=(localStorage.getItem('
 <script src="/books/eq/data-batch17.js?v=1"></script>
 <script src="/books/eq/data-batch18.js?v=1"></script>
 <script src="/books/eq/community.js?v=5"></script>
-<script type="module" src="/books/eq/app.js?v=14"></script>
+<script type="module" src="/books/eq/app.js?v=15"></script>
 </body>
 </html>

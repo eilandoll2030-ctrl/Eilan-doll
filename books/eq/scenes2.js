@@ -181,9 +181,10 @@ reaction(K,eq){const T=K.THREE,root=new T.Group();const txt=(eq.f+' '+eq.n.join(
  const th=new T.Group();th.add(K.cyl(.01,.01,.2,K.glass,{soft:true}));const merc=K.cyl(.006,.006,.19,K.red,{edge:false});th.add(merc);const thb=K.sph(.016,K.red,{center:true});th.add(thb);for(let i=1;i<6;i++)th.add(K.line([[.011,i*.035,0],[.02,i*.035,0]]));const thP=K.place(root,th,-.3,.0,0,.012);
  const card=K.card(.34,.1,()=>{});K.place(root,card,-.08,-.4);
  const fx=new T.Group();root.add(fx);const puffs=[];if(gas||hot)for(let i=0;i<10;i++){const pf=K.sph(.014,K.M(0xffffff,{op:.35}),{hull:false,edge:false,center:true});pf.userData.k=Math.random();fx.add(pf);puffs.push(pf)}
- const st={rate:.5,phase:0,mix:0,temp:.35};
+ const st={rate:.5,phase:0,mix:0,temp:.35,live:false};
  return{root,update(v){const val=has(v,eq.out)?v[eq.out]:1;st.rate=.35+K.lg(val,.5)*.9;card.userData.redraw((c,W,H)=>K.fit(c,eq.f,W,H))},
-  tick(t,dt){const okB=bkP.visible!==false,okF=flP.visible!==false,okH=burP.visible!==false;const run=okB&&okF;
+  setLive(on){st.live=!!on;if(on){st.phase=0;st.mix=0}},isLive:()=>st.live,
+  tick(t,dt){const okB=bkP.visible!==false,okF=flP.visible!==false,okH=burP.visible!==false;const run=okB&&okF&&st.live;if(!st.live){t=0;dt=0}
    st.phase=(st.phase+dt*.12*st.rate)%1;const ph=st.phase;
    const pour=run&&ph>.1&&ph<.45;const tilt=run?(ph<.1?ph/.1:ph<.45?1:ph<.55?1-(ph-.45)/.1:0):0;const e=tilt*tilt*(3-2*tilt);fpiv.rotation.z=e*1.75;fpiv.position.x=-e*.13;fpiv.position.y=.06+e*.2;
    if(run&&ph<.05)st.mix=0;if(pour)st.mix=Math.min(1,st.mix+dt*.45*st.rate);else if(run&&ph>.55)st.mix=Math.min(1,st.mix+dt*.15);
@@ -192,12 +193,12 @@ reaction(K,eq){const T=K.THREE,root=new T.Group();const txt=(eq.f+' '+eq.n.join(
    /* stream from flask lip to beaker */
    stream.visible=pour&&tilt>.95;if(stream.visible){root.updateMatrixWorld(true);const lip=root.worldToLocal(lipM.getWorldPosition(new T.Vector3()));const dst=new T.Vector3(-.08+.02,.12+.012+level,0);const dir=lip.clone().sub(dst);const L=dir.length();stream.position.copy(dst);stream.scale.set(1+Math.sin(t*40)*.15,L,1);stream.quaternion.setFromUnitVectors(new T.Vector3(0,1,0),dir.normalize())}
    /* wobbling surface */
-   const P=surfG.attributes.position;const amp=okB?(.003+(pour?.006:0)+(gas?.002:0)):0;for(let i=0;i<P.count;i++){const x=base0[i*3],z=base0[i*3+2];P.setY(i,base0[i*3+1]+amp*Math.sin(x*70+t*9)+amp*.7*Math.sin(z*60-t*7)+(pour?amp*1.5*Math.sin(Math.hypot(x-.03,z)*120-t*20):0))}P.needsUpdate=true;surfG.computeVertexNormals();
+   const P=surfG.attributes.position;const amp=okB&&st.live?(.003+(pour?.006:0)+(gas?.002:0)):0;for(let i=0;i<P.count;i++){const x=base0[i*3],z=base0[i*3+2];P.setY(i,base0[i*3+1]+amp*Math.sin(x*70+t*9)+amp*.7*Math.sin(z*60-t*7)+(pour?amp*1.5*Math.sin(Math.hypot(x-.03,z)*120-t*20):0))}P.needsUpdate=true;surfG.computeVertexNormals();
    bk.rotation.z=okB?Math.sin(t*3)*.01*(pour?2:1):0;stir.position.set(Math.cos(t*2)*.03,.02,Math.sin(t*2)*.03);stir.rotation.y=t*2;
-   bubs.forEach(b=>{b.visible=okB;const k=(t*(.25+st.rate*.35)*(gas?1.4:.6)+b.userData.o)%1;const a=b.userData.a+t*.8;b.position.set(Math.cos(a)*b.userData.r,.005+k*level,Math.sin(a)*b.userData.r);b.scale.setScalar(.6+k*.8)});
+   bubs.forEach(b=>{b.visible=okB&&st.live;const k=(t*(.25+st.rate*.35)*(gas?1.4:.6)+b.userData.o)%1;const a=b.userData.a+t*.8;b.position.set(Math.cos(a)*b.userData.r,.005+k*level,Math.sin(a)*b.userData.r);b.scale.setScalar(.6+k*.8)});
    ppts.forEach(q=>{q.visible=okB&&st.mix>.2;const k=(t*.12+q.userData.o)%1;q.position.set(q.userData.x+Math.sin(t+q.userData.o*9)*.006,Math.max(.004,level*(1-k)),q.userData.z)});
-   const hotNow=hot&&okH;flames.forEach((f,i)=>{f.visible=hotNow;f.scale.y=.7+.5*Math.sin(t*22+i*2)});
+   const hotNow=hot&&okH&&st.live;flames.forEach((f,i)=>{f.visible=hotNow;f.scale.y=.7+.5*Math.sin(t*22+i*2)});
    st.temp+=(((hotNow?.95:.35)+(run?st.mix*.15:0))-st.temp)*Math.min(1,dt*.6);merc.scale.y=thP.visible!==false?st.temp:.2;
    const sp=(.04+st.temp*.12)*(pbP.visible!==false?1:0)*st.rate;mols.forEach(m=>{m.position.addScaledVector(m.userData.v,sp*dt);['x','z'].forEach(a=>{if(Math.abs(m.position[a])>.068){m.position[a]=Math.sign(m.position[a])*.068;m.userData.v[a]*=-1}});if(m.position.y<.013||m.position.y>.147){m.position.y=K.clamp(m.position.y,.013,.147);m.userData.v.y*=-1}});
-   puffs.forEach(pf=>{pf.visible=okB&&(gas?st.mix>.1:hotNow);pf.userData.k=(pf.userData.k+dt*.25)%1;const k=pf.userData.k;pf.position.set(-.08+Math.sin(k*7+t)*.03,.12+.2+k*.14,0);pf.scale.setScalar(.6+k*2)})}}}
+   puffs.forEach(pf=>{pf.visible=st.live&&okB&&(gas?st.mix>.1:hotNow);pf.userData.k=(pf.userData.k+dt*.25)%1;const k=pf.userData.k;pf.position.set(-.08+Math.sin(k*7+t)*.03,.12+.2+k*.14,0);pf.scale.setScalar(.6+k*2)})}}}
 };

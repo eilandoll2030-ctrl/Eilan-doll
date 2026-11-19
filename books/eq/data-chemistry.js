@@ -275,8 +275,8 @@ EQ.add('cat',`
 `);
 
 EQ.add('crx',`
-البناء الضوئي|Photosynthesis|6CO₂ + 6H₂O → C₆H₁₂O₆ + 6O₂||||النباتات تصنع السكر والأكسجين.|Plants make sugar and oxygen.|plant
-التنفس الخلوي|Cellular respiration|C₆H₁₂O₆ + 6O₂ → 6CO₂ + 6H₂O + طاقة||||كيف تحصل خلايانا على الطاقة.|How our cells get energy.|plant
+البناء الضوئي|Photosynthesis|6CO₂ + 6H₂O → C₆H₁₂O₆ + 6O₂||||النباتات تصنع السكر والأكسجين.|Plants make sugar and oxygen.
+التنفس الخلوي|Cellular respiration|C₆H₁₂O₆ + 6O₂ → 6CO₂ + 6H₂O + طاقة||||كيف تحصل خلايانا على الطاقة.|How our cells get energy.
 احتراق الميثان|Combustion of methane|CH₄ + 2O₂ → CO₂ + 2H₂O||||غاز الطبخ.|Cooking gas.
 احتراق البروبان|Combustion of propane|C₃H₈ + 5O₂ → 3CO₂ + 4H₂O||||وقود الشواء.|Barbecue fuel.
 احتراق الأوكتان|Combustion of octane|2C₈H₁₈ + 25O₂ → 16CO₂ + 18H₂O||||البنزين في السيارات.|Petrol in cars.
@@ -300,7 +300,7 @@ EQ.add('crx',`
 صناعة الأمونيا (هابر)|Ammonia synthesis (Haber)|N₂ + 3H₂ ⇌ 2NH₃||||أسمدة تطعم مليارات البشر.|Fertiliser feeding billions.
 عملية التلامس|Contact process|2SO₂ + O₂ ⇌ 2SO₃||||صناعة حمض الكبريتيك.|Making sulfuric acid.
 عملية أوستفالد|Ostwald process|4NH₃ + 5O₂ → 4NO + 6H₂O||||صناعة حمض النيتريك.|Making nitric acid.
-التخمر|Fermentation|C₆H₁₂O₆ → 2C₂H₅OH + 2CO₂||||الخميرة تنفخ العجين.|Yeast makes dough rise.|plant
+التخمر|Fermentation|C₆H₁₂O₆ → 2C₂H₅OH + 2CO₂||||الخميرة تنفخ العجين.|Yeast makes dough rise.
 التصبن|Saponification|دهن + 3NaOH → غليسرول + 3 صابون||||صناعة الصابون.|Making soap.
 الثيرميت|Thermite reaction|2Al + Fe₂O₃ → Al₂O₃ + 2Fe||||حرارة عالية جدًا للحام السكك.|Very hot; welds rail tracks.
 احتراق المغنيسيوم|Burning magnesium|2Mg + O₂ → 2MgO||||ضوء أبيض ساطع.|A brilliant white light.

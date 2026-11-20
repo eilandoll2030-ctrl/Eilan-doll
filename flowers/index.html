@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="ar" dir="rtl" data-lang="ar">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>دار الورد — باقات مربوطة باليد</title>
+<meta name="description" content="دار الورد: باقات موسمية مربوطة باليد، زهور أعراس وتقديم واجب. تُصنع صباح يومها وتوصل بنفس اليوم داخل الدمام.">
+<meta name="theme-color" content="#08130D">
+<link rel="canonical" href="/flowers/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2308130D'/%3E%3Cpath d='M16 6c2.8 3.3 2.8 7.2 0 10.5C13.2 13.2 13.2 9.3 16 6z' fill='%23E0B454'/%3E%3Cpath d='M16 26V16m0 0c-4 .4-6.4 3-6.8 6.6M16 16c4 .4 6.4 3 6.8 6.6' stroke='%23F3EAD6' stroke-width='1.4' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:title" content="دار الورد — باقات مربوطة باليد">
+<meta property="og:description" content="زهور موسمية تُربط باليد عند الطاولة الخشبية، وتوصل بنفس اليوم.">
+<meta property="og:image" content="assets/img/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&family=Amiri:ital,wght@0,400;0,700;1,400&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="assets/img/film-1-1600.webp" media="(min-width:900px)">
+<link rel="preload" as="image" href="assets/img/film-1-900.webp" media="(max-width:899px)">
+<link rel="stylesheet" href="styles.css">
+<noscript><style>#veil{display:none}</style></noscript>
+</head>
+<body>
+
+<!-- ============ intro veil ============ -->
+<div id="veil" aria-hidden="true">
+  <div class="veil-in">
+    <svg class="veil-mark" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 5c3 3.5 3 7.6 0 11.2C13 12.6 13 8.5 16 5z" fill="#E0B454"/><path d="M16 28V16m0 0c-4.3.4-6.9 3.2-7.3 7.1M16 16c4.3.4 6.9 3.2 7.3 7.1" stroke="#F3EAD6" stroke-width="1.3" fill="none" stroke-linecap="round"/></svg>
+    <div class="veil-name">دار الورد</div>
+    <div class="veil-bar"><i></i></div>
+  </div>
+</div>
+
+<!-- ============ header ============ -->
+<header class="site-head" id="head">
+  <div class="wrap head-in">
+    <a class="brand" href="#top" aria-label="دار الورد">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 4.5c3.2 3.7 3.2 8.1 0 11.9-3.2-3.8-3.2-8.2 0-11.9z" fill="#E0B454"/><path d="M16 29V15.6m0 0c-4.6.4-7.4 3.4-7.8 7.6M16 15.6c4.6.4 7.4 3.4 7.8 7.6" stroke="#F3EAD6" stroke-width="1.3" fill="none" stroke-linecap="round"/></svg>
+      <span class="brand-t"><b data-i18n="brand">دار الورد</b><span>DAR AL-WARD · DAMMAM</span></span>
+    </a>
+    <nav class="nav" id="nav" aria-label="main">
+      <a href="#bouquets" data-i18n="nav.bouquets">الباقات</a>
+      <a href="#build" data-i18n="nav.build">ركّب باقتك</a>
+      <a href="#weddings" data-i18n="nav.weddings">الأعراس</a>
+      <a href="#sympathy" data-i18n="nav.sympathy">واجب العزاء</a>
+      <a href="#shop" data-i18n="nav.shop">المحل</a>
+    </nav>
+    <div class="head-tools">
+      <button class="lang" id="langBtn" type="button" aria-label="Switch language">
+        <b id="langNow">ع</b><span aria-hidden="true">/</span><span id="langAlt">EN</span>
+      </button>
+      <a class="btn btn-sm" href="#order" data-i18n="nav.order">اطلب</a>
+    </div>
+    <button class="burger" id="burger" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav"><i></i></button>
+  </div>
+</header>
+
+<!-- ============ section rail ============ -->
+<nav class="rail" id="rail" aria-hidden="true"></nav>
+
+<main id="top">
+
+  <div class="divider" aria-hidden="true"></div>
+
+  <!-- ============ hero ============ -->
+  <section class="hero" id="hero" aria-labelledby="hero-h">
+    <div class="hero-media">
+      <img id="heroImg" src="assets/img/film-4-1600.webp" alt="" fetchpriority="high" width="1600" height="995">
+    </div>
+    <canvas id="petals" aria-hidden="true"></canvas>
+    <canvas id="heroCube" aria-hidden="true"></canvas>
+    <div class="hero-in wrap">
+      <div class="hero-copy">
+        <p class="eyebrow" data-i18n="hero.eyebrow">زهور موسمية · الدمام</p>
+        <h1 class="display" id="hero-h" data-i18n-html="hero.h1">زهور تُجمع <em>باليد</em>.</h1>
+        <p class="lead" data-i18n="hero.lead">باقات موسمية مربوطة باليد، وزهور أعراس وتقديم واجب. كل باقة تُصنع صباح يومها وتوصل بنفس اليوم.</p>
+        <div class="hero-cta">
+          <a class="btn" href="#build" data-i18n="hero.cta1">ركّب باقتك</a>
+          <a class="btn btn-ghost" href="#film" data-i18n="hero.cta2">شوف كيف تُصنع</a>
+        </div>
+        <div class="hero-meta">
+          <span data-i18n="hero.meta1"><i></i> تُصنع صباحًا</span>
+          <span data-i18n="hero.meta2"><i></i> توصيل نفس اليوم</span>
+          <span data-i18n="hero.meta3"><i></i> من ٢٨ ريال</span>
+        </div>
+      </div>
+    </div>
+    <a class="scroll-cue" href="#film" aria-hidden="true"><span data-i18n="cue">مرّر</span><i></i></a>
+  </section>
+
+  <!-- ============ band ============ -->
+  <div class="band" aria-hidden="true">
+    <div class="band-track">
+      <span data-i18n="band.1">ورد الحديقة</span><span data-i18n="band.2">أنيمون أبيض</span><span data-i18n="band.3">قطيفة برتقالية</span><span data-i18n="band.4">أوكالبتوس</span><span data-i18n="band.5">عشب الريش</span><span data-i18n="band.6">من الموسم</span>
+      <span data-i18n="band.1">ورد الحديقة</span><span data-i18n="band.2">أنيمون أبيض</span><span data-i18n="band.3">قطيفة برتقالية</span><span data-i18n="band.4">أوكالبتوس</span><span data-i18n="band.5">عشب الريش</span><span data-i18n="band.6">من الموسم</span>
+    </div>
+  </div>
+
+  <!-- ============ the film ============ -->
+  <section class="film" id="film" aria-labelledby="film-h">
+    <h2 class="sr-only" id="film-h" data-i18n="film.h">كيف تُصنع الباقة</h2>
+    <div class="film-track" id="filmTrack">
+      <div class="film-stage" id="filmStage">
+        <div class="film-frames" id="filmFrames">
+          <figure class="film-frame is-on"><img data-frame="1" src="assets/img/film-1-1600.webp" srcset="assets/img/film-1-900.webp 900w, assets/img/film-1-1600.webp 1312w" sizes="100vw" alt="" width="1312" height="816" decoding="async"></figure>
+          <figure class="film-frame"><img data-frame="2" src="assets/img/film-2-1600.webp" srcset="assets/img/film-2-900.webp 900w, assets/img/film-2-1600.webp 1312w" sizes="100vw" alt="" width="1312" height="816" decoding="async"></figure>
+          <figure class="film-frame"><img data-frame="3" src="assets/img/film-3-1600.webp" srcset="assets/img/film-3-900.webp 900w, assets/img/film-3-1600.webp 1312w" sizes="100vw" alt="" width="1312" height="816" decoding="async"></figure>
+          <figure class="film-frame"><img data-frame="4" src="assets/img/film-4-1600.webp" srcset="assets/img/film-4-900.webp 900w, assets/img/film-4-1600.webp 1312w" sizes="100vw" alt="" width="1312" height="816" decoding="async"></figure>
+        </div>
+
+        <div class="hotspots" id="hotspots">
+          <button class="hotspot" type="button" style="left:46%;top:47%" data-name="ورد الحديقة" data-i18n-name="hs.rose" aria-label="ورد الحديقة"><i></i></button>
+          <button class="hotspot" type="button" style="left:62%;top:40%" data-name="زامبيا" data-i18n-name="hs.zinnia" aria-label="زامبيا"><i></i></button>
+          <button class="hotspot" type="button" style="left:55%;top:58%" data-name="أنيمون أبيض" data-i18n-name="hs.anemone" aria-label="أنيمون أبيض"><i></i></button>
+          <button class="hotspot" type="button" style="left:38%;top:62%" data-name="أوكالبتوس" data-i18n-name="hs.eucalyptus" aria-label="أوكالبتوس"><i></i></button>
+        </div>
+
+        <div class="film-ui">
+          <p class="film-hint">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 4v12m0 0l-4-4m4 4l4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span data-i18n="film.hint">مرّر لتتقدّم خطوة</span>
+          </p>
+          <div class="wrap">
+            <div class="film-copy" id="filmCopy">
+              <article class="film-step is-on" data-step="1">
+                <span class="k" data-i18n="s1.k">٠١ · الجمع</span>
+                <h3 class="display" data-i18n="s1.h">ساقًا فوق ساق، بشكل حلزوني.</h3>
+                <p data-i18n="s1.p">كل ساق تتقاطع مع اللي قبلها عند نفس النقطة، فتنفتح الباقة كالمروحة وتقف على رأسها لحالها.</p>
+              </article>
+              <article class="film-step" data-step="2">
+                <span class="k" data-i18n="s2.k">٠٢ · الترشيح</span>
+                <h3 class="display" data-i18n="s2.h">نضيف ونشيل، حتى تتوازن.</h3>
+                <p data-i18n="s2.p">نختار من اللي وصل الصباح فقط: ورد الحديقة، أنيمون، زامبيا، أوكالبتوس وعشب الريش. حطّ إصبعك على أي زهرة تعرف اسمها.</p>
+              </article>
+              <article class="film-step" data-step="3">
+                <span class="k" data-i18n="s3.k">٠٣ · اللف والربط</span>
+                <h3 class="display" data-i18n="s3.h">ورق، ثم حرير.</h3>
+                <p data-i18n="s3.p">ورق كرافت ومناديل باهتة، تُلف حول السيقان وتُربط بشريط حرير باليد. اختر لون الشريط.</p>
+                <div class="ribbons" id="ribbonsFilm" role="group" aria-label="ribbon"></div>
+              </article>
+              <article class="film-step" data-step="4">
+                <span class="k" data-i18n="s4.k">٠٤ · جاهزة</span>
+                <h3 class="display" data-i18n="s4.h">جاهزة قبل الساعة ٩.</h3>
+                <p data-i18n="s4.p">تُقص وتُشرب ماء وتُلفّ في نفس الصباح. تكتب البطاقة ونحطها بين الزهور.</p>
+                <div class="hero-cta" style="margin-top:24px">
+                  <a class="btn" href="#order" data-i18n="s4.cta">اطلب هذي الباقة</a>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <div class="film-dots" id="filmDots" role="tablist" aria-label="steps"></div>
+        <div class="film-count" aria-hidden="true"><b id="filmNum">01</b><em>/</em><span><span id="filmTotal">04</span> <span data-i18n="film.count">الباقة</span></span></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider" aria-hidden="true"></div>
+
+  <!-- ============ bouquets ============ -->
+  <section class="bouquets section" id="bouquets" aria-labelledby="bq-h">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="rv">
+          <p class="eyebrow" data-i18n="bq.eyebrow">الباقات</p>
+          <h2 class="display" id="bq-h" style="margin-top:14px" data-i18n="bq.h">اختر باقة.</h2>
+        </div>
+        <p class="section-note rv rv-d1" data-i18n="bq.note">كل باقة تُصنع صباح يومها من اللي وصل المحل، فالمزيج يتغير شوي مع الموسم. الأسعار أمثلة.</p>
+      </div>
+      <div class="chips rv" id="chips" role="group" aria-label="filter"></div>
+      <div class="grid-bq" id="bqGrid" style="margin-top:26px"></div>
+    </div>
+  </section>
+
+  <div class="divider" aria-hidden="true"></div>
+
+  <!-- ============ builder ============ -->
+  <section class="builder section" id="build" aria-labelledby="build-h">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="rv">
+          <p class="eyebrow" data-i18n="build.eyebrow">ركّب باقتك</p>
+          <h2 class="display" id="build-h" style="margin-top:14px" data-i18n="build.h">اختر السيقان، وشوفها تتجمّع.</h2>
+        </div>
+      </div>
+      <div class="builder-grid">
+        <div class="stage-3d rv" id="stage3d">
+          <span class="stage-label" data-i18n="build.stage">معاينة حيّة</span>
+          <div id="bouquet" aria-hidden="true"></div>
+          <div class="stage-total"><b id="stageTotal">٠</b><span data-i18n="build.total">الإجمالي</span></div>
+        </div>
+        <div class="builder-panel rv rv-d1">
+          <div class="panel-block">
+            <div class="panel-title"><b data-i18n="build.season">الموسم</b><span data-i18n="build.season.note">يغيّر المتوفر</span></div>
+            <div class="seasons" id="seasons" role="group" aria-label="season"></div>
+          </div>
+          <div class="panel-block">
+            <div class="panel-title"><b data-i18n="build.stems">السيقان</b><span id="stemCount">٠ ساق</span></div>
+            <div class="stems" id="stems"></div>
+          </div>
+          <div class="panel-block">
+            <div class="panel-title"><b data-i18n="build.ribbon">الشريط</b></div>
+            <div class="ribbons" id="ribbons" role="group" aria-label="ribbon"></div>
+          </div>
+          <div class="panel-block summary" id="summary"></div>
+          <a class="btn" href="#order" data-i18n="build.order">اطلب هذي الباقة</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider" aria-hidden="true"></div>
+
+  <!-- ============ weddings ============ -->
+  <section class="weddings section" id="weddings" aria-labelledby="wed-h">
+    <div class="wrap split">
+      <div class="rv">
+        <p class="eyebrow" data-i18n="wed.eyebrow">الأعراس</p>
+        <h2 class="display" id="wed-h" data-i18n="wed.h">زهور لليوم، وللطاولات بعد.</h2>
+        <p class="lead" data-i18n="wed.p">باقات وتفاصيل صدرية وتنسيقات منخفضة للطاولات الطويلة، مزروعة ومُختارة للموسم اللي تتزوجون فيه. نبدأ بجلسة ونمشي المكان سوا.</p>
+        <ul class="checks">
+          <li data-i18n="wed.l1">الباقة والتفاصيل الصدرية</li>
+          <li data-i18n="wed.l2">الطاولات والمداخل والممر</li>
+          <li data-i18n="wed.l3">تركيب صباح اليوم، وإزالة بعدها</li>
+        </ul>
+        <div class="split-actions">
+          <a class="btn" href="#order" data-i18n="wed.cta">تكلم معنا عن يومكم</a>
+        </div>
+      </div>
+      <figure class="split-media rv rv-d1">
+        <img src="assets/img/wedding-1200.webp" srcset="assets/img/wedding-640.webp 640w, assets/img/wedding-1200.webp 1200w" sizes="(max-width:900px) 92vw, 46vw" alt="طاولة طويلة في حظيرة خشبية، عليها تنسيقات ورد أبيض ووردي وأوكالبتوس وشموع" loading="lazy" width="1200" height="746">
+        <figcaption data-i18n="wed.cap">طاولة بتنسيقات منخفضة، وشموع بين الزهور.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <div class="divider" aria-hidden="true"></div>
+
+  <!-- ============ sympathy ============ -->
+  <section class="sympathy section" id="sympathy" aria-labelledby="sym-h">
+    <div class="wrap split">
+      <figure class="split-media portrait rv" style="order:2">
+        <img src="assets/img/sympathy-900.webp" srcset="assets/img/sympathy-520.webp 520w, assets/img/sympathy-900.webp 900w" sizes="(max-width:900px) 92vw, 38vw" alt="إكليل ورد أبيض وأوكالبتوس بشريط ذهبي على حجر فاتح" loading="lazy" width="900" height="1117">
+      </figure>
+      <div class="rv rv-d1" style="order:1">
+        <p class="eyebrow" data-i18n="sym.eyebrow">واجب العزاء</p>
+        <h2 class="display" id="sym-h" data-i18n="sym.h">شي بسيط، مصنوع بعناية.</h2>
+        <p class="lead" data-i18n="sym.p">أكاليل وروابط وباقات باللون الأبيض والأخضر، تودي لبيت أو مسجد أو مكتب جنائزي. لو تحب تتكلم فيها، اتصل بالمحل ونساعدك.</p>
+        <div class="split-actions">
+          <a class="btn" href="#order" data-i18n="sym.cta">اطلب زهور العزاء</a>
+          <a class="link-u" href="tel:+966500000000"><span class="tel">056 000 0000</span></a>
+        </div>
+        <p class="small" style="margin-top:14px" data-i18n="sym.note">رقم تجريبي للعرض.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider" aria-hidden="true"></div>
+
+  <!-- ============ shop ============ -->
+  <section class="shop section" id="shop" aria-labelledby="shop-h">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="rv">
+          <p class="eyebrow" data-i18n="shop.eyebrow">المحل</p>
+          <h2 class="display" id="shop-h" style="margin-top:14px" data-i18n="shop.h">نفتح بدري، على الشارع.</h2>
+        </div>
+        <p class="section-note rv rv-d1" data-i18n="shop.note">دلوات من اللي وصل الصباح، وطاولة تنربط عليها الباقات قدامك.</p>
+      </div>
+      <figure class="shop-media rv">
+        <img src="assets/img/shop-1200.webp" srcset="assets/img/shop-640.webp 640w, assets/img/shop-1200.webp 1200w" sizes="92vw" alt="داخل محل ورد: جدار أخضر غامق، دلوات زهور وأعشاب معلّقة، وطاولة خشبية" loading="lazy" width="1200" height="746">
+      </figure>
+      <div class="hours rv rv-d1">
+        <h3 data-i18n="shop.hours">الدوام</h3>
+        <dl>
+          <div><dt data-i18n="shop.d1">الأحد – الخميس</dt><dd>٨:٠٠ ص – ٦:٠٠ م</dd></div>
+          <div><dt data-i18n="shop.d2">السبت</dt><dd>٨:٠٠ ص – ٤:٠٠ م</dd></div>
+          <div><dt data-i18n="shop.d3">الجمعة</dt><dd data-i18n="shop.closed">مغلق</dd></div>
+        </dl>
+        <p class="addr">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 21s7-6.1 7-11a7 7 0 10-14 0c0 4.9 7 11 7 11z" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.6"/></svg>
+          <span data-i18n="shop.addr">شارع الأمير محمد بن فهد، الدمام — عنوان تجريبي للعرض</span>
+        </p>
+        <p class="small" style="margin-top:10px" data-i18n="shop.note2">الأوقات والعناوين أمثلة، تُستبدل بأوقات المحل الحقيقية.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider" aria-hidden="true"></div>
+
+  <!-- ============ order ============ -->
+  <section class="order section" id="order" aria-labelledby="order-h">
+    <canvas id="petals2" aria-hidden="true"></canvas>
+    <div class="wrap order-grid">
+      <div class="rv">
+        <p class="eyebrow" data-i18n="order.eyebrow">الطلب</p>
+        <h2 class="display" id="order-h" data-i18n="order.h">ابعث ورد.</h2>
+        <p class="lead" data-i18n="order.p">قل لنا وين ومتى. اطلب قبل الساعة ١١، وتطلع باقة الصباح نفس اليوم.</p>
+        <ul class="order-list">
+          <li><b>٠١</b><span data-i18n="order.l1">تختار الباقة أو تركّب وحدة بنفسك</span></li>
+          <li><b>٠٢</b><span data-i18n="order.l2">نأكد معك بالإيميل أو الواتساب قبل ما نبدأ</span></li>
+          <li><b>٠٣</b><span data-i18n="order.l3">نكتب البطاقة ونحطها بين الزهور</span></li>
+          <li><b>٠٤</b><span data-i18n="order.l4">توصيل باليد داخل الدمام</span></li>
+        </ul>
+      </div>
+      <form class="order-form rv rv-d1" id="orderForm" novalidate>
+        <div class="f-row">
+          <div class="field">
+            <label for="fName" data-i18n="f.name">الاسم</label>
+            <input id="fName" name="name" required autocomplete="name" placeholder="اسمك" data-i18n-ph="f.name.ph">
+          </div>
+          <div class="field">
+            <label for="fPhone" data-i18n="f.phone">الجوال</label>
+            <input id="fPhone" name="phone" required inputmode="tel" autocomplete="tel" placeholder="05x xxx xxxx" data-i18n-ph="f.phone.ph">
+          </div>
+        </div>
+        <div class="f-row">
+          <div class="field">
+            <label for="fBq" data-i18n="f.bouquet">الباقة</label>
+            <select id="fBq" name="bouquet"></select>
+          </div>
+          <div class="field">
+            <label for="fDate" data-i18n="f.date">التاريخ</label>
+            <select id="fDate" name="date"></select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="fCity" data-i18n="f.addr">العنوان</label>
+          <input id="fCity" name="addr" placeholder="الحي، الشارع، رقم المبنى" data-i18n-ph="f.addr.ph">
+        </div>
+        <div class="field">
+          <label for="fNote" data-i18n="f.note">البطاقة أو ملاحظة</label>
+          <textarea id="fNote" name="note" placeholder="اكتب رسالة البطاقة…" data-i18n-ph="f.note.ph"></textarea>
+        </div>
+        <div class="form-note" data-i18n-html="f.terms">بالإرسال توافق أن نتواصل معك لتأكيد الطلب. ما نأخذ دفع أونلاين؛ الدفع عند الاستلام أو تحويل.</div>
+        <div class="form-alert" id="formAlert" role="status"></div>
+        <div class="wa-note" id="waNote">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 20l1.3-3.9A8 8 0 1112 20a8 8 0 01-3.8-1L4 20z" stroke-linejoin="round"/><path d="M9 9.5c0 3 2.5 5.5 5.5 5.5" stroke-linecap="round"/></svg>
+          <span data-i18n="f.wa">ينفتح واتساب برسالة جاهزة ترسلها بنفسك.</span>
+        </div>
+        <button class="btn" type="submit" data-i18n="f.send">أرسل الطلب</button>
+        <p class="form-note" id="formNote" data-i18n="f.demo">نموذج تجريبي: ما يرسل بياناتك لأي مكان. للحقيقي نربطه بواتساب أو إيميل المحل.</p>
+      </form>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============ footer ============ -->
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="foot-top">
+      <div class="foot-brand">
+        <a class="brand" href="#top" aria-label="دار الورد">
+          <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 4.5c3.2 3.7 3.2 8.1 0 11.9-3.2-3.8-3.2-8.2 0-11.9z" fill="#E0B454"/><path d="M16 29V15.6m0 0c-4.6.4-7.4 3.4-7.8 7.6M16 15.6c4.6.4 7.4 3.4 7.8 7.6" stroke="#F3EAD6" stroke-width="1.3" fill="none" stroke-linecap="round"/></svg>
+          <span class="brand-t"><b data-i18n="brand">دار الورد</b><span>DAR AL-WARD</span></span>
+        </a>
+        <p data-i18n="foot.p">باقات مربوطة باليد من اللي في الموسم. تُصنع صباح يومها، وتوصل بنفس اليوم داخل الدمام.</p>
+      </div>
+      <div class="foot-col">
+        <h4 data-i18n="foot.browse">تصفح</h4>
+        <a href="#bouquets" data-i18n="nav.bouquets">الباقات</a>
+        <a href="#build" data-i18n="nav.build">ركّب باقتك</a>
+        <a href="#weddings" data-i18n="nav.weddings">الأعراس</a>
+        <a href="#sympathy" data-i18n="nav.sympathy">واجب العزاء</a>
+      </div>
+      <div class="foot-col">
+        <h4 data-i18n="foot.help">مساعده</h4>
+        <a href="#order" data-i18n="nav.order">اطلب</a>
+        <a href="#shop" data-i18n="nav.shop">المحل والدوام</a>
+        <a href="tel:+966500000000">056 000 0000</a>
+      </div>
+      <div class="foot-col">
+        <h4 data-i18n="foot.follow">تابعنا</h4>
+        <a href="#" data-i18n="foot.ig">إنستقرام</a>
+        <a href="#" data-i18n="foot.wa">واتساب</a>
+      </div>
+    </div>
+    <div class="foot-bot">
+      <span data-i18n="foot.rights">© ٢٠٢٦ دار الورد. الأسعار والعناوين أمثلة للعرض.</span>
+      <a class="eilan" href="../index.html">
+        <svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="22" fill="#0E0E0A" stroke="rgba(243,234,214,.2)"/><g><rect x="16" y="30" width="18" height="18" rx="5" fill="#EBDDB0"/><rect x="38" y="30" width="18" height="18" rx="5" fill="#7FAA8A"/><rect x="16" y="52" width="18" height="18" rx="5" fill="#3E7A55"/><rect x="38" y="52" width="18" height="18" rx="5" fill="#4A2682"/><rect x="60" y="52" width="18" height="18" rx="5" fill="#2F5E42"/><rect x="16" y="74" width="18" height="18" rx="5" fill="#2F5E42" opacity=".85"/><rect x="60" y="10" width="18" height="18" rx="5" fill="#E0B454"/></g></svg>
+        <span data-i18n="foot.by">من إيلان دول</span>
+      </a>
+    </div>
+  </div>
+</footer>
+
+<button class="to-top" id="toTop" type="button" aria-label="Top">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 20V5m0 0l-6 6m6-6l6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</button>
+
+<script src="app.js" defer></script>
+</body>
+</html>

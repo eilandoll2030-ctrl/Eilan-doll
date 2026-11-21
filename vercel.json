@@ -24,12 +24,5 @@
         }
       ]
     }
-  ],
-  "redirects": [
-    {
-      "source": "/",
-      "destination": "/eilantube-site-preview.html",
-      "permanent": false
-    }
   ]
 }

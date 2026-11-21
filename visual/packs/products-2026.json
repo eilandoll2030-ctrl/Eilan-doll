@@ -1,0 +1,33 @@
+{
+  "products": [
+    {"id": "power-bank-eilan", "name": "شاحن Power Bank إيلان دول", "price": 89, "category": "عروض", "desc": "شاحن محمول بتصميم Spatial Sound (3D Scene، Product Display، حركة سائلة) - نيون/سايبربانك/إيلان", "style": "spatial-sound"},
+    {"id": "cyber-plan-2026", "name": "مخطط سايبر 2026", "price": 49, "category": "عروض", "desc": "خطة تطوير رقمية متكاملة لعام 2026"},
+    {"id": "neon-bg-pack", "name": "حزمة خلفيات نيون", "price": 19, "category": "قوالب", "desc": "40 خلفية بدقة 4K للجوال والكمبيوتر"},
+    {"id": "eilan-avatar-kit", "name": "عدة أفاتار إيلان", "price": 35, "category": "عروض", "desc": "مجموعة صور شخصية رقمية"},
+    {"id": "focus-sounds", "name": "أصوات التركيز الدراسي", "price": 25, "category": "كتب", "desc": "12 مقطعاً صوتياً محيطياً"},
+    {"id": "notion-glitch-template", "name": "قالب نوشن جليتش", "price": 39, "category": "قوالب", "desc": "نظام حياة كامل على Notion"},
+    {"id": "procreate-neon-brushes", "name": "فرش بروكريت نيون", "price": 29, "category": "قوالب", "desc": "60 فرشاة توهج وجليتش"},
+    {"id": "cyber-arabic-fonts", "name": "خطوط عربية سايبر", "price": 45, "category": "قوالب", "desc": "5 خطوط عربية وإنجليزية مرخصة"},
+    {"id": "ui-basics-course", "name": "دورة أساسيات UI", "price": 79, "category": "عروض", "desc": "دورة عملية من 8 وحدات"},
+    {"id": "eilan-stickers", "name": "ملصقات إيلان الرقمية", "price": 15, "category": "عروض", "desc": "300 ملصق رقمي جاهز"},
+    {"id": "neon-quest-ticket", "name": "تذكرة Neon Quest", "price": 22, "category": "عروض", "desc": "تذكرة موسمية لتحديات وألغاز"},
+    {"id": "social-media-templates", "name": "قوالب سوشال ميديا", "price": 55, "category": "قوالب", "desc": "120 قالب انستقرام وتيك توك"},
+    {"id": "ai-commands-book", "name": "كتاب أوامر الذكاء الاصطناعي", "price": 30, "category": "كتب", "desc": "500 أمر احترافي (Prompt)"},
+    {"id": "digital-escape-room", "name": "غرفة الهروب الرقمية", "price": 18, "category": "عروض", "desc": "تجربة ألغاز تفاعلية جماعية"},
+    {"id": "neon-mind-session", "name": "جلسة Neon Mind", "price": 20, "category": "عروض", "desc": "تجربة صوتية-بصرية موجّهة"},
+    {"id": "coloring-book-interactive", "name": "دفتر التلوين التفاعلي", "price": 10, "category": "كتب", "desc": "كتاب تلوين رقمي"}
+  ],
+  "payment_methods": [
+    {"id": "mada", "name": "مادة", "icon": "💳"},
+    {"id": "apple_pay", "name": "أبل باي", "icon": "🍎"},
+    {"id": "stc_pay", "name": "STC Pay", "icon": "📱"},
+    {"id": "visa_master", "name": "فيزا / ماستركارد", "icon": "💳"},
+    {"id": "tabby_tamara", "name": "تابي / تمارا", "icon": "📦"}
+  ],
+  "legal_requirements": {
+    "document": "وثيقة عمل حر (سارية)",
+    "bank": "حساب بنكي تجاري (أو شخصي مرتبط)",
+    "sama": "بوابة الدفع مرخصة من SAMA",
+    "zatca": "فاتورة إلكترونية (إذا تجاوز الإيراد 375,000 ريال سنوياً)"
+  }
+}

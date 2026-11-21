@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#05040a">
+<title>🎁 — إيلان دول · EILAN DOLL</title>
+<link rel="icon" href="/favicon-96.png">
+<style>
+  html,body{margin:0;height:100%;background:#05040a;overflow:hidden;font-family:"Segoe UI",Tahoma,"PingFang SC","Hiragino Sans","Apple SD Gothic Neo","Noto Sans CJK SC",system-ui,sans-serif;color:#fff;-webkit-tap-highlight-color:transparent}
+  canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
+  #msg{position:fixed;left:0;right:0;bottom:8vh;text-align:center;opacity:0;transform:translateY(10px);transition:opacity 1.6s ease,transform 1.6s ease;pointer-events:none;padding:0 22px}
+  #msg.on{opacity:1;transform:none}
+  #msg .to{font-size:clamp(22px,5.4vw,40px);font-weight:800;text-shadow:0 0 18px currentColor}
+  #msg .note{font-size:clamp(14px,3.5vw,21px);opacity:.9;margin-top:8px;line-height:1.7}
+  #msg .from{font-size:clamp(12px,3vw,16px);opacity:.6;margin-top:6px}
+  #brand{position:fixed;bottom:max(10px,env(safe-area-inset-bottom));left:0;right:0;text-align:center;font-size:11px;letter-spacing:2px;opacity:.4;display:flex;gap:6px;justify-content:center;align-items:center}
+  #brand img{width:16px;height:16px}
+  #hint{position:fixed;top:max(14px,env(safe-area-inset-top));left:0;right:0;text-align:center;font-size:12px;opacity:0;transition:opacity 1s;pointer-events:none}
+  #open{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:radial-gradient(circle at 50% 45%,#1a1440,#05040a 70%);z-index:3;transition:opacity .8s;cursor:pointer}
+  #open .box{font-size:72px;animation:bob 1.8s ease-in-out infinite;filter:drop-shadow(0 0 24px #f5c24288)}
+  #open b{font-size:22px} #open span{font-size:13px;opacity:.6}
+  #qrb{position:fixed;left:max(12px,env(safe-area-inset-left));bottom:max(30px,env(safe-area-inset-bottom));width:40px;height:40px;border-radius:12px;border:1px solid #ffffff30;background:#ffffff14;color:#fff;font-size:18px;backdrop-filter:blur(8px);z-index:2;cursor:pointer;opacity:0;transition:opacity 1s}
+  #qrb.on{opacity:.85}
+  #qro{position:fixed;inset:0;background:#000c;backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;z-index:5;flex-direction:column;gap:12px;padding:20px}
+  #qro canvas{position:static;inset:auto;display:block;width:min(78vw,360px);height:min(78vw,360px);flex:none;border-radius:22px;box-shadow:0 0 50px #ffffff22}
+  #qro p{margin:0;font-size:14px;opacity:.85;text-align:center}
+  @keyframes bob{50%{transform:translateY(-10px) rotate(-4deg)}}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="open"><div class="box">🎁</div><b id="got"></b><span id="tap"></span></div>
+<div id="hint"></div>
+<div id="msg"><div class="to"></div><div class="note"></div><div class="from"></div></div>
+<button id="qrb" aria-label="QR">▦</button>
+<div id="qro"><canvas id="qrc"></canvas><p id="qrt"></p></div>
+<div id="brand"><img src="/assets/logo/eilan-icon.svg" alt="">إيلان دول · EILAN DOLL</div>
+<script src="i18n.js"></script>
+<script src="engine.js"></script>
+<script src="story.js"></script>
+<script src="engine3d.js"></script>
+<script src="qr.js"></script>
+<script>
+(function(){
+  const P=new URLSearchParams(location.search),I=EilanI18N,G=EilanGift,ST=EilanStory,E3=Eilan3D,ALL=Object.assign({},E3.D3,ST.STORIES,G.DESIGNS);
+  // new short links (?d=…) or the older readable ones (?g=…&to=…)
+  let o=P.get('d')?G.decode(P.get('d')):null;
+  if(!o)o={g:P.get('g'),w:P.get('w')||'',to:P.get('to')||'',m:P.get('m')||'',f:P.get('from')||'',c:P.get('c')||'',l:P.get('l')||'ar',k:P.get('k')||'w',s:P.get('s')||''};
+  const g=ALL[o.g]?o.g:'heart',D=ALL[g],isStory=!!D.story,is3d=!!E3.D3[g],l=I.ORDER.includes(o.l)?o.l:'ar';
+  document.documentElement.lang=l;document.documentElement.dir=I.RTL(l)?'rtl':'ltr';
+  const words=I.WORDS[D.wk]||I.WORDS.love;
+  const list=o.k==='m'?I.ORDER.map(x=>words[x]):o.k==='s'&&o.s?[o.s]:[o.w||words[l]];
+  const cfg={g,list,word:list[0],to:o.to||'',c:o.c||'',bare:P.get('bare')==='1',seek:+P.get('seek')||0};
+  document.getElementById('got').textContent=I.t('got',l);
+  document.getElementById('tap').textContent=I.t('tap',l);
+  document.getElementById('hint').textContent=I.t('replay',l);
+  const msg=document.getElementById('msg');
+  msg.querySelector('.to').textContent=o.to||'';
+  msg.querySelector('.note').textContent=o.m||'';
+  msg.querySelector('.from').textContent=o.f?('— '+o.f):'';
+  msg.querySelector('.to').style.color=(G.TINTS[o.c]||G.TINTS[D.tint]||['#fff'])[0];
+  const hint=document.getElementById('hint');
+  if(D.tap)cfg.onLit=()=>{hint.textContent=I.t('blow',l);hint.style.opacity=.85;};
+  if(cfg.bare){['msg','hint','brand'].forEach(id=>document.getElementById(id).style.display='none');}
+  else cfg.onFormed=()=>{msg.classList.add('on');hint.style.opacity=0;setTimeout(()=>{const h=hint;h.textContent=I.t('replay',l);h.style.opacity=.55;setTimeout(()=>h.style.opacity=0,3500);},1800);};
+  // the gift turns into its own QR code, in its own colours (tap ▦)
+  const qrb=document.getElementById('qrb'),qro=document.getElementById('qro');
+  if(!cfg.bare){setTimeout(()=>qrb.classList.add('on'),2500);
+    qrb.onclick=e=>{e.stopPropagation();const u=new URL(location.href);['auto','bare','seek'].forEach(k=>u.searchParams.delete(k));
+      const q=EilanQR.make(u.toString()),px=10,pad=4,c=document.getElementById('qrc');c.width=c.height=(q.size+pad*2)*px;const x=c.getContext('2d');
+      x.fillStyle='#ffffff';x.fillRect(0,0,c.width,c.height);const tc=(G.TINTS[o.c]||G.TINTS[D.tint]||['#0F6B44'])[0];
+      EilanQR.drawStyled(x,q,pad*px,pad*px,px,{main:tc,finder:'#1E44C8',accents:['#d6142c','#e8a400','#a27bff','#ff2f85']});
+      document.getElementById('qrt').textContent=I.t('scan',l);qro.style.display='flex';};
+    qro.onclick=()=>{qro.style.display='none';};}
+  let player=null;
+  const begin=()=>{player=(is3d?E3:isStory?ST:G).start(document.getElementById('c'),cfg);};
+  if(P.get('auto')==='1'||cfg.bare){document.getElementById('open').remove();begin();}
+  else document.getElementById('open').addEventListener('click',()=>{const e=document.getElementById('open');e.style.opacity=0;setTimeout(()=>e.remove(),800);begin();},{once:true});
+  addEventListener('resize',()=>msg.classList.remove('on'));
+  document.getElementById('c').addEventListener('click',()=>{if(player&&player.tap&&!player.formed()&&player.tap()){hint.style.opacity=0;return;}if(player&&player.formed()){msg.classList.remove('on');player.restart();}});
+})();
+</script>
+</body>
+</html>

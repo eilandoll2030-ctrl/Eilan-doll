@@ -14,7 +14,15 @@ FONTS = ROOT / "coloring" / "fonts"
 LOGO = re.search(r'const LOGO="(data:image/svg\+xml;base64,[^"]+)"', SRC).group(1)
 PAT = json.loads(re.search(r"const CUBE_PAT=(\{.*?\});", SRC).group(1))
 PAT.update(json.loads(re.search(r"const GZC_PAT=(\{.*?\});", SRC).group(1)))
-RAMP = ["#F6E3A8", "#E8B64A", "#B9CC6A", "#6DC27A", "#1FB36B"]
+RAMP = ["#FFD97A", "#FF8FB1", "#B48CFF", "#5B8CFF", "#3DDC97"]
+# كل بطاقة بلون مختلف: (خلفية فاتحة 1، خلفية فاتحة 2، لون التمييز، لون الحبر)
+FUN = [("#FFF3C9", "#FFE08A", "#E0A100", "#5A3D00"),
+       ("#FFE1EA", "#FFC2D4", "#E5487A", "#5C1530"),
+       ("#EDE3FF", "#D6C4FF", "#7B4FE0", "#2B1560"),
+       ("#DDEBFF", "#BED6FF", "#2F6BE8", "#0B1F5E"),
+       ("#D9F7E8", "#B4EED1", "#13A86B", "#07341F")]
+# القفا: ليلي بألوان الموقع، ويتغير لكل بطاقة
+NIGHT = [("#1E44C8", "#0B1F5E"), ("#4A2A8F", "#251147"), ("#0F6B44", "#07341F"), ("#7B2F7E", "#2A0F33"), ("#2F5BD8", "#251147")]
 AR_DIG = str.maketrans("0123456789", "٠١٢٣٤٥٦٧٨٩")
 
 
@@ -42,24 +50,26 @@ CSS = f"""
 @page{{size:297mm 210mm;margin:0}}
 *{{box-sizing:border-box;margin:0;padding:0}}
 html{{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
-body{{font-family:Cairo,Poppins,"Noto Color Emoji",sans-serif;color:#1F3A2B}}
-.pg{{width:297mm;height:210mm;position:relative;overflow:hidden;page-break-after:always;background:#FBF8F0}}
+body{{font-family:Cairo,Poppins,"Noto Color Emoji",sans-serif;color:#0B1F5E}}
+.pg{{width:297mm;height:210mm;position:relative;overflow:hidden;page-break-after:always;background:#FFFFFF}}
 .pg:last-child{{page-break-after:auto}}
 .lbl{{position:absolute;top:2.6mm;right:9mm;font-size:6.6pt;color:#9C9780;font-weight:700;letter-spacing:.2px}}
-.lbl b{{color:#B58A2E}}
+.lbl b{{color:#7B4FE0}}
 .cutv{{position:absolute;left:148.5mm;top:0;bottom:0;border-left:.5pt dashed #C9BE9C}}
 .cuth{{position:absolute;top:105mm;left:0;right:0;border-top:.5pt dashed #C9BE9C}}
 .sc{{position:absolute;font-size:9pt;color:#B9AE8E}}
 .slot{{position:absolute;width:148.5mm;height:105mm;padding:7mm}}
 .card{{width:100%;height:100%;border-radius:6mm;position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}}
-.front{{background:linear-gradient(160deg,#F6F1E3,#EAE2CB);border:.8pt solid #D9CFB4}}
-.backc{{background:linear-gradient(155deg,#2E6347,#16241B 70%);color:#F3ECDA}}
-.no{{position:absolute;top:4mm;right:4.5mm;width:9mm;height:9mm;border-radius:2.6mm;background:#2F5A3D;color:#F6F1E3;display:grid;place-items:center;font-weight:900;font-size:12pt;font-family:Poppins,Cairo}}
-.backc .no{{background:#E8B64A;color:#14150F}}
+.front{{background:linear-gradient(160deg,var(--b1),var(--b2));border:.8pt solid var(--ac)}}
+.front::after{{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle,rgba(255,255,255,.55) 1.1mm,transparent 1.2mm) 0 0/9mm 9mm;opacity:.5;mask:linear-gradient(135deg,#000,transparent 55%);-webkit-mask:linear-gradient(135deg,#000,transparent 55%)}}
+.front>*{{position:relative;z-index:1}}
+.backc{{background:radial-gradient(circle at 85% 15%,rgba(255,217,122,.25),transparent 40%),linear-gradient(155deg,var(--n1),var(--n2) 75%);color:#FFF8EA}}
+.no{{position:absolute;top:4mm;right:4.5mm;width:9mm;height:9mm;border-radius:2.6mm;background:var(--ac,#4A2A8F);color:#fff;display:grid;place-items:center;font-weight:900;font-size:12pt;font-family:Poppins,Cairo}}
+.backc .no{{background:#FFD97A;color:#251147}}
 .brand{{position:absolute;bottom:3.6mm;left:0;right:0;display:flex;align-items:center;justify-content:center;gap:1.6mm;font-family:Poppins;font-weight:800;font-size:6.4pt;letter-spacing:1.8px;color:#8E8A70}}
 .brand img{{width:4.6mm;height:4.6mm}}
-.backc .brand{{color:#A9BFA9}}
-.tl{{width:27mm;height:27mm;border-radius:6mm;background:#fff;border:.8pt solid #D9CFB4;box-shadow:0 1.4mm 0 #DCD2B6;display:grid;place-items:center;font-weight:900}}
+.backc .brand{{color:rgba(255,248,234,.7)}}
+.tl{{width:27mm;height:27mm;border-radius:6mm;background:#fff;border:1pt solid var(--ac);box-shadow:0 1.6mm 0 var(--ac);color:var(--ink);transform:rotate(var(--rt,0deg));display:grid;place-items:center;font-weight:900}}
 .cubes{{position:absolute;top:4.4mm;left:4.6mm;display:flex;gap:1.2mm}}.cubes i{{width:2.6mm;height:2.6mm;border-radius:.8mm;display:block}}
 """
 
@@ -100,26 +110,28 @@ def guess(lang):
         return f'<div class="tl" style="font-size:{fs}pt;font-family:{fam},\'Noto Color Emoji\'">{t}</div>'
 
     def front(i, q):
-        return f'''<div class="card front" dir="{'rtl' if ar else 'ltr'}">{cubes()}<div class="no">{num(i+1)}</div>
+        b1, b2, ac, ink = FUN[i % len(FUN)]
+        return f'''<div class="card front" dir="{'rtl' if ar else 'ltr'}" style="--b1:{b1};--b2:{b2};--ac:{ac};--ink:{ink};color:{ink}">{cubes()}<div class="no">{num(i+1)}</div>
 <div style="font-weight:900;font-size:15pt;margin-bottom:4mm;font-family:{fam}">{T['q']}</div>
-<div style="display:flex;align-items:center;gap:4mm">{tile(q[0])}<span style="font-size:22pt;font-weight:900;color:#B58A2E">+</span>{tile(q[1])}</div>
-<div style="font-size:22pt;font-weight:900;color:#2F5A3D;margin-top:3mm;font-family:{fam}">= {T['qq']}</div>{brand(T['game'])}</div>'''
+<div style="display:flex;align-items:center;gap:4mm"><div style="--rt:-4deg">{tile(q[0])}</div><span style="font-size:24pt;font-weight:900;color:{ac}">+</span><div style="--rt:4deg">{tile(q[1])}</div></div>
+<div style="font-size:24pt;font-weight:900;color:{ac};margin-top:3mm;font-family:{fam}">= {T['qq']}</div>{brand(T['game'])}</div>'''
 
     def backc(i, q):
         eq = q[2] or f"{q[0]} + {q[1]}"
-        return f'''<div class="card backc" dir="{'rtl' if ar else 'ltr'}"><div class="no">{num(i+1)}</div>
-<div style="font-family:Poppins;font-weight:800;letter-spacing:3px;font-size:7.5pt;color:#E8B64A">{T['sol'].upper() if not ar else T['sol']}</div>
+        n1, n2 = NIGHT[i % len(NIGHT)]
+        return f'''<div class="card backc" dir="{'rtl' if ar else 'ltr'}" style="--n1:{n1};--n2:{n2}"><div class="no">{num(i+1)}</div>
+<div style="font-family:Poppins;font-weight:800;letter-spacing:3px;font-size:7.5pt;color:#FFD97A">{T['sol'].upper() if not ar else T['sol']}</div>
 <div style="font-weight:900;font-size:30pt;line-height:1.2;font-family:{fam}">{q[3]}</div>
-<div style="font-size:10.5pt;color:#C9D8C3;margin-bottom:3.4mm;font-family:{fam},'Noto Color Emoji'">{eq}</div>
-<div style="background:rgba(243,236,218,.1);border:.6pt solid rgba(232,182,74,.45);border-radius:4mm;padding:2.6mm 5mm;max-width:105mm;font-size:9.6pt;line-height:1.55;font-family:{fam},'Noto Color Emoji'"><b style="color:#E8B64A">{T['win']}: </b>{q[4]}</div>{brand(T['game'])}</div>'''
+<div style="font-size:10.5pt;color:rgba(255,248,234,.75);margin-bottom:3.4mm;font-family:{fam},'Noto Color Emoji'">{eq}</div>
+<div style="background:rgba(243,236,218,.1);border:.6pt solid rgba(255,217,122,.55);border-radius:4mm;padding:2.6mm 5mm;max-width:105mm;font-size:9.6pt;line-height:1.55;font-family:{fam},'Noto Color Emoji'"><b style="color:#FFD97A">{T['win']}: </b>{q[4]}</div>{brand(T['game'])}</div>'''
 
-    rules_front = f'''<div class="card front" dir="{'rtl' if ar else 'ltr'}">{cubes()}<div style="font-weight:900;font-size:15pt;font-family:{fam}">{'طريقة اللعب' if ar else 'How to play'}</div>
+    rules_front = f'''<div class="card front" dir="{'rtl' if ar else 'ltr'}" style="--b1:#FFF3C9;--b2:#FFE08A;--ac:#E0A100;--ink:#5A3D00;color:#5A3D00">{cubes()}<div style="font-weight:900;font-size:15pt;font-family:{fam}">{'طريقة اللعب' if ar else 'How to play'}</div>
 <ol style="text-align:{'right' if ar else 'left'};font-size:9.4pt;line-height:1.75;padding-inline-start:5mm;margin-top:2mm;max-width:115mm;font-family:{fam}">
 {''.join(f'<li>{x}</li>' for x in (['المقدّم يمسك البطاقة: الوجه للاعبين، والقفا (الحل) له.','أسرع واحد يقول اسم البلد صح ياخذ البطاقة.','اللي جاوب صح ينفّذ «تحدي الفوز».','اللي يجمع بطاقات أكثر هو الفايز 🏆'] if ar else ['The host holds the card: front to the players, back (answer) to the host.','Fastest correct answer wins the card.','The winner does the fun reward.','Most cards wins 🏆']))}</ol>{brand(T['game'])}</div>'''
-    score_front = f'''<div class="card front" dir="{'rtl' if ar else 'ltr'}">{cubes()}<div style="font-weight:900;font-size:15pt;margin-bottom:2mm;font-family:{fam}">{'لوحة النقاط' if ar else 'Scoreboard'}</div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:2.4mm 6mm;width:110mm">{''.join(f'<div style="border-bottom:.6pt solid #C9BE9C;height:8.4mm;display:flex;align-items:flex-end;justify-content:space-between;font-size:8pt;color:#9C9780;font-family:{fam}"><span>{"الاسم" if ar else "Name"}</span><span>{"النقاط" if ar else "Pts"}</span></div>' for _ in range(8))}</div>{brand(T['game'])}</div>'''
-    plain_back = f'''<div class="card backc"><img src="{LOGO}" style="width:30mm;height:30mm"><div style="font-family:Poppins;font-weight:800;letter-spacing:3px;font-size:10pt;margin-top:2mm">EILAN DOLL</div>
-<div style="font-size:9.5pt;color:#C9D8C3;margin-top:1mm;font-family:Cairo">{'العبها أونلاين بمؤقّت وموسيقى — منطقة الترفيه في إيلان دول' if ar else 'Play it online with a timer & music — Eilan Doll fun zone'}</div></div>'''
+    score_front = f'''<div class="card front" dir="{'rtl' if ar else 'ltr'}" style="--b1:#DDEBFF;--b2:#BED6FF;--ac:#2F6BE8;--ink:#0B1F5E;color:#0B1F5E">{cubes()}<div style="font-weight:900;font-size:15pt;margin-bottom:2mm;font-family:{fam}">{'لوحة النقاط' if ar else 'Scoreboard'}</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:2.4mm 6mm;width:110mm">{''.join(f'<div style="border-bottom:.8pt solid #2F6BE8;height:8.4mm;display:flex;align-items:flex-end;justify-content:space-between;font-size:8pt;color:#2F6BE8;font-family:{fam}"><span>{"الاسم" if ar else "Name"}</span><span>{"النقاط" if ar else "Pts"}</span></div>' for _ in range(8))}</div>{brand(T['game'])}</div>'''
+    plain_back = f'''<div class="card backc" style="--n1:#4A2A8F;--n2:#0B1F5E"><img src="{LOGO}" style="width:30mm;height:30mm"><div style="font-family:Poppins;font-weight:800;letter-spacing:3px;font-size:10pt;margin-top:2mm">EILAN DOLL</div>
+<div style="font-size:9.5pt;color:rgba(255,248,234,.75);margin-top:1mm;font-family:Cairo">{'العبها أونلاين بمؤقّت وموسيقى — منطقة الترفيه في إيلان دول' if ar else 'Play it online with a timer & music — Eilan Doll fun zone'}</div></div>'''
 
     fronts = [front(i, q) for i, q in enumerate(Q)] + [rules_front, score_front]
     backs = [backc(i, q) for i, q in enumerate(Q)] + [plain_back, plain_back]
@@ -128,23 +140,23 @@ def guess(lang):
 
     # sheet 1: cover (front) + rules & print guide (back) — no cutting
     d = 'rtl' if ar else 'ltr'
-    cover = f'''<section class="pg" dir="{d}" style="background:radial-gradient(120% 90% at 50% 120%,#2E6347 0,#16241B 55%,#14150F 100%);color:#F3ECDA">
-<div class="lbl" style="color:#8FA28E">{lab(1, T['front'])}</div>
+    cover = f'''<section class="pg" dir="{d}" style="background:radial-gradient(60% 70% at 85% 10%,rgba(255,143,177,.35),transparent 60%),radial-gradient(60% 70% at 10% 100%,rgba(61,220,151,.3),transparent 60%),radial-gradient(70% 80% at 50% 50%,#1E44C8 0,#251147 60%,#07080C 100%);color:#FFF8EA">
+<div class="lbl" style="color:rgba(255,248,234,.6)">{lab(1, T['front'])}</div>
 <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:16mm;padding:0 20mm">
-<div>{cube('g-guess', 300)}</div>
-<div style="max-width:140mm"><div style="font-family:Poppins;font-weight:800;letter-spacing:4px;font-size:10pt;color:#E8B64A">EILAN GAMES · {'لعبة جَمعات' if ar else 'PARTY GAME'}</div>
+<div style="transform:rotate(-6deg);filter:drop-shadow(0 8mm 10mm rgba(0,0,0,.45))">{cube('g-guess', 300, '#FFF8EA')}</div>
+<div style="max-width:140mm"><div style="font-family:Poppins;font-weight:800;letter-spacing:4px;font-size:10pt;color:#FFD97A">EILAN GAMES · {'لعبة جَمعات' if ar else 'PARTY GAME'}</div>
 <div style="font-weight:900;font-size:58pt;line-height:1.1;font-family:{fam}">{T['title']}</div>
-<div style="font-size:15pt;color:#C9D8C3;margin:2mm 0 6mm;font-family:{fam}">{'طلّع اسم البلد من الإيموجي والحروف' if ar else 'Find the country from emojis & letters'}</div>
+<div style="font-size:15pt;color:rgba(255,248,234,.85);margin:2mm 0 6mm;font-family:{fam}">{'طلّع اسم البلد من الإيموجي والحروف' if ar else 'Find the country from emojis & letters'}</div>
 <div style="display:flex;gap:2.4mm;flex-wrap:wrap;font-size:10pt;font-weight:700;font-family:{fam}">
-{''.join(f'<span style="padding:1.6mm 4mm;border-radius:20mm;border:.6pt solid rgba(232,182,74,.5)">{x}</span>' for x in (['١٠ بطاقات','بطاقة القوانين','لوحة النقاط','🖨️ اطبع الوجهين'] if ar else ['10 cards','Rules card','Scoreboard','🖨️ Print both sides']))}</div></div></div>
-<div style="position:absolute;bottom:9mm;left:0;right:0;display:flex;justify-content:center;align-items:center;gap:2.4mm;font-family:Poppins;font-weight:800;letter-spacing:3px;font-size:9pt;color:#A9BFA9"><img src="{LOGO}" style="width:9mm;height:9mm">EILAN DOLL — THE DIGITAL WORLD</div></section>'''
+{''.join(f'<span style="padding:1.6mm 4mm;border-radius:20mm;background:rgba(255,255,255,.1);border:.6pt solid rgba(255,217,122,.6)">{x}</span>' for x in (['١٠ بطاقات','بطاقة القوانين','لوحة النقاط','🖨️ اطبع الوجهين'] if ar else ['10 cards','Rules card','Scoreboard','🖨️ Print both sides']))}</div></div></div>
+<div style="position:absolute;bottom:9mm;left:0;right:0;display:flex;justify-content:center;align-items:center;gap:2.4mm;font-family:Poppins;font-weight:800;letter-spacing:3px;font-size:9pt;color:rgba(255,248,234,.75)"><img src="{LOGO}" style="width:9mm;height:9mm">EILAN DOLL — THE DIGITAL WORLD</div></section>'''
     guide = f'''<section class="pg" dir="{d}"><div class="lbl">{lab(1, T['back'])}</div>
 <div style="position:absolute;inset:14mm 18mm;display:grid;grid-template-columns:1fr 1fr;gap:10mm;font-family:{fam}">
 <div><div style="font-weight:900;font-size:20pt;margin-bottom:4mm">{'🖨️ طريقة الطباعة' if ar else '🖨️ How to print'}</div>
 <ol style="font-size:11pt;line-height:1.95;padding-inline-start:6mm">{''.join(f'<li>{x}</li>' for x in (['ورق A4 — والأفضل ورق مقوّى (٢٠٠ جرام).','اختر: <b>الطباعة على الوجهين</b> · <b>القلب من الحافة القصيرة</b> (Flip on short edge).','الحجم الفعلي ١٠٠٪ — بدون «ملاءمة للصفحة».','في المكتبة؟ أعطهم الملف وقل: «وجهين، قلب من الحافة القصيرة».'] if ar else ['A4 paper — thick card (200gsm) is best.','Choose <b>Print on both sides</b> · <b>Flip on short edge</b>.','Actual size 100% — no "fit to page".','At a print shop: "double-sided, flip on short edge".']))}</ol></div>
 <div><div style="font-weight:900;font-size:20pt;margin-bottom:4mm">{'✂️ القص — قصّتين بس' if ar else '✂️ Cutting — just 2 cuts'}</div>
 <ol style="font-size:11pt;line-height:1.95;padding-inline-start:6mm">{''.join(f'<li>{x}</li>' for x in (['كل ورقة فيها ٤ بطاقات.','قص على الخط المنقّط بالطول، وبعدين بالعرض.','كل بطاقة رقمها مكتوب على الوجه والقفا — تأكد إنها متطابقة.','الورقة الأولى (هذي) ما تنقص — هي الغلاف.'] if ar else ['Each sheet has 4 cards.','Cut the dashed line down the middle, then across.','Each card has its number on both sides — check they match.','This first sheet is the cover — no cutting.']))}</ol>
-<div style="margin-top:6mm;display:flex;gap:4mm;align-items:center">{''.join(f'<div style="width:30mm;height:21mm;border-radius:2.4mm;border:.8pt dashed #B9AE8E;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;overflow:hidden">' + ''.join(f'<i style="border:.4pt dashed #C9BE9C;background:{bg}"></i>' for bg in ['#F1EAD6']*4) + '</div>' for _ in range(1))}
+<div style="margin-top:6mm;display:flex;gap:4mm;align-items:center">{''.join(f'<div style="width:30mm;height:21mm;border-radius:2.4mm;border:.8pt dashed #B9AE8E;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;overflow:hidden">' + ''.join(f'<i style="border:.4pt dashed #9DA8C8;background:{bg}"></i>' for bg in ['#FFE08A','#FFC2D4','#D6C4FF','#BED6FF']) + '</div>' for _ in range(1))}
 <span style="font-size:10pt;color:#6E6C5A">{'١ ورقة = ٤ بطاقات · خط بالطول + خط بالعرض' if ar else '1 sheet = 4 cards · one cut each way'}</span></div></div></div>
 <div style="position:absolute;bottom:9mm;left:0;right:0;text-align:center;font-size:10pt;color:#6E6C5A;font-family:{fam}">{'تبغونها على الشاشة؟ العبوها داخل موقع إيلان دول — منطقة الترفيه' if ar else 'Prefer a screen? Play it inside Eilan Doll — fun zone'}</div></section>'''
     pages = [cover, guide]

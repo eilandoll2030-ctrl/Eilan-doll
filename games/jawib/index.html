@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>جاوب غلط — إيلان دول</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&family=Lalezar&display=swap" rel="stylesheet">
+<style>
+:root{
+  --night:#07080C; --blue:#0B1F5E; --blue2:#1E44C8; --green:#07341F; --green2:#0F6B44;
+  --purple:#251147; --purple2:#4A2A8F; --mint:#D8FFE6; --gold:#E2B44B; --gold2:#FFD97A;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  font-family:'Tajawal',system-ui,sans-serif;color:var(--mint);overflow:hidden;
+  background:
+    radial-gradient(60% 50% at 80% 10%, rgba(74,42,143,.55), transparent 70%),
+    radial-gradient(50% 50% at 10% 90%, rgba(15,107,68,.5), transparent 70%),
+    radial-gradient(70% 60% at 50% 50%, rgba(11,31,94,.6), transparent 80%),
+    var(--night);
+}
+/* floating background cubes */
+.bg-cubes span{position:fixed;width:26px;height:26px;border-radius:6px;opacity:.18;animation:float 14s ease-in-out infinite;pointer-events:none}
+@keyframes float{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-40px) rotate(25deg)}}
+
+.screen{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;padding:24px}
+.screen.active{display:flex;animation:fade .5s ease}
+@keyframes fade{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:none}}
+
+.glass{
+  background:linear-gradient(145deg,rgba(255,255,255,.09),rgba(255,255,255,.02));
+  border:1px solid rgba(216,255,230,.16);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-radius:28px;box-shadow:0 20px 60px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.08);
+}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:.5px}
+.brand small{display:block;font-size:11px;opacity:.6;letter-spacing:2px;direction:ltr}
+.logo{width:44px;height:44px;filter:drop-shadow(0 4px 10px rgba(74,42,143,.6))}
+.logo .gc{animation:bob 2.6s ease-in-out infinite;transform-origin:center}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+
+.xbtn{position:fixed;top:16px;left:16px;z-index:20;width:44px;height:44px;border-radius:14px;border:1px solid rgba(216,255,230,.2);
+  background:rgba(7,8,12,.6);color:var(--mint);font-size:20px;cursor:pointer;backdrop-filter:blur(8px)}
+.trial{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);z-index:20;font-weight:700;font-size:14px;padding:8px 16px;border-radius:999px;
+  background:rgba(226,180,75,.18);border:1px solid rgba(255,217,122,.45);color:var(--gold2);white-space:nowrap}
+.topbar{padding-left:76px!important}
+/* START */
+.title{font-family:'Lalezar','Tajawal',sans-serif;font-size:clamp(64px,12vw,140px);line-height:1;
+  background:linear-gradient(180deg,var(--mint),#9fe9bd 60%,var(--gold2));-webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 6px 0 var(--purple2)) drop-shadow(0 12px 24px rgba(30,68,200,.5));margin:18px 0 6px}
+.sub{font-size:clamp(16px,2.2vw,22px);opacity:.85;margin-bottom:26px;text-align:center}
+.rules{padding:22px 28px;max-width:560px;width:100%;margin-bottom:26px}
+.rules h3{color:var(--gold2);margin-bottom:10px;font-size:20px}
+.rules li{list-style:none;padding:6px 0;font-size:17px;display:flex;gap:10px;align-items:flex-start}
+.rules li i{flex:0 0 14px;height:14px;margin-top:5px;border-radius:4px;background:linear-gradient(135deg,var(--green2),var(--blue2))}
+.row{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
+.btn{font-family:inherit;font-weight:900;font-size:19px;border:0;border-radius:18px;padding:16px 34px;cursor:pointer;color:var(--mint);
+  background:linear-gradient(135deg,var(--purple2),var(--blue2));box-shadow:0 8px 0 var(--purple),0 14px 30px rgba(30,68,200,.4);transition:transform .1s}
+.btn:active{transform:translateY(5px);box-shadow:0 3px 0 var(--purple)}
+.btn.green{background:linear-gradient(135deg,var(--green2),#14935d);box-shadow:0 8px 0 var(--green),0 14px 30px rgba(15,107,68,.4)}
+.btn.ghost{background:rgba(255,255,255,.07);box-shadow:0 6px 0 rgba(0,0,0,.4);border:1px solid rgba(216,255,230,.18)}
+.btn.gold{background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--night);box-shadow:0 8px 0 #8a6a1e}
+.opt{display:flex;gap:10px;align-items:center;margin-top:18px;font-size:16px;opacity:.9}
+.opt select{font-family:inherit;font-size:16px;background:var(--purple);color:var(--mint);border:1px solid var(--purple2);border-radius:10px;padding:6px 10px}
+
+/* GAME */
+.topbar{position:fixed;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;padding:16px 22px;z-index:5}
+.counter{font-weight:900;font-size:18px;padding:10px 18px;border-radius:999px}
+.progress{position:fixed;top:0;right:0;height:4px;background:linear-gradient(90deg,var(--gold2),var(--green2),var(--blue2));transition:width .4s;z-index:6}
+
+.stage{width:min(880px,94vw);display:flex;flex-direction:column;align-items:center;gap:22px;margin-top:40px}
+.card{position:relative;width:100%;aspect-ratio:16/9;max-height:56vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:30px;text-align:center;overflow:hidden}
+.card::before{content:"";position:absolute;inset:0;border-radius:28px;padding:2px;
+  background:linear-gradient(135deg,var(--purple2),transparent 40%,transparent 60%,var(--green2));
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
+.card.flip{animation:flip .55s ease}
+@keyframes flip{0%{transform:perspective(900px) rotateY(0)}50%{transform:perspective(900px) rotateY(90deg)}100%{transform:perspective(900px) rotateY(0)}}
+.tag{position:absolute;top:18px;right:20px;font-size:13px;font-weight:700;padding:6px 14px;border-radius:999px;
+  background:rgba(74,42,143,.35);border:1px solid rgba(216,255,230,.18)}
+.num{position:absolute;top:12px;left:22px;font-family:'Lalezar',sans-serif;font-size:54px;color:transparent;-webkit-text-stroke:1.5px rgba(216,255,230,.35)}
+.q{font-family:'Lalezar','Tajawal',sans-serif;font-size:clamp(34px,6.4vw,70px);line-height:1.25;color:#fff;
+  text-shadow:0 4px 0 var(--purple2),0 0 30px rgba(30,68,200,.6)}
+.hint{margin-top:16px;font-size:15px;opacity:0;transition:opacity .3s;background:rgba(7,52,31,.55);border:1px dashed rgba(216,255,230,.3);padding:8px 16px;border-radius:12px}
+.hint.show{opacity:.95}
+.sign{position:absolute;bottom:14px;left:0;right:0;display:flex;justify-content:center;align-items:center;gap:8px;font-size:12px;opacity:.55;letter-spacing:1px}
+.sign svg{width:18px;height:18px}
+
+.timer{position:absolute;bottom:16px;right:20px;width:64px;height:64px}
+.timer svg{transform:rotate(-90deg)}
+.timer b{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900}
+.boom{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Lalezar',sans-serif;font-size:clamp(40px,7vw,80px);
+  color:var(--gold2);background:rgba(7,8,12,.72);border-radius:28px;opacity:0;pointer-events:none;transition:opacity .2s}
+.boom.show{opacity:1}
+.boom.win{color:var(--mint);background:rgba(7,52,31,.82)}
+.cd{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;border-radius:28px;
+  background:radial-gradient(circle at 50% 45%,#1a0c36,#030407 75%);z-index:3}
+.cd.show{display:flex}
+.q.reveal{animation:reveal .35s ease}
+@keyframes reveal{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:none}}
+.cd small{font-size:22px;opacity:.8;margin-bottom:4px}
+.cd span{font-family:'Lalezar',sans-serif;font-size:clamp(90px,16vw,170px);line-height:1;color:var(--gold2);text-shadow:0 8px 0 var(--purple),0 0 40px rgba(255,217,122,.5)}
+.cd span.pop{animation:pop .9s ease}
+@keyframes pop{0%{transform:scale(1.8);opacity:0}30%{transform:scale(1);opacity:1}100%{transform:scale(.9);opacity:.9}}
+
+.score{display:flex;gap:14px;width:100%;justify-content:center}
+.team{display:flex;align-items:center;gap:12px;padding:10px 16px;border-radius:20px}
+.team input{width:110px;background:transparent;border:0;color:var(--mint);font-family:inherit;font-weight:700;font-size:17px;text-align:center}
+.team .pts{font-family:'Lalezar',sans-serif;font-size:34px;min-width:44px;text-align:center;color:var(--gold2)}
+.mini{width:40px;height:40px;border-radius:12px;border:0;font-size:22px;font-weight:900;cursor:pointer;color:var(--mint);background:rgba(255,255,255,.08)}
+.mini.plus{background:linear-gradient(135deg,var(--green2),#14935d)}
+
+.setup label{display:flex;flex-direction:column;gap:8px;font-weight:700;font-size:17px;color:var(--gold2);margin-bottom:16px}
+.setup input,.setup select{font-family:inherit;font-size:19px;font-weight:700;color:var(--mint);background:rgba(7,8,12,.55);
+  border:1px solid rgba(216,255,230,.22);border-radius:14px;padding:13px 16px;outline:none}
+.setup input:focus{border-color:var(--gold2);box-shadow:0 0 0 3px rgba(255,217,122,.2)}
+.setup .note{font-size:16px;opacity:.85;text-align:center}
+.tag.l1{background:rgba(15,107,68,.45)}.tag.l2{background:rgba(30,68,200,.45)}.tag.l3{background:rgba(74,42,143,.6)}.tag.l4{background:rgba(226,180,75,.35);color:var(--gold2)}
+/* END */
+.end h2{font-family:'Lalezar',sans-serif;font-size:clamp(48px,8vw,90px);color:var(--gold2);text-shadow:0 6px 0 var(--purple2)}
+.end p{font-size:22px;margin:10px 0 26px;text-align:center}
+@media (max-height:700px){.card{max-height:48vh}.stage{gap:14px}}
+@media (max-width:600px){.card{aspect-ratio:4/3;max-height:none}}
+</style>
+</head>
+<body>
+
+<div class="bg-cubes" id="bgc"></div>
+<button class="xbtn" id="xbtn" onclick="closeGame()" aria-label="إغلاق">✕</button>
+<div class="trial" id="trialPill" hidden>🎁 تجربة مجانية: أول ٣ أسئلة</div>
+<div class="progress" id="prog" style="width:0"></div>
+
+<!-- reusable logo -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <symbol id="cube" viewBox="0 0 100 100">
+      <polygon points="50,30 82,47 50,64 18,47" fill="#4A2A8F"/>
+      <polygon points="18,47 50,64 50,96 18,79" fill="#07341F"/>
+      <polygon points="50,64 82,47 82,79 50,96" fill="#0F6B44"/>
+      <g stroke="rgba(216,255,230,.35)" stroke-width="1" fill="none">
+        <line x1="34" y1="38.5" x2="66" y2="55.5"/><line x1="66" y1="38.5" x2="34" y2="55.5"/>
+        <line x1="18" y1="63" x2="50" y2="80"/><line x1="34" y1="55.5" x2="34" y2="87.5"/>
+        <line x1="50" y1="80" x2="82" y2="63"/><line x1="66" y1="55.5" x2="66" y2="87.5"/>
+      </g>
+      <g class="gc">
+        <polygon points="50,6 62,12 50,18 38,12" fill="#FFD97A"/>
+        <polygon points="38,12 50,18 50,28 38,22" fill="#B8862A"/>
+        <polygon points="50,18 62,12 62,22 50,28" fill="#E2B44B"/>
+      </g>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- START -->
+<section class="screen active" id="start">
+  <div class="brand"><svg class="logo"><use href="#cube"/></svg><div>إيلان دول<small>EILAN DOLL</small></div></div>
+  <h1 class="title">جاوب غلط</h1>
+  <p class="sub">أسرع لعبة ضحك… الجواب الصح ممنوع! 🚫</p>
+  <div class="glass rules">
+    <h3>طريقة اللعب</h3>
+    <ul>
+      <li><i></i>يظهر سؤال سهل جدًا… لازم تجاوب جواب <b>غلط</b>.</li>
+      <li><i></i>قبل كل سؤال عد تنازلي ٣ – ٢ – ١، بعدها يطلع السؤال ويبدأ الوقت لحاله.</li>
+      <li><i></i>عندك ٧ ثواني بس! إذا تأخرت أو قلت الصح… خسرت الجولة.</li>
+      <li><i></i>المقدّم يقدر يشوف الجواب الصح عشان يحكم.</li>
+      <li><i></i>العبوا فرق، وكل جواب غلط صحيح = نقطة ✨</li>
+    </ul>
+  </div>
+  <div class="row">
+    <button class="btn green" onclick="show('setup')">يلا نبدأ ←</button>
+  </div>
+</section>
+
+<!-- SETUP -->
+<section class="screen" id="setup">
+  <div class="brand"><svg class="logo"><use href="#cube"/></svg><div>إيلان دول<small>EILAN DOLL</small></div></div>
+  <h2 class="title" style="font-size:clamp(44px,7vw,80px)">جهّزوا الفرق</h2>
+  <div class="glass rules setup">
+    <label>اسم الفريق الأول<input id="n0" placeholder="مثلاً: فريق الصقور" maxlength="18"></label>
+    <label>اسم الفريق الثاني<input id="n1" placeholder="مثلاً: فريق النجوم" maxlength="18"></label>
+    <label>وقت كل سؤال
+      <select id="secs"><option value="5">5 ثواني</option><option value="7" selected>7 ثواني</option><option value="10">10 ثواني</option><option value="0">بدون وقت</option></select>
+    </label>
+    <p class="note">الأسئلة تبدأ <b>سهلة</b> وتصعب شوي شوي لين <b>صعب جدًا</b> 🔥</p>
+  </div>
+  <div class="row">
+    <button class="btn ghost" onclick="show('start')">→ رجوع</button>
+    <button class="btn green" onclick="startGame(false)">ابدأ اللعب</button>
+    <button class="btn" id="shufBtn" onclick="startGame(true)">أسئلة عشوائية 🔀</button>
+  </div>
+</section>
+
+<!-- GAME -->
+<section class="screen" id="game">
+  <div class="topbar">
+    <div class="brand"><svg class="logo"><use href="#cube"/></svg><div>جاوب غلط<small>EILAN DOLL</small></div></div>
+    <div class="glass counter" id="counter">1 / 40</div>
+  </div>
+
+  <div class="stage">
+    <div class="glass card" id="card" onclick="runTimer()">
+      <div class="tag" id="tag">جاوب غلط!</div>
+      <div class="num" id="num">01</div>
+      <div class="q" id="q"></div>
+      <div class="hint" id="hint"></div>
+      <div class="timer" id="timer">
+        <svg width="64" height="64"><circle cx="32" cy="32" r="27" stroke="rgba(255,255,255,.12)" stroke-width="6" fill="none"/>
+          <circle id="ring" cx="32" cy="32" r="27" stroke="url(#tg)" stroke-width="6" fill="none" stroke-linecap="round" stroke-dasharray="169.6" stroke-dashoffset="0"/>
+          <defs><linearGradient id="tg"><stop offset="0" stop-color="#FFD97A"/><stop offset="1" stop-color="#0F6B44"/></linearGradient></defs></svg>
+        <b id="tnum">▶</b>
+      </div>
+      <div class="boom" id="boom">انتهى الوقت! ⏰</div>
+      <div class="cd" id="cd"><small>استعدوا…</small><span id="cdn">3</span></div>
+      <div class="sign"><svg><use href="#cube"/></svg>إيلان دول · EILAN DOLL</div>
+    </div>
+
+    <div class="row">
+      <button class="btn ghost" onclick="prev()">→ السابق</button>
+      <button class="btn gold" onclick="toggleHint()">👀 الجواب الصح</button>
+      <button class="btn" onclick="next()">التالي ←</button>
+    </div>
+
+    <div class="score">
+      <div class="glass team"><button class="mini" onclick="pt(0,-1)">−</button><div><input id="t0" value="الفريق ١"><div class="pts" id="s0">0</div></div><button class="mini plus" onclick="pt(0,1)">+</button></div>
+      <div class="glass team"><button class="mini" onclick="pt(1,-1)">−</button><div><input id="t1" value="الفريق ٢"><div class="pts" id="s1">0</div></div><button class="mini plus" onclick="pt(1,1)">+</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- END -->
+<section class="screen end" id="end">
+  <svg class="logo" style="width:90px;height:90px"><use href="#cube"/></svg>
+  <h2>خلصت الأسئلة!</h2>
+  <p id="winner"></p>
+  <div class="row">
+    <button class="btn green" onclick="restart()">العب مرة ثانية</button>
+    <button class="btn ghost" onclick="show('start')">الرئيسية</button>
+  </div>
+  <div class="sign" style="position:fixed;bottom:18px;opacity:.6">إيلان دول · EILAN DOLL — THE DIGITAL WORLD</div>
+</section>
+
+<script>
+/* داخل موقع إيلان دول: اللعبة تنفتح في نافذة فوق الموقع وتسأل الموقع إذا كانت مفعّلة.
+   برّا الموقع (أو بدون تفعيل) = أول ٣ أسئلة بس. */
+const HOST=(()=>{try{return window.parent!==window&&window.parent.arcUnlocked?window.parent:null}catch(e){return null}})();
+const FULL=!!(HOST&&HOST.arcUnlocked('jawib'));
+const TRIAL_N=3;
+function closeGame(){if(HOST&&HOST.jwClose)HOST.jwClose();else location.href='/';}
+function trialOver(){if(HOST&&HOST.jwTrialEnd)HOST.jwTrialEnd();else location.href='/';}
+if(!FULL)document.getElementById('trialPill').hidden=false;
+// [السؤال, الجواب الصح, المستوى 1-4]
+const Q = [
+ // سهل
+ ["وش لون البحر؟","أزرق",1],["كم رجل عند القطوة؟","أربع",1],["وش لون الحليب؟","أبيض",1],["وش يطلع من النخلة؟","التمر",1],
+ ["الثلج حار ولا بارد؟","بارد",1],["وش صوت القطوة؟","مياو",1],["كم عين عند الإنسان؟","ثنتين",1],["وش لون العشب؟","أخضر",1],
+ ["الجمل يعيش في البحر ولا الصحراء؟","الصحراء",1],["وش نشرب لما نعطش؟","موية",1],
+ // متوسط
+ ["وش عاصمة السعودية؟","الرياض",2],["كم يوم في الأسبوع؟","سبعة",2],["الشمس تطلع من وين؟","الشرق",2],["وش الحيوان اللي عنده خرطوم؟","الفيل",2],
+ ["كم ساعة في اليوم؟","٢٤ ساعة",2],["وش أول شهر في السنة الميلادية؟","يناير",2],["القهوة العربية نصبها في وش؟","الفنجال",2],
+ ["كم لاعب في فريق كورة القدم داخل الملعب؟","١١",2],["وش أكبر كوكب في المجموعة الشمسية؟","المشتري",2],["كم لون في قوس قزح؟","سبعة",2],
+ // صعب: سؤالين بسؤال، حساب، نعم ولا
+ ["٧ + ٨ = كم؟","١٥",3],["وش لون علم السعودية وكم سيف فيه؟","أخضر – سيف واحد",3],["كم شهر في السنة وكم يوم في فبراير غالبًا؟","١٢ – ٢٨",3],
+ ["أنت الحين تلعب جاوب غلط؟ (نعم ولا لا)","نعم",3],["١٠ × ١٠ = كم؟","١٠٠",3],["وش يجي بعد الثلاثاء؟","الأربعاء",3],
+ ["وش ضد كلمة «فوق»؟","تحت",3],["الطماطم فاكهة ولا خضار؟ (علميًا)","فاكهة",3],["وش أطول نهر في العالم؟","النيل",3],
+ ["كم قارة في العالم؟","سبع",3],
+ // صعب جدًا: ألغاز تلخبط المخ
+ ["عُد من ١ إلى ٥","أي عدّ صح = خسارة 😄",4],["وش اسم اللاعب اللي جنبك؟","اسمه الحقيقي",4],["قول «لا» إذا كنت تجاوب غلط","المفروض «لا» … فيقول «نعم»",4],
+ ["٣ × ٣ ناقص ٩ = كم؟","صفر",4],["تهجّى كلمة «باب»","ب – ا – ب",4],["وش السؤال اللي قبل هذا؟","تهجّى كلمة «باب»",4],
+ ["رتّب: الصبح، الظهر، العصر … وش بعده؟","المغرب",4],["كم حرف في كلمة «إيلان»؟","٥ حروف",4],["إذا الغلط صح والصح غلط… وش لون البحر؟","أزرق (جوابه لازم يكون غلط برضو!)",4],
+ ["وش اسم هاللعبة؟","جاوب غلط! 🎉",4]
+];
+const lvl={1:["سهل","l1"],2:["متوسط","l2"],3:["صعب","l3"],4:["صعب جدًا 🔥","l4"]};
+let order=[],i=0,score=[0,0],tInt=null;
+
+// background cubes
+const cols=["#4A2A8F","#0F6B44","#1E44C8","#E2B44B","#251147"];
+const bgc=document.getElementById('bgc');
+for(let k=0;k<14;k++){const s=document.createElement('span');s.style.background=cols[k%5];
+ s.style.left=Math.random()*100+'vw';s.style.top=Math.random()*100+'vh';s.style.animationDelay=(-Math.random()*14)+'s';
+ const z=14+Math.random()*26;s.style.width=s.style.height=z+'px';bgc.appendChild(s)}
+
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');
+ document.getElementById('prog').style.width = id==='game' ? document.getElementById('prog').style.width : '0'}
+function startGame(shuf){
+ const n0=document.getElementById('n0').value.trim()||'الفريق ١',n1=document.getElementById('n1').value.trim()||'الفريق ٢';
+ document.getElementById('t0').value=n0;document.getElementById('t1').value=n1;
+ // العشوائي يخلط داخل كل مستوى بس، عشان تظل الصعوبة متدرجة
+ order=[];for(const L of [1,2,3,4]){const g=Q.map((q,k)=>q[2]===L?k:-1).filter(k=>k>=0);if(shuf)g.sort(()=>Math.random()-.5);order.push(...g)}
+ i=0;score=[0,0];upScore();show('game');render()}
+function restart(){show('setup')}
+function render(){
+ stopTimer();let [q,a,L]=Q[order[i]];if(q.startsWith('وش السؤال اللي قبل')&&i>0)a=Q[order[i-1]][0];
+ const c=document.getElementById('card');c.classList.remove('flip');void c.offsetWidth;c.classList.add('flip');
+ curQ=q;document.getElementById('q').textContent='';
+ setTimeout(()=>{
+  document.getElementById('hint').textContent='الجواب الصح (ممنوع تقولونه!): '+a;
+  document.getElementById('hint').classList.remove('show');
+  document.getElementById('num').textContent=String(i+1).padStart(2,'0');
+  const tg=document.getElementById('tag');tg.textContent=lvl[L][0];tg.className='tag '+lvl[L][1];},270);
+ document.getElementById('counter').textContent=(i+1)+' / '+Q.length;
+ document.getElementById('prog').style.width=((i+1)/Q.length*100)+'%';
+ const secs=+document.getElementById('secs').value;
+ document.getElementById('timer').style.display=secs?'block':'none';
+ document.getElementById('tnum').textContent=secs||'';document.getElementById('ring').style.strokeDashoffset=0;
+ const bm=document.getElementById('boom');bm.classList.remove('show','win');bm.textContent='انتهى الوقت! ⏰';
+ countdown(secs);
+}
+// 3-2-1 قبل كل سؤال، بعدها يبدأ الوقت تلقائيًا
+let cdInt=null,curQ='';
+function countdown(secs){
+ clearInterval(cdInt);const cd=document.getElementById('cd'),n=document.getElementById('cdn');
+ let c=3;cd.classList.add('show');
+ const tick=()=>{n.textContent=c;n.classList.remove('pop');void n.offsetWidth;n.classList.add('pop');beep(660,.08)};
+ tick();
+ cdInt=setInterval(()=>{c--;if(c>0){tick()}else{clearInterval(cdInt);cdInt=null;cd.classList.remove('show');const qe=document.getElementById('q');qe.textContent=curQ;qe.classList.remove('reveal');void qe.offsetWidth;qe.classList.add('reveal');beep(990,.12);if(secs)runTimer()}},1000);
+}
+function next(){if(!FULL&&i>=TRIAL_N-1){stopTimer();clearInterval(cdInt);cdInt=null;return trialOver()}if(i<Q.length-1){i++;render()}else{stopTimer();endGame()}}
+function prev(){if(i>0){i--;render()}}
+function toggleHint(){document.getElementById('hint').classList.toggle('show')}
+function pt(t,d){score[t]=Math.max(0,score[t]+d);upScore();
+ if(d>0){
+  // نقطة = يوقف المؤقت تلقائيًا ويبين مين أخذها
+  if(tInt){stopTimer();}
+  const b=document.getElementById('boom');b.textContent='✅ نقطة لـ '+document.getElementById('t'+t).value;b.classList.add('show','win');
+  beep(880,.08);setTimeout(()=>beep(1320,.12),110);
+ }}
+function upScore(){document.getElementById('s0').textContent=score[0];document.getElementById('s1').textContent=score[1]}
+
+function runTimer(){
+ const secs=+document.getElementById('secs').value;if(!secs||tInt||cdInt)return;
+ document.getElementById('boom').classList.remove('show');
+ const ring=document.getElementById('ring'),tn=document.getElementById('tnum');
+ const total=secs*1000,t0=performance.now();let last=secs+1;
+ tInt=setInterval(()=>{const el=performance.now()-t0,left=Math.max(0,total-el);
+  ring.style.strokeDashoffset=169.6*(el/total);const s=Math.ceil(left/1000);
+  if(s!==last){last=s;tn.textContent=s;if(s>0)beep(520,.05)}
+  if(left<=0){stopTimer();tn.textContent='0';const bm=document.getElementById('boom');bm.classList.remove('win');bm.textContent='انتهى الوقت! ⏰';bm.classList.add('show');beep(220,.4)}},50);
+}
+function stopTimer(){clearInterval(tInt);tInt=null}
+function endGame(){clearInterval(cdInt);cdInt=null;const n=document.querySelectorAll('.team input');
+ document.getElementById('winner').textContent = score[0]===score[1] ? 'تعادل! '+score[0]+' – '+score[1]+' 🤝'
+  : '🏆 الفائز: '+(score[0]>score[1]?n[0].value:n[1].value)+' ('+Math.max(...score)+' نقطة)';
+ show('end')}
+
+let ac;function beep(f,d){try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator(),g=ac.createGain();
+ o.frequency.value=f;o.type='triangle';g.gain.setValueAtTime(.15,ac.currentTime);g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+d);
+ o.connect(g);g.connect(ac.destination);o.start();o.stop(ac.currentTime+d)}catch(e){}}
+
+document.addEventListener('keydown',e=>{if(!document.getElementById('game').classList.contains('active'))return;
+ if(e.key==='ArrowLeft')next();if(e.key==='ArrowRight')prev();if(e.key===' ')runTimer()});
+</script>
+</body>
+</html>

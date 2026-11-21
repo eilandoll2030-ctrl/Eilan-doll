@@ -2,10 +2,6 @@
   "version": 2,
   "rewrites": [
     {
-      "source": "/",
-      "destination": "/eilantube-site-preview.html"
-    },
-    {
       "source": "/((?!api/).*)",
       "destination": "/index.html"
     }
@@ -27,6 +23,13 @@
           "value": "no-store, no-cache, must-revalidate, max-age=0"
         }
       ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "/eilantube-site-preview.html",
+      "permanent": false
     }
   ]
 }

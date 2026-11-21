@@ -31,14 +31,14 @@ svg.xpr-shape-svg,svg.xpr-mini-svg{stroke:none;stroke-width:0;fill:none;overflow
 
 /* Interactive Surprise Experience Frame */
 .xpr-frame{position:relative;min-height:520px;border-radius:24px;overflow:hidden;padding:26px 22px 20px;display:flex;flex-direction:column;justify-content:space-between;align-items:center;text-align:center;border:1px solid rgba(226,180,80,.36);box-shadow:0 22px 56px rgba(0,0,0,.48);transition:background .35s,color .35s;user-select:none;-webkit-tap-highlight-color:transparent}
-.xpr-frame[data-th="gold"]{--xbg:#07080C;--xbg2:#0F1320;--xcard:rgba(15,20,34,.88);--xacc:#E2B450;--xacc2:#F6DD8F;--xtxt:#F2F5FA;--xmu:rgba(242,245,250,.72);--xbd:rgba(226,180,80,.38);--xsub:#1E44C8;background:radial-gradient(circle at 50% 22%,rgba(226,180,80,.18),transparent 54%),radial-gradient(circle at 18% 82%,rgba(15,107,68,.2),transparent 52%),radial-gradient(circle at 84% 78%,rgba(30,68,200,.2),transparent 52%),linear-gradient(180deg,#0D111C,#07080C);color:#F2F5FA}
-.xpr-frame[data-th="forest"]{--xbg:#071810;--xbg2:#0B291B;--xcard:rgba(10,38,25,.9);--xacc:#E2B450;--xacc2:#D8FFE6;--xtxt:#F2F7F4;--xmu:rgba(216,255,230,.75);--xbd:rgba(15,107,68,.55);--xsub:#0F6B44;background:radial-gradient(circle at 50% 22%,rgba(226,180,80,.16),transparent 55%),radial-gradient(circle at 80% 80%,rgba(15,107,68,.28),transparent 55%),linear-gradient(180deg,#0C2B1D,#06130C);color:#F2F7F4}
-.xpr-frame[data-th="royal"]{--xbg:#080F26;--xbg2:#0B1F5E;--xcard:rgba(11,28,78,.88);--xacc:#E2B450;--xacc2:#F6DD8F;--xtxt:#F2F5FF;--xmu:rgba(230,238,255,.76);--xbd:rgba(30,68,200,.52);--xsub:#1E44C8;background:radial-gradient(circle at 50% 20%,rgba(226,180,80,.17),transparent 54%),radial-gradient(circle at 20% 82%,rgba(30,68,200,.32),transparent 55%),linear-gradient(180deg,#0E1E52,#070A16);color:#F2F5FF}
-.xpr-frame[data-th="velvet"]{--xbg:#0B0714;--xbg2:#1B0F33;--xcard:rgba(28,16,52,.9);--xacc:#E2B450;--xacc2:#F6DD8F;--xtxt:#F5F2FA;--xmu:rgba(245,242,250,.74);--xbd:rgba(74,42,143,.52);--xsub:#4A2A8F;background:radial-gradient(circle at 50% 22%,rgba(226,180,80,.16),transparent 54%),radial-gradient(circle at 82% 82%,rgba(74,42,143,.32),transparent 54%),linear-gradient(180deg,#1A0F30,#07080C);color:#F5F2FA}
+.xpr-frame[data-th="gold"]{--xbg:#07080C;--xbg2:#0F1320;--xcard:rgba(15,20,34,.88);--xacc:#E2B450;--xacc2:#F6DD8F;--xtxt:#F2F5FA;--xmu:rgba(242,245,250,.72);--xbd:rgba(226,180,80,.38);--xsub:#1E44C8;--xbtnfg:#07080C;background:radial-gradient(circle at 50% 22%,rgba(226,180,80,.18),transparent 54%),radial-gradient(circle at 18% 82%,rgba(15,107,68,.2),transparent 52%),radial-gradient(circle at 84% 78%,rgba(30,68,200,.2),transparent 52%),linear-gradient(180deg,#0D111C,#07080C);color:#F2F5FA}
+.xpr-frame[data-th="forest"]{--xbg:#071810;--xbg2:#0B291B;--xcard:rgba(10,38,25,.9);--xacc:#E2B450;--xacc2:#D8FFE6;--xtxt:#F2F7F4;--xmu:rgba(216,255,230,.75);--xbd:rgba(15,107,68,.55);--xsub:#0F6B44;--xbtnfg:#07080C;background:radial-gradient(circle at 50% 22%,rgba(226,180,80,.16),transparent 55%),radial-gradient(circle at 80% 80%,rgba(15,107,68,.28),transparent 55%),linear-gradient(180deg,#0C2B1D,#06130C);color:#F2F7F4}
+.xpr-frame[data-th="royal"]{--xbg:#080F26;--xbg2:#0B1F5E;--xcard:rgba(11,28,78,.88);--xacc:#E2B450;--xacc2:#F6DD8F;--xtxt:#F2F5FF;--xmu:rgba(230,238,255,.76);--xbd:rgba(30,68,200,.52);--xsub:#1E44C8;--xbtnfg:#07080C;background:radial-gradient(circle at 50% 20%,rgba(226,180,80,.17),transparent 54%),radial-gradient(circle at 20% 82%,rgba(30,68,200,.32),transparent 55%),linear-gradient(180deg,#0E1E52,#070A16);color:#F2F5FF}
+.xpr-frame[data-th="velvet"]{--xbg:#0B0714;--xbg2:#1B0F33;--xcard:rgba(28,16,52,.9);--xacc:#E2B450;--xacc2:#F6DD8F;--xtxt:#F5F2FA;--xmu:rgba(245,242,250,.74);--xbd:rgba(74,42,143,.52);--xsub:#4A2A8F;--xbtnfg:#07080C;background:radial-gradient(circle at 50% 22%,rgba(226,180,80,.16),transparent 54%),radial-gradient(circle at 82% 82%,rgba(74,42,143,.32),transparent 54%),linear-gradient(180deg,#1A0F30,#07080C);color:#F5F2FA}
 
 .xpr-top{width:100%;display:flex;justify-content:space-between;align-items:center;gap:8px;z-index:2}
 .xpr-to{padding:5px 13px;border-radius:999px;background:var(--xcard);border:1px solid var(--xbd);font-size:12.5px;font-weight:800;color:var(--xtxt);max-width:72%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.xpr-wm{padding:4px 10px;border-radius:999px;background:rgba(226,180,80,.18);border:1px solid rgba(226,180,80,.45);font-size:11px;font-weight:800;color:var(--xacc)}
+.xpr-wm{padding:4px 10px;border-radius:999px;background:rgba(226,180,80,.18);border:1px solid var(--xbd);font-size:11px;font-weight:800;color:var(--xacc)}
 .xpr-sndbtn{width:34px;height:34px;border-radius:50%;border:1px solid var(--xbd);background:var(--xcard);color:var(--xtxt);cursor:pointer;display:grid;place-items:center;font-size:14px}
 
 .xpr-body{position:relative;z-index:2;width:100%;max-width:440px;margin:auto;padding:14px 4px;display:flex;flex-direction:column;align-items:center;gap:16px}
@@ -49,44 +49,44 @@ svg.xpr-shape-svg,svg.xpr-mini-svg{stroke:none;stroke-width:0;fill:none;overflow
 .xpr-cube-btn{position:relative;width:196px;height:196px;border:0;background:transparent;cursor:pointer;padding:8px;display:grid;place-items:center;touch-action:manipulation;overflow:visible;transition:transform .28s cubic-bezier(.2,.9,.3,1.2)}
 .xpr-cube-btn:hover{transform:scale(1.04)}
 .xpr-cube-btn:active{transform:scale(.95)}
-.xpr-cube-halo{position:absolute;inset:12px;border-radius:50%;background:radial-gradient(circle,rgba(226,180,80,.3),transparent 68%);animation:xprPulse 3.2s ease-in-out infinite;pointer-events:none}
+.xpr-cube-halo{position:absolute;inset:12px;border-radius:50%;background:radial-gradient(circle,rgba(226,180,80,.3),transparent 68%);background:radial-gradient(circle,color-mix(in srgb,var(--xacc,#E2B450) 34%,transparent),transparent 68%);animation:xprPulse 3.2s ease-in-out infinite;pointer-events:none}
 .xpr-shape-svg{width:176px;height:176px;position:relative;z-index:2;overflow:visible!important;stroke:none!important;fill:none;filter:drop-shadow(0 16px 28px rgba(0,0,0,.44))}
 .xpr-shape-svg .xg-float{transform-box:fill-box;transform-origin:center;animation:xprFloat 3s ease-in-out infinite}
-.xpr-shape-svg .xg-tassel{transform-origin:70px 49px;animation:xprSwing 3.2s ease-in-out infinite}
+.xpr-shape-svg .xg-tassel{transform-origin:70px 48px;animation:xprSwing 3.2s ease-in-out infinite}
 .xpr-cube-btn.burst .xg-float{animation:xprBurst .62s cubic-bezier(.2,.9,.3,1.2) forwards}
 @keyframes xprFloat{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-7px) rotate(1.5deg)}}
 @keyframes xprSwing{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(5deg)}}
 @keyframes xprPulse{0%,100%{transform:scale(.94);opacity:.65}50%{transform:scale(1.08);opacity:1}}
 @keyframes xprBurst{0%{transform:scale(1)}45%{transform:translateY(-13px) scale(1.12) rotate(4deg)}100%{transform:translateY(-4px) scale(1.04)}}
 
-.xpr-tap-cta{padding:11px 22px;border-radius:999px;border:1px solid var(--xacc);background:rgba(226,180,80,.16);color:var(--xtxt);font-family:inherit;font-size:14px;font-weight:900;cursor:pointer;display:inline-flex;align-items:center;gap:8px;box-shadow:0 8px 24px rgba(0,0,0,.24);transition:.22s}
-.xpr-tap-cta:hover{background:var(--xacc);color:#07080C}
+.xpr-tap-cta{padding:11px 22px;border-radius:999px;border:1px solid var(--xacc);background:var(--xcard);color:var(--xtxt);font-family:inherit;font-size:14px;font-weight:900;cursor:pointer;display:inline-flex;align-items:center;gap:8px;box-shadow:0 8px 24px rgba(0,0,0,.22);transition:.22s}
+.xpr-tap-cta:hover{background:var(--xacc);color:var(--xbtnfg,#07080C)}
 
 /* Stage 1 & Stage 2 Cards */
-.xpr-mcard{width:100%;padding:22px 20px;border-radius:20px;background:var(--xcard);border:1px solid var(--xbd);box-shadow:0 16px 38px rgba(0,0,0,.28);animation:xprIn .42s cubic-bezier(.2,.8,.2,1)}
+.xpr-mcard{width:100%;padding:22px 20px;border-radius:20px;background:var(--xcard);border:1px solid var(--xbd);box-shadow:0 16px 38px rgba(0,0,0,.26);animation:xprIn .42s cubic-bezier(.2,.8,.2,1)}
 .xpr-mstep{font-size:11.5px;font-weight:900;letter-spacing:1.2px;color:var(--xacc);margin-bottom:8px;text-transform:uppercase}
 .xpr-mtxt{font-size:17px;line-height:1.8;font-weight:700;color:var(--xtxt);margin:0;white-space:pre-line}
 
-.xpr-vault{width:100%;padding:24px 20px;border-radius:22px;background:var(--xcard);border:2px solid var(--xacc);box-shadow:0 18px 46px rgba(0,0,0,.34),inset 0 0 32px rgba(226,180,80,.1);animation:xprIn .48s cubic-bezier(.18,.88,.24,1.08);position:relative;overflow:visible}
+.xpr-vault{width:100%;padding:24px 20px;border-radius:22px;background:var(--xcard);border:2px solid var(--xacc);box-shadow:0 18px 46px rgba(0,0,0,.32);animation:xprIn .48s cubic-bezier(.18,.88,.24,1.08);position:relative;overflow:visible}
 .xpr-vault-ic{width:68px;height:68px;margin:0 auto 8px;display:block}
-.xpr-vault-ic svg{width:100%;height:100%;overflow:visible!important;stroke:none!important}
+.xpr-vault-ic svg.xpr-shape-svg{width:68px;height:68px}
 .xpr-gift-lbl{font-size:12px;font-weight:800;color:var(--xacc);letter-spacing:1px;margin-bottom:6px}
 .xpr-gift-val{font-size:24px;font-weight:900;line-height:1.4;color:var(--xtxt);margin:0 0 8px;word-break:break-word}
 .xpr-gift-sub{font-size:14px;line-height:1.65;color:var(--xmu);margin:0 0 14px;white-space:pre-line}
-.xpr-from{display:inline-block;padding:6px 14px;border-radius:999px;background:rgba(226,180,80,.14);border:1px solid var(--xbd);font-size:13px;font-weight:800;color:var(--xtxt)}
-.xpr-extlink{margin-top:12px;display:inline-flex;align-items:center;gap:6px;padding:10px 18px;border-radius:12px;background:var(--xacc);color:#07080C;font-weight:900;font-size:13.5px;text-decoration:none}
+.xpr-from{display:inline-block;padding:6px 14px;border-radius:999px;background:var(--xcard);border:1px solid var(--xbd);font-size:13px;font-weight:800;color:var(--xtxt)}
+.xpr-extlink{margin-top:12px;display:inline-flex;align-items:center;gap:6px;padding:10px 18px;border-radius:12px;background:var(--xacc);color:var(--xbtnfg,#07080C);font-weight:900;font-size:13.5px;text-decoration:none}
 @keyframes xprIn{from{opacity:0;transform:translateY(14px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
 
-/* Calm Floating Golden Sparks */
+/* Calm Floating Sparks (dynamically tinted with --xacc) */
 .xpr-sparks{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:1}
-.xpr-sparks i{position:absolute;bottom:-12px;width:6px;height:6px;border-radius:2px;background:#E2B450;opacity:0;animation:xprSpark 5.2s ease-in-out infinite}
+.xpr-sparks i{position:absolute;bottom:-12px;width:6px;height:6px;border-radius:2px;background:var(--xacc,#E2B450);opacity:0;animation:xprSpark 5.2s ease-in-out infinite}
 @keyframes xprSpark{0%{transform:translateY(0) rotate(0deg);opacity:0}25%{opacity:.55}80%{opacity:.25}100%{transform:translateY(-440px) rotate(140deg);opacity:0}}
 @media (prefers-reduced-motion:reduce){.xpr-cube-halo,.xpr-shape-svg .xg-float,.xpr-shape-svg .xg-tassel,.xpr-sparks i{animation:none!important}}
 
 /* Eilan Signature Footer inside every Experience */
-.xpr-foot{width:100%;display:flex;justify-content:space-between;align-items:center;gap:8px;padding-top:10px;border-top:1px solid rgba(242,245,250,.1);font-size:11.5px;color:var(--xmu);z-index:2}
+.xpr-foot{width:100%;display:flex;justify-content:space-between;align-items:center;gap:8px;padding-top:10px;border-top:1px solid var(--xbd);font-size:11.5px;color:var(--xmu);z-index:2}
 .xpr-sig{display:inline-flex;align-items:center;gap:6px;font-weight:800;color:var(--xtxt);text-decoration:none;opacity:.9}
-.xpr-sig svg{width:20px;height:20px;border-radius:5px;overflow:visible!important;stroke:none!important}
+.xpr-sig svg.xpr-mini-svg{width:20px;height:20px;border-radius:5px}
 .xpr-dots{display:flex;gap:6px;align-items:center}
 .xpr-dots span{width:7px;height:7px;border-radius:50%;background:var(--xmu);opacity:.35;transition:.25s}
 .xpr-dots span.on{width:20px;border-radius:99px;background:var(--xacc);opacity:1}
@@ -99,17 +99,40 @@ svg.xpr-shape-svg,svg.xpr-mini-svg{stroke:none;stroke-width:0;fill:none;overflow
 .xpr-pre{padding:7px 11px;border-radius:10px;border:1px solid var(--bd);background:#0E121E;color:#F2F5FA;font-family:inherit;font-size:12px;font-weight:800;cursor:pointer;transition:.18s}
 .xpr-pre.on,.xpr-pre:hover{border-color:#E2B450;background:rgba(226,180,80,.16);color:#F6DD8F}
 
-/* 5-Shape Visual Picker */
-.xpr-shapes{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}
-.xpr-shbtn{padding:8px 4px 7px;border-radius:12px;border:1.5px solid var(--bd);background:#0E121E;color:#F2F5FA;font-family:inherit;font-size:11px;font-weight:800;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;transition:.18s}
-.xpr-shbtn svg{width:42px;height:42px;overflow:visible!important;stroke:none!important}
+/* 5 Ready Shapes + [+] Custom Topic Shape Picker */
+.xpr-shapes{display:grid;grid-template-columns:repeat(6,1fr);gap:7px}
+.xpr-shbtn{padding:8px 4px 7px;border-radius:12px;border:1.5px solid var(--bd);background:#0E121E;color:#F2F5FA;font-family:inherit;font-size:11px;font-weight:800;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;transition:.18s}
+.xpr-shbtn svg.xpr-shape-svg{width:42px;height:42px}
 .xpr-shbtn .xg-float,.xpr-shbtn .xg-tassel{animation:none!important}
 .xpr-shbtn.on,.xpr-shbtn:hover{border-color:#E2B450;background:rgba(226,180,80,.15);color:#F6DD8F}
+.xpr-shbtn.plus{border-style:dashed;border-color:rgba(226,180,80,.55);background:rgba(226,180,80,.07)}
+.xpr-plus-ic{width:38px;height:38px;border-radius:10px;background:rgba(226,180,80,.16);border:1px solid rgba(226,180,80,.45);color:#F6DD8F;display:grid;place-items:center;font-size:21px;font-weight:900;line-height:1}
 
-.xpr-swatches{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-.xpr-sw{padding:8px 6px;border-radius:12px;border:1.5px solid var(--bd);background:#0E121E;color:#F2F5FA;font-family:inherit;font-size:11.5px;font-weight:800;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px}
-.xpr-sw i{width:28px;height:28px;border-radius:8px;display:block;border:1px solid rgba(255,255,255,.16)}
-.xpr-sw.on{border-color:#E2B450;background:rgba(226,180,80,.14);color:#F6DD8F}
+/* Expandable Custom Topic Shape & Custom Color Drawers */
+.xpr-drawer{margin-top:8px;padding:14px;border-radius:14px;background:#090D16;border:1px solid rgba(226,180,80,.38);display:flex;flex-direction:column;gap:11px;animation:xprIn .25s ease}
+.xpr-topic-row{display:flex;gap:7px;flex-wrap:wrap}
+.xpr-topic-row .input{flex:1;min-width:170px}
+.xpr-xshapes{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.xpr-xshapes .xpr-shbtn{padding:6px 3px;font-size:10.5px}
+.xpr-xshapes .xpr-shbtn svg.xpr-shape-svg{width:36px;height:36px}
+.xpr-sym-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.xpr-sym-in{width:120px!important;text-align:center;font-size:16px!important;font-weight:800}
+.xpr-emo-chips{display:flex;gap:5px;flex-wrap:wrap}
+.xpr-emo-chip{padding:5px 9px;border-radius:8px;border:1px solid var(--bd);background:#111625;color:#F2F5FA;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit}
+.xpr-emo-chip:hover,.xpr-emo-chip.on{border-color:#E2B450;background:rgba(226,180,80,.16);color:#F6DD8F}
+
+/* 4 Ready Themes + [+] Custom Colors Picker */
+.xpr-swatches{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}
+.xpr-sw{padding:8px 5px;border-radius:12px;border:1.5px solid var(--bd);background:#0E121E;color:#F2F5FA;font-family:inherit;font-size:11px;font-weight:800;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center}
+.xpr-sw i{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;border:1px solid rgba(255,255,255,.18);font-style:normal;font-size:16px;font-weight:900;color:#F6DD8F}
+.xpr-sw.plus{border-style:dashed;border-color:rgba(226,180,80,.55);background:rgba(226,180,80,.07)}
+.xpr-sw.on,.xpr-sw:hover{border-color:#E2B450;background:rgba(226,180,80,.15);color:#F6DD8F}
+
+.xpr-cpickers{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.xpr-cpick{display:flex;align-items:center;gap:10px;padding:8px 11px;border-radius:11px;background:#101524;border:1px solid var(--bd);cursor:pointer}
+.xpr-cpick input[type="color"]{width:36px;height:36px;border:0;padding:0;background:transparent;cursor:pointer;border-radius:8px}
+.xpr-cpick b{display:block;font-size:12px;color:#F2F5FA}
+.xpr-cpick small{display:block;font-size:11px;color:var(--mu);font-family:monospace}
 
 .xpr-grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .xpr-fld{display:flex;flex-direction:column;gap:4px}
@@ -135,7 +158,7 @@ svg.xpr-shape-svg,svg.xpr-mini-svg{stroke:none;stroke-width:0;fill:none;overflow
 /* Template Card inside P.templates */
 .xpr-tcard{position:relative;display:flex;flex-direction:column;overflow:hidden}
 .xpr-tcard-vis{height:230px;width:100%;background:radial-gradient(circle at 65% 28%,rgba(226,180,80,.22),transparent 55%),linear-gradient(160deg,#0E1B48,#07080C);display:grid;place-items:center;position:relative;border-bottom:1px solid var(--bd);cursor:pointer}
-.xpr-tcard-vis svg{width:124px;height:124px;overflow:visible!important;stroke:none!important;filter:drop-shadow(0 12px 22px rgba(0,0,0,.48))}
+.xpr-tcard-vis svg.xpr-shape-svg{width:126px;height:126px;filter:drop-shadow(0 12px 22px rgba(0,0,0,.48))}
 .xpr-tcard-badge{position:absolute;top:10px;inset-inline-start:10px;padding:4px 10px;border-radius:999px;font-size:11px;font-weight:900;background:#E2B450;color:#07080C}
 .xpr-tcard-auto{position:absolute;bottom:10px;inset-inline-end:10px;padding:4px 9px;border-radius:999px;font-size:10.5px;font-weight:800;background:rgba(7,8,12,.82);border:1px solid rgba(216,255,230,.35);color:#D8FFE6}
 
@@ -148,32 +171,64 @@ svg.xpr-shape-svg,svg.xpr-mini-svg{stroke:none;stroke-width:0;fill:none;overflow
   .xpr-hero h1{font-size:24px}
   .xpr-frame{min-height:470px;padding:20px 16px 16px}
   .xpr-shapes{grid-template-columns:repeat(3,1fr)}
-  .xpr-swatches{grid-template-columns:repeat(2,1fr)}
-  .xpr-grid2,.xpr-acts-grid{grid-template-columns:1fr}
+  .xpr-xshapes{grid-template-columns:repeat(5,1fr)}
+  .xpr-swatches{grid-template-columns:repeat(3,1fr)}
+  .xpr-grid2,.xpr-acts-grid,.xpr-cpickers{grid-template-columns:1fr}
 }
 </style>
 <script>
 /* ================= 🔊 تجارب إيلان التفاعلية — Instant Automated Delivery Engine =================
-   Product #1 of 9: مفاجأة إيلان التفاعلية (ظرف ذهبي / قبعة تخرّج / باقة ورد / علبة هدية / مكعب إيلان) — 25 SAR.
+   Product #1 of 9: مفاجأة إيلان التفاعلية (أشكال جاهزة + شكل بموضوع العميل + ثيمات جاهزة + ألوان العميل) — 25 SAR.
    100% automated self-serve fulfillment: Salla sends code -> SHA-256 verified client-side ->
    instant shareable full-screen URL + scannable QR card (PNG & Print) + standalone HTML keepsake. */
 
 const XPR_CODES = {"cube":["3c7815cdab5ad2545e520792","7ab04028b9258b9e96c85ee1","3ee02477281f05639c8f11e2","941b3d2b68c8d79223a67c00","142859f51919a7465768f667","786f0b8a6a4fd94f68c07a70","dd710952d2a7f80901d8596b","3f4406e556ce5c5eaa87f8df","160d296fc535288f8c2df337","8116c7938961146f87ab669c","a96979f11b27f4869cbbbeda","8477ed1564dfd42bca4aec5c","27f679c345dc1fcdcfa4f4f8","8b58465e96b70c364e72c15c","3d243acc46e95047a7243a5a","7ab5b895a8c360f1a73004f5","dfe17efc31f6c68558397a55","6ac962a88f8c5ca48921e375","143594ec7ff492ecba2dd97c","c789b962813aae1249e53da5","872e06dbd9d2fe7b616e8747","1b0168283df1cbbfb8bdd784","2c4b2544f8bb9135aa96d2c9","da92f05cb54f0f59cd17036d","4e98d7f0fc349f64a934133b","e9d621c05b80c2c5eafce15d","48b0d015f33362ab6612a1de","bcdd77b7af057cc48c9b5e96","8cb403503484f75e7ac6ae61","e8429c855881c00302481379","aae20d6d231cf29f6aa714c4","4c22e597a7d8687edd1cbd74","6c988f23a17b4ae7de7c2f1f","928e5ddf3db542a501841963","24bd73c86abcb08451f9c5f4","57d21e7252d2228dbdd31e1d","f0de94acaf63f4222f8243ed","1f3fb70dcbd4754234ea5d0d","5736e0cca263fedfdf190ca2","7830f7a907f2433ef6b8474f","5d654b4fd5aed3ba302750ed","d5b2e85e41dfe96c6703cd7c","bcc51b54c70f01beb845c6fe","bbb4f372df326774e2c0bdff","9f26aa3e86280546f6e18d05","28996cf4bea94079045382b8","7157725dc127edc8525bb052","a2c1929ebcc916546abbecaa","749e1fdb75e88f9c3e18a4fb","3682a5ed1559f49b3bca32f0","04d56d5726d356bfeb43f895","b306fc0b74a3a8471390858a","217409247571264cf7f59199","d9330bbc8ea2dd675e0d9e7f","f3c96165098d37862e3a9060","a0ff628fee91710226619fe2","aa0ebb14c1248a5bf4dd89ea","74c99b21a54501c1176ea5ef","3b4414a0fa3ff8d2a46df5d3","7e657c5641e89f2f175de1d2","f0a2206af03d7c2d7a6e6a8c","538bca46b0b71a2475523338","e81254119fa79b0b0044e4c1","dc168e537546d0a5f448a4fe","d0fda8f0891ac5e2906d70af","8cd8efba79f76c2bfc034a1c","e2793fbb2d37a79330ee9b9c","5411accb294f4a60bbee9ff4","0719c7e789d2c1b6b29488e0","dabfe17beee135989e57fbaa","0e1ae151281ac439e8cb0777","427db19da22d0dd845dd1f07","49db2dda7627f20b20a24d30","b3cf3378689261d197106576","6edf562f47bb4cc0f43b1cd6","d73fb39ec43a0698012ac23f","5de18e34dacc0b2b80631102","aa9c156db4e8591826ccbd77","0ccc1d6242e6c175c10ac066","5784bbb7a52b4322e00d7074","6815400655527d3f44a1222d","05c2774efb4e55c531241984","6b7fbf874ec1b0701a888502","04041ee7b3ca1e4e753af420","82e84d5ac463fc2c4d41863b","80e2fa6770dee4deb164bcb8","22f38a46d5a28be6e18e18f5","a799cbba476002dc2d9d4315","5ae2bfa820eda4b1acf77e4e","1f9ef4458061dd4e8bc85d41","f74b8d3fc8882991d846a3da","47eaa2cc2fb55448a0a9ba33","e70cc5f16fad72ac0da05c3e","070d3ba9beead5c28461c445","2dbd61f8246774b79138c07e","bff15b9c98638a800f92b0da","8e78332bb786ccc70c745b4f","726dd6ad4bdce227bf792667","3db27cca6a9cbe252151b1a9","61627ebc1709d060e7468e5f","f9698005c6e1fbe588ad04c0","22674b7412e3070c20a438a0","9d8ac6c555f4890664be250b","2b3c0cef4307300ee9726801","73fd79ce6f1db63e5119f168","cb8b5cdf2056d50efcac28be","42c4c64ecc182441169f4e1d","b8802354559c17a7477f1705","a6ddf990d3e15c415f711a9c","35d560b4b83d764e07c91ae8","b9fc61658f50c0f87bc9479f","3f0262474bab15e10b9aa04f","431c857a218e728c600be48f","357759e6447051d6a0ee0fb0","f0d95dc57659ffd2ae53c0b6","62aa89ec944b61b7bfb0d669","75a16215adb6a5ca097fa554","2c859ff193cbdbc7a47a9d7f","e0be868a6059b7e58d905ff3","d84ffbaf6be22a381fa303d9","8414ea57f445fe4c33301697","85767f2671928297a01bbbe7","f13ecc821ee39269b138631b","72f840246dbbfd46e11e3aa6","e3bd442876dde90be2d2fa8e","ac9a3f1cb6823207bc3a45d1","52f71c51070293f1d511a0ff","7677464c64929f841670b7bb","eae1e24ab9b41a35c96c32f4","5c1e0135f0b5b13063144a13","94aa920b5d2f6ca64f4d885d","2c19fda1a6292069cf6f3b0c","22147176c350a7abbd86d258","76d6ee70844b65b4421524fc","7f4f979a6296a09f013503d9","bb0b13e1ee88c133e1ec7fb5","984ba64547225be6e86986b5","0da06860e041800fb0817156","6f430ddf2f8ab8e796f7b3b1","efd53a9bfe41fdad5b951033","ee4e21ff34bc71657f8303b4","cb5eeecbedc5fd8b7b163f65","86c94b4379b3bd176c21578e","cbfb47426fd8e67a8bf87c94","8ffd3a2d07444fbc72887cd0","0a2eee7ae155696fa3a5ad3e","276a9aa79e090c1f38efa014","76d5c39c164f00bf07fab7f5","3adeed283a66d7544ed02c72","2dc4fc3b69a70cf4212c2dbd"],"bundle":["e0e723485d425ceb53c208c6","fd9b49046ce14fae2aa02ef1","e9a09d5f8aa069780e18ee22","f5b8f4322799e9c3c0e25f0e","f990a2676d88bfd58e6aee6e","e9fb11a3d2df9df4a809bff1","516a2cc9fecfdf2b8bc6b220","d008bf1785f149062620237c","946de293947954d9ab971947","12997b9645a6f54270318e96","23306b64d681ac36aff9a413","8529d60aaf5ed665e1d0fed3","b1cb9ebcd4bb99aa5bebc446","e80adbe72bbb168c7382429d","a14dea682e18d64c385d2fc8","63735c148e6c5ca3d663a804","69ea060ad046a20e7749964e","8e0a78ad8aa16d9190a0a4e2","60d19d159ffef0a4b730b9bc","cc1af6c951cc9a9c6436cf87","9fb52e3b41122b4f4241d9d3","fe6455c5c20077bc49779fd0","ee2c9278419ecc8ba7177658","a5265583fe0c772a50cebd9d","f210d293e8faced3fd522379","7fc79e2868771db5b2555df1","34ccc2586476b6e389a23303","d442caf18018bab9993a9e5e","a22ff0e8941859a035f9af3d","6fdb7311f2dd058c4cf9cc1d","61c3f7b8f215a39194813797","8e92cd0b7d2c6f0ceee1cb2c","e8fbca8f9fdb8058011fb808","bb0069c19c92b5c949bcf95b","4f250238310619d94d0b4624","9ed47bce57a267d2dd6e8d83","ea88aa73a9039fb4c1f04e67","44038b593630eb2cc2ff4428","e36d62baa03b7758ea82a691","513a8c9b7cdd06300d5b65c2","b1bb62c1a11734d959347f81","cd8fe465aa5274adfbd15939","3970f841670056892b6b0473","327ee15a0528b577f47022c7","c4a805d0a9e2f6c8a9da5707","44da1cf1362ea6330ac58e21","ddaf7dbe5221a4564f001798","44c3bbf1a645bd4c49367cd6","1a4ab426da6bae4fe79f3581","6a1f05ac3ff36e586a8ef220","374fd80166c294fcf32a99f4","e97341f1cdb279c3c0996606","f80d9a4706e7e5c9682f0e64","9b67d7778da47054646b845c","15e86a7662d64e5c4548b7a9","c8180fc61c05963b2c874141","a02c2bc6604cdf55d2695b1b","e62a29094490b067c0a4e1a9","eb3f18bca2d9d4826b06b0a2","3c751dc6dc1f292d712665e9","60018b4403a5e9ae6d887f6d","1240860f6a06179494350eac","23e160fa94dc52e41b4678b8","3742d70ab73063e1eb2f2bca","8acf44d0e0b1e78e1c3760f7","3d37c5692a7278b5d9c53b6b","219927ae7bad29ef67f9b95b","626813a02a35dcf42644771f","655935ac87f860cef3b478bd","59efd9f9aeb489ba215cdea2","dcc1e0c8bffb8c7f448bf512","556f6af8f14bdb70f5591c28","142649f3325d0b5e57b890d4","d272f9fb5e42ac65832002a3","0eedbd7566a34a28f582d9a3","b5463de66ec827494bd6bffd","3878688f2f073a18d0b62a85","adedc61e4c7274839ce6e1cc","d01ab4b3277b167783f86249","471e092e122cc73019cc8106"]};
 
+/* 5 Primary Shapes on Main Row */
+const XPR_MAIN_SHAPES = ['envelope','grad','roses','giftbox','cube'];
+
+/* All 16 Shapes (5 Primary + 10 Topic 3D Shapes + 1 Custom Symbol/Monogram 3D Crest) */
 const XPR_SHAPES = {
-  envelope: { nAr:'ظرف ذهبي',   nEn:'Gold Envelope', ctaAr:'المس الظرف لفتح الإهداء',       ctaEn:'Tap the Envelope to Open' },
-  grad:     { nAr:'قبعة تخرّج',  nEn:'Grad Cap',      ctaAr:'المس قبعة التخرّج لفتح الإهداء', ctaEn:'Tap the Grad Cap to Open' },
-  roses:    { nAr:'باقة ورد',    nEn:'Rose Bouquet',  ctaAr:'المس باقة الورد لفتح الإهداء',   ctaEn:'Tap the Bouquet to Open' },
-  giftbox:  { nAr:'علبة هدية',   nEn:'Gift Box',      ctaAr:'المس علبة الهدية لفتح المفاجأة', ctaEn:'Tap the Gift Box to Open' },
-  cube:     { nAr:'مكعب إيلان',  nEn:'Eilan Cube',    ctaAr:'المس المكعب لفتح الإهداء',       ctaEn:'Tap the Cube to Open' }
+  envelope: { nAr:'ظرف ذهبي',    nEn:'Gold Envelope', ctaAr:'المس الظرف لفتح الإهداء',        ctaEn:'Tap the Envelope to Open' },
+  grad:     { nAr:'قبعة تخرّج',   nEn:'Grad Cap',      ctaAr:'المس قبعة التخرّج لفتح الإهداء',  ctaEn:'Tap the Grad Cap to Open' },
+  roses:    { nAr:'باقة ورد',     nEn:'Rose Bouquet',  ctaAr:'المس باقة الورد لفتح الإهداء',    ctaEn:'Tap the Bouquet to Open' },
+  giftbox:  { nAr:'علبة هدية',    nEn:'Gift Box',      ctaAr:'المس علبة الهدية لفتح المفاجأة',  ctaEn:'Tap the Gift Box to Open' },
+  cube:     { nAr:'مكعب إيلان',   nEn:'Eilan Cube',    ctaAr:'المس المكعب لفتح الإهداء',        ctaEn:'Tap the Cube to Open' },
+  coffee:   { nAr:'قهوة مختصة',   nEn:'Specialty Cup', ctaAr:'المس كوب القهوة لفتح المفاجأة',   ctaEn:'Tap the Coffee Cup to Open' },
+  perfume:  { nAr:'عطر فاخر',     nEn:'Luxury Scent',  ctaAr:'المس زجاجة العطر لفتح الإهداء',   ctaEn:'Tap the Perfume to Open' },
+  ring:     { nAr:'خاتم ومجوهرات', nEn:'Ring Box',      ctaAr:'المس علبة الخاتم لفتح المفاجأة',  ctaEn:'Tap the Ring Box to Open' },
+  cake:     { nAr:'كيكة احتفال',  nEn:'Celebration',   ctaAr:'المس كيكة الفرح لفتح المفاجأة',   ctaEn:'Tap the Cake to Open' },
+  plane:    { nAr:'تذكرة سفر',    nEn:'Travel Ticket', ctaAr:'المس تذكرة السفر لفتح المفاجأة',  ctaEn:'Tap the Ticket to Open' },
+  car:      { nAr:'هدية سيارة',   nEn:'Car Surprise',  ctaAr:'المس المفتاح الذهبي لفتح المفاجأة',ctaEn:'Tap the Key to Open' },
+  baby:     { nAr:'بشارة مولود',  nEn:'Newborn Joy',   ctaAr:'المس سحابة البشارة لفتح المفاجأة',ctaEn:'Tap to Reveal Baby Surprise' },
+  crown:    { nAr:'تاج التميّز',   nEn:'Royal Crown',   ctaAr:'المس التاج الذهبي لفتح الإهداء',  ctaEn:'Tap the Crown to Open' },
+  heart:    { nAr:'قلب مذهّب',     nEn:'Golden Heart',  ctaAr:'المس القلب لفتح الرسالة والمفاجأة',ctaEn:'Tap the Heart to Open' },
+  trophy:   { nAr:'كأس الإنجاز',  nEn:'Trophy Cup',    ctaAr:'المس كأس الإنجاز لفتح المفاجأة',  ctaEn:'Tap the Trophy to Open' },
+  crest:    { nAr:'رمز بموضوعك',  nEn:'Custom Crest',  ctaAr:'المس الميدالية لفتح المفاجأة',    ctaEn:'Tap the Crest to Open' }
 };
 
+const XPR_EXTRA_KEYS = ['coffee','perfume','ring','cake','plane','car','baby','crown','heart','trophy'];
+
 const XPR_THEMES = {
-  gold:   { nAr:'المكعب الرقمي (الرسمي)', nEn:'Eilan Digital Cube', sw:'linear-gradient(135deg,#07080C 35%,#1E44C8 70%,#E2B450)' },
-  forest: { nAr:'أخضر إيلان الداكن',      nEn:'Deep Eilan Green',   sw:'linear-gradient(135deg,#07341F 48%,#0F6B44 78%,#D8FFE6)' },
-  royal:  { nAr:'أزرق إيلان الليلي',      nEn:'Night Royal Blue',   sw:'linear-gradient(135deg,#0B1F5E 48%,#1E44C8 80%,#F6DD8F)' },
-  velvet: { nAr:'بنفسجي إيلان العميق',    nEn:'Deep Eilan Purple',  sw:'linear-gradient(135deg,#251147 50%,#4A2A8F 82%,#E2B450)' }
+  gold:   { nAr:'المكعب الرقمي', nEn:'Digital Cube', sw:'linear-gradient(135deg,#07080C 35%,#1E44C8 70%,#E2B450)' },
+  forest: { nAr:'أخضر إيلان',    nEn:'Eilan Green',  sw:'linear-gradient(135deg,#07341F 48%,#0F6B44 78%,#D8FFE6)' },
+  royal:  { nAr:'أزرق ليلي',     nEn:'Night Blue',   sw:'linear-gradient(135deg,#0B1F5E 48%,#1E44C8 80%,#F6DD8F)' },
+  velvet: { nAr:'بنفسجي عميق',   nEn:'Deep Purple',  sw:'linear-gradient(135deg,#251147 50%,#4A2A8F 82%,#E2B450)' }
 };
+
+const XPR_CUSTOM_PALS = [
+  ['☕ قهوة وكراميل', 'Coffee & Caramel', '#1B120C', '#DDA35D'],
+  ['🌸 وردي ناعم',    'Soft Rose',        '#26101B', '#F49CBB'],
+  ['🤍 عاجي نهاري',   'Warm Ivory',       '#F4EDE0', '#9E7324'],
+  ['🍷 عنابي فخم',    'Royal Burgundy',   '#240911', '#E8B858'],
+  ['🏜️ رمال العلا',   'Desert Gold',      '#1F1912', '#E0A958'],
+  ['🌌 كحلي وفضي',    'Midnight Silver',  '#0B1528', '#C8D8F0']
+];
+
+const XPR_QUICK_SYMS = [
+  ['🩺','طب'],['🎮','قيمنق'],['🌙','رمضان/عمرة'],['🏡','منزل جديد'],
+  ['💼','وظيفة/ترقية'],['📚','كتاب/علم'],['🎨','فن'],['⚽','رياضة'],['⌚','ساعة'],['🍫','شوكولاتة']
+];
 
 const XPR_SOUNDS = {
   warm: { nAr:'🔔 رنين ذهبي دافئ', nEn:'🔔 Warm Gold Chime' },
@@ -182,7 +237,7 @@ const XPR_SOUNDS = {
   mute: { nAr:'🔇 بدون صوت',       nEn:'🔇 Silent' }
 };
 
-/* Gender-neutral Arabic + natural English presets, each auto-selecting its matching 3D gift shape */
+/* Gender-neutral Arabic + natural English presets */
 const XPR_CUBE_PRESETS = {
   eid: {
     ic:'✉️', sh:'envelope', nAr:'عيدية / هدية مالية', nEn:'Eidiyah / Cash Gift',
@@ -221,11 +276,17 @@ function xprCanPreviewToggle(){
 const XPR_STATE = {
   preset: 'eid',
   stage: 0,
+  openShapePlus: false,
+  openColorPlus: false,
+  topicDraft: '',
   previewSimVisitor: false,
   D: {
     p: 'eid',
     sh: 'envelope',
+    st: '✨',
     th: 'gold',
+    cb: '#1B120C',
+    ca: '#DDA35D',
     lg: 'ar',
     sn: 'warm',
     to: XPR_CUBE_PRESETS.eid.ar.to,
@@ -245,12 +306,85 @@ function xprUnlocked(key='cube'){
   return !!(S.unlk && (S.unlk['x_'+key] || S.unlk.x_bundle));
 }
 
+function xprCleanHex(v, fb='#E2B450'){
+  const s = String(v||'').trim();
+  return /^#[0-9a-fA-F]{6}$/.test(s) ? s.toUpperCase() : fb;
+}
+function xprHexRgb(hex, fb=[14,18,30]){
+  const m = /^#?([0-9a-f]{6})$/i.exec(String(hex||'').trim());
+  if(!m) return fb;
+  const n = parseInt(m[1], 16);
+  return [(n>>16)&255, (n>>8)&255, n&255];
+}
+function xprCustomFrameStyle(cb='#1B120C', ca='#DDA35D'){
+  const bgHex = xprCleanHex(cb, '#1B120C');
+  const acHex = xprCleanHex(ca, '#DDA35D');
+  const [br,bg,bb] = xprHexRgb(bgHex, [27,18,12]);
+  const [ar,ag,ab] = xprHexRgb(acHex, [221,163,93]);
+  const lumBg = (0.299*br + 0.587*bg + 0.114*bb) / 255;
+  const lumAc = (0.299*ar + 0.587*ag + 0.114*ab) / 255;
+  const light = lumBg > 0.58;
+  const txt = light ? '#14150F' : '#F5F7FA';
+  const mu = light ? 'rgba(20,21,15,.68)' : 'rgba(245,247,250,.74)';
+  const card = light
+    ? 'rgba(255,255,255,.84)'
+    : `rgba(${Math.round(br*0.72)},${Math.round(bg*0.72)},${Math.round(bb*0.72)},.9)`;
+  const bd = `rgba(${ar},${ag},${ab},${light?.45:.42})`;
+  const bg2 = light
+    ? `rgb(${Math.max(0,br-18)},${Math.max(0,bg-18)},${Math.max(0,bb-18)})`
+    : `rgb(${Math.max(0,Math.round(br*0.52))},${Math.max(0,Math.round(bg*0.52))},${Math.max(0,Math.round(bb*0.52))})`;
+  const btnFg = lumAc > 0.5 ? '#07080C' : '#FFFFFF';
+  return `--xbg:${bgHex};--xbg2:${bg2};--xcard:${card};--xacc:${acHex};--xacc2:${acHex};--xtxt:${txt};--xmu:${mu};--xbd:${bd};--xsub:${acHex};--xbtnfg:${btnFg};background:radial-gradient(circle at 50% 22%,rgba(${ar},${ag},${ab},.24),transparent 56%),linear-gradient(180deg,${bgHex},${bg2});color:${txt};border-color:${bd}`;
+}
+
+/* Smart Topic -> Shape + Optional Custom Colors Matcher */
+function xprMatchTopic(rawTopic){
+  const t = String(rawTopic||'').trim();
+  if(!t) return null;
+  if(/قهو|كافي|لاتيه|ماتشا|اسبريسو|كوب|coffee|cafe|latte|matcha/i.test(t)) return { sh:'coffee', cb:'#1B120C', ca:'#DDA35D' };
+  if(/عطر|بخور|عود|مسك|طيب|perfume|oud|scent/i.test(t)) return { sh:'perfume', cb:'#191122', ca:'#E6BC6A' };
+  if(/خاتم|خطوب|زواج|عرس|ملكه|ملكة|ذهب|الماس|ألماس|سوار|عقد|مجوهرات|ring|wedding|diamond/i.test(t)) return { sh:'ring', cb:'#161226', ca:'#F5D993' };
+  if(/ميلاد|كيك|حفل|تورت|cake|birthday|party/i.test(t)) return { sh:'cake', cb:'#241021', ca:'#F4A3C0' };
+  if(/سفر|رحل|طيار|تذكر|مطار|فندق|اجاز|إجاز|لندن|باريس|دبي|travel|trip|flight|ticket/i.test(t)) return { sh:'plane', cb:'#0A1D3B', ca:'#F0C96B' };
+  if(/سيار|مركب|قياد|رخص|مفتاح|car|drive|auto/i.test(t)) return { sh:'car', cb:'#0D131C', ca:'#E2B450' };
+  if(/مولود|بيبي|طفل|قدوم|سلامتك|ولاد|baby|newborn/i.test(t)) return { sh:'baby', cb:'#102136', ca:'#F6DD8F' };
+  if(/تاج|ملك|فخم|امير|أمير|تميز|تميّز|crown|vip|royal/i.test(t)) return { sh:'crown', cb:'#160E29', ca:'#F6DD8F' };
+  if(/حب|شوق|غلا|ذكرى|امي|أمي|ابي|أبي|صداق|قلب|love|heart|mom|dad/i.test(t)) return { sh:'heart', cb:'#290B17', ca:'#F48FB1' };
+  if(/فوز|بطول|كأس|كاس|انجاز|إنجاز|جائز|مسابق|تحدي|trophy|win|award/i.test(t)) return { sh:'trophy', cb:'#0C2118', ca:'#F6DD8F' };
+  if(/تخرج|جامع|ثانوي|ماجستير|دكتوراه|شهاد|grad/i.test(t)) return { sh:'grad' };
+  if(/ورد|زهر|باقه|باقة|شكر|امتنان|سلامه|سلامة|rose|flower|thank/i.test(t)) return { sh:'roses' };
+  if(/عيد|عيدي|مالي|تحويل|ريال|فلوس|eid|cash/i.test(t)) return { sh:'envelope' };
+
+  const symRules = [
+    [/طب|دكتور|عياد|تمريض|صيدل|doctor|med/i, '🩺', '#0C1E33', '#E2B450'],
+    [/قيمنق|لعب|بلايستيشن|سوني|ستيم|game|gaming/i, '🎮', '#140B29', '#B392FF'],
+    [/رمضان|عمر|حج|مكه|مكة|مدين|هلال|مبارك الشهر|ramadan|umrah/i, '🌙', '#092218', '#F6DD8F'],
+    [/بيت|منزل|شقه|شقة|سكن|نقل|home|house/i, '🏡', '#12261C', '#E2B450'],
+    [/وظيف|عمل|ترقي|تعيين|مشروع|شرك|افتتاح|job|work|business/i, '💼', '#0E1A38', '#E2B450'],
+    [/كتاب|قراء|رواي|علم|دراس|مذاكر|book|study/i, '📚', '#1C1610', '#E8C068'],
+    [/رسم|فن|تصميم|لوح|art|design/i, '🎨', '#1E122B', '#F2C166'],
+    [/رياض|نادي|كوره|كرة|تمرين|sport|gym|football/i, '⚽', '#0B2418', '#E2B450'],
+    [/ساع|watch/i, '⌚', '#10141D', '#E2B450'],
+    [/شوكولا|حلى|حلا|سويت|chocolate|sweet/i, '🍫', '#21130D', '#E3B068'],
+    [/تصوير|كاميرا|فوتو|camera|photo/i, '📷', '#12151E', '#E2B450'],
+    [/موسيق|بيانو|عود|غناء|music|piano/i, '🎶', '#171128', '#E8BE66'],
+    [/كشت|بر|مخيم|شتاء|kashta|camp/i, '🔥', '#1E140C', '#EE9B4B'],
+    [/خيل|فرس|فروسي|horse/i, '🐎', '#1C140E', '#E2B450'],
+    [/قط|اليف|أليف|حيوان|cat|pet/i, '🐾', '#1A1524', '#F0C27B']
+  ];
+  for(const [re, sym, cb, ca] of symRules){
+    if(re.test(t)) return { sh:'crest', st:sym, cb, ca };
+  }
+  const firstWord = t.split(/\s+/)[0].slice(0, 5);
+  return { sh:'crest', st:firstWord || '✨', cb:'#10162B', ca:'#E2B450' };
+}
+
 /* Register Product #1 in Store & Experiences catalog (100% real data, sales:0, no fake reviews) */
 (function xprRegisterProducts(){
   const pCube = {
     id:'x-cube',
-    name:'مفاجأة إيلان التفاعلية — ظرف، قبعة تخرّج، ورد ومكعب ذهبي',
-    en:'Eilan Interactive Surprise — Envelope, Grad Cap, Roses & Cube',
+    name:'مفاجأة إيلان التفاعلية — أشكال وألوان بموضوعك',
+    en:'Eilan Interactive Surprise — Custom Shapes & Themes',
     cat:'experiences',
     price:25,
     icon:'🎁',
@@ -258,9 +392,9 @@ function xprUnlocked(key='cube'){
     kind:'digital',
     badge:'تسليم فوري',
     sales:0,
-    note:'⚡ تسليم فوري تلقائي ٢٤/٧: اختر شكل الهدية (ظرف ذهبي، قبعة تخرّج، باقة ورد، علبة هدية، أو مكعب إيلان) واستلم رابط واتساب بملء الشاشة + بطاقة باركود QR للطباعة.',
-    desc:'قالب تجربة إهداء ومفاجأة تفاعلي يُفتح باللمس على ٣ مراحل مشوّقة مع ٥ أشكال فاخرة حسب المناسبة (ظرف عيدية، قبعة تخرّج، باقة ورد، علبة هدية، ومكعب إيلان) ونغمة لمس هادئة. يوصلك الكود فوراً بعد الدفع وتستلم رابطك وبطاقتك في نفس اللحظة.',
-    tags:['تجارب','قوالب','هدية','عيدية','تخرج','ورد','ظرف','مفاجأة','باركود','تفاعلي','cube','gift','reveal']
+    note:'⚡ تسليم فوري تلقائي ٢٤/٧: اختر من الأشكال والثيمات الجاهزة أو اضغط (+) لتصميم شكل وألوان بموضوعك، واستلم رابط واتساب بملء الشاشة + بطاقة باركود QR.',
+    desc:'قالب تجربة إهداء ومفاجأة تفاعلي يُفتح باللمس على ٣ مراحل مشوّقة: يشمل أشكال جاهزة (ظرف، قبعة تخرّج، ورد، علبة هدية، مكعب إيلان) + زر (+) لتوليد أشكال وألوان خاصة بموضوعك (قهوة، عطر، سفر، سيارة، مولود، أو رمزك الخاص).',
+    tags:['تجارب','قوالب','هدية','عيدية','تخرج','ورد','ظرف','قهوة','سفر','مفاجأة','باركود','تفاعلي','cube','gift']
   };
   if(typeof DEF!=='undefined' && Array.isArray(DEF.products)){
     const i = DEF.products.findIndex(x=>x.id===pCube.id);
@@ -280,10 +414,14 @@ function xprLogoMini(){
   return `<svg xmlns="http://www.w3.org/2000/svg" class="xpr-mini-svg" viewBox="-4 -6 108 110" style="stroke:none;overflow:visible" aria-hidden="true"><rect x="-2" y="-4" width="104" height="106" rx="22" fill="#07080C"/>${XPR_CUBE_POLYS}${XPR_GOLD_POLYS}</svg>`;
 }
 
-/* 5 Unclipped 3D Interactive Gift Shapes (viewBox 0 0 140 140 + generous headroom so nothing ever clips) */
-function xprShapeSvg(sh='envelope'){
+/* 16 Unclipped 3D Interactive Gift Shapes (5 Main + 10 Topic Vectors + Custom Symbol/Monogram 3D Crest) */
+function xprShapeSvg(sh='envelope', customAcc='', customSym=''){
   const k = XPR_SHAPES[sh] ? sh : 'envelope';
+  const acc = /^#[0-9a-fA-F]{6}$/.test(customAcc||'') ? customAcc : '#E2B450';
+  const sym = String(customSym || '✨').trim().slice(0, 6) || '✨';
+  const xmlEsc = s => String(s).replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
   let inner = '';
+
   if(k === 'envelope'){
     inner = `
       <ellipse cx="70" cy="121" rx="44" ry="6.5" fill="rgba(0,0,0,.34)"/>
@@ -375,6 +513,145 @@ function xprShapeSvg(sh='envelope'){
         <path d="M70,46 C86,29 97,43 84,50 C79,53 73,49 70,46 Z" fill="#E2B450" stroke="#B6892E" stroke-width="1"/>
         <circle cx="70" cy="46" r="4.8" fill="#FFF0BA"/>
       </g>`;
+  } else if(k === 'coffee'){
+    inner = `
+      <ellipse cx="70" cy="123" rx="34" ry="6" fill="rgba(0,0,0,.34)"/>
+      <g class="xg-float">
+        <path d="M56,42 C52,34 60,28 56,22" fill="none" stroke="#F6DD8F" stroke-width="2.4" stroke-linecap="round" opacity=".82"/>
+        <path d="M70,39 C66,30 75,25 70,18" fill="none" stroke="#FAF3E0" stroke-width="2.6" stroke-linecap="round" opacity=".9"/>
+        <path d="M84,42 C80,34 88,28 84,22" fill="none" stroke="#F6DD8F" stroke-width="2.4" stroke-linecap="round" opacity=".82"/>
+        <ellipse cx="70" cy="114" rx="34" ry="6.5" fill="#D8C29D"/>
+        <polygon points="44,54 96,54 88,113 52,113" fill="#FAF3E3"/>
+        <polygon points="70,54 96,54 88,113 70,113" fill="#EDE0C6"/>
+        <polygon points="46.5,72 93.5,72 90.5,95 49.5,95" fill="#6F472B"/>
+        <circle cx="70" cy="83.5" r="8" fill="#E2B450"/>
+        <path d="M70,79.5 C67,76.5 63.5,80 66,83.5 L70,87.5 L74,83.5 C76.5,80 73,76.5 70,79.5 Z" fill="#2B190E"/>
+        <rect x="40" y="47" width="60" height="8" rx="4" fill="#2B190E"/>
+        <rect x="45" y="42" width="50" height="6" rx="3" fill="#432818"/>
+        <rect x="52" y="49" width="36" height="2.4" rx="1.2" fill="#E2B450"/>
+      </g>`;
+  } else if(k === 'perfume'){
+    inner = `
+      <ellipse cx="70" cy="123" rx="34" ry="6" fill="rgba(0,0,0,.34)"/>
+      <g class="xg-float">
+        <rect x="59" y="25" width="22" height="14" rx="4" fill="#F6DD8F" stroke="#B6892E" stroke-width="1.2"/>
+        <rect x="63" y="39" width="14" height="9" fill="#CFA244"/>
+        <circle cx="94" cy="40" r="6" fill="#E2B450"/>
+        <path d="M77,42 Q86,40 89,40" fill="none" stroke="#F6DD8F" stroke-width="2.4"/>
+        <polygon points="44,54 96,54 104,66 104,108 94,116 46,116 36,108 36,66" fill="#26173E" stroke="#E2B450" stroke-width="1.8"/>
+        <polygon points="46,57 70,57 70,113 48,113 40,106 40,67" fill="#3B2560" opacity=".85"/>
+        <rect x="51" y="69" width="38" height="30" rx="5" fill="#FAF3E0" stroke="#CFA244" stroke-width="1.4"/>
+        <path d="M70 76 L72 81.5 L77.5 83.5 L72 85.5 L70 91 L68 85.5 L62.5 83.5 L68 81.5 Z" fill="#CFA244"/>
+      </g>`;
+  } else if(k === 'ring'){
+    inner = `
+      <ellipse cx="70" cy="123" rx="38" ry="6" fill="rgba(0,0,0,.34)"/>
+      <polygon points="34,78 106,78 100,114 40,114" fill="#1F1538" stroke="#E2B450" stroke-width="1.5"/>
+      <ellipse cx="70" cy="78" rx="36" ry="8" fill="#35235E"/>
+      <g class="xg-float">
+        <path d="M40,68 L48,34 L92,34 L100,68 Z" fill="#291A4A" stroke="#E2B450" stroke-width="1.4"/>
+        <circle cx="70" cy="68" r="15" fill="none" stroke="#F6DD8F" stroke-width="5"/>
+        <circle cx="70" cy="68" r="15" fill="none" stroke="#CFA244" stroke-width="1.6"/>
+        <polygon points="70,38 81,47 76,55 64,55 59,47" fill="#E8F4FF" stroke="#9CC8F7" stroke-width="1.2"/>
+        <polygon points="70,38 76,55 64,55" fill="#FFFFFF" opacity=".8"/>
+        <path d="M70 23 L71.8 28.2 L77 30 L71.8 31.8 L70 37 L68.2 31.8 L63 30 L68.2 28.2 Z" fill="#F6DD8F"/>
+      </g>`;
+  } else if(k === 'cake'){
+    inner = `
+      <ellipse cx="70" cy="123" rx="44" ry="6" fill="rgba(0,0,0,.34)"/>
+      <g class="xg-float">
+        <ellipse cx="70" cy="114" rx="44" ry="7" fill="#E2B450"/>
+        <rect x="34" y="80" width="72" height="33" rx="8" fill="#FAF0E4"/>
+        <path d="M34,88 Q43,96 52,88 T70,88 T88,88 T106,88 L106,82 Q106,78 100,78 L40,78 Q34,78 34,82 Z" fill="#D94B72"/>
+        <rect x="46" y="54" width="48" height="26" rx="6" fill="#FFF7EE"/>
+        <path d="M46,61 Q54,68 62,61 T78,61 T94,61 L94,57 Q94,54 89,54 L51,54 Q46,54 46,57 Z" fill="#E2B450"/>
+        <rect x="67" y="34" width="6" height="20" rx="2.5" fill="#F6DD8F"/>
+        <path d="M70,20 C75,26 75,32 70,34 C65,32 65,26 70,20 Z" fill="#FFB732"/>
+        <circle cx="70" cy="29" r="2.3" fill="#FFF6D6"/>
+      </g>`;
+  } else if(k === 'plane'){
+    inner = `
+      <ellipse cx="70" cy="123" rx="42" ry="6" fill="rgba(0,0,0,.34)"/>
+      <g class="xg-float">
+        <g transform="rotate(-10 70 84)">
+          <rect x="26" y="64" width="88" height="42" rx="9" fill="#FAF3E0" stroke="#E2B450" stroke-width="1.8"/>
+          <rect x="26" y="64" width="24" height="42" rx="8" fill="#162E6E"/>
+          <line x1="56" y1="68" x2="56" y2="102" stroke="#CFA244" stroke-width="1.6" stroke-dasharray="3 3"/>
+          <rect x="64" y="74" width="38" height="5" rx="2.5" fill="#1A3A9F"/>
+          <rect x="64" y="85" width="26" height="4" rx="2" fill="#C9B792"/>
+          <rect x="64" y="93" width="32" height="4" rx="2" fill="#E2B450"/>
+        </g>
+        <path d="M36,52 L66,43 L56,25 L65,23 L82,39 L104,33 C110,31 114,36 108,40 L86,49 L79,68 L71,69 L73,52 L50,58 L44,65 L38,65 L41,55 Z" fill="#F6DD8F" stroke="#94702A" stroke-width="1.2"/>
+      </g>`;
+  } else if(k === 'car'){
+    inner = `
+      <ellipse cx="70" cy="123" rx="44" ry="6" fill="rgba(0,0,0,.34)"/>
+      <g class="xg-float">
+        <path d="M26,90 L36,72 C40,65 48,62 60,62 L84,62 C95,62 103,66 108,74 L116,86 C118,90 118,98 112,98 L28,98 C23,98 23,93 26,90 Z" fill="#182852" stroke="#E2B450" stroke-width="1.8"/>
+        <polygon points="45,74 58,65 84,65 98,74" fill="#F6DD8F" opacity=".88"/>
+        <circle cx="45" cy="98" r="10" fill="#0B0E17" stroke="#E2B450" stroke-width="2.4"/>
+        <circle cx="45" cy="98" r="4" fill="#F6DD8F"/>
+        <circle cx="97" cy="98" r="10" fill="#0B0E17" stroke="#E2B450" stroke-width="2.4"/>
+        <circle cx="97" cy="98" r="4" fill="#F6DD8F"/>
+        <rect x="56" y="25" width="28" height="26" rx="9" fill="#0E1424" stroke="#F6DD8F" stroke-width="1.8"/>
+        <circle cx="70" cy="38" r="5" fill="#E2B450"/>
+      </g>`;
+  } else if(k === 'baby'){
+    inner = `
+      <ellipse cx="70" cy="123" rx="38" ry="6" fill="rgba(0,0,0,.34)"/>
+      <g class="xg-float">
+        <path d="M58,28 C43,32 37,50 47,64 C56,77 75,80 88,71 C74,73 62,63 61,49 C60,39 64,32 70,27 C66,26 62,27 58,28 Z" fill="#F6DD8F"/>
+        <path d="M38,88 C30,88 25,82 27,75 C29,69 36,66 42,68 C46,59 58,56 66,62 C73,57 85,60 88,68 C95,68 101,74 100,81 C99,86 94,88 88,88 Z" fill="#FAF5EA" stroke="#E2B450" stroke-width="1.4"/>
+        <line x1="50" y1="88" x2="50" y2="104" stroke="#F6DD8F" stroke-width="1.6"/>
+        <line x1="74" y1="88" x2="74" y2="109" stroke="#F6DD8F" stroke-width="1.6"/>
+        <circle cx="50" cy="106" r="4.5" fill="#E2B450"/>
+        <path d="M74 103 L75.8 108 L81 109.8 L75.8 111.6 L74 116.6 L72.2 111.6 L67 109.8 L72.2 108 Z" fill="#F6DD8F"/>
+      </g>`;
+  } else if(k === 'crown'){
+    inner = `
+      <ellipse cx="70" cy="122" rx="40" ry="6" fill="rgba(0,0,0,.34)"/>
+      <g class="xg-float">
+        <polygon points="26,92 20,46 47,66 70,32 93,66 120,46 114,92" fill="#E2B450" stroke="#FFF0BA" stroke-width="1.5"/>
+        <polygon points="70,32 93,66 120,46 114,92 70,92" fill="#CFA244" opacity=".55"/>
+        <rect x="25" y="92" width="90" height="14" rx="5" fill="#B6892E" stroke="#F6DD8F" stroke-width="1.5"/>
+        <circle cx="20" cy="43" r="5" fill="#FFF0BA"/>
+        <circle cx="70" cy="29" r="6" fill="#FFF0BA"/>
+        <circle cx="120" cy="43" r="5" fill="#FFF0BA"/>
+        <polygon points="70,64 76,72 70,80 64,72" fill="#1A3A9F" stroke="#FFF0BA" stroke-width="1.2"/>
+        <circle cx="44" cy="76" r="4" fill="#0F6B44"/>
+        <circle cx="96" cy="76" r="4" fill="#4A2A8F"/>
+      </g>`;
+  } else if(k === 'heart'){
+    inner = `
+      <ellipse cx="70" cy="122" rx="34" ry="6" fill="rgba(0,0,0,.34)"/>
+      <g class="xg-float">
+        <path d="M70,108 L34,72 C20,57 26,33 46,31 C57,30 65,37 70,45 C75,37 83,30 94,31 C114,33 120,57 106,72 Z" fill="#B8254B" stroke="#F6DD8F" stroke-width="2.2"/>
+        <path d="M70,102 L40,71 C29,59 34,40 49,38 C58,37 65,43 70,51 Z" fill="#DC3862"/>
+        <ellipse cx="50" cy="49" rx="8" ry="4.5" transform="rotate(-28 50 49)" fill="#FFA6BE" opacity=".65"/>
+        <path d="M98 25 L100 30.5 L105.5 32.5 L100 34.5 L98 40 L96 34.5 L90.5 32.5 L96 30.5 Z" fill="#F6DD8F"/>
+      </g>`;
+  } else if(k === 'trophy'){
+    inner = `
+      <ellipse cx="70" cy="123" rx="36" ry="6" fill="rgba(0,0,0,.34)"/>
+      <g class="xg-float">
+        <path d="M44,40 H96 V54 C96,69 109,65 109,51 C109,43 102,42 96,44 M44,44 C38,42 31,43 31,51 C31,65 44,69 44,54" fill="none" stroke="#F6DD8F" stroke-width="4.2" stroke-linecap="round"/>
+        <path d="M42,34 H98 V58 C98,77 85,88 70,88 C55,88 42,77 42,58 Z" fill="#E2B450" stroke="#FFF0BA" stroke-width="1.4"/>
+        <path d="M70,34 H98 V58 C98,77 85,88 70,88 Z" fill="#CFA244" opacity=".55"/>
+        <rect x="65" y="87" width="10" height="15" fill="#B6892E"/>
+        <rect x="48" y="101" width="44" height="12" rx="4" fill="#182238" stroke="#E2B450" stroke-width="1.6"/>
+        <path d="M70 46 L72.8 53.5 L80.5 54 L74.5 59 L76.5 66.5 L70 62 L63.5 66.5 L65.5 59 L59.5 54 L67.2 53.5 Z" fill="#FFF5CC"/>
+      </g>`;
+  } else if(k === 'crest'){
+    const fz = sym.length > 2 ? 22 : 38;
+    inner = `
+      <ellipse cx="70" cy="123" rx="36" ry="6" fill="rgba(0,0,0,.34)"/>
+      <g class="xg-float">
+        <polygon points="70,22 104,36 118,70 104,104 70,118 36,104 22,70 36,36" fill="#10172A" stroke="${acc}" stroke-width="2.8"/>
+        <circle cx="70" cy="70" r="36" fill="#182342" stroke="${acc}" stroke-width="1.4"/>
+        <circle cx="70" cy="70" r="30" fill="none" stroke="rgba(255,255,255,.18)" stroke-width="1" stroke-dasharray="3 3"/>
+        <text x="70" y="72" text-anchor="middle" dominant-baseline="central" fill="#FFFFFF" font-family="Cairo,Tajawal,system-ui,sans-serif" font-weight="900" font-size="${fz}">${xmlEsc(sym)}</text>
+        <circle cx="70" cy="22" r="4" fill="${acc}"/>
+      </g>`;
   } else {
     inner = `
       <ellipse cx="70" cy="124" rx="34" ry="6" fill="rgba(0,0,0,.34)"/>
@@ -425,7 +702,12 @@ function xprEncodeData(D){
   const def = prObj[lg];
   const o = { p };
   if(D.sh && D.sh !== prObj.sh) o.sh = D.sh;
+  if(D.sh === 'crest' && D.st) o.st = String(D.st).slice(0, 6);
   if(D.th && D.th !== 'gold') o.th = D.th;
+  if(D.th === 'custom'){
+    o.cb = xprCleanHex(D.cb, '#1B120C');
+    o.ca = xprCleanHex(D.ca, '#DDA35D');
+  }
   if(lg !== 'ar') o.lg = lg;
   if(D.sn && D.sn !== 'warm') o.sn = D.sn;
   if(D.to !== def.to) o.to = String(D.to||'').slice(0,80);
@@ -454,10 +736,14 @@ function xprDecodeData(tok){
     const lg = o.lg === 'en' ? 'en' : 'ar';
     const def = prObj[lg];
     const lk = (typeof o.lk==='string' && /^https:\/\/\S+/i.test(o.lk.trim())) ? o.lk.trim() : '';
+    const isCustomTh = o.th === 'custom';
     return {
       p,
       sh: XPR_SHAPES[o.sh] ? o.sh : prObj.sh,
-      th: XPR_THEMES[o.th] ? o.th : 'gold',
+      st: typeof o.st==='string' ? o.st.slice(0,6) : '✨',
+      th: isCustomTh ? 'custom' : (XPR_THEMES[o.th] ? o.th : 'gold'),
+      cb: xprCleanHex(o.cb, '#1B120C'),
+      ca: xprCleanHex(o.ca, '#DDA35D'),
       lg,
       sn: XPR_SOUNDS[o.sn] ? o.sn : 'warm',
       to: typeof o.to==='string' ? o.to : def.to,
@@ -600,6 +886,8 @@ function xprRenderFrameHTML(D, stage, opts={}){
   const muted = D.sn === 'mute';
   const shKey = XPR_SHAPES[D.sh] ? D.sh : 'envelope';
   const shMeta = XPR_SHAPES[shKey];
+  const accForShape = D.th === 'custom' ? xprCleanHex(D.ca, '#DDA35D') : '#E2B450';
+  const customStyle = D.th === 'custom' ? ` style="${xprCustomFrameStyle(D.cb, D.ca)}"` : '';
   const sparks = Array.from({length:10}, (_,i)=>`<i style="left:${8+i*9}%;animation-delay:${(i*0.47).toFixed(2)}s"></i>`).join('');
 
   let centerHTML = '';
@@ -608,7 +896,7 @@ function xprRenderFrameHTML(D, stage, opts={}){
       <p class="xpr-hook">${esc(D.hk || (en?'One touch unlocks your surprise ✨':'لمسة واحدة تفتح المفاجأة ✨'))}</p>
       <button type="button" class="xpr-cube-btn" data-xact="nextstage" aria-label="${en?shMeta.ctaEn:shMeta.ctaAr}">
         <span class="xpr-cube-halo"></span>
-        ${xprShapeSvg(shKey)}
+        ${xprShapeSvg(shKey, accForShape, D.st)}
       </button>
       <button type="button" class="xpr-tap-cta" data-xact="nextstage">
         <span>✨</span><span>${en ? shMeta.ctaEn : shMeta.ctaAr}</span>
@@ -627,7 +915,7 @@ function xprRenderFrameHTML(D, stage, opts={}){
     const safeLink = (D.lk && /^https:\/\/\S+/i.test(D.lk.trim())) ? D.lk.trim() : '';
     centerHTML = `
       <div class="xpr-vault">
-        <span class="xpr-vault-ic">${xprShapeSvg(shKey)}</span>
+        <span class="xpr-vault-ic">${xprShapeSvg(shKey, accForShape, D.st)}</span>
         <div class="xpr-gift-lbl">${en ? '★ YOUR SURPRISE REVEAL ★' : '★ المفاجأة الخاصة ★'}</div>
         <h3 class="xpr-gift-val">${esc(D.gf || '')}</h3>
         ${D.sb ? `<p class="xpr-gift-sub">${esc(D.sb)}</p>` : ''}
@@ -640,7 +928,7 @@ function xprRenderFrameHTML(D, stage, opts={}){
   }
 
   return `
-    <div class="xpr-frame no-ei" data-th="${esc(D.th||'gold')}" dir="${dir}">
+    <div class="xpr-frame no-ei" data-th="${esc(D.th||'gold')}"${customStyle} dir="${dir}">
       <div class="xpr-sparks">${sparks}</div>
       <div class="xpr-top">
         <span class="xpr-to">${en ? 'To: ' : 'إلى: '}${esc(D.to || (en?'Someone Special':'أغلى الناس'))}</span>
@@ -670,10 +958,8 @@ async function xprVerifyCode(ev){
   const f = ev.target;
   const msg = $('#xprCodeMsg');
   const raw = String(f.code.value || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
-  let key = 'cube', body = raw;
-  if(raw.startsWith('EXPB')){ key = 'bundle'; }
-  else if(raw.startsWith('CUB1')){ key = 'cube'; }
-  else { body = 'CUB1' + raw; }
+  let body = raw;
+  if(!raw.startsWith('EXPB') && !raw.startsWith('CUB1')) body = 'CUB1' + raw;
 
   if(body.length < 15){
     msg.className = 'lh-msg bad';
@@ -702,7 +988,7 @@ async function xprVerifyCode(ev){
   xprRefreshStudio();
 }
 
-/* Luxury Landscape Gift Card Renderer (1600x1000 Canvas -> PNG or Landscape Print PDF) */
+/* Luxury Landscape Gift Card Renderer (1600x1000 Canvas -> PNG or Landscape Print PDF, supports Custom Colors & Shapes) */
 async function xprDrawGiftCardCanvas(D){
   const url = xprShareUrl(D);
   const qr = xprMakeQR(url);
@@ -712,27 +998,32 @@ async function xprDrawGiftCardCanvas(D){
   const ctx = cv.getContext('2d');
   const en = D.lg === 'en';
 
-  // Background matching official Eilan live palette
+  const isCust = D.th === 'custom';
+  const cbHex = isCust ? xprCleanHex(D.cb, '#1B120C') : (D.th==='forest'?'#0C2B1D':D.th==='royal'?'#0E1E52':D.th==='velvet'?'#1F1139':'#0E1426');
+  const caHex = isCust ? xprCleanHex(D.ca, '#DDA35D') : '#E2B450';
+  const [br,bg,bb] = xprHexRgb(cbHex);
+  const [ar,ag,ab] = xprHexRgb(caHex);
+  const light = (0.299*br + 0.587*bg + 0.114*bb)/255 > 0.58;
+  const txtMain = light ? '#14150F' : '#F2F5FA';
+  const txtSub  = light ? 'rgba(20,21,15,0.75)' : 'rgba(242,245,250,0.85)';
+  const txtMu   = light ? 'rgba(20,21,15,0.56)' : 'rgba(242,245,250,0.6)';
+
   const g = ctx.createLinearGradient(0, 0, W, H);
-  if(D.th==='forest'){ g.addColorStop(0,'#0C2B1D'); g.addColorStop(1,'#06130C'); }
-  else if(D.th==='royal'){ g.addColorStop(0,'#0E1E52'); g.addColorStop(1,'#070A16'); }
-  else if(D.th==='velvet'){ g.addColorStop(0,'#1F1139'); g.addColorStop(1,'#07080C'); }
-  else { g.addColorStop(0,'#0E1426'); g.addColorStop(1,'#07080C'); }
+  g.addColorStop(0, cbHex);
+  g.addColorStop(1, light ? `rgb(${Math.max(0,br-18)},${Math.max(0,bg-18)},${Math.max(0,bb-18)})` : '#07080C');
   ctx.fillStyle = g;
   ctx.fillRect(0, 0, W, H);
 
-  // Subtle golden glow
   const rg = ctx.createRadialGradient(W*0.72, H*0.35, 20, W*0.72, H*0.35, 520);
-  rg.addColorStop(0, 'rgba(226,180,80,0.18)');
-  rg.addColorStop(1, 'rgba(226,180,80,0)');
+  rg.addColorStop(0, `rgba(${ar},${ag},${ab},0.22)`);
+  rg.addColorStop(1, `rgba(${ar},${ag},${ab},0)`);
   ctx.fillStyle = rg;
   ctx.fillRect(0, 0, W, H);
 
-  // Double Luxury Border
-  ctx.strokeStyle = '#E2B450';
+  ctx.strokeStyle = caHex;
   ctx.lineWidth = 4;
   ctx.beginPath(); ctx.roundRect(36, 36, W-72, H-72, 34); ctx.stroke();
-  ctx.strokeStyle = 'rgba(226,180,80,0.28)';
+  ctx.strokeStyle = `rgba(${ar},${ag},${ab},0.3)`;
   ctx.lineWidth = 2;
   ctx.beginPath(); ctx.roundRect(54, 54, W-108, H-108, 26); ctx.stroke();
 
@@ -743,18 +1034,17 @@ async function xprDrawGiftCardCanvas(D){
     im.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgStr);
   });
 
-  // Left/Side QR Panel
   const qrBoxX = en ? W - 540 : 100;
   const qrBoxY = 150, qrBoxW = 440, qrBoxH = 700;
-  ctx.fillStyle = 'rgba(7,8,12,0.74)';
-  ctx.strokeStyle = 'rgba(226,180,80,0.48)';
+  ctx.fillStyle = light ? 'rgba(255,255,255,0.82)' : 'rgba(7,8,12,0.74)';
+  ctx.strokeStyle = `rgba(${ar},${ag},${ab},0.48)`;
   ctx.lineWidth = 2.5;
   ctx.beginPath(); ctx.roundRect(qrBoxX, qrBoxY, qrBoxW, qrBoxH, 28); ctx.fill(); ctx.stroke();
 
   if(qr){
     const qSize = 340;
     const qX = qrBoxX + (qrBoxW - qSize)/2, qY = qrBoxY + 44;
-    ctx.fillStyle = '#F5F7FA';
+    ctx.fillStyle = '#FFFFFF';
     ctx.beginPath(); ctx.roundRect(qX - 18, qY - 18, qSize + 36, qSize + 36, 18); ctx.fill();
     const N = qr.length, cell = qSize / N;
     ctx.fillStyle = '#07080C';
@@ -764,37 +1054,34 @@ async function xprDrawGiftCardCanvas(D){
       }
     }
   }
-  ctx.fillStyle = '#F2F5FA';
+  ctx.fillStyle = txtMain;
   ctx.font = '800 25px Cairo, Tajawal, sans-serif';
   ctx.textAlign = 'center';
   ctx.fillText(en ? 'Scan Camera to Open Gift' : 'وجّه الكاميرا لفتح المفاجأة', qrBoxX + qrBoxW/2, qrBoxY + 462);
-  ctx.fillStyle = '#E2B450';
+  ctx.fillStyle = caHex;
   ctx.font = '700 19px Cairo, Tajawal, sans-serif';
   ctx.fillText(en ? 'Interactive Touch Surprise ✨' : 'تجربة مفاجأة تفاعلية تُفتح باللمس ✨', qrBoxX + qrBoxW/2, qrBoxY + 502);
-  await drawSvgStr(xprShapeSvg(D.sh||'envelope'), qrBoxX + qrBoxW/2 - 64, qrBoxY + 520, 128, 128);
+  await drawSvgStr(xprShapeSvg(D.sh||'envelope', caHex, D.st), qrBoxX + qrBoxW/2 - 64, qrBoxY + 520, 128, 128);
 
-  // Text Content Side
   const txX = en ? 110 : W - 110;
   const maxW = 860;
   ctx.textAlign = en ? 'left' : 'right';
   ctx.direction = en ? 'ltr' : 'rtl';
 
   await drawSvgStr(xprLogoMini(), en ? 110 : W - 196, 108, 86, 86);
-  ctx.fillStyle = '#E2B450';
+  ctx.fillStyle = caHex;
   ctx.font = '900 24px Cairo, Tajawal, sans-serif';
   ctx.fillText(en ? 'EILAN INTERACTIVE GIFT' : 'بطاقة مفاجأة إيلان التفاعلية', en ? 215 : W - 215, 150);
-  ctx.fillStyle = 'rgba(242,245,250,0.68)';
+  ctx.fillStyle = txtMu;
   ctx.font = '700 19px Cairo, Tajawal, sans-serif';
   ctx.fillText('EILAN DOLL · العالم الرقمي', en ? 215 : W - 215, 182);
 
-  // Recipient
-  ctx.fillStyle = '#F2F5FA';
+  ctx.fillStyle = txtMain;
   ctx.font = '900 50px Cairo, Tajawal, sans-serif';
   const toLine = (en ? 'To: ' : 'إهداء خاص إلى: ') + (D.to || '');
   ctx.fillText(toLine.slice(0, 42), txX, 320, maxW);
 
-  // Hook & Warm Note Wrap
-  ctx.fillStyle = '#F6DD8F';
+  ctx.fillStyle = caHex;
   ctx.font = '800 32px Cairo, Tajawal, sans-serif';
   const wrapText = (text, x, y, mw, lh, maxLines)=>{
     const words = String(text||'').replace(/\n+/g,' ').split(/\s+/);
@@ -811,19 +1098,17 @@ async function xprDrawGiftCardCanvas(D){
 
   let nextY = wrapText(D.hk || '', txX, 415, maxW, 48, 2);
 
-  ctx.fillStyle = 'rgba(242,245,250,0.88)';
+  ctx.fillStyle = txtSub;
   ctx.font = '700 27px Cairo, Tajawal, sans-serif';
-  nextY = wrapText(D.ms || '', txX, nextY + 42, maxW, 44, 4);
+  wrapText(D.ms || '', txX, nextY + 42, maxW, 44, 4);
 
-  // Sender pill
   if(D.fr){
-    ctx.fillStyle = '#E2B450';
+    ctx.fillStyle = caHex;
     ctx.font = '800 28px Cairo, Tajawal, sans-serif';
     ctx.fillText((en ? 'From: ' : 'من: ') + D.fr, txX, 790, maxW);
   }
 
-  // Official Eilan Signature Footer
-  ctx.fillStyle = 'rgba(242,245,250,0.58)';
+  ctx.fillStyle = txtMu;
   ctx.font = '700 20px Cairo, Tajawal, sans-serif';
   ctx.fillText('صُنع بتوقيع إيلان دول · EILAN DOLL — تجارب رقمية تفاعلية', txX, 905, maxW);
 
@@ -892,6 +1177,9 @@ const XPR_CUBE_POLYS = ${JSON.stringify(XPR_CUBE_POLYS)};
 const XPR_GOLD_POLYS = ${JSON.stringify(XPR_GOLD_POLYS)};
 let stage = 0, ac = null;
 const esc = s => String(s??'').replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const xprCleanHex = ${xprCleanHex.toString()};
+const xprHexRgb = ${xprHexRgb.toString()};
+const xprCustomFrameStyle = ${xprCustomFrameStyle.toString()};
 const xprLogoMini = ${xprLogoMini.toString()};
 const xprShapeSvg = ${xprShapeSvg.toString()};
 function chime(st){
@@ -908,17 +1196,19 @@ function chime(st){
 function draw(){
   const en = D.lg==='en', muted = D.sn==='mute';
   const shKey = XPR_SHAPES[D.sh] ? D.sh : 'envelope', shMeta = XPR_SHAPES[shKey];
+  const acc = D.th==='custom' ? xprCleanHex(D.ca,'#DDA35D') : '#E2B450';
+  const cStyle = D.th==='custom' ? ' style="'+xprCustomFrameStyle(D.cb,D.ca)+'"' : '';
   const sparks = Array.from({length:10},(_,i)=>'<i style="left:'+(8+i*9)+'%;animation-delay:'+(i*.47).toFixed(2)+'s"></i>').join('');
   let body = '';
   if(stage===0){
-    body = '<p class="xpr-hook">'+esc(D.hk)+'</p><button class="xpr-cube-btn" id="bNext"><span class="xpr-cube-halo"></span>'+xprShapeSvg(shKey)+'</button><button class="xpr-tap-cta" id="bNext2">✨ '+(en?shMeta.ctaEn:shMeta.ctaAr)+'</button>';
+    body = '<p class="xpr-hook">'+esc(D.hk)+'</p><button class="xpr-cube-btn" id="bNext"><span class="xpr-cube-halo"></span>'+xprShapeSvg(shKey,acc,D.st)+'</button><button class="xpr-tap-cta" id="bNext2">✨ '+(en?shMeta.ctaEn:shMeta.ctaAr)+'</button>';
   }else if(stage===1){
     body = '<div class="xpr-mcard"><div class="xpr-mstep">'+(en?'✦ Message · 2 / 3':'✦ رسالة خاصة من القلب · ٢ / ٣')+'</div><p class="xpr-mtxt">'+esc(D.ms)+'</p></div><button class="xpr-tap-cta" id="bNext">🎁 '+(en?'Reveal the Grand Surprise →':'كشف المفاجأة الكبرى ←')+'</button>';
   }else{
     const lk = (D.lk && /^https:\\/\\/\\S+/i.test(D.lk.trim())) ? D.lk.trim() : '';
-    body = '<div class="xpr-vault"><span class="xpr-vault-ic">'+xprShapeSvg(shKey)+'</span><div class="xpr-gift-lbl">'+(en?'★ YOUR SURPRISE REVEAL ★':'★ المفاجأة الخاصة ★')+'</div><h3 class="xpr-gift-val">'+esc(D.gf)+'</h3>'+(D.sb?'<p class="xpr-gift-sub">'+esc(D.sb)+'</p>':'')+(D.fr?'<div class="xpr-from">'+(en?'From: ':'من: ')+esc(D.fr)+'</div>':'')+(lk?'<div><a class="xpr-extlink" href="'+esc(lk)+'" target="_blank" rel="noopener">'+(en?'Open Gift Link ↗':'فتح الرابط المرفق ↗')+'</a></div>':'')+'</div><button class="xpr-tap-cta" id="bReplay">↺ '+(en?'Replay':'إعادة الفتح')+'</button>';
+    body = '<div class="xpr-vault"><span class="xpr-vault-ic">'+xprShapeSvg(shKey,acc,D.st)+'</span><div class="xpr-gift-lbl">'+(en?'★ YOUR SURPRISE REVEAL ★':'★ المفاجأة الخاصة ★')+'</div><h3 class="xpr-gift-val">'+esc(D.gf)+'</h3>'+(D.sb?'<p class="xpr-gift-sub">'+esc(D.sb)+'</p>':'')+(D.fr?'<div class="xpr-from">'+(en?'From: ':'من: ')+esc(D.fr)+'</div>':'')+(lk?'<div><a class="xpr-extlink" href="'+esc(lk)+'" target="_blank" rel="noopener">'+(en?'Open Gift Link ↗':'فتح الرابط المرفق ↗')+'</a></div>':'')+'</div><button class="xpr-tap-cta" id="bReplay">↺ '+(en?'Replay':'إعادة الفتح')+'</button>';
   }
-  document.getElementById('app').innerHTML = '<div class="xpr-frame" data-th="'+esc(D.th||'gold')+'" dir="'+(en?'ltr':'rtl')+'"><div class="xpr-sparks">'+sparks+'</div><div class="xpr-top"><span class="xpr-to">'+(en?'To: ':'إلى: ')+esc(D.to)+'</span><button class="xpr-sndbtn" id="bSnd">'+(muted?'🔇':'🔔')+'</button></div><div class="xpr-body">'+body+'</div><div class="xpr-foot"><span class="xpr-sig">'+xprLogoMini()+'<span>EILAN DOLL · إيلان دول</span></span><div class="xpr-dots"><span class="'+(stage===0?'on':'')+'"></span><span class="'+(stage===1?'on':'')+'"></span><span class="'+(stage===2?'on':'')+'"></span></div></div></div>';
+  document.getElementById('app').innerHTML = '<div class="xpr-frame" data-th="'+esc(D.th||'gold')+'"'+cStyle+' dir="'+(en?'ltr':'rtl')+'"><div class="xpr-sparks">'+sparks+'</div><div class="xpr-top"><span class="xpr-to">'+(en?'To: ':'إلى: ')+esc(D.to)+'</span><button class="xpr-sndbtn" id="bSnd">'+(muted?'🔇':'🔔')+'</button></div><div class="xpr-body">'+body+'</div><div class="xpr-foot"><span class="xpr-sig">'+xprLogoMini()+'<span>EILAN DOLL · إيلان دول</span></span><div class="xpr-dots"><span class="'+(stage===0?'on':'')+'"></span><span class="'+(stage===1?'on':'')+'"></span><span class="'+(stage===2?'on':'')+'"></span></div></div></div>';
   const nxt = ()=>{ stage = Math.min(2, stage+1); chime(stage); draw(); };
   if(document.getElementById('bNext')) document.getElementById('bNext').onclick = nxt;
   if(document.getElementById('bNext2')) document.getElementById('bNext2').onclick = nxt;
@@ -980,7 +1270,7 @@ function xprOpenFullscreen(D, isRecipientLink=false){
   paint();
 }
 
-/* Render Live Stage & Delivery Box inside Studio */
+/* Render Live Stage & URL Box inside Studio (without destroying open color wheels or text inputs!) */
 function xprRefreshStageOnly(){
   const box = $('#xprLiveStage');
   if(!box) return;
@@ -999,13 +1289,15 @@ function xprRefreshStudio(){
   const pObj = S.products.find(x=>x.id==='x-cube') || {id:'x-cube', price:25};
   const sallaUrl = typeof extUrl==='function' ? extUrl(pObj) : '';
   const shareUrl = xprShareUrl(D);
+  const isExtraShape = !XPR_MAIN_SHAPES.includes(D.sh);
+  const accForShape = D.th === 'custom' ? xprCleanHex(D.ca, '#DDA35D') : '#E2B450';
 
   root.innerHTML = `
     ${xprCanPreviewToggle() ? `
     <div class="xpr-ownbar no-ei">
       <div>
         <b>👑 ${gzL('شريط المعاينة السريعة على الـ iPad (خاص بالمالكة والمعاينة فقط — لا يظهر للزوار)','Owner / iPad Preview Bar (Hidden for regular visitors)')}</b>
-        <small>${gzL('تقدرين بضغطة زر تبدّلين بين «وضع العميل بعد الشراء» لتجربة نسخ الرابط والبطاقة، وبين «وضع الزائر قبل الشراء» لمشاهدة خانة كود سلة. · التقدم: ١ / ٩ (أشكال الهدية الخمسة جاهزة ✓)','Toggle buyer unlocked view vs visitor view with one tap.')}</small>
+        <small>${gzL('تقدرين بضغطة زر تبدّلين بين «وضع العميل بعد الشراء» لتجربة نسخ الرابط والبطاقة، وبين «وضع الزائر قبل الشراء» لمشاهدة خانة كود سلة.','Toggle buyer unlocked view vs visitor view with one tap.')}</small>
       </div>
       <button type="button" class="btn sm ${unlocked?'g':''}" data-xui="toggleprev">
         ${unlocked ? '🔓 '+gzL('وضع المشتري مفعّل — اضغطي للمعاينة كزائر','Buyer View Active — Tap for Visitor View') : '🔑 '+gzL('فعّلي وضع المشتري للمعاينة الفورية','Activate Buyer View for Instant Test')}
@@ -1036,10 +1328,71 @@ function xprRefreshStudio(){
         </div>
 
         <div>
-          <span class="xpr-sec-lbl">🎁 ${gzL('شكل الهدية التفاعلي (اختر الشكل اللي يناسب إهداءك)','Interactive Gift Shape')}</span>
+          <span class="xpr-sec-lbl">🎁 ${gzL('شكل الهدية التفاعلي (أشكال جاهزة + زر + لشكل بموضوعك)','Interactive Gift Shape (+ Your Own Topic)')}</span>
           <div class="xpr-shapes">
-            ${Object.entries(XPR_SHAPES).map(([k,v])=>`<button type="button" class="xpr-shbtn ${D.sh===k?'on':''}" data-xui="shape" data-v="${k}">${xprShapeSvg(k)}<span>${gzL(v.nAr, v.nEn)}</span></button>`).join('')}
+            ${XPR_MAIN_SHAPES.map(k=>{
+              const v = XPR_SHAPES[k];
+              return `<button type="button" class="xpr-shbtn ${D.sh===k?'on':''}" data-xui="shape" data-v="${k}">${xprShapeSvg(k, accForShape, D.st)}<span>${gzL(v.nAr, v.nEn)}</span></button>`;
+            }).join('')}
+            <button type="button" class="xpr-shbtn plus ${(isExtraShape || XPR_STATE.openShapePlus)?'on':''}" data-xui="toggleshapeplus">
+              ${isExtraShape ? xprShapeSvg(D.sh, accForShape, D.st) : `<span class="xpr-plus-ic">＋</span>`}
+              <span>${isExtraShape ? gzL(XPR_SHAPES[D.sh].nAr+' ✎','Custom ✎') : gzL('+ بموضوعك','+ Your Topic')}</span>
+            </button>
           </div>
+
+          ${(XPR_STATE.openShapePlus || isExtraShape) ? `
+          <div class="xpr-drawer">
+            <span class="xpr-sec-lbl" style="margin:0">✨ ${gzL('اكتب موضوع هديتك وإيلان تختار الشكل والألوان تلقائياً (أو اختر من الأسفل):','Type your gift topic for instant shape & color match:')}</span>
+            <div class="xpr-topic-row">
+              <input class="input" id="xprTopicInp" value="${esc(XPR_STATE.topicDraft)}" maxlength="60" placeholder="${gzL('مثال: قهوة مختصة، عطر، تذكرة سفر، سيارة، مولود، طب، قيمنق…','e.g. Coffee, Perfume, Travel, Car, Baby, Med, Gaming…')}">
+              <button type="button" class="btn sm g" data-xui="applytopic">✨ ${gzL('طبّق بموضوعي','Match Topic')}</button>
+            </div>
+
+            <div class="xpr-xshapes">
+              ${XPR_EXTRA_KEYS.map(k=>{
+                const v = XPR_SHAPES[k];
+                return `<button type="button" class="xpr-shbtn ${D.sh===k?'on':''}" data-xui="shape" data-v="${k}">${xprShapeSvg(k, accForShape, D.st)}<span>${gzL(v.nAr, v.nEn)}</span></button>`;
+              }).join('')}
+            </div>
+
+            <div class="xpr-sym-row">
+              <span class="mu" style="font-size:12px">${gzL('أو ضع أي إيموجي / حروف داخل ميدالية ثلاثية الأبعاد:','Or any emoji / initials inside a 3D Crest:')}</span>
+              <input class="input xpr-sym-in" data-xcrest="1" maxlength="6" value="${esc(D.st||'✨')}" placeholder="✨">
+              <button type="button" class="btn sm ${D.sh==='crest'?'g':''}" data-xui="shape" data-v="crest">${gzL('استخدم الميدالية','Use Crest')}</button>
+            </div>
+            <div class="xpr-emo-chips">
+              ${XPR_QUICK_SYMS.map(([em,lbl])=>`<button type="button" class="xpr-emo-chip ${(D.sh==='crest'&&D.st===em)?'on':''}" data-xui="quicksym" data-em="${em}">${em} ${lbl}</button>`).join('')}
+            </div>
+          </div>` : ''}
+        </div>
+
+        <div>
+          <span class="xpr-sec-lbl">🎨 ${gzL('ثيم الألوان (ثيمات إيلان + زر + لألوان من اختيارك)','Color Theme (+ Custom Colors)')}</span>
+          <div class="xpr-swatches">
+            ${Object.entries(XPR_THEMES).map(([k,v])=>`<button type="button" class="xpr-sw ${D.th===k?'on':''}" data-xui="theme" data-v="${k}"><i style="background:${v.sw}"></i><span>${gzL(v.nAr, v.nEn)}</span></button>`).join('')}
+            <button type="button" class="xpr-sw plus ${(D.th==='custom' || XPR_STATE.openColorPlus)?'on':''}" data-xui="togglecolorplus">
+              <i id="xprCustomSwDot" style="background:linear-gradient(135deg,${xprCleanHex(D.cb,'#1B120C')} 48%,${xprCleanHex(D.ca,'#DDA35D')})">＋</i>
+              <span>${gzL('+ ألوانك','+ Custom')}</span>
+            </button>
+          </div>
+
+          ${(XPR_STATE.openColorPlus || D.th==='custom') ? `
+          <div class="xpr-drawer">
+            <span class="xpr-sec-lbl" style="margin:0">🎨 ${gzL('اختر ألوانك الخاصة مباشرة (أو اضغط تناسق جاهز وعدّل عليه):','Pick your own custom colors:')}</span>
+            <div class="xpr-cpickers">
+              <label class="xpr-cpick">
+                <input type="color" data-xcol="cb" value="${xprCleanHex(D.cb,'#1B120C')}">
+                <div><b>${gzL('لون الخلفية','Background Color')}</b><small id="xprHexCb">${xprCleanHex(D.cb,'#1B120C')}</small></div>
+              </label>
+              <label class="xpr-cpick">
+                <input type="color" data-xcol="ca" value="${xprCleanHex(D.ca,'#DDA35D')}">
+                <div><b>${gzL('لون التمييز والإطار','Accent & Glow')}</b><small id="xprHexCa">${xprCleanHex(D.ca,'#DDA35D')}</small></div>
+              </label>
+            </div>
+            <div class="xpr-emo-chips">
+              ${XPR_CUSTOM_PALS.map(([ar,en,cb,ca])=>`<button type="button" class="xpr-emo-chip ${(D.th==='custom'&&D.cb===cb&&D.ca===ca)?'on':''}" data-xui="custpal" data-cb="${cb}" data-ca="${ca}">${gzL(ar,en)}</button>`).join('')}
+            </div>
+          </div>` : ''}
         </div>
 
         <div class="xpr-grid2">
@@ -1055,13 +1408,6 @@ function xprRefreshStudio(){
             <select class="select" data-xfld="sn">
               ${Object.entries(XPR_SOUNDS).map(([k,v])=>`<option value="${k}" ${D.sn===k?'selected':''}>${gzL(v.nAr, v.nEn)}</option>`).join('')}
             </select>
-          </div>
-        </div>
-
-        <div>
-          <span class="xpr-sec-lbl">🎨 ${gzL('ثيم الألوان (ضمن هوية إيلان المعتمدة)','Brand Color Theme')}</span>
-          <div class="xpr-swatches">
-            ${Object.entries(XPR_THEMES).map(([k,v])=>`<button type="button" class="xpr-sw ${D.th===k?'on':''}" data-xui="theme" data-v="${k}"><i style="background:${v.sw}"></i><span>${gzL(v.nAr, v.nEn)}</span></button>`).join('')}
           </div>
         </div>
 
@@ -1146,12 +1492,32 @@ function xprRefreshStudio(){
     </div>`;
 }
 
+function xprRunApplyTopic(){
+  const inp = $('#xprTopicInp');
+  const val = inp ? inp.value.trim() : XPR_STATE.topicDraft.trim();
+  if(!val){ toast(gzL('اكتب موضوع الهدية أولاً (مثال: قهوة، سفر، عطر، سيارة…)','Type your topic first')); if(inp) inp.focus(); return; }
+  XPR_STATE.topicDraft = val;
+  const m = xprMatchTopic(val);
+  if(!m) return;
+  XPR_STATE.D.sh = m.sh;
+  if(m.st) XPR_STATE.D.st = m.st;
+  if(m.cb && m.ca){
+    XPR_STATE.D.th = 'custom';
+    XPR_STATE.D.cb = m.cb;
+    XPR_STATE.D.ca = m.ca;
+    XPR_STATE.openColorPlus = true;
+  }
+  XPR_STATE.stage = 0;
+  xprPlayChime(XPR_STATE.D.sn, 1);
+  toast('✨ ' + gzL('تم تخصيص الشكل والألوان لموضوع: ','Matched shape & theme for: ') + val);
+  xprRefreshStudio();
+}
+
 function xprBindStudioEvents(container){
   if(!container || container._xprBound) return;
   container._xprBound = true;
 
   container.addEventListener('click', async ev=>{
-    // Stage interactions inside live preview
     const xact = ev.target.closest('[data-xact]');
     if(xact){
       const a = xact.dataset.xact;
@@ -1193,8 +1559,35 @@ function xprBindStudioEvents(container){
       const sh = ui.dataset.v;
       if(!XPR_SHAPES[sh]) return;
       XPR_STATE.D.sh = sh;
+      if(XPR_MAIN_SHAPES.includes(sh)) XPR_STATE.openShapePlus = false;
       XPR_STATE.stage = 0;
       xprPlayChime(XPR_STATE.D.sn, 1);
+      xprRefreshStudio();
+    } else if(cmd === 'toggleshapeplus'){
+      XPR_STATE.openShapePlus = !XPR_STATE.openShapePlus;
+      xprRefreshStudio();
+    } else if(cmd === 'applytopic'){
+      xprRunApplyTopic();
+    } else if(cmd === 'quicksym'){
+      XPR_STATE.D.sh = 'crest';
+      XPR_STATE.D.st = ui.dataset.em || '✨';
+      XPR_STATE.openShapePlus = true;
+      XPR_STATE.stage = 0;
+      xprPlayChime(XPR_STATE.D.sn, 1);
+      xprRefreshStudio();
+    } else if(cmd === 'theme'){
+      XPR_STATE.D.th = ui.dataset.v;
+      XPR_STATE.openColorPlus = false;
+      xprRefreshStudio();
+    } else if(cmd === 'togglecolorplus'){
+      XPR_STATE.openColorPlus = !XPR_STATE.openColorPlus;
+      XPR_STATE.D.th = 'custom';
+      xprRefreshStudio();
+    } else if(cmd === 'custpal'){
+      XPR_STATE.D.th = 'custom';
+      XPR_STATE.D.cb = ui.dataset.cb;
+      XPR_STATE.D.ca = ui.dataset.ca;
+      XPR_STATE.openColorPlus = true;
       xprRefreshStudio();
     } else if(cmd === 'lang'){
       const lg = ui.dataset.v === 'en' ? 'en' : 'ar';
@@ -1210,9 +1603,6 @@ function xprBindStudioEvents(container){
         if(XPR_STATE.D.sb === oldDef.sub) XPR_STATE.D.sb = newDef.sub;
         if(XPR_STATE.D.fr === oldDef.fr) XPR_STATE.D.fr = newDef.fr;
       }
-      xprRefreshStudio();
-    } else if(cmd === 'theme'){
-      XPR_STATE.D.th = ui.dataset.v;
       xprRefreshStudio();
     } else if(cmd === 'toggleprev'){
       if(!xprCanPreviewToggle()) return;
@@ -1248,11 +1638,42 @@ function xprBindStudioEvents(container){
     }
   });
 
+  container.addEventListener('keydown', ev=>{
+    if(ev.key === 'Enter' && ev.target && ev.target.id === 'xprTopicInp'){
+      ev.preventDefault();
+      xprRunApplyTopic();
+    }
+  });
+
   container.addEventListener('input', ev=>{
-    const fld = ev.target.dataset && ev.target.dataset.xfld;
+    const t = ev.target;
+    if(!t) return;
+    if(t.id === 'xprTopicInp'){
+      XPR_STATE.topicDraft = t.value;
+      return;
+    }
+    if(t.dataset && t.dataset.xcol){
+      const colKey = t.dataset.xcol;
+      XPR_STATE.D.th = 'custom';
+      XPR_STATE.D[colKey] = xprCleanHex(t.value, colKey==='cb'?'#1B120C':'#DDA35D');
+      const lbl = colKey==='cb' ? $('#xprHexCb') : $('#xprHexCa');
+      if(lbl) lbl.textContent = XPR_STATE.D[colKey];
+      const dot = $('#xprCustomSwDot');
+      if(dot) dot.style.background = `linear-gradient(135deg,${XPR_STATE.D.cb} 48%,${XPR_STATE.D.ca})`;
+      xprRefreshStageOnly();
+      return;
+    }
+    if(t.dataset && t.dataset.xcrest){
+      XPR_STATE.D.sh = 'crest';
+      XPR_STATE.D.st = t.value.slice(0, 6) || '✨';
+      XPR_STATE.stage = 0;
+      xprRefreshStageOnly();
+      return;
+    }
+    const fld = t.dataset && t.dataset.xfld;
     if(!fld) return;
-    XPR_STATE.D[fld] = ev.target.value;
-    if(fld === 'sn') xprPlayChime(ev.target.value, 1);
+    XPR_STATE.D[fld] = t.value;
+    if(fld === 'sn') xprPlayChime(t.value, 1);
     if(['ms'].includes(fld)) XPR_STATE.stage = 1;
     else if(['gf','sb','lk'].includes(fld)) XPR_STATE.stage = 2;
     xprRefreshStageOnly();
@@ -1269,10 +1690,10 @@ P.experiences = {
         <div>
           <div class="eyebrow">EILAN INTERACTIVE EXPERIENCES</div>
           <h1>${gzL('تجارب إيلان','Eilan')} <span class="grad-t">${gzL('التفاعلية','Experiences')}</span></h1>
-          <p>${gzL('قوالب مفاجآت وتجارب رقمية فاخرة تُفتح باللمس بـ ٥ أشكال مميزة (ظرف ذهبي، قبعة تخرّج، باقة ورد، علبة هدية، ومكعب إيلان). صمّم تجربتك وشاهدها أمامك مجاناً، واستلم رابطك وبطاقة الباركود تلقائياً في نفس اللحظة بعد الشراء بدون أي انتظار.','Interactive touch-first digital gift templates with 5 custom 3D shapes (Gold Envelope, Grad Cap, Rose Bouquet, Gift Box & Eilan Cube). Customize live for free and unlock instant 24/7 delivery.')}</p>
+          <p>${gzL('قوالب مفاجآت وتجارب رقمية فاخرة تُفتح باللمس: اختر من الأشكال والثيمات الجاهزة أو اضغط (+) لتصميم شكل وألوان خاصة بموضوعك أنت! واستلم رابطك وبطاقة الباركود تلقائياً في نفس اللحظة بعد الشراء بدون أي انتظار.','Interactive touch-first digital gift templates: pick ready 3D shapes & themes, or tap (+) to match your own topic and custom colors — with 24/7 instant delivery.')}</p>
           <div class="xpr-badges no-ei">
             <span class="xpr-pill gold">⚡ ${gzL('تسليم فوري تلقائي ٢٤/٧','24/7 Instant Automated Delivery')}</span>
-            <span class="xpr-pill grn">🎁 ${gzL('٥ أشكال تفاعلية حسب المناسبة','5 Custom Shapes by Occasion')}</span>
+            <span class="xpr-pill grn">＋ ${gzL('أشكال وألوان جاهزة + بموضوعك','Ready & Custom Shapes/Colors')}</span>
             <span class="xpr-pill">🌐 ${gzL('عربي محايد + English','Bilingual AR / EN')}</span>
           </div>
         </div>
@@ -1283,9 +1704,9 @@ P.experiences = {
       </section>
 
       <section class="xpr-flow no-ei" aria-label="طريقة الاستلام الفوري">
-        <div class="xpr-step"><i>١</i><div><b>${gzL('اختر الشكل والمناسبة مجاناً','1. Pick Shape & Customize Free')}</b><span>${gzL('اختر ظرف ذهبي أو قبعة تخرّج أو باقة ورد أو علبة هدية أو مكعب إيلان، واكتب رسالتك ومفاجأتك وشوفها حية قدامك.','Choose Envelope, Grad Cap, Bouquet, Gift Box or Eilan Cube and preview your words live.')}</span></div></div>
+        <div class="xpr-step"><i>١</i><div><b>${gzL('اختر جاهز أو (+) بموضوعك','1. Ready Options or (+) Custom')}</b><span>${gzL('اختر ظرف أو قبعة تخرّج أو ورد أو اضغط (+) لكتابة موضوعك واختيار ألوانك الخاصة وشوفها حية قدامك.', 'Pick a ready shape/theme or tap (+) to customize by your topic & colors.')}</span></div></div>
         <div class="xpr-step"><i>٢</i><div><b>${gzL('كود فوري تلقائي من سلة','2. Instant Code from Salla')}</b><span>${gzL('بمجرد الدفع، يرسل لك نظام سلة وموظفو إيلان الرقميون كود التفعيل تلقائياً في نفس الثانية ٢٤/٧ بدون انتظار.','Salla sends your activation code automatically the second you pay — 24/7.')}</span></div></div>
-        <div class="xpr-step"><i>٣</i><div><b>${gzL('رابط واتساب + بطاقة باركود QR','3. Share Link + QR Gift Card')}</b><span>${gzL('انسخ رابط المفاجأة التفاعلي بملء الشاشة، وحمّل بطاقة الإهداء الفاخرة بباركود QR جاهزة للطباعة أو الإرسال.','Copy your fullscreen surprise link, QR card PNG/PDF, and offline file.')}</span></div></div>
+        <div class="xpr-step"><i>٣</i><div><b>${gzL('رابط واتساب + بطاقة باركود QR','3. Share Link + QR Gift Card')}</b><span>${gzL('انسخ رابط المفاجأة التفاعلي بملء الشاشة، وحمّل بطاقة الإهداء الفاخرة بباركود QR بألوانك وشكل هديتك.', 'Copy your fullscreen surprise link, QR card PNG/PDF, and offline file.')}</span></div></div>
       </section>
 
       <div id="xprStudioMount"></div>
@@ -1311,7 +1732,6 @@ P.experiences = {
     if(idx >= 0) NAV.splice(idx + 1, 0, item); else NAV.push(item);
   }
 
-  // Route Home page Experiences pillar & journey card straight to live eilan://experiences
   if(P.home && P.home.html){
     const _homeHtml = P.home.html;
     P.home.html = r => _homeHtml(r)
@@ -1320,20 +1740,19 @@ P.experiences = {
       .replace(/eilan:\/\/store\?cat=experiences/g, 'eilan://experiences');
   }
 
-  // Inject «🔊 تجارب تفاعلية» chip & Interactive Surprise template card into قسم القوالب (P.templates)
   if(P.templates && P.templates.html){
     const _tplHtml = P.templates.html;
     const expCardHTML = () => `
       <article class="tp-card card xpr-tcard" data-cat="exp">
         <div class="tp-thumb xpr-tcard-vis no-ei" data-go="eilan://experiences">
-          <span class="xpr-tcard-badge">🔊 ${gzL('٥ أشكال باللمس','5 Touch Shapes')}</span>
+          <span class="xpr-tcard-badge">🔊 ${gzL('أشكال وألوان بموضوعك','Custom Shapes & Colors')}</span>
           ${xprShapeSvg('envelope')}
           <span class="xpr-tcard-auto">⚡ ${gzL('تسليم فوري ٢٤/٧','Instant 24/7')}</span>
         </div>
         <div class="tp-cbody">
-          <div class="tp-meta"><span class="tag">${gzL('تجارب تفاعلية','Experiences')}</span><span class="mu">${gzL('ظرف · تخرّج · ورد · هدية','Envelope · Grad · Roses')}</span></div>
-          <h3>${gzL('مفاجأة إيلان التفاعلية — ٥ أشكال حسب المناسبة','Eilan Interactive Surprise — 5 Shapes')}</h3>
-          <p class="mu">${gzL('تجربة إهداء تفاعلية باللمس (ظرف ذهبي، قبعة تخرّج، باقة ورد، علبة هدية، أو مكعب إيلان) — تستلم فوراً رابط واتساب بملء الشاشة + بطاقة باركود QR.','3-stage touch reveal with 5 custom shapes — instant fullscreen link + printable QR card.')}</p>
+          <div class="tp-meta"><span class="tag">${gzL('تجارب تفاعلية','Experiences')}</span><span class="mu">${gzL('جاهز + زر (+) بموضوعك','Ready + (+) Custom')}</span></div>
+          <h3>${gzL('مفاجأة إيلان التفاعلية — أشكال وألوان بموضوعك','Eilan Interactive Surprise — Custom Shapes & Colors')}</h3>
+          <p class="mu">${gzL('تجربة إهداء باللمس (ظرف، تخرّج، ورد، علبة هدية، مكعب إيلان + زر (+) لأي موضوع وألوان يختارها العميل) — مع رابط واتساب بملء الشاشة وبطاقة باركود QR.','3-stage touch reveal with ready shapes/themes + (+) custom topic shapes & colors.')}</p>
           <div class="tp-foot no-ei">
             <b class="tp-price">25 <small>${gzL('ر.س','SAR')}</small></b>
             <button class="btn sm" data-go="eilan://experiences">✨ ${gzL('جرّبه','Try')}</button>
@@ -1353,7 +1772,6 @@ P.experiences = {
     };
   }
 
-  // Enhance Store Product Page for x-cube with direct Interactive Studio launcher
   if(P.product && P.product.html){
     const _prodHtml = P.product.html;
     P.product.html = r => {
@@ -1362,7 +1780,7 @@ P.experiences = {
       const banner = `<div class="card no-ei" style="padding:16px;margin:14px 0;border-color:rgba(226,180,80,.5);display:flex;gap:12px;flex-wrap:wrap;align-items:center">
         <div style="flex:1;min-width:220px">
           <b style="color:#F6DD8F">⚡ ${gzL('هذا المنتج يعمل بنظام التسليم الفوري التلقائي ٢٤/٧','24/7 Instant Automated Self-Serve Product')}</b>
-          <div class="mu" style="font-size:13px;margin-top:3px">${gzL('اختر شكل الهدية (ظرف، قبعة تخرّج، باقة ورد، علبة هدية، أو مكعب إيلان) واكتب رسالتك مجاناً الآن، واستلم الرابط والبطاقة فوراً بعد التفعيل.','Pick your gift shape and customize live right now — unlock immediately with your Salla code.')}</div>
+          <div class="mu" style="font-size:13px;margin-top:3px">${gzL('اختر من الأشكال والثيمات الجاهزة أو اضغط (+) لتصميم شكل وألوان بموضوعك مجاناً الآن، واستلم الرابط والبطاقة فوراً بعد التفعيل.','Pick ready options or tap (+) for custom shapes & colors — unlock immediately with your Salla code.')}</div>
         </div>
         <button class="btn g" data-go="eilan://experiences">✨ ${gzL('افتح استوديو المفاجأة الآن','Open Surprise Studio')}</button>
       </div>`;

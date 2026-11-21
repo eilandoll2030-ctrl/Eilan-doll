@@ -2,7 +2,57 @@
 <style>
 /* ===== 🔊 تجارب إيلان التفاعلية — Interactive Experiences & Instant Self-Serve Engine (.xpr-*) ===== */
 .xpr-wrap{display:flex;flex-direction:column;gap:18px}
-svg.xpr-shape-svg,svg.xpr-mini-svg{stroke:none;stroke-width:0;fill:none;overflow:visible!important;display:block}
+svg.xpr-shape-svg,svg.xpr-mini-svg,svg.xpr-seal-svg{stroke:none;stroke-width:0;fill:none;overflow:visible!important;display:block}
+
+/* Product Switcher Shelf inside eilan://experiences */
+.xpr-pshelf{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.xpr-ptab{position:relative;padding:15px 16px;border-radius:18px;border:1.5px solid var(--bd);background:#0C101B;color:#F2F5FA;font-family:inherit;text-align:start;cursor:pointer;display:flex;align-items:center;gap:14px;transition:.22s}
+.xpr-ptab:hover{border-color:rgba(226,180,80,.55);transform:translateY(-1px)}
+.xpr-ptab.on{border-color:#E2B450;background:radial-gradient(circle at 88% 20%,rgba(226,180,80,.18),transparent 58%),#101626;box-shadow:0 12px 30px rgba(0,0,0,.32)}
+.xpr-ptab-ic{width:54px;height:54px;border-radius:14px;background:rgba(226,180,80,.12);border:1px solid rgba(226,180,80,.35);display:grid;place-items:center;flex-shrink:0}
+.xpr-ptab-ic svg.xpr-shape-svg,.xpr-ptab-ic svg.xpr-seal-svg{width:44px;height:44px}
+.xpr-ptab-ic .xg-float,.xpr-ptab-ic .xg-tassel{animation:none!important}
+.xpr-ptab-txt{flex:1;min-width:0}
+.xpr-ptab-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:3px}
+.xpr-ptab-top b{font-size:15px;color:#F2F5FA}
+.xpr-ptab-pr{padding:3px 9px;border-radius:999px;background:rgba(226,180,80,.18);color:#F6DD8F;font-size:12px;font-weight:900;white-space:nowrap}
+.xpr-ptab-txt span{display:block;font-size:12px;color:var(--mu);line-height:1.5}
+
+/* Product #2: Open When Letters («رسائل افتحها لمّا…») Interactive Sealed Box & Letter View */
+.xpr-wbody{position:relative;z-index:2;width:100%;max-width:480px;margin:auto;padding:10px 2px;display:flex;flex-direction:column;align-items:center;gap:12px}
+.xpr-whead h3{margin:0 0 4px;font-size:19px;font-weight:900;color:var(--xtxt);line-height:1.4}
+.xpr-whead p{margin:0;font-size:12.5px;color:var(--xmu);line-height:1.55}
+.xpr-wgrid{width:100%;display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.xpr-wenv{position:relative;padding:14px 11px 12px;border-radius:16px;border:1.2px solid var(--xbd);background:var(--xcard);color:var(--xtxt);font-family:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;box-shadow:0 10px 24px rgba(0,0,0,.22);overflow:hidden;transition:transform .22s,border-color .22s}
+.xpr-wenv:last-child:nth-child(odd){grid-column:1 / -1;max-width:236px;justify-self:center;width:100%}
+.xpr-wenv::before{content:"";position:absolute;top:0;left:0;right:0;height:42px;background:linear-gradient(180deg,color-mix(in srgb,var(--xacc,#E2B450) 18%,transparent),transparent);clip-path:polygon(0 0,100% 0,50% 100%);pointer-events:none}
+.xpr-wenv:hover{transform:translateY(-3px);border-color:var(--xacc)}
+.xpr-wenv:active{transform:scale(.97)}
+.xpr-wenv.done{opacity:.92}
+.xpr-wenv-done{position:absolute;top:7px;inset-inline-start:7px;padding:2px 7px;border-radius:99px;font-size:10px;font-weight:800;background:rgba(15,107,68,.28);border:1px solid rgba(216,255,230,.4);color:#D8FFE6}
+.xpr-wenv-em{position:absolute;top:7px;inset-inline-end:8px;font-size:15px}
+.xpr-wenv-seal{width:46px;height:46px;margin-top:4px;position:relative;z-index:1;transition:transform .28s}
+.xpr-wenv:hover .xpr-wenv-seal{transform:scale(1.08) rotate(-4deg)}
+.xpr-wenv-seal svg.xpr-seal-svg{width:46px;height:46px}
+.xpr-wenv-kicker{font-size:10.5px;font-weight:900;color:var(--xacc);letter-spacing:.4px}
+.xpr-wenv-ttl{font-size:13px;font-weight:800;line-height:1.4;color:var(--xtxt);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+
+.xpr-wletter{width:100%;padding:20px 18px;border-radius:20px;background:var(--xcard);border:1.6px solid var(--xacc);box-shadow:0 18px 44px rgba(0,0,0,.3);text-align:start;animation:xprIn .38s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column;gap:12px}
+.xpr-wl-top{display:flex;align-items:center;gap:10px;padding-bottom:10px;border-bottom:1px dashed var(--xbd)}
+.xpr-wl-ic{width:44px;height:44px;border-radius:12px;background:color-mix(in srgb,var(--xacc,#E2B450) 16%,transparent);border:1px solid var(--xbd);display:grid;place-items:center;font-size:21px;flex-shrink:0}
+.xpr-wl-top small{display:block;font-size:11px;font-weight:900;color:var(--xacc)}
+.xpr-wl-top h4{margin:2px 0 0;font-size:16px;font-weight:900;color:var(--xtxt);line-height:1.35}
+.xpr-wl-txt{margin:0;font-size:15.5px;line-height:1.85;font-weight:700;color:var(--xtxt);white-space:pre-line}
+.xpr-wl-gift{padding:10px 13px;border-radius:13px;background:color-mix(in srgb,var(--xacc,#E2B450) 14%,transparent);border:1px solid var(--xbd);font-size:13.5px;font-weight:800;color:var(--xtxt);display:flex;align-items:center;gap:8px}
+.xpr-wnav{width:100%;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+
+/* Envelope Editor Tabs in Customizer */
+.xpr-wtabs{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.xpr-wtab{padding:7px 11px;border-radius:10px;border:1.5px solid var(--bd);background:#0E121E;color:#F2F5FA;font-family:inherit;font-size:12px;font-weight:800;cursor:pointer;display:inline-flex;align-items:center;gap:5px}
+.xpr-wtab.on,.xpr-wtab:hover{border-color:#E2B450;background:rgba(226,180,80,.16);color:#F6DD8F}
+.xpr-wtab.add{border-style:dashed;border-color:rgba(226,180,80,.55);color:#F6DD8F}
+.xpr-wbox-ed{padding:14px;border-radius:14px;background:#0A0E18;border:1px solid rgba(226,180,80,.32);display:flex;flex-direction:column;gap:10px}
+.xpr-seals{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}
 .xpr-hero{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;padding:22px;background:radial-gradient(circle at 88% 18%,rgba(226,180,80,.16),transparent 52%),radial-gradient(circle at 12% 85%,rgba(15,107,68,.2),transparent 55%),#0B0E17;border:1px solid var(--bd2);border-radius:20px}
 .xpr-hero h1{font-size:30px;margin:4px 0 8px;line-height:1.25}
 .xpr-hero p{color:var(--mu);max-width:690px;margin:0;line-height:1.7;font-size:14.5px}
@@ -163,7 +213,7 @@ svg.xpr-shape-svg,svg.xpr-mini-svg{stroke:none;stroke-width:0;fill:none;overflow
 .xpr-tcard-auto{position:absolute;bottom:10px;inset-inline-end:10px;padding:4px 9px;border-radius:999px;font-size:10.5px;font-weight:800;background:rgba(7,8,12,.82);border:1px solid rgba(216,255,230,.35);color:#D8FFE6}
 
 @media (max-width:860px){
-  .xpr-work{grid-template-columns:1fr}
+  .xpr-work,.xpr-pshelf{grid-template-columns:1fr}
   .xpr-stage-col{position:static}
   .xpr-flow{grid-template-columns:1fr}
 }
@@ -172,17 +222,20 @@ svg.xpr-shape-svg,svg.xpr-mini-svg{stroke:none;stroke-width:0;fill:none;overflow
   .xpr-frame{min-height:470px;padding:20px 16px 16px}
   .xpr-shapes{grid-template-columns:repeat(3,1fr)}
   .xpr-xshapes{grid-template-columns:repeat(5,1fr)}
-  .xpr-swatches{grid-template-columns:repeat(3,1fr)}
+  .xpr-swatches,.xpr-seals{grid-template-columns:repeat(3,1fr)}
+  .xpr-wgrid{grid-template-columns:1fr}
+  .xpr-wenv:last-child:nth-child(odd){max-width:100%}
   .xpr-grid2,.xpr-acts-grid,.xpr-cpickers{grid-template-columns:1fr}
 }
 </style>
 <script>
 /* ================= 🔊 تجارب إيلان التفاعلية — Instant Automated Delivery Engine =================
-   Product #1 of 9: مفاجأة إيلان التفاعلية (أشكال جاهزة + شكل بموضوع العميل + ثيمات جاهزة + ألوان العميل) — 25 SAR.
+   Product #1 of 9: مفاجأة إيلان التفاعلية (أشكال وألوان جاهزة + بموضوع العميل) — 25 SAR.
+   Product #2 of 9: رسائل «افتحها لمّا…» (صندوق ظروف مختومة بالشمع لأوقات ومشاعر مختلفة) — 29 SAR.
    100% automated self-serve fulfillment: Salla sends code -> SHA-256 verified client-side ->
    instant shareable full-screen URL + scannable QR card (PNG & Print) + standalone HTML keepsake. */
 
-const XPR_CODES = /*XPR_CODES_JSON*/{"cube":[],"bundle":[]}/*END_XPR_CODES_JSON*/;
+const XPR_CODES = /*XPR_CODES_JSON*/{"cube":[],"when":[],"bundle":[]}/*END_XPR_CODES_JSON*/;
 
 /* 5 Primary Shapes on Main Row */
 const XPR_MAIN_SHAPES = ['envelope','grad','roses','giftbox','cube'];
@@ -266,6 +319,224 @@ const XPR_CUBE_PRESETS = {
   }
 };
 
+/* Product #2 («رسائل افتحها لمّا…») Wax Seal Styles: 4 Ready + Custom Symbol */
+const XPR_SEALS = {
+  royal:  { nAr:'ختم إيلان الملكي', nEn:'Royal Seal' },
+  heart:  { nAr:'ختم القلب',        nEn:'Heart Seal' },
+  star:   { nAr:'ختم النجمة',       nEn:'Star Seal' },
+  rose:   { nAr:'ختم الوردة',       nEn:'Rose Seal' },
+  custom: { nAr:'+ رمزك الخاص',     nEn:'+ Your Symbol' }
+};
+
+const XPR_WHEN_EMOJIS = ['☕','🌧️','😊','🏆','🌙','✈️','🎓','🤍','💪','🎉','🌸','📚','✨','🏡'];
+
+/* Product #2 Ready Occasion Letter Packs (Gender-neutral Arabic + English, 5 Envelopes each) */
+const XPR_WHEN_PRESETS = {
+  loved: {
+    ic:'🤍', sl:'heart', nAr:'لشخص غالي وقريب', nEn:'For Someone Special',
+    ar:{
+      to:'أغلى الناس',
+      box:'صندوق رسائل مخبّأة لأوقاتك المختلفة ✨',
+      sub:'اختر الظرف الذي يشبه لحظتك الآن، واكسر الختم الشمعي باللمس',
+      fr:'بكل المحبة دايماً',
+      items:[
+        { em:'☕', wh:'تشتاق للحظاتنا وقهوتنا', tx:'المسافات والانشغال عمرها ما تغيّر المكانة اللي بالقلب…\nخذ نفس هادئ وتذكّر إن لك دايماً مساحة دافية وأيام أحلى جاية قريب بإذن الله.', gf:'قهوتك الجاية عليّ ☕🤍' },
+        { em:'🌧️', wh:'يطول يومك وتحتاج كلمة تريّحك', tx:'أدري إن بعض الأيام تكون ثقيلة ومليانة تفاصيل…\nهونها على نفسك، مو لازم تنجز كل شي دفعة وحدة. راحتك وهدوء بالك أهم من كل شي.', gf:'خذ استراحة هادئة الحين، تستاهل الراحة 🌿' },
+        { em:'😊', wh:'تبي تبتسم من قلبك الحين', tx:'حبيت أذكّرك إن وجودك يفرّق كثير ويخلّي الأيام أخف وأجمل…\nابتسامتك لحالها كفيلة تغيّر جو اليوم كله للأحسن!', gf:'ابتسامة اليوم وصلت؟ ✨' },
+        { em:'🏆', wh:'تحقّق إنجاز أو خطوة حلوة', tx:'كنت واثق فيك من البداية! تعبك واجتهادك مستحيل يروح سدى…\nافرح بإنجازك وافتخر بنفسك قدّ الدنيا، ومنها للأعلى دايماً.', gf:'نحتفل قريب بهالإنجاز الرهيب 🎉' },
+        { em:'🌙', wh:'يهدأ الليل قبل ما تنام', tx:'قبل ما يخلص يومك، اترك كل تفكير شاغل بالك لبكرة…\nتصبح على خير وراحة بال وأيام تشبه طيبة قلبك.', gf:'نوم العافية وراحة البال 🌙✨' }
+      ]
+    },
+    en:{
+      to:'Someone Truly Special',
+      box:'A Box of Sealed Letters for Your Moments ✨',
+      sub:'Pick the envelope that matches your moment right now and tap to break the seal',
+      fr:'Always With Warmth',
+      items:[
+        { em:'☕', wh:'You miss our warm moments', tx:'No matter how busy days get, your place in my heart stays just as close.\nTake a slow breath and remember brighter coffee moments are right ahead.', gf:'Next specialty coffee is on me ☕🤍' },
+        { em:'🌧️', wh:'You had a long, heavy day', tx:'Some days ask a lot from you — be gentle with yourself tonight.\nYou do not have to carry everything at once; your peace comes first.', gf:'Permission to pause & rest right now 🌿' },
+        { em:'😊', wh:'You need an instant smile', tx:'Just a quiet reminder that your presence makes ordinary days noticeably brighter.\nHope this tiny note brings an effortless smile right now!', gf:'Sending good vibes your way ✨' },
+        { em:'🏆', wh:'You celebrate a proud win', tx:'Never doubted you for a second! Every quiet effort led to this moment.\nBe genuinely proud of how far you have come.', gf:'Celebration treat awaits 🎉' },
+        { em:'🌙', wh:'The night grows quiet before sleep', tx:'Let tomorrow handle tomorrow.\nMay tonight bring calm rest, peaceful thoughts, and a bright morning ahead.', gf:'Wishing you restful peace 🌙✨' }
+      ]
+    }
+  },
+  grad: {
+    ic:'🎓', sl:'royal', nAr:'تخرّج وبداية مرحلة', nEn:'Graduation & New Chapter',
+    ar:{
+      to:'فخرنا الكبير',
+      box:'رسائل «افتحها لمّا…» لمرحلتك الجديدة 🎓',
+      sub:'٥ رسائل مختومة ترافقك من لحظة التخرّج لبداياتك القادمة',
+      fr:'أهل الفخر والمحبة',
+      items:[
+        { em:'🎓', wh:'تلبس عباية التخرّج وتحتفل', tx:'هذي اللحظة حصاد سهر وتعب وصبر طويل…\nمبارك من القلب! ارفع راسك وعيش فرحة الإنجاز بكل تفاصيلها.', gf:'هدية التخرّج محفوظة لك بكل فخر 🎁' },
+        { em:'🚀', wh:'تبدأ أول يوم في خطوتك الجاية', tx:'البدايات الجديدة دايماً فيها حماس ورهبة خفيفة…\nادخل بثقة، اللي قدر يوصل لهنا يقدر يبدع في كل مكان يروح له.', gf:'بداية موفّقة ومباركة يا رب ✨' },
+        { em:'💪', wh:'تحس بصعوبة أو تحدي جديد', tx:'طبيعي جداً تواجه أشياء أول مرة تجرّبها…\nلا تقسُ على نفسك، خطوة ورا خطوة بتلقى نفسك متمكّن ومبدع كعادتك.', gf:'تذكّر كم عقبة عدّيتها من قبل 🌟' },
+        { em:'☕', wh:'تشتاق لأيام الدراسة والذكريات', tx:'الأيام الحلوة ما تنتهي، تتحوّل لذكريات دافية تبتسم كل ما مرّت ببالك…\nومرحلتك الجاية مخبّية لك صحبة ونجاحات أجمل.', gf:'جلسة قهوة قريبة نسترجع فيها أحلى الذكريات ☕' },
+        { em:'🌟', wh:'تحتاج تذكير بقيمتك وقدراتك', tx:'مهما تغيّرت المحطات، معدنك واجتهادك هم سر تميّزك الحقيقي…\nفخورين فيك اليوم وكل يوم.', gf:'منها لأعلى المراتب دايماً 🏆' }
+      ]
+    },
+    en:{
+      to:'Our Bright Graduate',
+      box:'Open When Letters for Your Next Chapter 🎓',
+      sub:'5 sealed notes to accompany you from graduation into new beginnings',
+      fr:'So Proud of You',
+      items:[
+        { em:'🎓', wh:'You celebrate graduation day', tx:'Every late night and steady effort brought you right here.\nSoak in every moment of this proud milestone!', gf:'Your graduation gift awaits 🎁' },
+        { em:'🚀', wh:'You start day one of what is next', tx:'New chapters always mix excitement with butterflies.\nStep in confidently — you have earned your seat.', gf:'Wishing you a brilliant start ✨' },
+        { em:'💪', wh:'A new challenge feels tough', tx:'Every master was once a beginner in a new room.\nGive yourself grace; step by step you will shine.', gf:'Remember every hurdle you already cleared 🌟' },
+        { em:'☕', wh:'You feel nostalgic for uni days', tx:'Sweet chapters stay warm in memory while making space for even richer ones ahead.', gf:'Coffee catch-up soon ☕' },
+        { em:'🌟', wh:'You need a reminder of your strength', tx:'Titles and places grow, and your curiosity and heart remain your greatest superpower.', gf:'Cheering for you always 🏆' }
+      ]
+    }
+  },
+  travel: {
+    ic:'✈️', sl:'star', nAr:'لمسافر أو مغترب', nEn:'For a Traveler / Abroad',
+    ar:{
+      to:'رفيق الدرب الغالي',
+      box:'حقيبة رسائل ترافقك في سفرك ✈️',
+      sub:'كل ما مرّت فيك لحظة هناك… افتح الظرف المخصّص لها',
+      fr:'قلوبنا معك دايماً',
+      items:[
+        { em:'✈️', wh:'تركب الطيارة وتبدأ الرحلة', tx:'درب السلامة والتوفيق يحفّك من كل صوب…\nرحلة جميلة وميسّرة بإذن الله، استمتع بكل منظر وتجربة جديدة.', gf:'توصّل بالسلامة وطمّنا أول ما تهبط 🤍' },
+        { em:'🏡', wh:'توصل لمكانك الجديد بالسلامة', tx:'الحمد لله على السلامة! خذ وقتك ترتاح وترتّب مكانك على مهلك…\nبإذن الله تكون أيامك هنا فاتحة خير وبركة.', gf:'أول وجبة هناك بالعافية على قلبك ✨' },
+        { em:'☕', wh:'تحنّ للبيت ولمّتنا وقهوتنا', tx:'الشوق دليل المحبة، ومكانك بيننا محفوظ ينتظر رجعتك بالسلامة…\nسوّ لك كوب دافي، واعتبرنا جالسين معك الحين!', gf:'اتصال فيديو قريب مع القهوة ☕📲' },
+        { em:'🌧️', wh:'يمرّ عليك يوم طويل بالغربة', tx:'بعض الأيام بالبعد تحسها أطول من المعتاد…\nتذكّر ليه بديت هالرحلة، وتذكّر إن وراك قلوب تدعي لك بكل وقت.', gf:'دعواتنا ترافقك في كل خطوة 🌿' },
+        { em:'🎉', wh:'تنجز شي حلو وتبي تشاركنا', tx:'فرحتك هناك توصلنا هنا بنفس اللحظة!\nأرسل لنا على طول، ما فيه أحلى من أخبارك الحلوة.', gf:'بانتظار بشائرك الجميلة دايماً 🌟' }
+      ]
+    },
+    en:{
+      to:'Safe Travels Companion',
+      box:'Sealed Letters for Your Journey ✈️',
+      sub:'Whenever a moment finds you miles away, break the matching seal',
+      fr:'With You Across the Miles',
+      items:[
+        { em:'✈️', wh:'You board your flight', tx:'Wishing you smooth skies, calm travels, and inspiring discoveries ahead!', gf:'Text us when you land safely 🤍' },
+        { em:'🏡', wh:'You arrive at your new place', tx:'Welcome to your new corner! Unpack slowly, rest well, and make it feel cozy.', gf:'Enjoy your first meal there ✨' },
+        { em:'☕', wh:'You miss home & our coffee', tx:'Home is never far when hearts stay connected.\nPour a warm cup and know we are right there in spirit!', gf:'Video call & coffee soon ☕📲' },
+        { em:'🌧️', wh:'A day away feels extra long', tx:'Even quiet, distant days pass into brighter mornings.\nRemember why you started — we are cheering for you.', gf:'Sending warmth across the miles 🌿' },
+        { em:'🎉', wh:'You have good news to share', tx:'Distance never shrinks shared joy — message us right away so we celebrate together!', gf:'Always excited for your updates 🌟' }
+      ]
+    }
+  },
+  care: {
+    ic:'🌿', sl:'rose', nAr:'دعم وطبطبة وقت الضغط', nEn:'Calm & Exam/Work Support',
+    ar:{
+      to:'صاحب الهمّة العالية',
+      box:'رسائل هدوء وطاقة لأيام الانشغال 🌿',
+      sub:'افتح الظرف المناسب كل ما احتجت نفس هادئ أو دفعة معنوية',
+      fr:'معك خطوة بخطوة',
+      items:[
+        { em:'📚', wh:'تحس إن المهام والضغط كثير', tx:'وقف ثواني وخذ نفس عميق…\nقسّم اللي قدامك لأجزاء صغيرة، وأنجز خطوة وحدة بس الحين. القليل المستمر يصنع المعجزات.', gf:'خطوة وحدة تكفي هالساعة ✨' },
+        { em:'🌿', wh:'تحتاج ٥ دقايق صفاء ذهن', tx:'أبعد الجوال شوي، اشرب موية، وريّح عيونك…\nذهنك الصافي أهم بكثير من الاستعجال تحت التوتر.', gf:'استراحة ٥ دقايق مستحقة الحين 🍃' },
+        { em:'💡', wh:'تشكّ بقدرتك للحظة عابرة', tx:'التعب أحياناً يخلينا ننسى كم مرة أبدعنا من قبل!\nأنت قدّها وفوقها، بس جسمك وعقلك يحتاجون لطف وثقة.', gf:'ثقتنا فيك مالها حدود 💪' },
+        { em:'☕', wh:'تأخذ استراحة قهوة وسط الشغل', tx:'عوافي على قلبك! استمتع بكوبك بدون تأنيب ضمير…\nالراحة جزء أساسي من الإنجاز الذكي.', gf:'بالعافية أروق كوب قهوة ☕🤍' },
+        { em:'🏅', wh:'تخلّص أصعب خطوة وتنجح', tx:'كفو والله! عدّيت الأصعب بفضل الله ثم عزيمتك…\nالحين وقت تحتفل وتكافئ نفسك راحة تامة.', gf:'كافئ نفسك اليوم، تستاهل كل خير 🎉' }
+      ]
+    },
+    en:{
+      to:'Steady & Bright Mind',
+      box:'Calm Support Letters for Busy Seasons 🌿',
+      sub:'Open whenever you need a calm breath or gentle encouragement',
+      fr:'Cheering You On',
+      items:[
+        { em:'📚', wh:'Everything feels overwhelming', tx:'Pause and take one slow breath.\nPick just one tiny task right now — steady steps win every time.', gf:'One small step is enough ✨' },
+        { em:'🌿', wh:'You need 5 minutes of calm clarity', tx:'Rest your eyes, sip some water, and unclench your shoulders.\nA rested mind works twice as gently.', gf:'5-minute guilt-free breather 🍃' },
+        { em:'💡', wh:'Self-doubt whispers for a second', tx:'Fatigue hides how capable you truly are.\nLook at everything you have already mastered — you have got this.', gf:'Believing in you 100% 💪' },
+        { em:'☕', wh:'You take a well-earned coffee break', tx:'Savor every warm sip with zero guilt — rest fuels real brilliance.', gf:'Enjoy your break ☕🤍' },
+        { em:'🏅', wh:'You finish the hardest part', tx:'You did it! Time to exhale deeply and reward your hard work.', gf:'Treat yourself tonight 🎉' }
+      ]
+    }
+  },
+  y2027: {
+    ic:'✨', sl:'royal', nAr:'كبسولة رسائل ٢٠٢٧', nEn:'2027 Time Capsule Letters',
+    ar:{
+      to:'رفيق عام ٢٠٢٧',
+      box:'كبسولة رسائل عام ٢٠٢٧ المختومة ✨',
+      sub:'٥ ظروف ترافق محطات سنتك الجديدة من أول يوم لآخر ليلة',
+      fr:'إيلان دول · ٢٠٢٧',
+      items:[
+        { em:'✨', wh:'تفتح أول صفحة في عام ٢٠٢٧', tx:'سنة جديدة بيضاء قدّامك…\nعساها سنة خير وبركة وهدوء بال وتحقيق لكل أمنية طيبة في خاطرك.', gf:'انطلاقة ٢٠٢٧ المباركة 🌟' },
+        { em:'🎯', wh:'تحقّق أول هدف خطّطت له', tx:'أول الغيث قطرة! بداية تثبت إن خطواتك هالسنة موزونة ومباركة…\nسجّل هاللحظة الحلوة واستمر بنفس الروح.', gf:'أول إنجاز في ٢٠٢٧ تم بنجاح 🏆' },
+        { em:'🌤️', wh:'يمرّ عليك يوم روتيني عادي', tx:'الأيام الهادئة العادية نعمة عظيمة تستحق الحمد…\nاصنع لنفسك تفصيلة صغيرة تفرّحك اليوم.', gf:'اصنع لحظة لطيفة لنفسك اليوم ☕' },
+        { em:'🔋', wh:'تحتاج تجدّد شغفك بنص السنة', tx:'طبيعي تهدأ السرعة بنص الطريق…\nرتّب أولوياتك من جديد، وكمّل بالوتيرة اللي تريّحك وتناسبك.', gf:'طاقة متجددة وخطى ثابتة ✨' },
+        { em:'🌙', wh:'تختم السنة بامتنان وراحة بال', tx:'مهما كان شكل السنة، يكفي إنك كبرت وتعلّمت وعدّيت محطات كثيرة…\nالحمد لله على التمام وعلى القادم الأجمل.', gf:'كل عام وأنت بخير وسلام 🤍' }
+      ]
+    },
+    en:{
+      to:'2027 Companion',
+      box:'Your 2027 Sealed Letter Capsule ✨',
+      sub:'5 timeless notes for milestones across your year ahead',
+      fr:'Eilan Doll · 2027',
+      items:[
+        { em:'✨', wh:'You open the first page of 2027', tx:'A fresh canvas of days awaits — wishing you calm focus, health, and meaningful joy.', gf:'Happy 2027 Kickoff 🌟' },
+        { em:'🎯', wh:'You hit your first goal of the year', tx:'Momentum unlocked! Celebrate this milestone and keep moving at your steady rhythm.', gf:'First 2027 win unlocked 🏆' },
+        { em:'🌤️', wh:'An ordinary quiet Tuesday arrives', tx:'Peaceful ordinary days are hidden treasures — add one small joy to today.', gf:'Savor a slow moment today ☕' },
+        { em:'🔋', wh:'You need mid-year fresh energy', tx:'Adjust the pace without dropping the dream — gentle consistency goes furthest.', gf:'Recharged & steady ✨' },
+        { em:'🌙', wh:'You wrap up the year in gratitude', tx:'Look how much you grew, learned, and carried with grace this year.', gf:'Here is to brighter horizons 🤍' }
+      ]
+    }
+  }
+};
+
+function xprCloneWhenItems(items){
+  return (items||[]).map(it => ({
+    em: String(it.em||'💌').slice(0,4),
+    wh: String(it.wh||''),
+    tx: String(it.tx||''),
+    gf: String(it.gf||''),
+    lk: String(it.lk||'')
+  }));
+}
+
+/* Unclipped 3D Scalloped Wax Seal SVG for Product #2 («رسائل افتحها لمّا…») */
+function xprWaxSealSvg(seal='royal', customAcc='', customSym=''){
+  const k = XPR_SEALS[seal] ? seal : 'royal';
+  const acc = /^#[0-9a-fA-F]{6}$/.test(customAcc||'') ? customAcc : '#E2B450';
+  const sym = String(customSym || '✦').trim().slice(0, 5) || '✦';
+  const xmlEsc = s => String(s).replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  let motif = '';
+  if(k === 'heart'){
+    motif = `<path d="M40,51 L29,40 C24,35 27,27 33.5,27 C36.8,27 38.8,29.3 40,31.5 C41.2,29.3 43.2,27 46.5,27 C53,27 56,35 51,40 Z" fill="#FFF4CC"/>`;
+  } else if(k === 'star'){
+    motif = `<path d="M40 23 L43.2 33.4 L54 33.8 L45.5 40.4 L48.5 51 L40 44.8 L31.5 51 L34.5 40.4 L26 33.8 L36.8 33.4 Z" fill="#FFF4CC"/>`;
+  } else if(k === 'rose'){
+    motif = `<circle cx="40" cy="40" r="9.5" fill="none" stroke="#FFF4CC" stroke-width="2.2"/><circle cx="40" cy="40" r="4.8" fill="#FFF4CC"/><circle cx="40" cy="27.5" r="2.2" fill="#FFF4CC"/><circle cx="40" cy="52.5" r="2.2" fill="#FFF4CC"/><circle cx="27.5" cy="40" r="2.2" fill="#FFF4CC"/><circle cx="52.5" cy="40" r="2.2" fill="#FFF4CC"/>`;
+  } else if(k === 'custom'){
+    const fz = sym.length > 2 ? 13 : 20;
+    motif = `<text x="40" y="41" text-anchor="middle" dominant-baseline="central" fill="#FFF8E2" font-family="Cairo,Tajawal,system-ui,sans-serif" font-weight="900" font-size="${fz}">${xmlEsc(sym)}</text>`;
+  } else {
+    motif = `<path d="M40 24 L43.5 36.5 L56 40 L43.5 43.5 L40 56 L36.5 43.5 L24 40 L36.5 36.5 Z" fill="#FFF4CC"/>`;
+  }
+  return `<svg xmlns="http://www.w3.org/2000/svg" class="xpr-seal-svg" viewBox="0 0 80 80" style="stroke:none;overflow:visible" aria-hidden="true">
+    <circle cx="40" cy="43" r="31" fill="rgba(0,0,0,.32)"/>
+    <path d="M40,7 C45,7 48,11 53,10 C58,9 62,13 64,18 C66,23 71,25 71,30 C71,35 74,39 72,44 C70,49 71,54 67,58 C63,62 61,67 56,68 C51,69 47,73 40,73 C33,73 29,69 24,68 C19,67 17,62 13,58 C9,54 10,49 8,44 C6,39 9,35 9,30 C9,25 14,23 16,18 C18,13 22,9 27,10 C32,11 35,7 40,7 Z" fill="${acc}"/>
+    <circle cx="40" cy="40" r="23" fill="rgba(0,0,0,.18)" stroke="rgba(255,248,220,.72)" stroke-width="1.6"/>
+    <circle cx="40" cy="40" r="19" fill="none" stroke="rgba(255,248,220,.32)" stroke-width="1" stroke-dasharray="2.5 2.5"/>
+    ${motif}
+  </svg>`;
+}
+
+/* Preview Artwork SVG for Templates Card #2 (Floating Stack of Wax-Sealed Letters) */
+function xprWhenHeroSvg(acc='#E2B450'){
+  return `<svg xmlns="http://www.w3.org/2000/svg" class="xpr-shape-svg" viewBox="0 0 140 140" style="stroke:none;overflow:visible" aria-hidden="true">
+    <ellipse cx="70" cy="123" rx="44" ry="6.5" fill="rgba(0,0,0,.35)"/>
+    <g class="xg-float">
+      <g transform="rotate(-8 62 66)">
+        <rect x="22" y="36" width="84" height="56" rx="9" fill="#1C2748" stroke="${acc}" stroke-width="1.5"/>
+        <path d="M23,39 L64,68 L105,39" fill="none" stroke="${acc}" stroke-width="1.4" opacity=".65"/>
+      </g>
+      <g transform="rotate(5 76 74)">
+        <rect x="30" y="46" width="88" height="58" rx="9" fill="#FAF3E0" stroke="${acc}" stroke-width="1.8"/>
+        <polygon points="30,48 74,80 118,48" fill="#EED9A4"/>
+        <path d="M30,103 L63,76 M118,103 L85,76" fill="none" stroke="#D8BE80" stroke-width="1.3"/>
+        <circle cx="74" cy="77" r="13.5" fill="#9E1B3B" stroke="#FFF0BA" stroke-width="1.4"/>
+        <path d="M74 70.5 L76 75.2 L81 77 L76 78.8 L74 83.5 L72 78.8 L67 77 L72 75.2 Z" fill="#FFF0BA"/>
+      </g>
+    </g>
+  </svg>`;
+}
+
 function xprIsPreviewHost(){
   try{ return /^(localhost|127\.0\.0\.1)$|\.e2b\.app$/i.test(location.hostname); }catch(e){ return false; }
 }
@@ -274,6 +545,7 @@ function xprCanPreviewToggle(){
 }
 
 const XPR_STATE = {
+  activeProd: 'cube', // 'cube' (Product #1 — 25 SAR) | 'when' (Product #2 — 29 SAR)
   preset: 'eid',
   stage: 0,
   openShapePlus: false,
@@ -296,6 +568,29 @@ const XPR_STATE = {
     sb: XPR_CUBE_PRESETS.eid.ar.sub,
     fr: XPR_CUBE_PRESETS.eid.ar.fr,
     lk: ''
+  },
+  /* Product #2 («رسائل افتحها لمّا…») State */
+  whenPreset: 'loved',
+  whenView: 'box', // 'box' | 'open'
+  whenIdx: 0,
+  whenOpened: {},
+  openWhenTopicPlus: false,
+  openWhenColorPlus: false,
+  whenTopicDraft: '',
+  W: {
+    p: 'loved',
+    sl: 'heart',
+    ss: '🤍',
+    th: 'velvet',
+    cb: '#24101B',
+    ca: '#F2B866',
+    lg: 'ar',
+    sn: 'warm',
+    to: XPR_WHEN_PRESETS.loved.ar.to,
+    bx: XPR_WHEN_PRESETS.loved.ar.box,
+    sb: XPR_WHEN_PRESETS.loved.ar.sub,
+    fr: XPR_WHEN_PRESETS.loved.ar.fr,
+    it: xprCloneWhenItems(XPR_WHEN_PRESETS.loved.ar.items)
   }
 };
 
@@ -379,30 +674,49 @@ function xprMatchTopic(rawTopic){
   return { sh:'crest', st:firstWord || '✨', cb:'#10162B', ca:'#E2B450' };
 }
 
-/* Register Product #1 in Store & Experiences catalog (100% real data, sales:0, no fake reviews) */
+/* Register Products #1 & #2 in Store & Experiences catalog (100% real data, sales:0, no fake reviews) */
 (function xprRegisterProducts(){
-  const pCube = {
-    id:'x-cube',
-    name:'مفاجأة إيلان التفاعلية — أشكال وألوان بموضوعك',
-    en:'Eilan Interactive Surprise — Custom Shapes & Themes',
-    cat:'experiences',
-    price:25,
-    icon:'🎁',
-    c:['#E2B450','#07080C'],
-    kind:'digital',
-    badge:'تسليم فوري',
-    sales:0,
-    note:'⚡ تسليم فوري تلقائي ٢٤/٧: اختر من الأشكال والثيمات الجاهزة أو اضغط (+) لتصميم شكل وألوان بموضوعك، واستلم رابط واتساب بملء الشاشة + بطاقة باركود QR.',
-    desc:'قالب تجربة إهداء ومفاجأة تفاعلي يُفتح باللمس على ٣ مراحل مشوّقة: يشمل أشكال جاهزة (ظرف، قبعة تخرّج، ورد، علبة هدية، مكعب إيلان) + زر (+) لتوليد أشكال وألوان خاصة بموضوعك (قهوة، عطر، سفر، سيارة، مولود، أو رمزك الخاص).',
-    tags:['تجارب','قوالب','هدية','عيدية','تخرج','ورد','ظرف','قهوة','سفر','مفاجأة','باركود','تفاعلي','cube','gift']
-  };
-  if(typeof DEF!=='undefined' && Array.isArray(DEF.products)){
-    const i = DEF.products.findIndex(x=>x.id===pCube.id);
-    if(i>=0) DEF.products[i] = pCube; else DEF.products.push(pCube);
-  }
-  if(typeof S!=='undefined' && Array.isArray(S.products) && !(S.custom&&S.custom['no_'+pCube.id])){
-    const i = S.products.findIndex(x=>x.id===pCube.id);
-    if(i>=0) S.products[i] = pCube; else S.products.push(pCube);
+  const list = [
+    {
+      id:'x-cube',
+      name:'مفاجأة إيلان التفاعلية — أشكال وألوان بموضوعك',
+      en:'Eilan Interactive Surprise — Custom Shapes & Themes',
+      cat:'experiences',
+      price:25,
+      icon:'🎁',
+      c:['#E2B450','#07080C'],
+      kind:'digital',
+      badge:'تسليم فوري',
+      sales:0,
+      note:'⚡ تسليم فوري تلقائي ٢٤/٧: اختر من الأشكال والثيمات الجاهزة أو اضغط (+) لتصميم شكل وألوان بموضوعك، واستلم رابط واتساب بملء الشاشة + بطاقة باركود QR.',
+      desc:'قالب تجربة إهداء ومفاجأة تفاعلي يُفتح باللمس على ٣ مراحل مشوّقة: يشمل أشكال جاهزة (ظرف، قبعة تخرّج، ورد، علبة هدية، مكعب إيلان) + زر (+) لتوليد أشكال وألوان خاصة بموضوعك.',
+      tags:['تجارب','قوالب','هدية','عيدية','تخرج','ورد','ظرف','قهوة','سفر','مفاجأة','باركود','تفاعلي','cube','gift']
+    },
+    {
+      id:'x-when',
+      name:'رسائل «افتحها لمّا…» التفاعلية — ظروف مختومة بالشمع',
+      en:'Interactive "Open When…" Letters — Wax-Sealed Envelopes',
+      cat:'experiences',
+      price:29,
+      icon:'💌',
+      c:['#4A2A8F','#07080C'],
+      kind:'digital',
+      badge:'تسليم فوري',
+      sales:0,
+      note:'⚡ تسليم فوري تلقائي ٢٤/٧: جهّز صندوق ظروف مختومة بالشمع لأوقات ومشاعر مختلفة (جاهزة أو بموضوعك وألوانك)، واستلم رابط واتساب تفاعلي + بطاقة باركود QR للطباعة.',
+      desc:'صندوق رسائل «افتحها لمّا…» تفاعلي يضم حتى ٦ ظروف مختومة بختم شمعي مذهّب يكسره المُستلم باللمس متى ما عاش اللحظة (لشخص غالي، تخرّج، مسافر، دعم وقت الضغط، أو بموضوعك وألوانك الخاصة).',
+      tags:['تجارب','قوالب','رسائل','افتحها لما','افتحها لمّا','هدية','سفر','تخرج','ظروف','باركود','تفاعلي','open when','letters']
+    }
+  ];
+  for(const prod of list){
+    if(typeof DEF!=='undefined' && Array.isArray(DEF.products)){
+      const i = DEF.products.findIndex(x=>x.id===prod.id);
+      if(i>=0) DEF.products[i] = prod; else DEF.products.push(prod);
+    }
+    if(typeof S!=='undefined' && Array.isArray(S.products) && !(S.custom&&S.custom['no_'+prod.id])){
+      const i = S.products.findIndex(x=>x.id===prod.id);
+      if(i>=0) S.products[i] = prod; else S.products.push(prod);
+    }
   }
 })();
 
@@ -762,25 +1076,173 @@ function xprShareUrl(D){
   return `${base}?exp=cube&d=${xprEncodeData(D)}`;
 }
 
-/* Pure Vanilla-JS ISO/IEC 18004 QR Matrix Generator (Versions 1..20, ECC-L, Byte Mode) */
+/* Compact Lossless Arabic+UTF8 Byte Packer (cuts Arabic URL & QR size by ~48%) */
+function xprPackBytes(str){
+  const out = [];
+  const enc = new TextEncoder();
+  for(const ch of String(str||'')){
+    const cp = ch.codePointAt(0);
+    if(cp < 0x80){ out.push(cp); }
+    else if(cp >= 0x0600 && cp <= 0x067E){ out.push(0x80 + (cp - 0x0600)); }
+    else {
+      const b = enc.encode(ch);
+      out.push(0xFF, b.length, ...b);
+    }
+  }
+  return new Uint8Array(out);
+}
+function xprUnpackBytes(bytes){
+  let out = '', i = 0;
+  const dec = new TextDecoder();
+  while(i < bytes.length){
+    const b = bytes[i++];
+    if(b < 0x80){ out += String.fromCharCode(b); }
+    else if(b < 0xFF){ out += String.fromCharCode(0x0600 + (b - 0x80)); }
+    else {
+      const ln = bytes[i++] || 0;
+      out += dec.decode(bytes.subarray(i, i + ln));
+      i += ln;
+    }
+  }
+  return out;
+}
+
+/* Compact Delta Encoder & Decoder for Product #2 («رسائل افتحها لمّا…») */
+function xprEncodeWhenData(W){
+  const p = XPR_WHEN_PRESETS[W.p] ? W.p : 'loved';
+  const prObj = XPR_WHEN_PRESETS[p];
+  const lg = W.lg === 'en' ? 'en' : 'ar';
+  const def = prObj[lg];
+  const o = { p };
+  if(W.sl && W.sl !== prObj.sl) o.sl = W.sl;
+  if(W.sl === 'custom' && W.ss) o.ss = String(W.ss).slice(0, 5);
+  if(W.th && W.th !== 'velvet') o.th = W.th;
+  if(W.th === 'custom'){
+    o.cb = xprCleanHex(W.cb, '#24101B');
+    o.ca = xprCleanHex(W.ca, '#F2B866');
+  }
+  if(lg !== 'ar') o.lg = lg;
+  if(W.sn && W.sn !== 'warm') o.sn = W.sn;
+  if(W.to !== def.to) o.to = String(W.to||'').slice(0, 70);
+  if(W.bx !== def.box) o.bx = String(W.bx||'').slice(0, 110);
+  if(W.sb !== def.sub) o.sb = String(W.sb||'').slice(0, 140);
+  if(W.fr !== def.fr) o.fr = String(W.fr||'').slice(0, 70);
+
+  const items = Array.isArray(W.it) ? W.it.slice(0, 6) : [];
+  const sameLen = items.length === def.items.length;
+  let allDefault = sameLen;
+  const packed = items.map((it, idx)=>{
+    const dIt = def.items[idx] || {};
+    const lk = (it.lk && /^https:\/\/\S+/i.test(String(it.lk).trim())) ? String(it.lk).trim().slice(0,180) : '';
+    const d = {};
+    const em = String(it.em||'💌').slice(0,4);
+    const wh = String(it.wh||'').slice(0,90);
+    const tx = String(it.tx||'').slice(0,260);
+    const gf = String(it.gf||'').slice(0,110);
+    if(em !== (dIt.em||'')) d.e = em;
+    if(wh !== (dIt.wh||'')) d.w = wh;
+    if(tx !== (dIt.tx||'')) d.t = tx;
+    if(gf !== (dIt.gf||'')) d.g = gf;
+    if(lk) d.l = lk;
+    if(Object.keys(d).length > 0) allDefault = false;
+    return d;
+  });
+  if(!allDefault){
+    o.n = items.length;
+    o.i = packed;
+  }
+  const bytes = xprPackBytes(JSON.stringify(o));
+  let bin = '';
+  bytes.forEach(b => bin += String.fromCharCode(b));
+  return '2.' + btoa(bin).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+}
+
+function xprDecodeWhenData(tok){
+  try{
+    let rawTok = String(tok||'');
+    const isPacked = rawTok.startsWith('2.');
+    if(isPacked) rawTok = rawTok.slice(2);
+    const b64 = rawTok.replace(/-/g,'+').replace(/_/g,'/');
+    const pad = b64 + '==='.slice((b64.length + 3) % 4);
+    const bin = atob(pad);
+    const bytes = new Uint8Array(bin.length);
+    for(let i=0;i<bin.length;i++) bytes[i] = bin.charCodeAt(i);
+    const jsonStr = isPacked ? xprUnpackBytes(bytes) : new TextDecoder().decode(bytes);
+    const o = JSON.parse(jsonStr);
+    const p = XPR_WHEN_PRESETS[o.p] ? o.p : 'loved';
+    const prObj = XPR_WHEN_PRESETS[p];
+    const lg = o.lg === 'en' ? 'en' : 'ar';
+    const def = prObj[lg];
+    const isCustomTh = o.th === 'custom';
+    let items = xprCloneWhenItems(def.items);
+    if(Array.isArray(o.i) && o.i.length >= 2){
+      const cnt = Math.min(6, Math.max(2, o.n || o.i.length));
+      items = [];
+      for(let idx=0; idx<cnt; idx++){
+        const dIt = def.items[idx] || { em:'💌', wh:'', tx:'', gf:'' };
+        const pIt = o.i[idx] || {};
+        const lk = (typeof pIt.l==='string' && /^https:\/\/\S+/i.test(pIt.l.trim())) ? pIt.l.trim() : '';
+        items.push({
+          em: typeof pIt.e==='string' ? pIt.e.slice(0,4) : dIt.em,
+          wh: typeof pIt.w==='string' ? pIt.w : dIt.wh,
+          tx: typeof pIt.t==='string' ? pIt.t : dIt.tx,
+          gf: typeof pIt.g==='string' ? pIt.g : dIt.gf,
+          lk
+        });
+      }
+    }
+    return {
+      p,
+      sl: XPR_SEALS[o.sl] ? o.sl : prObj.sl,
+      ss: typeof o.ss==='string' ? o.ss.slice(0,5) : '🤍',
+      th: isCustomTh ? 'custom' : (XPR_THEMES[o.th] ? o.th : 'velvet'),
+      cb: xprCleanHex(o.cb, '#24101B'),
+      ca: xprCleanHex(o.ca, '#F2B866'),
+      lg,
+      sn: XPR_SOUNDS[o.sn] ? o.sn : 'warm',
+      to: typeof o.to==='string' ? o.to : def.to,
+      bx: typeof o.bx==='string' ? o.bx : def.box,
+      sb: typeof o.sb==='string' ? o.sb : def.sub,
+      fr: typeof o.fr==='string' ? o.fr : def.fr,
+      it: items
+    };
+  }catch(e){ return null; }
+}
+
+function xprWhenShareUrl(W){
+  const base = location.origin + '/';
+  return `${base}?exp=when&d=${xprEncodeWhenData(W)}`;
+}
+
+/* Pure Vanilla-JS ISO/IEC 18004 QR Matrix Generator (Versions 1..40, up to 2,953 bytes, ECC-L) */
 function xprMakeQR(str){
   const data = Array.from(new TextEncoder().encode(str));
-  const V_CAP = [0,19,34,55,80,108,136,156,194,232,274,324,370,428,461,523,589,647,721,795,861];
+  const V_CAP = [0,19,34,55,80,108,136,156,194,232,274,324,370,428,461,523,589,647,721,795,861,
+    932,1006,1094,1174,1276,1370,1468,1531,1631,1735,
+    1843,1955,2071,2191,2306,2434,2566,2702,2812,2956];
   const V_BLK = [null,
     [7,1,19,0,0],[10,1,34,0,0],[15,1,55,0,0],[20,1,80,0,0],[26,1,108,0,0],
     [18,2,68,0,0],[20,2,78,0,0],[24,2,97,0,0],[30,2,116,0,0],[18,2,68,2,69],
     [20,4,81,0,0],[24,2,92,2,93],[26,4,107,0,0],[30,3,115,1,116],[22,5,87,1,88],
-    [24,5,98,1,99],[28,1,107,5,108],[30,5,120,1,121],[28,3,113,4,114],[28,3,107,5,108]
+    [24,5,98,1,99],[28,1,107,5,108],[30,5,120,1,121],[28,3,113,4,114],[28,3,107,5,108],
+    [28,4,116,4,117],[28,2,111,7,112],[30,4,121,5,122],[30,6,117,4,118],[26,8,106,4,107],
+    [28,10,114,2,115],[30,8,122,4,123],[30,3,117,10,118],[30,7,116,7,117],[30,5,115,10,116],
+    [30,13,115,3,116],[30,17,115,0,0],[30,17,115,1,116],[30,13,115,6,116],[30,12,121,7,122],
+    [30,6,121,14,122],[30,17,122,4,123],[30,4,122,18,123],[30,20,117,4,118],[30,19,118,6,119]
   ];
   const ALIGN = [null,[],[6,18],[6,22],[6,26],[6,30],[6,34],[6,22,38],[6,24,42],[6,26,46],[6,28,50],
-    [6,30,54],[6,32,58],[6,34,62],[6,26,46,66],[6,26,48,70],[6,26,50,74],[6,30,54,78],[6,30,56,82],[6,30,58,86],[6,34,62,90]];
+    [6,30,54],[6,32,58],[6,34,62],[6,26,46,66],[6,26,48,70],[6,26,50,74],[6,30,54,78],[6,30,56,82],[6,30,58,86],[6,34,62,90],
+    [6,28,50,72,94],[6,26,50,74,98],[6,30,54,78,102],[6,28,54,80,106],[6,32,58,84,110],
+    [6,30,58,86,114],[6,34,62,90,118],[6,26,50,74,98,122],[6,30,54,78,102,126],[6,26,52,78,104,130],
+    [6,30,56,82,108,134],[6,34,60,86,112,138],[6,30,58,86,114,142],[6,34,62,90,118,146],[6,30,54,78,102,126,150],
+    [6,24,50,76,102,128,154],[6,28,54,80,106,132,158],[6,32,58,84,110,136,162],[6,26,54,82,110,138,166],[6,30,58,86,114,142,170]];
   let ver = 1;
-  while(ver <= 20){
+  while(ver <= 40){
     const lb = ver < 10 ? 8 : 16;
     if(4 + lb + data.length * 8 <= V_CAP[ver] * 8) break;
     ver++;
   }
-  if(ver > 20) return null;
+  if(ver > 40) return null;
   const bits = [];
   const pushB = (v,n)=>{ for(let i=n-1;i>=0;i--) bits.push((v>>>i)&1); };
   pushB(0b0100, 4);
@@ -952,35 +1414,36 @@ function xprRenderFrameHTML(D, stage, opts={}){
     </div>`;
 }
 
-/* Activate Salla Code (Client-Side SHA-256 — Zero Owner Intervention Needed) */
-async function xprVerifyCode(ev){
+/* Activate Salla Code (Client-Side SHA-256 — Supports CUB1, OWHN, and EXPB Pass) */
+async function xprVerifyCode(ev, prodKey='cube'){
   ev.preventDefault();
   const f = ev.target;
   const msg = $('#xprCodeMsg');
+  const pref = prodKey === 'when' ? 'OWHN' : 'CUB1';
   const raw = String(f.code.value || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
   let body = raw;
-  if(!raw.startsWith('EXPB') && !raw.startsWith('CUB1')) body = 'CUB1' + raw;
+  if(!raw.startsWith('EXPB') && !raw.startsWith('CUB1') && !raw.startsWith('OWHN')) body = pref + raw;
 
   if(body.length < 15){
     msg.className = 'lh-msg bad';
-    msg.textContent = gzL('الكود ناقص — الصيغة الصحيحة: CUB1-XXXX-XXXX-XXXX','Code incomplete — expected CUB1-XXXX-XXXX-XXXX');
+    msg.textContent = gzL(`الكود ناقص — الصيغة الصحيحة: ${pref}-XXXX-XXXX-XXXX`, `Code incomplete — expected ${pref}-XXXX-XXXX-XXXX`);
     return;
   }
   const dg = new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode('eilan-arc-v1:' + body)));
   const hx = Array.from(dg, b => b.toString(16).padStart(2,'0')).join('').slice(0, 24);
-  const validCube = Array.isArray(XPR_CODES.cube) && XPR_CODES.cube.includes(hx);
+  const validProd = Array.isArray(XPR_CODES[prodKey]) && XPR_CODES[prodKey].includes(hx);
   const validBundle = Array.isArray(XPR_CODES.bundle) && XPR_CODES.bundle.includes(hx);
 
-  if(!validCube && !validBundle){
+  if(!validProd && !validBundle){
     msg.className = 'lh-msg bad';
     msg.textContent = '❌ ' + gzL('الكود غير صحيح — تأكد من نسخه كما وصلك من سلة','Invalid activation code');
     return;
   }
   S.unlk = S.unlk || {};
   if(validBundle) S.unlk.x_bundle = 1;
-  else S.unlk.x_cube = 1;
+  else S.unlk['x_' + prodKey] = 1;
   S.owned = S.owned || {};
-  S.owned['x-cube'] = Date.now();
+  S.owned['x-' + prodKey] = Date.now();
   XPR_STATE.previewSimVisitor = false;
   save();
   xprPlayChime('joy', 2);
@@ -1270,10 +1733,407 @@ function xprOpenFullscreen(D, isRecipientLink=false){
   paint();
 }
 
+/* ================= Product #2 («رسائل افتحها لمّا…») Frame, Fullscreen, Card & Offline HTML ================= */
+function xprRenderWhenFrameHTML(W, viewMode='box', openIdx=0, openedMap={}, opts={}){
+  const en = W.lg === 'en';
+  const dir = en ? 'ltr' : 'rtl';
+  const preview = !!opts.preview;
+  const muted = W.sn === 'mute';
+  const items = Array.isArray(W.it) && W.it.length ? W.it : XPR_WHEN_PRESETS.loved[en?'en':'ar'].items;
+  const safeIdx = Math.max(0, Math.min(items.length - 1, +openIdx || 0));
+  const sealKey = XPR_SEALS[W.sl] ? W.sl : 'heart';
+  const accHex = W.th === 'custom' ? xprCleanHex(W.ca, '#F2B866') : '#E2B450';
+  const customStyle = W.th === 'custom' ? ` style="${xprCustomFrameStyle(W.cb, W.ca)}"` : '';
+  const sparks = Array.from({length:8}, (_,i)=>`<i style="left:${10+i*11}%;animation-delay:${(i*0.55).toFixed(2)}s"></i>`).join('');
+  const openedCount = items.reduce((acc, _, idx)=> acc + (openedMap[idx] ? 1 : 0), 0);
+
+  let bodyHTML = '';
+  if(viewMode === 'open'){
+    const cur = items[safeIdx] || items[0];
+    const safeLk = (cur.lk && /^https:\/\/\S+/i.test(String(cur.lk).trim())) ? String(cur.lk).trim() : '';
+    const nxtIdx = (safeIdx + 1) % items.length;
+    bodyHTML = `
+      <div class="xpr-wletter">
+        <div class="xpr-wl-top">
+          <span class="xpr-wl-ic">${esc(cur.em || '💌')}</span>
+          <div style="flex:1;min-width:0">
+            <small>${en ? `✦ OPEN WHEN · ${safeIdx+1} OF ${items.length}` : `✦ افتحها لمّا… · رسالة ${safeIdx+1} من ${items.length}`}</small>
+            <h4>${esc(cur.wh || '')}</h4>
+          </div>
+        </div>
+        <p class="xpr-wl-txt">${esc(cur.tx || '')}</p>
+        ${cur.gf ? `<div class="xpr-wl-gift"><span>🎁</span><span>${esc(cur.gf)}</span></div>` : ''}
+        ${safeLk ? `<div><a class="xpr-extlink" href="${esc(safeLk)}" target="_blank" rel="noopener noreferrer">${en ? 'Open Attached Link ↗' : 'فتح الرابط المرفق داخل الظرف ↗'}</a></div>` : ''}
+        ${W.fr ? `<div style="padding-top:4px"><span class="xpr-from">${en ? 'From: ' : 'من: '}${esc(W.fr)}</span></div>` : ''}
+      </div>
+      <div class="xpr-wnav">
+        <button type="button" class="xpr-tap-cta" data-wact="backbox">
+          <span>⊞</span><span>${en ? 'All Envelopes' : 'كل الظروف المختومة'}</span>
+        </button>
+        <button type="button" class="xpr-tap-cta" data-wact="openenv" data-idx="${nxtIdx}">
+          <span>💌</span><span>${en ? 'Next Envelope →' : 'الظرف التالي ←'}</span>
+        </button>
+      </div>`;
+  } else {
+    bodyHTML = `
+      <div class="xpr-whead">
+        <h3>${esc(W.bx || (en ? 'Sealed Letters for Your Moments ✨' : 'صندوق رسائل مخبّأة لأوقاتك المختلفة ✨'))}</h3>
+        <p>${esc(W.sb || (en ? 'Tap any wax-sealed envelope that matches your moment' : 'اختر الظرف الذي يشبه لحظتك الآن واكسر الختم باللمس'))}</p>
+      </div>
+      <div class="xpr-wgrid">
+        ${items.map((it, idx)=>{
+          const done = !!openedMap[idx];
+          return `
+            <button type="button" class="xpr-wenv ${done?'done':''}" data-wact="openenv" data-idx="${idx}">
+              ${done ? `<span class="xpr-wenv-done">✓ ${en?'Opened':'فُتحت'}</span>` : ''}
+              <span class="xpr-wenv-em">${esc(it.em || '💌')}</span>
+              <span class="xpr-wenv-seal">${xprWaxSealSvg(sealKey, accHex, W.ss)}</span>
+              <span class="xpr-wenv-kicker">${en ? 'OPEN WHEN…' : 'افتحها لمّا…'}</span>
+              <span class="xpr-wenv-ttl">${esc(it.wh || '')}</span>
+            </button>`;
+        }).join('')}
+      </div>
+      ${W.fr ? `<div class="xpr-from">${en ? 'From: ' : 'من: '}${esc(W.fr)}</div>` : ''}`;
+  }
+
+  return `
+    <div class="xpr-frame no-ei" data-th="${esc(W.th||'velvet')}"${customStyle} dir="${dir}">
+      <div class="xpr-sparks">${sparks}</div>
+      <div class="xpr-top">
+        <span class="xpr-to">${en ? 'To: ' : 'إلى: '}${esc(W.to || (en?'Someone Special':'أغلى الناس'))}</span>
+        <div style="display:flex;gap:6px;align-items:center">
+          ${preview ? `<span class="xpr-wm">${en ? 'Free Preview' : 'معاينة مجانية'}</span>` : ''}
+          <button type="button" class="xpr-sndbtn" data-wact="togglesnd" title="${en?'Sound':'الصوت'}">${muted ? '🔇' : '🔔'}</button>
+        </div>
+      </div>
+      <div class="xpr-wbody">${bodyHTML}</div>
+      <div class="xpr-foot">
+        <a class="xpr-sig" href="${opts.recipient ? '/?explore=experiences' : '#xprStudio'}" ${opts.recipient ? '' : 'onclick="event.preventDefault()"'}>
+          ${xprLogoMini()}
+          <span>EILAN DOLL · إيلان دول</span>
+        </a>
+        <span>${en ? `Opened ${openedCount} / ${items.length}` : `فُتحت ${openedCount} من ${items.length} رسائل`}</span>
+      </div>
+    </div>`;
+}
+
+function xprOpenWhenFullscreen(W, isRecipientLink=false){
+  let ov = $('#xprFullOverlay');
+  if(ov) ov.remove();
+  ov = document.createElement('div');
+  ov.id = 'xprFullOverlay';
+  ov.className = 'xpr-full no-ei';
+  let view = 'box', idx = 0;
+  const opened = {};
+  const localW = JSON.parse(JSON.stringify(W));
+
+  const paint = ()=>{
+    ov.innerHTML = `
+      ${isRecipientLink
+        ? `<a class="xpr-full-close" href="/?explore=experiences">✦ ${localW.lg==='en'?'Made with Eilan Doll · Create Yours':'صُنع في إيلان دول · اصنع رسائلك'}</a>`
+        : `<button type="button" class="xpr-full-close" data-xclose="1">✕ ${gzL('إغلاق المعاينة والعودة','Close Preview')}</button>`}
+      ${xprRenderWhenFrameHTML(localW, view, idx, opened, {preview:false, recipient:isRecipientLink})}
+    `;
+  };
+  ov.addEventListener('click', ev=>{
+    if(ev.target.closest('[data-xclose]')){ ov.remove(); return; }
+    const wEl = ev.target.closest('[data-wact]');
+    if(!wEl) return;
+    const act = wEl.dataset.wact;
+    if(act === 'openenv'){
+      idx = +wEl.dataset.idx || 0;
+      opened[idx] = 1;
+      view = 'open';
+      xprPlayChime(localW.sn, 2);
+      paint();
+    } else if(act === 'backbox'){
+      view = 'box';
+      xprPlayChime(localW.sn, 1);
+      paint();
+    } else if(act === 'togglesnd'){
+      localW.sn = localW.sn === 'mute' ? 'warm' : 'mute';
+      paint();
+    }
+  });
+  document.body.appendChild(ov);
+  paint();
+}
+
+/* Luxury 1600x1000 QR Gift Card for Product #2 («رسائل افتحها لمّا…») */
+async function xprDrawWhenCardCanvas(WObj){
+  const url = xprWhenShareUrl(WObj);
+  const qr = xprMakeQR(url);
+  const W = 1600, H = 1000;
+  const cv = document.createElement('canvas');
+  cv.width = W; cv.height = H;
+  const ctx = cv.getContext('2d');
+  const en = WObj.lg === 'en';
+
+  const isCust = WObj.th === 'custom';
+  const cbHex = isCust ? xprCleanHex(WObj.cb, '#24101B') : (WObj.th==='forest'?'#0C2B1D':WObj.th==='royal'?'#0E1E52':WObj.th==='gold'?'#0E1426':'#1F1139');
+  const caHex = isCust ? xprCleanHex(WObj.ca, '#F2B866') : '#E2B450';
+  const [br,bg,bb] = xprHexRgb(cbHex);
+  const [ar,ag,ab] = xprHexRgb(caHex);
+  const light = (0.299*br + 0.587*bg + 0.114*bb)/255 > 0.58;
+  const txtMain = light ? '#14150F' : '#F2F5FA';
+  const txtSub  = light ? 'rgba(20,21,15,0.78)' : 'rgba(242,245,250,0.86)';
+  const txtMu   = light ? 'rgba(20,21,15,0.56)' : 'rgba(242,245,250,0.6)';
+
+  const g = ctx.createLinearGradient(0, 0, W, H);
+  g.addColorStop(0, cbHex);
+  g.addColorStop(1, light ? `rgb(${Math.max(0,br-18)},${Math.max(0,bg-18)},${Math.max(0,bb-18)})` : '#07080C');
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, W, H);
+
+  const rg = ctx.createRadialGradient(W*0.72, H*0.35, 20, W*0.72, H*0.35, 540);
+  rg.addColorStop(0, `rgba(${ar},${ag},${ab},0.22)`);
+  rg.addColorStop(1, `rgba(${ar},${ag},${ab},0)`);
+  ctx.fillStyle = rg;
+  ctx.fillRect(0, 0, W, H);
+
+  ctx.strokeStyle = caHex; ctx.lineWidth = 4;
+  ctx.beginPath(); ctx.roundRect(36, 36, W-72, H-72, 34); ctx.stroke();
+  ctx.strokeStyle = `rgba(${ar},${ag},${ab},0.3)`; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.roundRect(54, 54, W-108, H-108, 26); ctx.stroke();
+
+  const drawSvgStr = (svgStr, x, y, w, h)=>new Promise(res=>{
+    const im = new Image();
+    im.onload = ()=>{ try{ ctx.drawImage(im, x, y, w, h); }catch(e){} res(); };
+    im.onerror = ()=>res();
+    im.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgStr);
+  });
+
+  const qrBoxX = en ? W - 540 : 100;
+  const qrBoxY = 140, qrBoxW = 440, qrBoxH = 720;
+  ctx.fillStyle = light ? 'rgba(255,255,255,0.84)' : 'rgba(7,8,12,0.75)';
+  ctx.strokeStyle = `rgba(${ar},${ag},${ab},0.48)`; ctx.lineWidth = 2.5;
+  ctx.beginPath(); ctx.roundRect(qrBoxX, qrBoxY, qrBoxW, qrBoxH, 28); ctx.fill(); ctx.stroke();
+
+  if(qr){
+    const qSize = 340;
+    const qX = qrBoxX + (qrBoxW - qSize)/2, qY = qrBoxY + 42;
+    ctx.fillStyle = '#FFFFFF';
+    ctx.beginPath(); ctx.roundRect(qX - 18, qY - 18, qSize + 36, qSize + 36, 18); ctx.fill();
+    const N = qr.length, cell = qSize / N;
+    ctx.fillStyle = '#07080C';
+    for(let r=0;r<N;r++){
+      for(let c=0;c<N;c++){
+        if(qr[r][c]) ctx.fillRect(qX + c*cell, qY + r*cell, Math.ceil(cell), Math.ceil(cell));
+      }
+    }
+  }
+  ctx.fillStyle = txtMain;
+  ctx.font = '800 24px Cairo, Tajawal, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText(en ? 'Scan to Open Your Letters' : 'امسح الباركود لفتح صندوق رسائلك', qrBoxX + qrBoxW/2, qrBoxY + 455);
+  ctx.fillStyle = caHex;
+  ctx.font = '700 18.5px Cairo, Tajawal, sans-serif';
+  const cnt = (WObj.it || []).length;
+  ctx.fillText(en ? `${cnt} Wax-Sealed Interactive Letters 💌` : `${cnt} ظروف مختومة بالشمع تُفتح باللمس 💌`, qrBoxX + qrBoxW/2, qrBoxY + 493);
+  await drawSvgStr(xprWaxSealSvg(WObj.sl||'heart', caHex, WObj.ss), qrBoxX + qrBoxW/2 - 58, qrBoxY + 525, 116, 116);
+
+  const txX = en ? 110 : W - 110;
+  const maxW = 860;
+  ctx.textAlign = en ? 'left' : 'right';
+  ctx.direction = en ? 'ltr' : 'rtl';
+
+  await drawSvgStr(xprLogoMini(), en ? 110 : W - 196, 108, 86, 86);
+  ctx.fillStyle = caHex;
+  ctx.font = '900 24px Cairo, Tajawal, sans-serif';
+  ctx.fillText(en ? 'EILAN "OPEN WHEN…" LETTERS' : 'صندوق رسائل «افتحها لمّا…» التفاعلي', en ? 215 : W - 215, 150);
+  ctx.fillStyle = txtMu;
+  ctx.font = '700 19px Cairo, Tajawal, sans-serif';
+  ctx.fillText('EILAN DOLL · العالم الرقمي', en ? 215 : W - 215, 182);
+
+  ctx.fillStyle = txtMain;
+  ctx.font = '900 46px Cairo, Tajawal, sans-serif';
+  ctx.fillText(((en ? 'To: ' : 'إهداء خاص إلى: ') + (WObj.to || '')).slice(0, 42), txX, 300, maxW);
+
+  ctx.fillStyle = caHex;
+  ctx.font = '800 30px Cairo, Tajawal, sans-serif';
+  ctx.fillText(String(WObj.bx || '').slice(0, 62), txX, 368, maxW);
+
+  ctx.fillStyle = txtSub;
+  ctx.font = '700 24px Cairo, Tajawal, sans-serif';
+  const listItems = (WObj.it || []).slice(0, 6);
+  listItems.forEach((it, i)=>{
+    const prefix = en ? `${it.em||'💌'} Open when: ` : `${it.em||'💌'} افتحها لمّا `;
+    ctx.fillText((prefix + String(it.wh||'')).slice(0, 58), txX, 445 + i * 52, maxW);
+  });
+
+  if(WObj.fr){
+    ctx.fillStyle = caHex;
+    ctx.font = '800 28px Cairo, Tajawal, sans-serif';
+    ctx.fillText((en ? 'From: ' : 'من: ') + WObj.fr, txX, 815, maxW);
+  }
+  ctx.fillStyle = txtMu;
+  ctx.font = '700 20px Cairo, Tajawal, sans-serif';
+  ctx.fillText('صُنع بتوقيع إيلان دول · EILAN DOLL — تجارب رقمية تفاعلية', txX, 905, maxW);
+  return cv;
+}
+
+async function xprDownloadWhenCardPNG(){
+  if(!xprUnlocked('when')){ toast(gzL('فعّل الكود أولاً لاستلام البطاقة بدون علامة معاينة','Unlock first to download your gift card')); return; }
+  const cv = await xprDrawWhenCardCanvas(XPR_STATE.W);
+  cv.toBlob(async blob=>{
+    if(!blob) return;
+    const file = new File([blob], 'Eilan-Open-When-Card.png', {type:'image/png'});
+    if(navigator.canShare && navigator.canShare({files:[file]})){
+      try{ await navigator.share({files:[file], title:'بطاقة رسائل افتحها لمّا — إيلان دول'}); return; }catch(e){}
+    }
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = file.name;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); }, 4000);
+    toast('🃏 ' + gzL('تم تحميل بطاقة الباركود الفاخرة (PNG)','Luxury QR Card downloaded'));
+  }, 'image/png');
+}
+
+async function xprPrintWhenCardPDF(){
+  if(!xprUnlocked('when')){ toast(gzL('فعّل الكود أولاً لطباعة البطاقة الفاخرة','Unlock first to print your card')); return; }
+  const w = window.open('', '_blank');
+  if(!w){ toast(gzL('اسمح بفتح النافذة للطباعة أو حمّل صورة البطاقة PNG','Allow popups to print or download PNG')); return; }
+  const cv = await xprDrawWhenCardCanvas(XPR_STATE.W);
+  const dataUrl = cv.toDataURL('image/png');
+  w.document.write(`<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><title>بطاقة رسائل افتحها لمّا — إيلان دول</title>
+  <style>@page{size:A4 landscape;margin:10mm}body{margin:0;background:#0B0E17;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;font-family:system-ui,sans-serif}
+  img{max-width:100%;max-height:86vh;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.38)}
+  .bar{margin-bottom:12px;display:flex;gap:10px}@media print{.bar{display:none}body{background:#fff}img{box-shadow:none;max-height:95vh}}</style></head>
+  <body><div class="bar"><button onclick="window.print()" style="padding:10px 22px;border-radius:10px;border:0;background:#E2B450;color:#07080C;font-weight:800;font-size:15px;cursor:pointer">🖨️ طباعة / حفظ كملف PDF أفقي</button></div>
+  <img src="${dataUrl}" alt="Eilan Open When Card" onload="setTimeout(()=>window.print(),350)"></body></html>`);
+  w.document.close();
+}
+
+function xprDownloadWhenStandaloneHTML(){
+  if(!xprUnlocked('when')){ toast(gzL('فعّل الكود أولاً لتحميل ملف التجربة المستقل','Unlock first to download standalone file')); return; }
+  const WObj = XPR_STATE.W;
+  const payloadJson = JSON.stringify(WObj).replace(/</g,'\\u003c');
+  const styleEl = Array.from(document.querySelectorAll('style')).find(s=>s.textContent.includes('.xpr-frame'));
+  const css = styleEl ? styleEl.textContent : '';
+  const en = WObj.lg === 'en';
+  const html = `<!doctype html>
+<html lang="${en?'en':'ar'}" dir="${en?'ltr':'rtl'}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>${esc(WObj.to||'Open When Letters')} — EILAN DOLL · إيلان دول</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;padding:0;min-height:100%;font-family:'Cairo','Tajawal',system-ui,-apple-system,sans-serif;background:#07080C}
+${css}
+</style>
+</head>
+<body>
+<div class="xpr-full" id="app"></div>
+<script>
+const W = ${payloadJson};
+const XPR_SEALS = ${JSON.stringify(XPR_SEALS)};
+const XPR_CUBE_POLYS = ${JSON.stringify(XPR_CUBE_POLYS)};
+const XPR_GOLD_POLYS = ${JSON.stringify(XPR_GOLD_POLYS)};
+let view = 'box', idx = 0, ac = null;
+const opened = {};
+const esc = s => String(s??'').replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const xprCleanHex = ${xprCleanHex.toString()};
+const xprHexRgb = ${xprHexRgb.toString()};
+const xprCustomFrameStyle = ${xprCustomFrameStyle.toString()};
+const xprLogoMini = ${xprLogoMini.toString()};
+const xprWaxSealSvg = ${xprWaxSealSvg.toString()};
+const xprRenderWhenFrameHTML = ${xprRenderWhenFrameHTML.toString()};
+function chime(st){
+  if(!W.sn || W.sn==='mute') return;
+  try{
+    const AC = window.AudioContext || window.webkitAudioContext; if(!AC) return;
+    if(!ac) ac = new AC(); if(ac.state==='suspended') ac.resume();
+    const now = ac.currentTime, notes = st>=2?[329.63,415.3,493.88,659.25]:[329.63,493.88];
+    notes.forEach((f,i)=>{ const o=ac.createOscillator(),g=ac.createGain(); o.type='triangle'; o.frequency.setValueAtTime(f,now+i*.085);
+      g.gain.setValueAtTime(.0001,now+i*.085); g.gain.exponentialRampToValueAtTime(.08/(1+i*.2),now+i*.085+.03); g.gain.exponentialRampToValueAtTime(.0001,now+i*.085+.95);
+      o.connect(g); g.connect(ac.destination); o.start(now+i*.085); o.stop(now+i*.085+1); });
+  }catch(e){}
+}
+function draw(){
+  document.getElementById('app').innerHTML = xprRenderWhenFrameHTML(W, view, idx, opened, {preview:false, recipient:false});
+}
+document.getElementById('app').addEventListener('click', ev=>{
+  const el = ev.target.closest('[data-wact]'); if(!el) return;
+  const a = el.dataset.wact;
+  if(a==='openenv'){ idx=+el.dataset.idx||0; opened[idx]=1; view='open'; chime(2); draw(); }
+  else if(a==='backbox'){ view='box'; chime(1); draw(); }
+  else if(a==='togglesnd'){ W.sn = W.sn==='mute'?'warm':'mute'; draw(); }
+});
+draw();
+<\/script>
+</body></html>`;
+  const blob = new Blob([html], {type:'text/html;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'Eilan-Open-When-Letters.html';
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); }, 4000);
+  toast('📦 ' + gzL('تم تحميل ملف صندوق الرسائل المستقل','Standalone interactive letters downloaded'));
+}
+
+/* Smart Topic Matcher for Product #2 («رسائل افتحها لمّا…») */
+function xprRunApplyWhenTopic(){
+  const inp = $('#xprWhenTopicInp');
+  const val = inp ? inp.value.trim() : XPR_STATE.whenTopicDraft.trim();
+  if(!val){ toast(gzL('اكتب موضوع الرسائل أولاً (مثال: قهوة وصداقة، زواج، أمي، سفر، رمضان، طب…)','Type your topic first')); if(inp) inp.focus(); return; }
+  XPR_STATE.whenTopicDraft = val;
+  const W = XPR_STATE.W;
+  const en = W.lg === 'en';
+  let sym = '✨', cb = '#1B1429', ca = '#E8BE66', presetToLoad = null;
+
+  if(/سفر|رحل|ابتعاث|غرب|مطار|travel|abroad|trip/i.test(val)){ presetToLoad='travel'; sym='✈️'; cb='#0A1D3B'; ca='#F0C96B'; }
+  else if(/تخرج|جامع|شهاد|grad/i.test(val)){ presetToLoad='grad'; sym='🎓'; cb='#0E1A40'; ca='#F6DD8F'; }
+  else if(/اختبار|مذاكر|ضغط|امتحان|شغل|عمل|وظيف|ترقي|exam|work|study/i.test(val)){ presetToLoad='care'; sym='💼'; cb='#0C2218'; ca='#E2B450'; }
+  else if(/قهو|صداق|صديق|رفيق|coffee|friend/i.test(val)){ sym='☕'; cb='#1B120C'; ca='#DDA35D'; }
+  else if(/زواج|خطوب|ذكرى|حب|زوج|شريك|wedding|love|anniversary/i.test(val)){ sym='💍'; cb='#240E1A'; ca='#F4A8C0'; }
+  else if(/ام|أم|اب|أب|عائل|والد|mom|dad|family/i.test(val)){ sym='🤍'; cb='#1E1510'; ca='#EBC074'; }
+  else if(/مولود|بيبي|طفل|اموم|أموم|baby|newborn/i.test(val)){ sym='🍼'; cb='#102136'; ca='#F6DD8F'; }
+  else if(/طب|دكتور|مناوب|تمريض|عياد|doctor|med/i.test(val)){ sym='🩺'; cb='#0C1E33'; ca='#E2B450'; }
+  else if(/رمضان|عيد|عمر|حج|مبارك|ramadan|eid/i.test(val)){ sym='🌙'; cb='#092218'; ca='#F6DD8F'; }
+  else {
+    const m = xprMatchTopic(val);
+    if(m){
+      if(m.cb) cb = m.cb;
+      if(m.ca) ca = m.ca;
+      if(m.st) sym = m.st;
+    }
+  }
+
+  if(presetToLoad && XPR_WHEN_PRESETS[presetToLoad]){
+    XPR_STATE.whenPreset = presetToLoad;
+    const src = XPR_WHEN_PRESETS[presetToLoad][en?'en':'ar'];
+    W.p = presetToLoad;
+    W.to = src.to; W.bx = src.box; W.sb = src.sub; W.fr = src.fr;
+    W.it = xprCloneWhenItems(src.items);
+  }
+  W.bx = en ? `Sealed Letters: ${val} ✨` : `صندوق رسائل «افتحها لمّا…» — ${val} ✨`;
+  W.sl = 'custom';
+  W.ss = sym;
+  W.th = 'custom';
+  W.cb = cb;
+  W.ca = ca;
+  XPR_STATE.openWhenColorPlus = true;
+  XPR_STATE.whenView = 'box';
+  xprPlayChime(W.sn, 1);
+  toast('✨ ' + gzL('تم تجهيز ختم وثيم الصندوق لموضوع: ','Matched seal & theme for: ') + val);
+  xprRefreshStudio();
+}
+
 /* Render Live Stage & URL Box inside Studio (without destroying open color wheels or text inputs!) */
 function xprRefreshStageOnly(){
   const box = $('#xprLiveStage');
   if(!box) return;
+  if(XPR_STATE.activeProd === 'when'){
+    const unlocked = xprUnlocked('when');
+    box.innerHTML = xprRenderWhenFrameHTML(XPR_STATE.W, XPR_STATE.whenView, XPR_STATE.whenIdx, XPR_STATE.whenOpened, {preview: !unlocked, recipient:false});
+    $$('.xpr-stab').forEach(b => b.classList.toggle('on', b.dataset.wv === XPR_STATE.whenView));
+    const uIn = $('#xprShareInput');
+    if(uIn && unlocked) uIn.value = xprWhenShareUrl(XPR_STATE.W);
+    return;
+  }
   const unlocked = xprUnlocked('cube');
   box.innerHTML = xprRenderFrameHTML(XPR_STATE.D, XPR_STATE.stage, {preview: !unlocked, recipient:false});
   $$('.xpr-stab').forEach(b => b.classList.toggle('on', +b.dataset.st === XPR_STATE.stage));
@@ -1281,19 +2141,249 @@ function xprRefreshStageOnly(){
   if(uIn && unlocked) uIn.value = xprShareUrl(XPR_STATE.D);
 }
 
+function xprRenderWhenStudioHTML(unlocked){
+  const W = XPR_STATE.W;
+  const pObj = S.products.find(x=>x.id==='x-when') || {id:'x-when', price:29};
+  const sallaUrl = typeof extUrl==='function' ? extUrl(pObj) : '';
+  const shareUrl = xprWhenShareUrl(W);
+  const accForSeal = W.th === 'custom' ? xprCleanHex(W.ca, '#F2B866') : '#E2B450';
+  const items = W.it;
+  const edIdx = Math.max(0, Math.min(items.length - 1, XPR_STATE.whenIdx || 0));
+  XPR_STATE.whenIdx = edIdx;
+  const curIt = items[edIdx] || {em:'💌', wh:'', tx:'', gf:'', lk:''};
+
+  return `
+    <div class="xpr-work" id="xprStudio">
+      <div class="xpr-stage-col">
+        <div class="xpr-stage-bar no-ei">
+          <div class="xpr-stabs">
+            <button type="button" class="xpr-stab ${XPR_STATE.whenView==='box'?'on':''}" data-xui="wview" data-wv="box">📦 ${gzL('صندوق الظروف المختومة','Sealed Box')}</button>
+            <button type="button" class="xpr-stab ${XPR_STATE.whenView==='open'?'on':''}" data-xui="wview" data-wv="open">💌 ${gzL(`قراءة ظرف ${edIdx+1}`,`Read Env ${edIdx+1}`)}</button>
+          </div>
+          <span class="mu" style="font-size:12px">👆 ${gzL('المس أي ظرف لكسر الختم','Tap any envelope')}</span>
+        </div>
+        <div id="xprLiveStage">${xprRenderWhenFrameHTML(W, XPR_STATE.whenView, edIdx, XPR_STATE.whenOpened, {preview: !unlocked})}</div>
+      </div>
+
+      <div class="card xpr-form no-ei">
+        <h3>💌 ${gzL('خصّص صندوق رسائل «افتحها لمّا…»','Customize Your "Open When…" Letters')}</h3>
+
+        <div>
+          <span class="xpr-sec-lbl">١. ${gzL('اختر باقة مناسبة جاهزة (أو اضغط + بموضوعك لتخصيص الصندوق)','1. Ready Letter Pack (+ Your Own Topic)')}</span>
+          <div class="xpr-presets">
+            ${Object.entries(XPR_WHEN_PRESETS).map(([k,v])=>`<button type="button" class="xpr-pre ${XPR_STATE.whenPreset===k?'on':''}" data-xui="wpreset" data-k="${k}">${v.ic} ${gzL(v.nAr, v.nEn)}</button>`).join('')}
+            <button type="button" class="xpr-pre ${XPR_STATE.openWhenTopicPlus?'on':''}" style="border-style:dashed;border-color:rgba(226,180,80,.6)" data-xui="togglewtopic">＋ ${gzL('بموضوعك','Your Topic')}</button>
+          </div>
+
+          ${XPR_STATE.openWhenTopicPlus ? `
+          <div class="xpr-drawer">
+            <span class="xpr-sec-lbl" style="margin:0">✨ ${gzL('اكتب موضوعك وإيلان تنسّق الختم والألوان وعنوان الصندوق تلقائياً:','Type your topic for instant seal & color match:')}</span>
+            <div class="xpr-topic-row">
+              <input class="input" id="xprWhenTopicInp" value="${esc(XPR_STATE.whenTopicDraft)}" maxlength="60" placeholder="${gzL('مثال: قهوة وصداقة، زواج، أمي، سفر، رمضان، طب، وظيفة…','e.g. Coffee & Friendship, Wedding, Mom, Travel, Med…')}">
+              <button type="button" class="btn sm g" data-xui="applywtopic">✨ ${gzL('طبّق بموضوعي','Match Topic')}</button>
+            </div>
+          </div>` : ''}
+        </div>
+
+        <div>
+          <span class="xpr-sec-lbl">🕯️ ${gzL('شكل الختم الشمعي على الظروف (جاهز + رمزك الخاص)','Wax Seal Emblem (+ Your Custom Symbol)')}</span>
+          <div class="xpr-seals">
+            ${['royal','heart','star','rose'].map(k=>{
+              const v = XPR_SEALS[k];
+              return `<button type="button" class="xpr-shbtn ${W.sl===k?'on':''}" data-xui="wseal" data-v="${k}">${xprWaxSealSvg(k, accForSeal, W.ss)}<span>${gzL(v.nAr, v.nEn)}</span></button>`;
+            }).join('')}
+            <button type="button" class="xpr-shbtn plus ${W.sl==='custom'?'on':''}" data-xui="wseal" data-v="custom">
+              ${W.sl==='custom' ? xprWaxSealSvg('custom', accForSeal, W.ss) : `<span class="xpr-plus-ic">＋</span>`}
+              <span>${gzL('+ رمزك','+ Symbol')}</span>
+            </button>
+          </div>
+          ${W.sl === 'custom' ? `
+          <div class="xpr-drawer">
+            <div class="xpr-sym-row">
+              <span class="mu" style="font-size:12px">${gzL('اكتب إيموجي أو حروف على الختم الشمعي:','Emoji or initials on wax seal:')}</span>
+              <input class="input xpr-sym-in" data-wseal-sym="1" maxlength="5" value="${esc(W.ss||'🤍')}" placeholder="🤍">
+            </div>
+            <div class="xpr-emo-chips">
+              ${XPR_QUICK_SYMS.map(([em,lbl])=>`<button type="button" class="xpr-emo-chip ${W.ss===em?'on':''}" data-xui="wquicksym" data-em="${em}">${em} ${lbl}</button>`).join('')}
+            </div>
+          </div>` : ''}
+        </div>
+
+        <div>
+          <span class="xpr-sec-lbl">🎨 ${gzL('ثيم الألوان (ثيمات إيلان + زر + لألوان من اختيارك)','Color Theme (+ Custom Colors)')}</span>
+          <div class="xpr-swatches">
+            ${Object.entries(XPR_THEMES).map(([k,v])=>`<button type="button" class="xpr-sw ${W.th===k?'on':''}" data-xui="wtheme" data-v="${k}"><i style="background:${v.sw}"></i><span>${gzL(v.nAr, v.nEn)}</span></button>`).join('')}
+            <button type="button" class="xpr-sw plus ${(W.th==='custom' || XPR_STATE.openWhenColorPlus)?'on':''}" data-xui="togglewcolorplus">
+              <i id="xprWhenSwDot" style="background:linear-gradient(135deg,${xprCleanHex(W.cb,'#24101B')} 48%,${xprCleanHex(W.ca,'#F2B866')})">＋</i>
+              <span>${gzL('+ ألوانك','+ Custom')}</span>
+            </button>
+          </div>
+          ${(XPR_STATE.openWhenColorPlus || W.th==='custom') ? `
+          <div class="xpr-drawer">
+            <div class="xpr-cpickers">
+              <label class="xpr-cpick">
+                <input type="color" data-wcol="cb" value="${xprCleanHex(W.cb,'#24101B')}">
+                <div><b>${gzL('لون الخلفية','Background Color')}</b><small id="xprWHexCb">${xprCleanHex(W.cb,'#24101B')}</small></div>
+              </label>
+              <label class="xpr-cpick">
+                <input type="color" data-wcol="ca" value="${xprCleanHex(W.ca,'#F2B866')}">
+                <div><b>${gzL('لون الختم والإطار','Wax Seal & Accent')}</b><small id="xprWHexCa">${xprCleanHex(W.ca,'#F2B866')}</small></div>
+              </label>
+            </div>
+            <div class="xpr-emo-chips">
+              ${XPR_CUSTOM_PALS.map(([ar,en,cb,ca])=>`<button type="button" class="xpr-emo-chip ${(W.th==='custom'&&W.cb===cb&&W.ca===ca)?'on':''}" data-xui="wcustpal" data-cb="${cb}" data-ca="${ca}">${gzL(ar,en)}</button>`).join('')}
+            </div>
+          </div>` : ''}
+        </div>
+
+        <div class="xpr-grid2">
+          <div class="xpr-fld">
+            <span>🌐 ${gzL('لغة الصندوق للمُستلم','Recipient Language')}</span>
+            <div class="sd-seg">
+              <button type="button" class="${W.lg==='ar'?'on':''}" data-xui="wlang" data-v="ar">العربية</button>
+              <button type="button" class="${W.lg==='en'?'on':''}" data-xui="wlang" data-v="en">English</button>
+            </div>
+          </div>
+          <div class="xpr-fld">
+            <span>🔔 ${gzL('نغمة فتح الختم','Seal Chime')}</span>
+            <select class="select" data-wfld="sn">
+              ${Object.entries(XPR_SOUNDS).map(([k,v])=>`<option value="${k}" ${W.sn===k?'selected':''}>${gzL(v.nAr, v.nEn)}</option>`).join('')}
+            </select>
+          </div>
+        </div>
+
+        <div class="xpr-grid2">
+          <label class="xpr-fld">
+            <span>👤 ${gzL('إلى (اسم المُهدى إليه)','To (Recipient Name)')}</span>
+            <input class="input" data-wfld="to" maxlength="70" value="${esc(W.to)}">
+          </label>
+          <label class="xpr-fld">
+            <span>✍️ ${gzL('من (التوقيع)','From (Your Signature)')}</span>
+            <input class="input" data-wfld="fr" maxlength="70" value="${esc(W.fr)}">
+          </label>
+        </div>
+
+        <label class="xpr-fld">
+          <span>✨ ${gzL('عنوان صندوق الرسائل','Collection Title')}</span>
+          <input class="input" data-wfld="bx" maxlength="110" value="${esc(W.bx)}">
+        </label>
+
+        <div>
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap">
+            <span class="xpr-sec-lbl" style="margin:0">✉️ ${gzL(`حرّر الظروف المختومة (${items.length} من ٦ ظروف)`,`Edit Sealed Envelopes (${items.length} of 6)`)}</span>
+            ${items.length > 2 ? `<button type="button" class="btn sm" style="padding:4px 9px;font-size:11.5px" data-xui="wdelenv">🗑️ ${gzL('حذف هذا الظرف','Delete Envelope')}</button>` : ''}
+          </div>
+          <div class="xpr-wtabs" style="margin-bottom:8px">
+            ${items.map((it, idx)=>`<button type="button" class="xpr-wtab ${idx===edIdx?'on':''}" data-xui="wselenv" data-idx="${idx}">${esc(it.em||'💌')} ${gzL('ظرف','Env')} ${idx+1}</button>`).join('')}
+            ${items.length < 6 ? `<button type="button" class="xpr-wtab add" data-xui="waddenv">＋ ${gzL('إضافة ظرف','Add Envelope')}</button>` : ''}
+          </div>
+
+          <div class="xpr-wbox-ed">
+            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+              <label class="xpr-fld" style="width:92px">
+                <span>${gzL('أيقونة الظرف','Icon')}</span>
+                <input class="input" style="text-align:center;font-size:17px" data-witem="em" maxlength="4" value="${esc(curIt.em)}">
+              </label>
+              <label class="xpr-fld" style="flex:1;min-width:190px">
+                <span>${gzL(`عنوان «افتحها لمّا…» (ظرف ${edIdx+1})`,`"Open When…" Prompt (Env ${edIdx+1})`)}</span>
+                <input class="input" data-witem="wh" maxlength="90" value="${esc(curIt.wh)}" placeholder="${gzL('مثال: تشتاق للحظاتنا الحلوة','e.g. You miss our warm moments')}">
+              </label>
+            </div>
+            <div class="xpr-emo-chips">
+              ${XPR_WHEN_EMOJIS.map(em=>`<button type="button" class="xpr-emo-chip ${curIt.em===em?'on':''}" data-xui="witememo" data-em="${em}">${em}</button>`).join('')}
+            </div>
+            <label class="xpr-fld">
+              <span>💌 ${gzL('نص الرسالة داخل هذا الظرف','Letter Inside This Envelope')}</span>
+              <textarea class="textarea" rows="3" data-witem="tx" maxlength="260">${esc(curIt.tx)}</textarea>
+            </label>
+            <div class="xpr-grid2">
+              <label class="xpr-fld">
+                <span>🎁 ${gzL('هدية صغيرة / همسة بأسفل الرسالة (اختياري)','Small Gift / Tuck-in Note (Optional)')}</span>
+                <input class="input" data-witem="gf" maxlength="110" value="${esc(curIt.gf)}" placeholder="${gzL('مثال: قهوتك اليوم عليّ ☕','e.g. Coffee is on me today ☕')}">
+              </label>
+              <label class="xpr-fld">
+                <span>🔗 ${gzL('رابط مرفق داخل الظرف (https://)','Optional Link Inside (https://)')}</span>
+                <input class="input" dir="ltr" data-witem="lk" maxlength="180" value="${esc(curIt.lk||'')}" placeholder="https://...">
+              </label>
+            </div>
+          </div>
+        </div>
+
+        ${unlocked ? `
+        <div class="xpr-deliv open">
+          <div class="xpr-deliv-h">
+            <b>✅ ${gzL('التسليم الفوري مفعّل — استلم وشارك صندوق رسائلك الآن','Instant Delivery Active — Share & Download Now')}</b>
+            <span class="xpr-pill grn">${gzL('بدون علامة معاينة · جاهز للإرسال','Clean & Ready')}</span>
+          </div>
+          <div class="xpr-urlbox">
+            <input id="xprShareInput" dir="ltr" readonly value="${esc(shareUrl)}">
+            <button type="button" class="btn sm g" data-xui="wcopylink">📋 ${gzL('نسخ الرابط','Copy Link')}</button>
+          </div>
+          <div class="xpr-acts-grid">
+            <button type="button" class="btn g" data-xui="wsharelink">📲 ${gzL('إرسال للواتساب / مشاركة','Share via WhatsApp')}</button>
+            <button type="button" class="btn" data-xui="wopenfull">👁️ ${gzL('معاينة شاشة المُستلم كاملة','Recipient Fullscreen')}</button>
+            <button type="button" class="btn p" data-xui="wdlcard">🃏 ${gzL('تحميل بطاقة باركود QR (PNG)','Download QR Gift Card')}</button>
+            <button type="button" class="btn" data-xui="wprintcard">🖨️ ${gzL('طباعة البطاقة / PDF أفقي','Print / Landscape PDF')}</button>
+          </div>
+          <button type="button" class="btn sm" style="align-self:flex-start" data-xui="wdlhtml">📦 ${gzL('تحميل ملف صندوق الرسائل المستقل (يعمل بدون إنترنت)','Download Standalone Offline HTML')}</button>
+        </div>
+        ` : `
+        <div class="xpr-deliv">
+          <div class="xpr-deliv-h">
+            <div>
+              <b>⚡ ${gzL('استلام فوري تلقائي ٢٤/٧ — بدون انتظار','24/7 Instant Automated Delivery')}</b>
+              <div class="mu" style="font-size:12.5px;margin-top:2px">${gzL('اشترِ من سلة، يوصلك كود التفعيل تلقائياً في نفس الثانية، دخّله هنا واستلم رابط صندوق الرسائل وبطاقة الباركود فوراً.','Buy on Salla -> receive instant code -> unlock clean share link, QR card & offline file immediately.')}</div>
+            </div>
+            <span class="xpr-price-tag">29 <small>${gzL('ر.س','SAR')}</small></span>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            ${sallaUrl
+              ? `<a class="btn g" href="${esc(sallaUrl)}" target="_blank" rel="noopener">🛍️ ${gzL('اشترِ الكود الفوري من سلة — 29 ر.س','Buy Instant Code on Salla — 29 SAR')}</a>`
+              : `<button type="button" class="btn g" data-go="eilan://product/x-when">🛍️ ${gzL('صفحة المنتج والشراء — 29 ر.س','Product Page — 29 SAR')}</button>`}
+            <button type="button" class="btn" data-xui="wopenfull">👁️ ${gzL('جرّب شاشة المُستلم قبل الشراء','Preview Fullscreen')}</button>
+          </div>
+          <form class="lh-code" onsubmit="xprVerifyCode(event,'when')">
+            <input class="input" name="code" dir="ltr" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="OWHN-XXXX-XXXX-XXXX" maxlength="24">
+            <button class="btn">🔑 ${gzL('تفعيل واستلام فوري','Instant Unlock')}</button>
+            <div class="lh-msg" id="xprCodeMsg"></div>
+          </form>
+        </div>
+        `}
+      </div>
+    </div>`;
+}
+
 function xprRefreshStudio(){
   const root = $('#xprStudioMount');
   if(!root) return;
-  const D = XPR_STATE.D;
-  const unlocked = xprUnlocked('cube');
-  const pObj = S.products.find(x=>x.id==='x-cube') || {id:'x-cube', price:25};
-  const sallaUrl = typeof extUrl==='function' ? extUrl(pObj) : '';
-  const shareUrl = xprShareUrl(D);
-  const isExtraShape = !XPR_MAIN_SHAPES.includes(D.sh);
-  const accForShape = D.th === 'custom' ? xprCleanHex(D.ca, '#DDA35D') : '#E2B450';
+  const prodKey = XPR_STATE.activeProd === 'when' ? 'when' : 'cube';
+  const unlocked = xprUnlocked(prodKey);
 
-  root.innerHTML = `
-    ${xprCanPreviewToggle() ? `
+  const shelfHTML = `
+    <div class="xpr-pshelf no-ei" role="tablist" aria-label="منتجات تجارب إيلان التفاعلية">
+      <button type="button" class="xpr-ptab ${prodKey==='cube'?'on':''}" data-xui="switchprod" data-prod="cube">
+        <span class="xpr-ptab-ic">${xprShapeSvg('envelope')}</span>
+        <div class="xpr-ptab-txt">
+          <div class="xpr-ptab-top">
+            <b>١. ${gzL('مفاجأة إيلان التفاعلية','1. Interactive Surprise')}</b>
+            <span class="xpr-ptab-pr">25 ${gzL('ر.س','SAR')}</span>
+          </div>
+          <span>${gzL('٣ مراحل تشويق باللمس · أشكال وألوان جاهزة + زر (+) بموضوعك','3-stage touch reveal · Ready + (+) custom topic shapes & colors')}</span>
+        </div>
+      </button>
+      <button type="button" class="xpr-ptab ${prodKey==='when'?'on':''}" data-xui="switchprod" data-prod="when">
+        <span class="xpr-ptab-ic">${xprWaxSealSvg('heart','#E2B450')}</span>
+        <div class="xpr-ptab-txt">
+          <div class="xpr-ptab-top">
+            <b>٢. ${gzL('رسائل «افتحها لمّا…»','2. "Open When…" Letters')}</b>
+            <span class="xpr-ptab-pr">29 ${gzL('ر.س','SAR')}</span>
+          </div>
+          <span>${gzL('صندوق ظروف مختومة بالشمع لأوقات ومشاعر مختلفة · جاهزة + بموضوعك','Box of wax-sealed interactive envelopes for life moments')}</span>
+        </div>
+      </button>
+    </div>`;
+
+  const ownBarHTML = xprCanPreviewToggle() ? `
     <div class="xpr-ownbar no-ei">
       <div>
         <b>👑 ${gzL('شريط المعاينة السريعة على الـ iPad (خاص بالمالكة والمعاينة فقط — لا يظهر للزوار)','Owner / iPad Preview Bar (Hidden for regular visitors)')}</b>
@@ -1302,8 +2392,21 @@ function xprRefreshStudio(){
       <button type="button" class="btn sm ${unlocked?'g':''}" data-xui="toggleprev">
         ${unlocked ? '🔓 '+gzL('وضع المشتري مفعّل — اضغطي للمعاينة كزائر','Buyer View Active — Tap for Visitor View') : '🔑 '+gzL('فعّلي وضع المشتري للمعاينة الفورية','Activate Buyer View for Instant Test')}
       </button>
-    </div>` : ''}
+    </div>` : '';
 
+  if(prodKey === 'when'){
+    root.innerHTML = shelfHTML + ownBarHTML + xprRenderWhenStudioHTML(unlocked);
+    return;
+  }
+
+  const D = XPR_STATE.D;
+  const pObj = S.products.find(x=>x.id==='x-cube') || {id:'x-cube', price:25};
+  const sallaUrl = typeof extUrl==='function' ? extUrl(pObj) : '';
+  const shareUrl = xprShareUrl(D);
+  const isExtraShape = !XPR_MAIN_SHAPES.includes(D.sh);
+  const accForShape = D.th === 'custom' ? xprCleanHex(D.ca, '#DDA35D') : '#E2B450';
+
+  root.innerHTML = shelfHTML + ownBarHTML + `
     <div class="xpr-work" id="xprStudio">
       <div class="xpr-stage-col">
         <div class="xpr-stage-bar no-ei">
@@ -1481,7 +2584,7 @@ function xprRefreshStudio(){
               : `<button type="button" class="btn g" data-go="eilan://product/x-cube">🛍️ ${gzL('صفحة المنتج والشراء — 25 ر.س','Product Page — 25 SAR')}</button>`}
             <button type="button" class="btn" data-xui="openfullpreview">👁️ ${gzL('جرّب شاشة المُستلم قبل الشراء','Preview Fullscreen')}</button>
           </div>
-          <form class="lh-code" onsubmit="xprVerifyCode(event)">
+          <form class="lh-code" onsubmit="xprVerifyCode(event,'cube')">
             <input class="input" name="code" dir="ltr" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="CUB1-XXXX-XXXX-XXXX" maxlength="24">
             <button class="btn">🔑 ${gzL('تفعيل واستلام فوري','Instant Unlock')}</button>
             <div class="lh-msg" id="xprCodeMsg"></div>
@@ -1518,6 +2621,30 @@ function xprBindStudioEvents(container){
   container._xprBound = true;
 
   container.addEventListener('click', async ev=>{
+    /* Product #2 Stage Actions (Box / Wax-Sealed Envelopes) */
+    const wact = ev.target.closest('[data-wact]');
+    if(wact){
+      const a = wact.dataset.wact;
+      if(a === 'openenv'){
+        const idx = +wact.dataset.idx || 0;
+        const prevIdx = XPR_STATE.whenIdx;
+        XPR_STATE.whenIdx = idx;
+        XPR_STATE.whenOpened[idx] = 1;
+        XPR_STATE.whenView = 'open';
+        xprPlayChime(XPR_STATE.W.sn, 2);
+        if(prevIdx !== idx) xprRefreshStudio(); else xprRefreshStageOnly();
+      } else if(a === 'backbox'){
+        XPR_STATE.whenView = 'box';
+        xprPlayChime(XPR_STATE.W.sn, 1);
+        xprRefreshStageOnly();
+      } else if(a === 'togglesnd'){
+        XPR_STATE.W.sn = XPR_STATE.W.sn === 'mute' ? 'warm' : 'mute';
+        xprRefreshStudio();
+      }
+      return;
+    }
+
+    /* Product #1 Stage Actions */
     const xact = ev.target.closest('[data-xact]');
     if(xact){
       const a = xact.dataset.xact;
@@ -1541,7 +2668,129 @@ function xprBindStudioEvents(container){
     const ui = ev.target.closest('[data-xui]');
     if(!ui) return;
     const cmd = ui.dataset.xui;
-    if(cmd === 'stage'){
+
+    /* Shared Product Switcher */
+    if(cmd === 'switchprod'){
+      XPR_STATE.activeProd = ui.dataset.prod === 'when' ? 'when' : 'cube';
+      xprPlayChime('warm', 1);
+      xprRefreshStudio();
+      return;
+    }
+
+    /* Product #2 Customizer UI Actions */
+    if(cmd === 'wview'){
+      XPR_STATE.whenView = ui.dataset.wv === 'open' ? 'open' : 'box';
+      xprRefreshStageOnly();
+    } else if(cmd === 'wpreset'){
+      const k = ui.dataset.k;
+      const pr = XPR_WHEN_PRESETS[k];
+      if(!pr) return;
+      XPR_STATE.whenPreset = k;
+      XPR_STATE.whenOpened = {};
+      XPR_STATE.whenIdx = 0;
+      XPR_STATE.whenView = 'box';
+      const lg = XPR_STATE.W.lg || 'ar';
+      const src = pr[lg];
+      Object.assign(XPR_STATE.W, { p:k, sl:pr.sl, to:src.to, bx:src.box, sb:src.sub, fr:src.fr, it:xprCloneWhenItems(src.items) });
+      xprPlayChime(XPR_STATE.W.sn, 1);
+      xprRefreshStudio();
+    } else if(cmd === 'togglewtopic'){
+      XPR_STATE.openWhenTopicPlus = !XPR_STATE.openWhenTopicPlus;
+      xprRefreshStudio();
+    } else if(cmd === 'applywtopic'){
+      xprRunApplyWhenTopic();
+    } else if(cmd === 'wseal'){
+      const v = ui.dataset.v;
+      if(!XPR_SEALS[v]) return;
+      XPR_STATE.W.sl = v;
+      xprPlayChime(XPR_STATE.W.sn, 1);
+      xprRefreshStudio();
+    } else if(cmd === 'wquicksym'){
+      XPR_STATE.W.sl = 'custom';
+      XPR_STATE.W.ss = ui.dataset.em || '🤍';
+      xprPlayChime(XPR_STATE.W.sn, 1);
+      xprRefreshStudio();
+    } else if(cmd === 'wtheme'){
+      XPR_STATE.W.th = ui.dataset.v;
+      XPR_STATE.openWhenColorPlus = false;
+      xprRefreshStudio();
+    } else if(cmd === 'togglewcolorplus'){
+      XPR_STATE.openWhenColorPlus = !XPR_STATE.openWhenColorPlus;
+      XPR_STATE.W.th = 'custom';
+      xprRefreshStudio();
+    } else if(cmd === 'wcustpal'){
+      XPR_STATE.W.th = 'custom';
+      XPR_STATE.W.cb = ui.dataset.cb;
+      XPR_STATE.W.ca = ui.dataset.ca;
+      XPR_STATE.openWhenColorPlus = true;
+      xprRefreshStudio();
+    } else if(cmd === 'wlang'){
+      const lg = ui.dataset.v === 'en' ? 'en' : 'ar';
+      const prevLg = XPR_STATE.W.lg;
+      const curPr = XPR_WHEN_PRESETS[XPR_STATE.whenPreset];
+      XPR_STATE.W.lg = lg;
+      if(curPr && prevLg !== lg){
+        const oldDef = curPr[prevLg], newDef = curPr[lg];
+        if(XPR_STATE.W.to === oldDef.to) XPR_STATE.W.to = newDef.to;
+        if(XPR_STATE.W.bx === oldDef.box) XPR_STATE.W.bx = newDef.box;
+        if(XPR_STATE.W.sb === oldDef.sub) XPR_STATE.W.sb = newDef.sub;
+        if(XPR_STATE.W.fr === oldDef.fr) XPR_STATE.W.fr = newDef.fr;
+        if(JSON.stringify(XPR_STATE.W.it) === JSON.stringify(xprCloneWhenItems(oldDef.items))){
+          XPR_STATE.W.it = xprCloneWhenItems(newDef.items);
+        }
+      }
+      xprRefreshStudio();
+    } else if(cmd === 'wselenv'){
+      XPR_STATE.whenIdx = +ui.dataset.idx || 0;
+      XPR_STATE.whenView = 'open';
+      xprRefreshStudio();
+    } else if(cmd === 'waddenv'){
+      if(XPR_STATE.W.it.length >= 6) return;
+      const en = XPR_STATE.W.lg === 'en';
+      XPR_STATE.W.it.push({
+        em: '✨',
+        wh: en ? 'A special moment arrives' : 'تمرّ فيك لحظة حلوة خاصّة',
+        tx: en ? 'Write your heartfelt note for this moment here…' : 'اكتب هنا رسالتك الدافئة المخصّصة لهذي اللحظة…',
+        gf: '',
+        lk: ''
+      });
+      XPR_STATE.whenIdx = XPR_STATE.W.it.length - 1;
+      XPR_STATE.whenView = 'open';
+      xprPlayChime(XPR_STATE.W.sn, 1);
+      xprRefreshStudio();
+    } else if(cmd === 'wdelenv'){
+      if(XPR_STATE.W.it.length <= 2) return;
+      XPR_STATE.W.it.splice(XPR_STATE.whenIdx, 1);
+      XPR_STATE.whenIdx = Math.max(0, XPR_STATE.whenIdx - 1);
+      xprRefreshStudio();
+    } else if(cmd === 'witememo'){
+      const cur = XPR_STATE.W.it[XPR_STATE.whenIdx];
+      if(cur){ cur.em = ui.dataset.em || '💌'; xprRefreshStudio(); }
+    } else if(cmd === 'wcopylink'){
+      const url = xprWhenShareUrl(XPR_STATE.W);
+      try{ await navigator.clipboard.writeText(url); }catch(e){
+        const inp = $('#xprShareInput'); if(inp){ inp.select(); document.execCommand('copy'); }
+      }
+      toast('🔗 ' + gzL('تم نسخ رابط صندوق الرسائل! أرسله الآن بالواتساب','Letters link copied! Ready for WhatsApp'));
+    } else if(cmd === 'wsharelink'){
+      const url = xprWhenShareUrl(XPR_STATE.W);
+      if(navigator.share){
+        try{ await navigator.share({ title: XPR_STATE.W.bx, text: (XPR_STATE.W.to ? `${XPR_STATE.W.to} — ` : '') + XPR_STATE.W.bx, url }); return; }catch(e){}
+      }
+      try{ await navigator.clipboard.writeText(url); }catch(e){}
+      toast('🔗 ' + gzL('تم نسخ الرابط الجاهز للإرسال بالواتساب','Link copied for WhatsApp'));
+    } else if(cmd === 'wopenfull'){
+      xprOpenWhenFullscreen(XPR_STATE.W, false);
+    } else if(cmd === 'wdlcard'){
+      xprDownloadWhenCardPNG();
+    } else if(cmd === 'wprintcard'){
+      xprPrintWhenCardPDF();
+    } else if(cmd === 'wdlhtml'){
+      xprDownloadWhenStandaloneHTML();
+    }
+
+    /* Product #1 Customizer UI Actions */
+    else if(cmd === 'stage'){
       XPR_STATE.stage = +ui.dataset.st || 0;
       xprRefreshStageOnly();
     } else if(cmd === 'preset'){
@@ -1606,7 +2855,8 @@ function xprBindStudioEvents(container){
       xprRefreshStudio();
     } else if(cmd === 'toggleprev'){
       if(!xprCanPreviewToggle()) return;
-      if(xprUnlocked('cube')){
+      const pk = XPR_STATE.activeProd === 'when' ? 'when' : 'cube';
+      if(xprUnlocked(pk)){
         XPR_STATE.previewSimVisitor = true;
       } else {
         XPR_STATE.previewSimVisitor = false;
@@ -1639,19 +2889,57 @@ function xprBindStudioEvents(container){
   });
 
   container.addEventListener('keydown', ev=>{
-    if(ev.key === 'Enter' && ev.target && ev.target.id === 'xprTopicInp'){
-      ev.preventDefault();
-      xprRunApplyTopic();
+    if(ev.key === 'Enter' && ev.target){
+      if(ev.target.id === 'xprTopicInp'){ ev.preventDefault(); xprRunApplyTopic(); }
+      else if(ev.target.id === 'xprWhenTopicInp'){ ev.preventDefault(); xprRunApplyWhenTopic(); }
     }
   });
 
   container.addEventListener('input', ev=>{
     const t = ev.target;
     if(!t) return;
-    if(t.id === 'xprTopicInp'){
-      XPR_STATE.topicDraft = t.value;
+    if(t.id === 'xprTopicInp'){ XPR_STATE.topicDraft = t.value; return; }
+    if(t.id === 'xprWhenTopicInp'){ XPR_STATE.whenTopicDraft = t.value; return; }
+
+    /* Product #2 Live Inputs (iPad-safe: updates stage without re-mounting form) */
+    if(t.dataset && t.dataset.wcol){
+      const colKey = t.dataset.wcol;
+      XPR_STATE.W.th = 'custom';
+      XPR_STATE.W[colKey] = xprCleanHex(t.value, colKey==='cb'?'#24101B':'#F2B866');
+      const lbl = colKey==='cb' ? $('#xprWHexCb') : $('#xprWHexCa');
+      if(lbl) lbl.textContent = XPR_STATE.W[colKey];
+      const dot = $('#xprWhenSwDot');
+      if(dot) dot.style.background = `linear-gradient(135deg,${XPR_STATE.W.cb} 48%,${XPR_STATE.W.ca})`;
+      xprRefreshStageOnly();
       return;
     }
+    if(t.dataset && t.dataset.wsealSym){
+      XPR_STATE.W.sl = 'custom';
+      XPR_STATE.W.ss = t.value.slice(0, 5) || '🤍';
+      XPR_STATE.whenView = 'box';
+      xprRefreshStageOnly();
+      return;
+    }
+    if(t.dataset && t.dataset.wfld){
+      const wfld = t.dataset.wfld;
+      XPR_STATE.W[wfld] = t.value;
+      if(wfld === 'sn') xprPlayChime(t.value, 1);
+      if(wfld === 'bx' || wfld === 'sb') XPR_STATE.whenView = 'box';
+      xprRefreshStageOnly();
+      return;
+    }
+    if(t.dataset && t.dataset.witem){
+      const k = t.dataset.witem;
+      const cur = XPR_STATE.W.it[XPR_STATE.whenIdx];
+      if(cur){
+        cur[k] = t.value;
+        XPR_STATE.whenView = (k === 'tx' || k === 'gf' || k === 'lk') ? 'open' : XPR_STATE.whenView;
+        xprRefreshStageOnly();
+      }
+      return;
+    }
+
+    /* Product #1 Live Inputs */
     if(t.dataset && t.dataset.xcol){
       const colKey = t.dataset.xcol;
       XPR_STATE.D.th = 'custom';
@@ -1690,10 +2978,10 @@ P.experiences = {
         <div>
           <div class="eyebrow">EILAN INTERACTIVE EXPERIENCES</div>
           <h1>${gzL('تجارب إيلان','Eilan')} <span class="grad-t">${gzL('التفاعلية','Experiences')}</span></h1>
-          <p>${gzL('قوالب مفاجآت وتجارب رقمية فاخرة تُفتح باللمس: اختر من الأشكال والثيمات الجاهزة أو اضغط (+) لتصميم شكل وألوان خاصة بموضوعك أنت! واستلم رابطك وبطاقة الباركود تلقائياً في نفس اللحظة بعد الشراء بدون أي انتظار.','Interactive touch-first digital gift templates: pick ready 3D shapes & themes, or tap (+) to match your own topic and custom colors — with 24/7 instant delivery.')}</p>
+          <p>${gzL('قوالب مفاجآت وصناديق رسائل رقمية فاخرة تُفتح باللمس: اختر من الباقات والثيمات الجاهزة أو اضغط (+) لتصميم تجربة خاصة بموضوعك وألوانك، واستلم رابطك وبطاقة الباركود تلقائياً في نفس اللحظة ٢٤/٧.','Interactive touch-first digital gifts & wax-sealed letter boxes: pick ready designs or tap (+) to match your own topic and colors — with 24/7 instant delivery.')}</p>
           <div class="xpr-badges no-ei">
             <span class="xpr-pill gold">⚡ ${gzL('تسليم فوري تلقائي ٢٤/٧','24/7 Instant Automated Delivery')}</span>
-            <span class="xpr-pill grn">＋ ${gzL('أشكال وألوان جاهزة + بموضوعك','Ready & Custom Shapes/Colors')}</span>
+            <span class="xpr-pill grn">＋ ${gzL('خيارات جاهزة + بموضوعك وألوانك','Ready & Custom Topics/Colors')}</span>
             <span class="xpr-pill">🌐 ${gzL('عربي محايد + English','Bilingual AR / EN')}</span>
           </div>
         </div>
@@ -1704,14 +2992,16 @@ P.experiences = {
       </section>
 
       <section class="xpr-flow no-ei" aria-label="طريقة الاستلام الفوري">
-        <div class="xpr-step"><i>١</i><div><b>${gzL('اختر جاهز أو (+) بموضوعك','1. Ready Options or (+) Custom')}</b><span>${gzL('اختر ظرف أو قبعة تخرّج أو ورد أو اضغط (+) لكتابة موضوعك واختيار ألوانك الخاصة وشوفها حية قدامك.', 'Pick a ready shape/theme or tap (+) to customize by your topic & colors.')}</span></div></div>
-        <div class="xpr-step"><i>٢</i><div><b>${gzL('كود فوري تلقائي من سلة','2. Instant Code from Salla')}</b><span>${gzL('بمجرد الدفع، يرسل لك نظام سلة وموظفو إيلان الرقميون كود التفعيل تلقائياً في نفس الثانية ٢٤/٧ بدون انتظار.','Salla sends your activation code automatically the second you pay — 24/7.')}</span></div></div>
-        <div class="xpr-step"><i>٣</i><div><b>${gzL('رابط واتساب + بطاقة باركود QR','3. Share Link + QR Gift Card')}</b><span>${gzL('انسخ رابط المفاجأة التفاعلي بملء الشاشة، وحمّل بطاقة الإهداء الفاخرة بباركود QR بألوانك وشكل هديتك.', 'Copy your fullscreen surprise link, QR card PNG/PDF, and offline file.')}</span></div></div>
+        <div class="xpr-step"><i>١</i><div><b>${gzL('اختر التجربة وخصّصها حية','1. Pick Experience & Customize')}</b><span>${gzL('بدّل بين «مفاجأة إيلان» أو «رسائل افتحها لمّا…»، واختر جاهز أو اضغط (+) لموضوعك وألوانك.', 'Choose Surprise Reveal or Open When Letters, ready or (+) custom.')}</span></div></div>
+        <div class="xpr-step"><i>٢</i><div><b>${gzL('كود فوري تلقائي من سلة','2. Instant Code from Salla')}</b><span>${gzL('بمجرد الدفع، يرسل لك نظام سلة كود التفعيل تلقائياً في نفس الثانية ٢٤/٧ بدون أي انتظار.','Salla sends your activation code automatically the second you pay — 24/7.')}</span></div></div>
+        <div class="xpr-step"><i>٣</i><div><b>${gzL('رابط واتساب + بطاقة باركود QR','3. Share Link + QR Gift Card')}</b><span>${gzL('انسخ رابط التجربة التفاعلي بملء الشاشة، وحمّل بطاقة الباركود الفاخرة للطباعة والملف المستقل.', 'Copy your fullscreen link, QR card PNG/PDF, and offline HTML file.')}</span></div></div>
       </section>
 
       <div id="xprStudioMount"></div>
     </div>`,
-  mount: ()=>{
+  mount: (r)=>{
+    if(r && (r.id === 'when' || (r.q && r.q.p === 'when'))) XPR_STATE.activeProd = 'when';
+    else if(r && (r.id === 'cube' || (r.q && r.q.p === 'cube'))) XPR_STATE.activeProd = 'cube';
     if(xprIsPreviewHost() && S.unlk && S.unlk.xpr_prev_on === undefined){
       S.unlk.xpr_prev_on = 1;
     }
@@ -1720,15 +3010,15 @@ P.experiences = {
   }
 };
 
-/* Bridge into Navigation, Home Pillars/Journey, P.templates («🔊 تجارب تفاعلية» chip + card), and P.product */
+/* Bridge into Navigation, Home Pillars/Journey, P.templates («🔊 تجارب تفاعلية» chip + cards), and P.product */
 (function xprIntegrateSite(){
   if(typeof SEO_T === 'object'){
-    SEO_T.experiences = 'تجارب إيلان التفاعلية — قوالب مفاجآت وهدايا تُفتح باللمس | إيلان دول';
+    SEO_T.experiences = 'تجارب إيلان التفاعلية — قوالب مفاجآت ورسائل تُفتح باللمس | إيلان دول';
     if(Array.isArray(SEO_PAGES) && !SEO_PAGES.includes('experiences')) SEO_PAGES.push('experiences');
   }
   if(Array.isArray(NAV) && !NAV.some(n=>n.u==='experiences')){
     const idx = NAV.findIndex(n=>n.u==='templates');
-    const item = {u:'experiences', n:'تجارب تفاعلية', e:'🔊', k:['experiences','تجارب','تجربة','مكعب','مفاجأة','عيدية','هدية','تخرج','ورد','ظرف','باركود']};
+    const item = {u:'experiences', n:'تجارب تفاعلية', e:'🔊', k:['experiences','تجارب','تجربة','مكعب','مفاجأة','افتحها لما','رسائل','عيدية','هدية','تخرج','ورد','ظرف','باركود']};
     if(idx >= 0) NAV.splice(idx + 1, 0, item); else NAV.push(item);
   }
 
@@ -1742,21 +3032,38 @@ P.experiences = {
 
   if(P.templates && P.templates.html){
     const _tplHtml = P.templates.html;
-    const expCardHTML = () => `
+    const expCardsHTML = () => `
       <article class="tp-card card xpr-tcard" data-cat="exp">
-        <div class="tp-thumb xpr-tcard-vis no-ei" data-go="eilan://experiences">
+        <div class="tp-thumb xpr-tcard-vis no-ei" data-go="eilan://experiences?p=cube">
           <span class="xpr-tcard-badge">🔊 ${gzL('أشكال وألوان بموضوعك','Custom Shapes & Colors')}</span>
           ${xprShapeSvg('envelope')}
           <span class="xpr-tcard-auto">⚡ ${gzL('تسليم فوري ٢٤/٧','Instant 24/7')}</span>
         </div>
         <div class="tp-cbody">
-          <div class="tp-meta"><span class="tag">${gzL('تجارب تفاعلية','Experiences')}</span><span class="mu">${gzL('جاهز + زر (+) بموضوعك','Ready + (+) Custom')}</span></div>
+          <div class="tp-meta"><span class="tag">${gzL('تجارب تفاعلية','Experiences')}</span><span class="mu">${gzL('٣ مراحل باللمس','3-Stage Reveal')}</span></div>
           <h3>${gzL('مفاجأة إيلان التفاعلية — أشكال وألوان بموضوعك','Eilan Interactive Surprise — Custom Shapes & Colors')}</h3>
-          <p class="mu">${gzL('تجربة إهداء باللمس (ظرف، تخرّج، ورد، علبة هدية، مكعب إيلان + زر (+) لأي موضوع وألوان يختارها العميل) — مع رابط واتساب بملء الشاشة وبطاقة باركود QR.','3-stage touch reveal with ready shapes/themes + (+) custom topic shapes & colors.')}</p>
+          <p class="mu">${gzL('تجربة إهداء باللمس (ظرف، تخرّج، ورد، علبة هدية، مكعب إيلان + زر (+) لأي موضوع وألوان يختارها العميل) مع بطاقة باركود QR.','3-stage touch reveal with ready shapes/themes + (+) custom topic shapes & colors.')}</p>
           <div class="tp-foot no-ei">
             <b class="tp-price">25 <small>${gzL('ر.س','SAR')}</small></b>
-            <button class="btn sm" data-go="eilan://experiences">✨ ${gzL('جرّبه','Try')}</button>
-            <button class="btn sm g" data-go="eilan://experiences">⚡ ${gzL('خصّصه','Customize')}</button>
+            <button class="btn sm" data-go="eilan://experiences?p=cube">✨ ${gzL('جرّبه','Try')}</button>
+            <button class="btn sm g" data-go="eilan://experiences?p=cube">⚡ ${gzL('خصّصه','Customize')}</button>
+          </div>
+        </div>
+      </article>
+      <article class="tp-card card xpr-tcard" data-cat="exp">
+        <div class="tp-thumb xpr-tcard-vis no-ei" style="background:radial-gradient(circle at 65% 28%,rgba(226,180,80,.22),transparent 55%),linear-gradient(160deg,#251147,#07080C)" data-go="eilan://experiences?p=when">
+          <span class="xpr-tcard-badge">💌 ${gzL('صندوق ظروف مختومة','Wax-Sealed Letters')}</span>
+          ${xprWhenHeroSvg('#E2B450')}
+          <span class="xpr-tcard-auto">⚡ ${gzL('تسليم فوري ٢٤/٧','Instant 24/7')}</span>
+        </div>
+        <div class="tp-cbody">
+          <div class="tp-meta"><span class="tag">${gzL('تجارب تفاعلية','Experiences')}</span><span class="mu">${gzL('حتى ٦ رسائل مختومة','Up to 6 Letters')}</span></div>
+          <h3>${gzL('رسائل «افتحها لمّا…» — ظروف مختومة بالشمع','Interactive "Open When…" Wax-Sealed Letters')}</h3>
+          <p class="mu">${gzL('صندوق يضم حتى ٦ ظروف مختومة بالشمع لأوقات ومشاعر مختلفة (لشخص غالي، تخرّج، مسافر، دعم، أو بموضوعك وألوانك) يكسرها المُستلم باللمس.', 'Box of up to 6 wax-sealed interactive envelopes for different moments & moods.')}</p>
+          <div class="tp-foot no-ei">
+            <b class="tp-price">29 <small>${gzL('ر.س','SAR')}</small></b>
+            <button class="btn sm" data-go="eilan://experiences?p=when">✨ ${gzL('جرّبه','Try')}</button>
+            <button class="btn sm g" data-go="eilan://experiences?p=when">⚡ ${gzL('خصّصه','Customize')}</button>
           </div>
         </div>
       </article>`;
@@ -1767,7 +3074,7 @@ P.experiences = {
         /(<button class="chip [^"]*" data-tp="filter" data-v="all">[^<]*<\/button>)/,
         `$1<button class="chip ${TPS.filter==='exp'?'on':''}" data-tp="filter" data-v="exp">🔊 ${gzL('تجارب تفاعلية','Interactive Experiences')}</button>`
       );
-      h = h.replace('<div class="tp-grid" id="tpGrid">', '<div class="tp-grid" id="tpGrid">' + expCardHTML());
+      h = h.replace('<div class="tp-grid" id="tpGrid">', '<div class="tp-grid" id="tpGrid">' + expCardsHTML());
       return h;
     };
   }
@@ -1776,13 +3083,16 @@ P.experiences = {
     const _prodHtml = P.product.html;
     P.product.html = r => {
       const h = _prodHtml(r);
-      if(r.id !== 'x-cube') return h;
+      if(r.id !== 'x-cube' && r.id !== 'x-when') return h;
+      const isWhen = r.id === 'x-when';
       const banner = `<div class="card no-ei" style="padding:16px;margin:14px 0;border-color:rgba(226,180,80,.5);display:flex;gap:12px;flex-wrap:wrap;align-items:center">
         <div style="flex:1;min-width:220px">
           <b style="color:#F6DD8F">⚡ ${gzL('هذا المنتج يعمل بنظام التسليم الفوري التلقائي ٢٤/٧','24/7 Instant Automated Self-Serve Product')}</b>
-          <div class="mu" style="font-size:13px;margin-top:3px">${gzL('اختر من الأشكال والثيمات الجاهزة أو اضغط (+) لتصميم شكل وألوان بموضوعك مجاناً الآن، واستلم الرابط والبطاقة فوراً بعد التفعيل.','Pick ready options or tap (+) for custom shapes & colors — unlock immediately with your Salla code.')}</div>
+          <div class="mu" style="font-size:13px;margin-top:3px">${isWhen
+            ? gzL('جهّز ظروف «افتحها لمّا…» المختومة وجرّب فتحها مجاناً الآن، واستلم الرابط وبطاقة الباركود فوراً بعد التفعيل.','Customize your wax-sealed Open When letters live now — unlock immediately with your Salla code.')
+            : gzL('اختر من الأشكال والثيمات الجاهزة أو اضغط (+) لتصميم شكل وألوان بموضوعك مجاناً الآن، واستلم الرابط والبطاقة فوراً بعد التفعيل.','Pick ready options or tap (+) for custom shapes & colors — unlock immediately with your Salla code.')}</div>
         </div>
-        <button class="btn g" data-go="eilan://experiences">✨ ${gzL('افتح استوديو المفاجأة الآن','Open Surprise Studio')}</button>
+        <button class="btn g" data-go="eilan://experiences?p=${isWhen?'when':'cube'}">✨ ${gzL('افتح الاستوديو التفاعلي الآن','Open Interactive Studio')}</button>
       </div>`;
       const idx = h.indexOf('<div class="acts">');
       return idx > -1 ? h.slice(0, idx) + banner + h.slice(idx) : h + banner;
@@ -1790,27 +3100,39 @@ P.experiences = {
   }
 })();
 
-/* Auto-Boot Recipient Fullscreen View when a shared gift link (?exp=cube&d=...) is opened */
+/* Auto-Boot Recipient Fullscreen View when a shared gift link (?exp=cube|when&d=...) is opened */
 (function xprCheckIncomingGiftLink(){
   const run = ()=>{
     try{
       const sp = new URLSearchParams(location.search);
       if(sp.get('explore') === 'experiences' && typeof go === 'function'){
-        setTimeout(()=>go('eilan://experiences'), 80);
+        const p = sp.get('p') === 'when' ? '?p=when' : '';
+        setTimeout(()=>go('eilan://experiences' + p), 80);
         return;
       }
       let expType = sp.get('exp'), tok = sp.get('d');
-      if(!expType && /^#exp=cube:/i.test(location.hash)){
-        expType = 'cube';
-        tok = location.hash.slice('#exp=cube:'.length);
+      if(!expType && /^#exp=(cube|when):/i.test(location.hash)){
+        const m = /^#exp=(cube|when):(.*)$/i.exec(location.hash);
+        if(m){ expType = m[1].toLowerCase(); tok = m[2]; }
       }
-      if(expType !== 'cube' || !tok) return;
-      const D = xprDecodeData(tok);
-      if(!D) return;
-      const boot = $('#boot');
-      if(boot) boot.classList.add('hide');
-      document.title = (D.to ? `${D.to} · ` : '') + 'مفاجأة خاصة لك — إيلان دول';
-      xprOpenFullscreen(D, true);
+      if(!tok) return;
+      if(expType === 'when'){
+        const W = xprDecodeWhenData(tok);
+        if(!W) return;
+        const boot = $('#boot');
+        if(boot) boot.classList.add('hide');
+        document.title = (W.to ? `${W.to} · ` : '') + 'رسائل افتحها لمّا… — إيلان دول';
+        xprOpenWhenFullscreen(W, true);
+        return;
+      }
+      if(expType === 'cube'){
+        const D = xprDecodeData(tok);
+        if(!D) return;
+        const boot = $('#boot');
+        if(boot) boot.classList.add('hide');
+        document.title = (D.to ? `${D.to} · ` : '') + 'مفاجأة خاصة لك — إيلان دول';
+        xprOpenFullscreen(D, true);
+      }
     }catch(e){}
   };
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', ()=>setTimeout(run, 30));

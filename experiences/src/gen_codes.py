@@ -4,7 +4,7 @@
 Plaintext codes are written ONLY to `experiences/private-codes/` (gitignored)
 for direct upload into Salla -> Digital Product (Codes).
 Only 24-char SHA-256 hashes (`SHA-256('eilan-arc-v1:' + normalized_code)[:24]`)
-are printed/saved to `experiences/src/code_hashes.json` for client-side verification.
+are saved to `experiences/src/code_hashes.json` for client-side verification.
 """
 
 import hashlib
@@ -18,7 +18,8 @@ PRIVATE_DIR = os.path.join(ROOT, "private-codes")
 HASH_FILE = os.path.join(ROOT, "src", "code_hashes.json")
 
 PRODUCTS = [
-    ("cube", "CUB1", 150, "مكعب المفاجأة الذهبي — Golden Cube Reveal (25 SAR)"),
+    ("cube", "CUB1", 150, "مفاجأة إيلان التفاعلية — Interactive Surprise (25 SAR)"),
+    ("when", "OWHN", 150, "رسائل «افتحها لمّا…» — Open When Letters (29 SAR)"),
     ("bundle", "EXPB", 80, "باقة تجارب إيلان التفاعلية — Eilan Experiences Pass"),
 ]
 
@@ -42,8 +43,8 @@ def main() -> None:
 
     for key, prefix, count, label in PRODUCTS:
         code_path = os.path.join(PRIVATE_DIR, f"salla-{key}-codes.txt")
-        if key in hashes and os.path.exists(code_path):
-            print(f"[keep] {key}: {len(hashes[key])} hashes already generated")
+        if key in hashes and len(hashes[key]) > 0:
+            print(f"[keep] {key}: {len(hashes[key])} public hashes preserved")
             continue
         codes_plain = []
         codes_hash = []

@@ -3,6 +3,7 @@
    الإحداثيات: مركز الصفحة (0,0,0)، x بين −0.44 و 0.44، z بين −0.62 و 0.62، y لفوق. */
 import * as THREE from 'three';
 import {MORE} from './scenes2.js';
+window.__THREE=THREE;
 
 export function kit(lang){
  const K={THREE};

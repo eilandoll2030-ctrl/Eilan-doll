@@ -330,6 +330,49 @@ desk(K,eq){const T=K.THREE,root=new T.Group();
  return{root,update(v){const val=has(v,eq.out)?v[eq.out]:1;st.sp=.5+K.lg(val,1)*2;card.userData.redraw((c,W,H)=>K.fit(c,eq.f,W,H));cal.userData.redraw((c,W,H)=>{c.fillStyle='#C8463C';c.fillRect(6,6,W-12,H*.24);K.txt(c,K.L('يوم','DAY'),W/2,H*.15,56,'#fff');K.txt(c,K.num(Math.round(val%1000)),W/2,H*.62,150,'#26282f',true,'center',true)})},
   tick(t,dt){mg.rotation.z=-t*st.sp*.6;hg.rotation.z=-t*st.sp*.05;const writing=nbP.visible!==false&&booksP.visible!==false;if(writing)lines+=dt*st.sp*.6;const {x}=page.userData;x.fillStyle='#fbf8f0';x.fillRect(0,0,256,180);x.strokeStyle='#8fa7f0';x.lineWidth=1;for(let i=1;i<9;i++){x.beginPath();x.moveTo(10,i*20);x.lineTo(246,i*20);x.stroke()}x.strokeStyle='#14286f';x.lineWidth=3;const L=lines%8;for(let i=0;i<Math.floor(L);i++){x.beginPath();x.moveTo(16,i*20+16);for(let k=0;k<20;k++)x.lineTo(16+k*11,i*20+16+Math.sin(k*1.7+i)*3);x.stroke()}const frac=L%1;x.beginPath();x.moveTo(16,Math.floor(L)*20+16);for(let k=0;k<20*frac;k++)x.lineTo(16+k*11,Math.floor(L)*20+16+Math.sin(k*1.7)*3);x.stroke();page.needsUpdate=true;pen.position.x=-.07+frac*.14}}},
 /* ===== solar system with real NASA planet maps ===== */
+/* ===== مجهر ضوئي واقعي + ساحة الرؤية الحيّة ===== */
+microscope(K,eq){const T=K.THREE,root=new T.Group();const body=K.M(0xf1f2f4,{r:.35}),blk=K.M(0x1d2027,{r:.45});
+ const base=new T.Group();base.add(K.box(.2,.03,.26,body));const lampG=K.cyl(.025,.025,.006,K.M(0xfff4c8,{e:0xffe9a0,ei:1.4}),{edge:false});lampG.position.set(0,.03,.03);base.add(lampG);
+ const sw=K.cyl(.012,.012,.01,blk,{edge:false});sw.rotation.z=Math.PI/2;sw.position.set(.1,.015,.07);base.add(sw);const cond=K.cyl(.02,.016,.04,blk,{edge:false});cond.position.set(0,.105,.03);base.add(cond);K.place(root,base,0,0,-.65);
+ const arm=new T.Group();const pil=K.box(.05,.24,.05,body);pil.position.set(0,.03,-.09);arm.add(pil);arm.add(K.tube([[0,.24,-.09],[0,.3,-.07],[0,.33,-.03],[0,.335,0]],.022,body,{seg:24}));
+ const kC=K.cyl(.032,.032,.012,blk,{edge:false,seg:28});kC.rotation.z=Math.PI/2;kC.position.set(.034,.12,-.09);arm.add(kC);const kC2=kC.clone();kC2.position.x=-.034;arm.add(kC2);
+ const kF=K.cyl(.018,.018,.012,K.M(0x8a8f99,{m:.6,r:.3}),{edge:false});kF.rotation.z=Math.PI/2;kF.position.set(.046,.12,-.09);arm.add(kF);K.place(root,arm,0,0,-.65);
+ const stage=new T.Group();stage.add(K.box(.15,.008,.13,blk));stage.position.y=.15;const hole=K.cyl(.012,.012,.0085,K.M(0xfff1b0,{e:0xffe08a,ei:.8}),{edge:false});hole.position.y=0;stage.add(hole);
+ const slide=K.box(.075,.002,.025,K.glass,{edge:false});slide.position.y=.009;stage.add(slide);const spec=K.cyl(.009,.009,.0006,K.M(0xc86fb0,{op:.75}),{edge:false});spec.position.y=.011;stage.add(spec);
+ [-.03,.03].forEach(x=>{const c=K.box(.006,.002,.05,K.steel,{edge:false});c.position.set(x,.011,.03);stage.add(c)});stage.position.z=.03;const stP=K.place(root,stage,0,0,-.65,0);
+ const head=new T.Group();const turret=K.cyl(.04,.035,.02,K.steel,{edge:false,seg:32});turret.position.y=.3;head.add(turret);
+ const objs=new T.Group();objs.position.y=.3;[[0xd93b3b,.05],[0xf0c419,.06],[0x3b7dd9,.07]].forEach(([c,L],i)=>{const g=new T.Group();const o=K.cyl(.009,.011,L,K.steel,{edge:false,seg:18});o.position.y=-L;g.add(o);const r=K.cyl(.0115,.0115,.004,K.M(c,{r:.3}),{edge:false});r.position.y=-L*.35;g.add(r);g.rotation.z=.32;g.rotation.y=i*Math.PI*2/3;objs.add(g)});head.add(objs);
+ const bt=K.cyl(.02,.02,.1,body,{edge:false,seg:24});bt.position.set(0,.36,.0);bt.rotation.x=-.5;head.add(bt);
+ const ep=K.cyl(.014,.017,.05,blk,{edge:false,seg:22});ep.position.set(0,.43,-.035);ep.rotation.x=-.5;head.add(ep);head.position.z=.03;K.place(root,head,0,0,-.65,0);
+ const vc=document.createElement('canvas');vc.width=vc.height=256;const vx=vc.getContext('2d');const vt=new T.CanvasTexture(vc);vt.colorSpace=T.SRGBColorSpace;
+ const mode=/بكتير|bacteri|خمير|yeast|نمو|growth|مضاعف|doubl/i.test(((eq.n||[]).join(' '))+' '+(eq.f||''))?'bac':'cell';
+ const seeds=[...Array(28)].map((_,i)=>({x:Math.random(),y:Math.random(),r:.06+Math.random()*.05,a:Math.random()*6.28,ph:Math.random()}));
+ const drawV=(t,z)=>{const W=256;vx.fillStyle='#f5ecd0';vx.fillRect(0,0,W,W);const g=vx.createRadialGradient(128,128,40,128,128,128);g.addColorStop(0,'rgba(255,250,225,0)');g.addColorStop(1,'rgba(150,120,60,.45)');
+  seeds.forEach((c,i)=>{const s=z*W,x=((c.x*W+t*3*(i%3-1))%W+W)%W,y=c.y*W;
+   if(mode==='bac'){const sp=((t*.25+c.ph)%1),split=sp>.7?(sp-.7)/.3*c.r*s*.6:0;vx.save();vx.translate(x,y);vx.rotate(c.a);vx.fillStyle='rgba(120,70,160,.78)';[-1,1].forEach(k=>{vx.beginPath();vx.ellipse(k*split,0,c.r*s*.55,c.r*s*.2,0,0,6.28);vx.fill()});vx.restore()}
+   else{vx.fillStyle='rgba(214,120,170,.45)';vx.strokeStyle='rgba(140,60,110,.8)';vx.lineWidth=2;vx.beginPath();vx.arc(x,y,c.r*s,0,6.28);vx.fill();vx.stroke();vx.fillStyle='rgba(80,30,110,.85)';vx.beginPath();vx.arc(x+c.r*s*.2,y-c.r*s*.15,c.r*s*.32,0,6.28);vx.fill()}});
+  vx.fillStyle=g;vx.fillRect(0,0,W,W);vt.needsUpdate=true};
+ const view=new T.Group();const disc=new T.Mesh(new T.CircleGeometry(.085,48),new T.MeshBasicMaterial({map:vt}));view.add(disc);const ring=K.tor(.087,.006,blk,{seg:48});view.add(ring);
+ view.position.set(-.22,.24,.04);view.rotation.y=.35;const vP=K.place(root,view,0,0);
+ const card=K.card(.34,.09,()=>{});K.place(root,card,.02,.24);root.scale.setScalar(.76);
+ const st={z:1,last:-1};drawV(0,1);
+ return{root,update(v){const val=has(v,eq.out)?v[eq.out]:1;st.z=K.clamp(.6+K.lg(Math.abs(val)||1,.4)*.6,.5,1.8);card.userData.redraw((c,W,H)=>K.fit(c,eq.f,W,H));drawV(st.last<0?0:st.last,st.z)},
+  tick(t,dt){if(t-st.last>.12||t<st.last){st.last=t;drawV(t,st.z)}objs.rotation.y=Math.sin(t*.4)*.15;kF.rotation.x=t*.8;lampG.material.emissiveIntensity=1.2+Math.sin(t*3)*.15}}},
+
+/* ===== حلزون DNA المزدوج ===== */
+dna(K,eq){const T=K.THREE,root=new T.Group();const N=22,H=.42,R=.07,turns=2.2;
+ const stand=new T.Group();stand.add(K.cyl(.09,.1,.02,K.M(0x1d2027,{r:.4}),{edge:false,seg:40}));const pole=K.cyl(.004,.004,H+.05,K.steel,{edge:false});pole.position.y=.02;stand.add(pole);K.place(root,stand,0,0);
+ const pts=(ph)=>[...Array(61)].map((_,i)=>{const u=i/60,a=u*turns*Math.PI*2+ph;return[Math.cos(a)*R,u*H,Math.sin(a)*R]});
+ const s1=new T.Group();s1.add(K.tube(pts(0),.007,K.M(0x2f6fd6,{r:.3}),{seg:160}));const s2=new T.Group();s2.add(K.tube(pts(Math.PI*.8),.007,K.M(0xe2a21b,{r:.3}),{seg:160}));
+ const bp=new T.Group();const col={A:0xe0475b,T:0x2fb5d6,G:0x3fbf6b,C:0xf2c94c};const seq='ATGCGTACCGATTAGCCATGCA';
+ for(let i=0;i<N;i++){const u=(i+.5)/N,a=u*turns*Math.PI*2,a2=a+Math.PI*.8,y=u*H;const p1=new T.Vector3(Math.cos(a)*R,y,Math.sin(a)*R),p2=new T.Vector3(Math.cos(a2)*R,y,Math.sin(a2)*R),m=p1.clone().lerp(p2,.5);
+  const b1=seq[i],b2={A:'T',T:'A',G:'C',C:'G'}[b1];[[p1,m,b1],[m,p2,b2]].forEach(([q1,q2,b])=>{const L=q1.distanceTo(q2);const c=new T.Mesh(new T.CylinderGeometry(.0042,.0042,L,10),K.M(col[b],{r:.35}));c.position.copy(q1).lerp(q2,.5);c.quaternion.setFromUnitVectors(new T.Vector3(0,1,0),q2.clone().sub(q1).normalize());bp.add(c)})}
+ [s1,s2,bp].forEach(g=>K.place(root,g,0,0,0,.05));
+ const leg=K.card(.24,.1,(c,W,H)=>{const L=[['A','#e0475b'],['T','#2fb5d6'],['G','#3fbf6b'],['C','#f2c94c']];L.forEach(([b,cl],i)=>{c.fillStyle=cl;c.fillRect(30+i*(W-60)/4,H*.3,70,H*.4);c.fillStyle='#111';c.font='bold 120px sans-serif';c.fillText(b,110+i*(W-60)/4,H*.68)})});K.place(root,leg,-.25,.1);
+ const card=K.card(.34,.09,()=>{});K.place(root,card,.05,.24);root.scale.setScalar(.8);
+ const st={sp:1};
+ return{root,update(v){const val=has(v,eq.out)?v[eq.out]:1;st.sp=.5+K.lg(Math.abs(val)||1,.4)*.4;card.userData.redraw((c,W,H)=>K.fit(c,eq.f,W,H))},
+  tick(t,dt){[s1,s2,bp].forEach(g=>g.rotation.y+=dt*.5*st.sp)}}},
 /* ===== معايرة واقعية: حامل، سحاحة مدرّجة، دورق مخروطي، خلّاط مغناطيسي ===== */
 titration(K,eq){const T=K.THREE,root=new T.Group();
  const stand=new T.Group();stand.add(K.box(.34,.014,.2,K.bench));const rod=K.cyl(.007,.007,.52,K.steel,{edge:false,seg:16});rod.position.set(-.12,.014,-.05);stand.add(rod);

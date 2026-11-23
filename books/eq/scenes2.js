@@ -6,9 +6,9 @@ const outv=(v,eq,d=1)=>has(v,eq.out)?v[eq.out]:d;
 
 /* real anatomy loader: BodyParts3D (CC BY-SA 2.1 JP) — see books/eq/models/LICENSE.txt */
 let _bodyP=null;
-function loadBody(){if(_bodyP)return _bodyP;_bodyP=Promise.all([fetch('/books/eq/models/body.json').then(r=>r.json()),fetch('/books/eq/models/body.bin').then(r=>r.arrayBuffer())]).then(([J,buf])=>{
+function loadBody(){if(_bodyP)return _bodyP;_bodyP=Promise.all(['body','body2'].flatMap(n=>[fetch('/books/eq/models/'+n+'.json').then(r=>r.json()),fetch('/books/eq/models/'+n+'.bin').then(r=>r.arrayBuffer())])).then(([J,buf0,J2,buf2])=>{
   const T=window.__THREE;const half=J.half,c=J.center;const minZ=J.bbox[0][2];
-  const geo=key=>{const p=J.parts[key];if(!p)return null;const [po,pn]=p.pos,[no,nn]=p.nor,[io,inn,it]=p.idx;const q=new Int16Array(buf,po,pn),n8=new Int8Array(buf,no,nn);const ix=it==='uint32'?new Uint32Array(buf,io,inn):new Uint16Array(buf,io,inn);
+  const geo=key=>{let p=J.parts[key],B=buf0;if(!p&&J2.parts[key]){p=J2.parts[key];B=buf2}if(!p)return null;const buf=B;const [po,pn]=p.pos,[no,nn]=p.nor,[io,inn,it]=p.idx;const q=new Int16Array(buf,po,pn),n8=new Int8Array(buf,no,nn);const ix=it==='uint32'?new Uint32Array(buf,io,inn):new Uint16Array(buf,io,inn);
    const P=new Float32Array(pn),N=new Float32Array(nn);for(let i=0;i<pn;i+=3){const x=q[i]/32767*half+c[0],y=q[i+1]/32767*half+c[1],z=q[i+2]/32767*half+c[2];P[i]=x/half;P[i+1]=(z-minZ)/half;P[i+2]=-y/half;N[i]=n8[i]/127;N[i+1]=n8[i+2]/127;N[i+2]=-n8[i+1]/127}
    const g=new T.BufferGeometry();g.setAttribute('position',new T.BufferAttribute(P,3));g.setAttribute('normal',new T.BufferAttribute(N,3));g.setIndex(new T.BufferAttribute(ix,1));return g};
   return{geo,lift:0}}).catch(e=>{console.warn('body model',e);return null});return _bodyP}
@@ -235,11 +235,10 @@ body(K,eq){const T=K.THREE,root=new T.Group();
   heart:PM({color:0x8a1820,roughness:.32,clearcoat:.7,clearcoatRoughness:.25,sheen:.35,sheenColor:new T.Color(0xff6a6a)}),
   lung:PM({color:0xd88792,roughness:.72,sheen:.9,sheenColor:new T.Color(0xffc8cf),transparent:true,opacity:.62,depthWrite:false}),
   kidney:PM({color:0x7c2f2a,roughness:.38,clearcoat:.55,clearcoatRoughness:.3}),
-  bone:PM({color:0xf1e6cf,roughness:.55,clearcoat:.25})};
+  bone:PM({color:0xeee2c6,roughness:.5,clearcoat:.3}),brain:PM({color:0xe7a6a8,roughness:.6,sheen:.6,sheenColor:new T.Color(0xffd0d0)}),stomach:PM({color:0xd98a7a,roughness:.45,clearcoat:.4}),liver:PM({color:0x6e2420,roughness:.35,clearcoat:.6}),intest:PM({color:0xe0a08a,roughness:.5,clearcoat:.3}),misc:PM({color:0xb4605a,roughness:.4,clearcoat:.4}),eye:PM({color:0xf6f3ee,roughness:.2,clearcoat:.9}),trach:PM({color:0xe9d2c0,roughness:.55})};
  const S=.23;/* metres of page per normalised unit */
  const stand=new T.Group();const sb=new T.Mesh(new T.CylinderGeometry(.12,.13,.012,48),PM({color:0x23252d,roughness:.3,metalness:.6}));sb.position.y=.006;sb.receiveShadow=true;stand.add(sb);K.place(root,stand,-.12,.06);
- const G={};['skin','heart','lungs','kidneys','ear'].forEach(k=>G[k]=new T.Group());
- const pS=K.place(root,G.skin,-.12,.06,0,.012),pH=K.place(root,G.heart,-.12,.06,0,.012),pL=K.place(root,G.lungs,-.12,.06,0,.012),pK=K.place(root,G.kidneys,-.12,.06,0,.012),pE=K.place(root,G.ear,-.12,.06,0,.012);
+ const G={};const ORDER=['skin','skeleton','brain','heart','lungs','digest','kidneys','ear'];ORDER.forEach(k=>{G[k]=new T.Group();K.place(root,G[k],-.12,.06,0,.012)});
  /* original inner ear (magnified): cochlea spiral + three semicircular canals + vestibule */
  const ie=new T.Group();const ieM=PM({color:0xf3e3c3,roughness:.4,clearcoat:.5});const pts=[];for(let i=0;i<=120;i++){const a=i/120*Math.PI*2*2.6,r=.028*(1-i/150);pts.push(new T.Vector3(Math.cos(a)*r,i/120*.022,Math.sin(a)*r))}
  const coch=new T.Mesh(new T.TubeGeometry(new T.CatmullRomCurve3(pts),160,.006,10),ieM);coch.castShadow=true;coch.position.set(-.04,.03,0);ie.add(coch);
@@ -257,12 +256,14 @@ body(K,eq){const T=K.THREE,root=new T.Group();
  /* load real anatomy */
  const centers={};
  loadBody().then(B=>{if(!B)return;const add=(key,grp,mat)=>{const g=B.geo(key);if(!g)return null;g.computeBoundingBox();const c=g.boundingBox.getCenter(new T.Vector3());g.translate(-c.x,-c.y,-c.z);const m=new T.Mesh(g,mat);m.castShadow=mat!==M.skin;m.receiveShadow=true;m.position.copy(c);grp.add(m);return m};
-  add('skin',G.skin,M.skin);add('ear',G.ear,M.ear);add('heart',G.heart,M.heart);add('lung_l',G.lungs,M.lung);add('lung_r',G.lungs,M.lung);add('kidney_l',G.kidneys,M.kidney);add('kidney_r',G.kidneys,M.kidney);
-  [G.skin,G.ear,G.heart,G.lungs,G.kidneys].forEach(g=>{g.scale.setScalar(S);g.position.y=B.lift*S})}).catch(()=>{});
+  add('skin',G.skin,M.skin);add('skeleton',G.skeleton,M.bone);add('brain',G.brain,M.brain);add('heart',G.heart,M.heart);add('lung_l',G.lungs,M.lung);add('lung_r',G.lungs,M.lung);add('trachea',G.lungs,M.trach);
+  add('esophagus',G.digest,M.trach);add('stomach',G.digest,M.stomach);add('liver',G.digest,M.liver);add('intestine',G.digest,M.intest);add('pancreas',G.digest,M.misc);add('spleen',G.digest,M.misc);
+  add('kidney_l',G.kidneys,M.kidney);add('kidney_r',G.kidneys,M.kidney);add('bladder',G.kidneys,M.misc);add('ear',G.ear,M.ear);add('eyes',G.ear,M.eye);
+  ORDER.forEach(k=>{G[k].scale.setScalar(S);G[k].position.y=B.lift*S})}).catch(()=>{});
  const st={bpm:72,br:14};const trace=[];
  return{root,update(v){const val=has(v,eq.out)?v[eq.out]:72;st.bpm=K.clamp(has(v,'HR')?v.HR:50+K.lg(val,1)*60,40,180);st.br=10+K.lg(val,1)*10;card.userData.redraw((c,W,H)=>K.fit(c,eq.f,W,H))},
   tick(t,dt){const beat=(t*st.bpm/60)%1;const pulse=beat<.12?1+Math.sin(beat/.12*Math.PI)*.12:beat<.24?1+Math.sin((beat-.12)/.12*Math.PI)*.05:1;G.heart.children.forEach(m=>m.scale.setScalar(pulse));
-   const br=Math.sin(t*st.br/60*Math.PI*2)*.5+.5;G.lungs.children.forEach(m=>m.scale.set(1+br*.06,1+br*.09,1+br*.07));
+   const br=Math.sin(t*st.br/60*Math.PI*2)*.5+.5;G.lungs.children.forEach((m,i)=>{if(i<2)m.scale.set(1+br*.06,1+br*.09,1+br*.07)});
    coch.rotation.y=t*.4;
    const {x}=ecg.userData;const y=beat<.04?0:beat<.07?-40:beat<.1?60:beat<.13?-20:beat<.3?Math.sin((beat-.13)/.17*Math.PI)*10:0;trace.push(y);if(trace.length>128)trace.shift();x.fillStyle='#04060a';x.fillRect(0,0,256,160);x.strokeStyle='rgba(70,224,122,.18)';x.lineWidth=1;for(let i=0;i<256;i+=16){x.beginPath();x.moveTo(i,0);x.lineTo(i,160);x.stroke()}x.strokeStyle='#46e07a';x.lineWidth=3;x.beginPath();trace.forEach((v,i)=>{const X=i*2,Y=95-v;i?x.lineTo(X,Y):x.moveTo(X,Y)});x.stroke();x.fillStyle='#D8FFE6';x.font='700 26px monospace';x.fillText('♥ '+Math.round(st.bpm),150,32);ecg.needsUpdate=true}}},
 

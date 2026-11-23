@@ -330,6 +330,33 @@ desk(K,eq){const T=K.THREE,root=new T.Group();
  return{root,update(v){const val=has(v,eq.out)?v[eq.out]:1;st.sp=.5+K.lg(val,1)*2;card.userData.redraw((c,W,H)=>K.fit(c,eq.f,W,H));cal.userData.redraw((c,W,H)=>{c.fillStyle='#C8463C';c.fillRect(6,6,W-12,H*.24);K.txt(c,K.L('يوم','DAY'),W/2,H*.15,56,'#fff');K.txt(c,K.num(Math.round(val%1000)),W/2,H*.62,150,'#26282f',true,'center',true)})},
   tick(t,dt){mg.rotation.z=-t*st.sp*.6;hg.rotation.z=-t*st.sp*.05;const writing=nbP.visible!==false&&booksP.visible!==false;if(writing)lines+=dt*st.sp*.6;const {x}=page.userData;x.fillStyle='#fbf8f0';x.fillRect(0,0,256,180);x.strokeStyle='#8fa7f0';x.lineWidth=1;for(let i=1;i<9;i++){x.beginPath();x.moveTo(10,i*20);x.lineTo(246,i*20);x.stroke()}x.strokeStyle='#14286f';x.lineWidth=3;const L=lines%8;for(let i=0;i<Math.floor(L);i++){x.beginPath();x.moveTo(16,i*20+16);for(let k=0;k<20;k++)x.lineTo(16+k*11,i*20+16+Math.sin(k*1.7+i)*3);x.stroke()}const frac=L%1;x.beginPath();x.moveTo(16,Math.floor(L)*20+16);for(let k=0;k<20*frac;k++)x.lineTo(16+k*11,Math.floor(L)*20+16+Math.sin(k*1.7)*3);x.stroke();page.needsUpdate=true;pen.position.x=-.07+frac*.14}}},
 /* ===== solar system with real NASA planet maps ===== */
+/* ===== معايرة واقعية: حامل، سحاحة مدرّجة، دورق مخروطي، خلّاط مغناطيسي ===== */
+titration(K,eq){const T=K.THREE,root=new T.Group();
+ const stand=new T.Group();stand.add(K.box(.34,.014,.2,K.bench));const rod=K.cyl(.007,.007,.52,K.steel,{edge:false,seg:16});rod.position.set(-.12,.014,-.05);stand.add(rod);
+ const clamp=K.box(.13,.012,.018,K.steel,{edge:false});clamp.position.set(-.06,.42,-.05);stand.add(clamp);const jaw=K.tor(.016,.004,K.dark,{seg:20});jaw.rotation.x=Math.PI/2;jaw.position.set(0,.425,-.05);stand.add(jaw);K.place(root,stand,0,0);
+ const stir=new T.Group();stir.add(K.box(.15,.04,.15,K.M(0xeef0f3,{r:.4})));const knob=K.cyl(.012,.012,.012,K.dark,{edge:false});knob.rotation.x=Math.PI/2;knob.position.set(.04,.02,.075);stir.add(knob);const led=K.sph(.005,K.M(0x2ecc71,{e:0x2ecc71,ei:1}),{hull:false,edge:false,center:true});led.position.set(-.04,.02,.076);stir.add(led);const tile=K.box(.12,.003,.12,K.M(0xffffff,{r:.25}));tile.position.y=.04;stir.add(tile);const stirP=K.place(root,stir,0,-.05,0,.014);
+ const fl=new T.Group();fl.add(K.lathe([[0,0],[.06,0],[.063,.008],[.024,.1],[.02,.14],[.025,.148]],K.glass,{soft:true}));const fM=K.liq(new T.Color(0xf3f6fa),.5);const fliq=K.lathe([[0,0],[.058,0],[.06,.006],[.042,.05],[0,.05]],fM,{edge:false});fl.add(fliq);
+ const bar=K.cyl(.004,.004,.04,K.M(0xffffff,{r:.3}),{edge:false,seg:10});bar.rotation.z=Math.PI/2;bar.position.set(.02,.006,0);const barG=new T.Group();barG.add(bar);fl.add(barG);fl.scale.setScalar(.85);const flP=K.place(root,fl,0,-.05,0,.057);
+ const bu=new T.Group();const BL=.24,BY=.26;const tubeG=K.cyl(.011,.011,BL,K.glass,{open:true,soft:true,seg:20});tubeG.position.y=BY;bu.add(tubeG);
+ const gc=document.createElement('canvas');gc.width=64;gc.height=512;const gx=gc.getContext('2d');gx.strokeStyle='#1b2a5c';gx.fillStyle='#1b2a5c';gx.font='bold 20px sans-serif';for(let i=0;i<=50;i++){const y=12+i*(488/50);gx.lineWidth=i%5?1.5:3;gx.beginPath();gx.moveTo(2,y);gx.lineTo(i%5?14:24,y);gx.stroke();if(!(i%10))gx.fillText(String(i),28,y+7)}
+ const gt=new T.CanvasTexture(gc);gt.colorSpace=T.SRGBColorSpace;const gm=new T.Mesh(new T.CylinderGeometry(.0113,.0113,BL*.92,16,1,true,-.7,1.4),new T.MeshBasicMaterial({map:gt,transparent:true,depthWrite:false}));gm.position.y=BY+BL/2;bu.add(gm);
+ const bM=K.liq(new T.Color(0x5d9be6),.82);const bliq=K.cyl(.0095,.0095,1,bM,{edge:false,seg:16});bliq.position.y=BY;bu.add(bliq);
+ const neck=K.cyl(.011,.004,.05,K.glass,{soft:true,seg:16});neck.position.y=BY-.05;bu.add(neck);const tip=K.cyl(.0035,.0015,.06,K.glass,{soft:true,seg:12});tip.position.y=BY-.11;bu.add(tip);
+ const cock=new T.Group();cock.add(K.box(.05,.008,.012,K.M(0xd94b3d,{r:.4}),{edge:false}));cock.position.set(0,BY-.07,0);bu.add(cock);const cockC=K.cyl(.009,.009,.016,K.M(0xf4f4f4,{r:.3}),{edge:false,seg:14});cockC.rotation.x=Math.PI/2;cockC.position.set(0,BY-.07,0);bu.add(cockC);
+ const buP=K.place(root,bu,0,-.05,0,.014);
+ const drops=[];for(let i=0;i<3;i++){const d=K.sph(.0045,bM,{hull:false,edge:false,center:true});d.userData.o=i/3;d.visible=false;root.add(d);drops.push(d)}
+ const card=K.card(.34,.1,()=>{});K.place(root,card,.02,.24);root.scale.setScalar(.8);
+ const pink=new T.Color(0xf06fb4),clear=new T.Color(0xdbe8f7),blueL=new T.Color(0x9cc4f0);
+ const ind=/ميثيل|methyl/i.test((eq.n&&eq.n.join(' '))||'')?[new T.Color(0xe8573c),new T.Color(0xf2c230)]:[clear,pink];
+ const st={sp:1,k:0};
+ return{root,update(v){const val=has(v,eq.out)?v[eq.out]:1;st.sp=.6+K.lg(Math.abs(val)||1,.5)*.5;card.userData.redraw((c,W,H)=>K.fit(c,eq.f,W,H))},
+  tick(t,dt){const on=buP.visible!==false&&flP.visible!==false;if(on){if(st.t0==null)st.t0=t;st.k=((t-st.t0)*.09*st.sp)%1.25}else st.t0=null;const k=Math.min(st.k,1);
+   const lvl=BL*(.92-.62*k);bliq.scale.y=lvl;bliq.position.y=BY;
+   const end=K.clamp((k-.82)/.12,0,1);fM.color.copy(ind[0]).lerp(ind[1],end);fM.opacity=.5+.3*end;
+   cock.rotation.y=on&&k<1?Math.PI/2:0;barG.rotation.y+=dt*(on?18:0);fliq.rotation.y=t*.4;
+   const wp=new T.Vector3();tip.getWorldPosition(wp);root.worldToLocal(wp);
+   drops.forEach(d=>{d.visible=on&&k<1;const q=((t*1.6*st.sp)+d.userData.o)%1;d.position.set(wp.x,wp.y-.035-q*.13,wp.z);d.scale.setScalar(q<.1?q*10:1)});
+   led.material.emissiveIntensity=on?1:.1}}},
 space(K,eq){const T=K.THREE,root=new T.Group();const txt=eq.f+' '+eq.n.join(' ')+' '+(eq.d||[]).join(' ');
  const TL=new T.TextureLoader();const tex=n=>{const t=TL.load('/books/eq/models/planets/'+n+'.jpg');t.colorSpace=T.SRGBColorSpace;t.anisotropy=4;return t};
  const planet=(r,map,o={})=>{const m=new T.Mesh(new T.SphereGeometry(r,48,32),new T.MeshStandardMaterial({map,roughness:o.rough??.9,metalness:0,emissive:o.e||0x000000,emissiveIntensity:o.ei||0}));m.castShadow=true;m.receiveShadow=true;return m};

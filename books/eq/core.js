@@ -37,6 +37,8 @@ window.EQ=(function(){
   ['cga','chem','قوانين الغازات','Gas laws','gas'],
   ['cso','chem','المحاليل والتراكيز','Solutions & concentration','beaker'],
   ['cab','chem','الأحماض والقواعد','Acids & bases','beaker'],
+  ['ttr','chem','المعايرة والتحليل الحجمي','Titration & volumetric analysis','titration'],
+  ['gvm','chem','التحليل الوزني وأدوات المختبر','Gravimetric analysis & lab measurement','beaker'],
   ['cth','chem','الكيمياء الحرارية','Thermochemistry','heat'],
   ['cki','chem','سرعة التفاعل','Reaction kinetics','reaction'],
   ['ceq','chem','الاتزان الكيميائي','Chemical equilibrium','reaction'],

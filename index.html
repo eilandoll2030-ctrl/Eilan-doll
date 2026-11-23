@@ -15532,7 +15532,7 @@ Object.entries(ARC).forEach(([k,a])=>{GZ_PAID[k]=['arc_'+k,a.id,a.n,a.en];
  ACT['arc_'+k+'code']=()=>arcCodeModal(k)});
 if(typeof SYNC_KEYS!=='undefined'&&!SYNC_KEYS.includes('gtrial'))SYNC_KEYS.push('gtrial');
 if(typeof mergePersonal==='function'){const _mp=mergePersonal;mergePersonal=function(L,R){const o=_mp(L,R),a=(L||{}).gtrial||{},b=(R||{}).gtrial||{},g={};new Set([...Object.keys(a),...Object.keys(b)]).forEach(k=>g[k]=Math.max(a[k]||0,b[k]||0));o.gtrial=g;return o}}
-const arcUnlocked=k=>!!(S.unlk&&S.unlk[k]==='arc1');
+const arcUnlocked=k=>!!(S.unlk&&S.unlk[k]==='arc1')||(typeof isOwner==='function'&&isOwner());
 async function arcRedeem(k,code){const a=ARC[k],n=String(code||'').toUpperCase().replace(/[^A-Z0-9]/g,'');const body=n.startsWith(a.pre)?n:a.pre+n;if(body.length<a.pre.length+12)return 'short';
  if(!(window.crypto&&crypto.subtle))return 'nocrypto';
  if(PKG_W[k]&&body.length===a.pre.length+13&&/[PS]/.test(body[a.pre.length]))return pkgRedeem(k,body);const d=new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode('eilan-arc-v1:'+body)));

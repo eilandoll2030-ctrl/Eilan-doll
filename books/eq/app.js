@@ -126,7 +126,7 @@ function popAll(root,dir,dur=900,done){const kids=root.children.filter(c=>c.user
  tween(dur+kids.length*60,el=>{kids.forEach((k,i)=>{let p=K.clamp((el-i*60)/dur,0,1);p=dir>0?back(p):1-ease(p);k.scale.set(1,Math.max(.001,p),1);k.rotation.x=(1-K.clamp(p,0,1))*-1.25});},done)}
 function mountModel(e){if(cur){modelAnchor.remove(cur.root);cur.root.traverse(o=>{if(o.geometry)o.geometry.dispose()})}
  const fnB=SCENES[e.sc]||SCENES.energy;let s;try{s=fnB(K,e)}catch(err){console.error('scene',e.sc,err);s=SCENES.energy(K,e)}cur=s;
- const side=-textSide();modelAnchor.position.set(side*PW/2,TOPY+.004,-.02);modelAnchor.scale.setScalar(1.18);modelAnchor.add(s.root);s.root.traverse(o=>{if(o.isMesh){o.castShadow=o.castShadow!==false}});
+ const side=-textSide();modelAnchor.position.set(side*PW/2,TOPY+.004,-.02);modelAnchor.scale.setScalar(1.18);modelAnchor.add(s.root);s.root.traverse(o=>{if(o.isMesh){o.castShadow=o.castShadow!==false&&!o.userData.noShadow;const ms=Array.isArray(o.material)?o.material:[o.material];ms.forEach(m=>{if(m&&m.userData&&m.userData.env&&scene.environment&&!m.envMap){m.envMap=scene.environment;m.envMapIntensity=m.userData.env;m.needsUpdate=true}})}});
  const kids=s.root.children.filter(k=>k.userData.pop);const spec=(PARTS[e.sc]||(()=>[]))(e);kids.forEach((k,i)=>{k.userData.part=spec[i]||{n:['قطعة','Piece'],r:['جزء من المجسم','part of the model']};k.userData.home=k.position.clone();k.userData.idx=i});PS.kids=kids;PS.removed=new Set();GL.step=0;dimMap.clear();
  PS.strays=s.root.children.filter(k=>!k.userData.pop);PS.done=false;
  if(PS.build)kids.forEach((k,i)=>{PS.removed.add(i);k.visible=false});

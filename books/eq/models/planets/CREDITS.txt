@@ -1,0 +1,5 @@
+Planet texture maps (earth, mars, jupiter, saturn, venus, neptune)
+Source: NASA 3D Resources — https://github.com/nasa/NASA-3D-Resources ("Images and Textures")
+NASA states these assets are free and without copyright. Resized to 1024x512 for the web by Eilan Doll.
+Use follows NASA's media usage guidelines (https://www.nasa.gov/nasa-brand-center/images-and-media):
+no NASA logo is used and no NASA endorsement is implied.

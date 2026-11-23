@@ -34,6 +34,11 @@ GAMES = {  # game key -> (code prefix, file stem, Arabic name)
     'lawkunt': ('LWK', 'LawKunt', 'لو كنت'),
     'qulha': ('QLH', 'QulhaBilahjatak', 'قولها بلهجتك'),
     'couples': ('CPL', 'BeniWbenak', 'بيني وبينك'),
+    'lahad': ('LHD', 'LahadYeshidha', 'لحد يشدها'),
+    'family': ('FAM', 'AsilaAailiya', 'أسئلة عائلية'),
+    'bahar': ('BHR', 'KatharBaharat', 'كثّر بهارات'),
+    'mashaer': ('MSH', 'Mashaer', 'مشاعر'),
+    'nisf': ('NSF', 'NisfAllail', 'نص الليل'),
 }
 FILES = {  # file role -> (suffix, download name label)
     'print': ('Print-AR.pdf', 'ورقة الطباعة والقص'),

@@ -198,7 +198,120 @@ ROMANCE = dict(
     howbg="linear-gradient(160deg,#FFF5F8,#FFE4EC)", howink="#5A0F2E")
 
 
-GAMES = {"lawkunt": cfg_lawkunt, "jawib": cfg_jawib, "qulha": cfg_qulha, "couples": cfg_couples}
+# ---- the five older card games: questions live in a PRIVATE file (paid content, never in the repo)
+def old(name):
+    sys.path.insert(0, "/home/claude/private/oldgames")
+    import content  # noqa: E402
+    return getattr(content, name)
+
+
+def _txt(pt=19):
+    return lambda x: f'<div style="font-weight:900;font-size:{pt}pt;line-height:1.55;margin-top:4mm;max-width:118mm;font-family:Cairo,{E}">{x}</div>'
+
+
+def _old_cfg(file, title, items, lab, kick, sub, chips, rules, steps, end, back, extra=None, slide_extra=None, **kw):
+    T = _txt(19 if max(len(q["x"]) for q in items) < 70 else 17)
+
+    def pf(i, q, c):
+        return chip(lab(q), c[2]) + T(q["x"]) + (extra(q, c) if extra else "")
+
+    def pb(i, q):
+        return back(q)
+
+    def sl(i, q, c):
+        body = (f'<div style="display:flex;gap:20px">{schip(lab(q), c[2])}</div>'
+                f'<div data-el="q" style="font-weight:900;font-size:{84 if len(q["x"]) < 60 else 70}px;line-height:1.5;margin-top:44px;max-width:1550px;font-family:Cairo,{E}">{q["x"]}</div>')
+        st = [('after', [('lv', 'pop', 600, 0)]), ('after', [('q', 'rise', 700, 0), ('brand', 'fade', 500, 0)])]
+        if slide_extra and slide_extra(q, c):
+            body += slide_extra(q, c)
+            st.append(('click', [('tw', 'pop', 700, 0)]))
+        return body, st, 'q'
+
+    return dict(file=file, title=title, items=items, kick=kick, sub=sub, chips=chips, rules=rules, steps=steps, end=end,
+                pf=pf, pb=pb, sl=sl, **kw)
+
+
+def _tw(t, c):
+    return f'<div data-el="tw" style="margin-top:34px;padding:18px 40px;border-radius:30px;background:rgba(255,255,255,.65);border:3px dashed {c[2]};font-size:42px;font-weight:900;font-family:Cairo,{E}">{t}</div>'
+
+
+def _bk(icon, line1, line2=""):
+    return (f'<div style="font-size:30pt;font-family:{E}">{icon}</div><div style="font-weight:900;font-size:15pt;margin-top:1mm;font-family:Cairo,{E}">{line1}</div>'
+            + (f'<div style="font-weight:800;font-size:9.6pt;color:#FFD97A;margin-top:2mm;max-width:110mm;font-family:Cairo,{E}">{line2}</div>' if line2 else ""))
+
+
+def cfg_lahad():
+    Q = old("LAHAD"); TY = {"q": "💬 سؤال صراحة", "c": "⚡ تحدّي", "r": "🏁 أول واحد…", "j": "🃏 جوكر"}
+    return _old_cfg("LahadYeshidha", "لحد يشدها", Q, lambda q: TY[q["t"]], "لعبة جَمعات وصراحة",
+                    "صراحة وتحديات وسباقات «أول واحد…» — مين يشدها؟",
+                    [f"{num(len(Q))} بطاقة", "أسئلة · تحديات · سباقات · جوكر", "٣ لاعبين أو أكثر"],
+                    ["اخلطوا البطاقات وحطوها مقلوبة.", "كل واحد بدوره يسحب بطاقة ويقرأها بصوت عالي.",
+                     "💬 سؤال صراحة: جاوب بصراحة · ⚡ تحدّي: نفّذه · 🏁 أول واحد: سباق للكل!", "🃏 الجوكر: نفّذ اللي مكتوب فيه — وكالعادة الصراااحة ثم الصراحة."],
+                    ["اسحب بطاقة واقرأها", "جاوب بصراحة أو نفّذ التحدي", "في «أول واحد…» الكل يتسابق 🏁"],
+                    ("🏆", "مين شدّها اليوم؟", "العبوها أونلاين — منطقة الترفيه في إيلان دول"),
+                    lambda q: _bk({"q": "💬", "c": "⚡", "r": "🏁", "j": "🃏"}[q["t"]], "لحد يشدها",
+                                  ("🏆 " + q["w"]) if q.get("w") else ("⏳ تحدٍّ مستمر حتى نهاية اللعبة" if q.get("p") else "")),
+                    slide_extra=lambda q, c: _tw("🏆 " + q["w"], c) if q.get("w") else "", bg="#0B1F5E")
+
+
+def cfg_family():
+    Q = old("FAMILY")
+    return _old_cfg("AsilaAailiya", "أسئلة عائلية", Q, lambda q: "⚡ " + q["tag"] if q.get("tag") else "❓ سؤال", "لعبة عائلية سريعة",
+                    "أسرع واحد يجاوب صح… ياخذ النقطة!",
+                    [f"{num(len(Q))} سؤال", "أسئلة سريعة وألغاز", "لاعبين أو أكثر"],
+                    ["واحد يقرأ السؤال بصوت عالي.", "لكل شخص محاولة وحدة فقط.", "أسرع واحد يجاوب صح هو اللي ياخذ النقطة.", "احسبوا النقاط — وصفّقوا للفايز 👏"],
+                    ["واحد يقرأ السؤال", "أسرع جواب صح = نقطة", "احسبوا النقاط 👏"],
+                    ("👏", "مين الفايز؟", "العبوها أونلاين — منطقة الترفيه في إيلان دول"),
+                    lambda q: _bk("👨‍👩‍👧‍👦", "أسئلة عائلية", "أسرع جواب صح ياخذ النقطة!"), bg="#07341F", bg2="#0B1F5E")
+
+
+def cfg_bahar():
+    Q = old("BAHAR")
+    TW = {"dbl": ("🌶️🌶️ دبل بهارات", "هالجولة فيها كذابين اثنين! (إذا الفريق ٤ أو أكثر)"), "zero": ("🤔 يمكن ما فيه كذاب!", "هالجولة ممكن يكون الكل صادقين… فكّروا زين"),
+          "rev": ("🙃 الكذب بالعكس", "الكل يكذب إلا واحد! طلّعوا الصادق"), "ask": ("🕵️ جولة المحقق", "الفريق الثاني يسأل كل واحد سؤال واحد قبل التصويت"),
+          "fast": ("⏱️ جولة السرعة", "كل قصة ٣٠ ثانية بس!"), "style": ("🎭 بأسلوب خاص", "")}
+    lab = lambda q: TW[q["t"]][0] if q.get("t") else "🌶️ موضوع القصة"
+    desc = lambda q: (q.get("s") or TW[q["t"]][1]) if q.get("t") else ""
+    return _old_cfg("KatharBaharat", "كثّر بهارات", Q, lab, "لعبة فريقين وقصص",
+                    "واحد بس قصته كذب 🌶️ — تقدرون تطلّعونه؟",
+                    [f"{num(len(Q))} موضوع قصة", "جولات خاصة 🌶️", "فريقين · ٤ أو أكثر"],
+                    ["انقسموا لفريقين متساويين.", "الفريق الأول يتفق بالسر: مين اللي بيكثّر بهارات ويألّف قصة كذب.",
+                     "كل واحد يحكي قصة عن الموضوع — والفريق الثاني يطلّع الكذاب.", "كشفتوه؟ النقطة لكم. ما كشفتوه؟ النقطة للفريق الثاني 😏"],
+                    ["اسحبوا موضوع القصة", "كل واحد يحكي قصته", "طلّعوا مين كثّر بهارات 🌶️"],
+                    ("🌶️", "مين أشطر كذاب؟", "العبوها أونلاين — منطقة الترفيه في إيلان دول"),
+                    lambda q: _bk("🌶️", "كثّر بهارات", desc(q)),
+                    extra=lambda q, c: f'<div style="font-weight:800;font-size:10.5pt;color:{c[2]};margin-top:3mm;font-family:Cairo,{E}">{desc(q)}</div>' if desc(q) else "",
+                    slide_extra=lambda q, c: _tw(desc(q), c) if desc(q) else "", bg="#4A2A8F")
+
+
+def cfg_mashaer():
+    Q = old("MASHAER"); PEN = old("MASHAER_PEN")
+    TY = {"moment": "💞 لحظة", "letter": "✍️ رسالة", "pick": "🎯 سؤالك أنت"}
+    return _old_cfg("Mashaer", "مشاعر", Q, lambda q: TY.get(q.get("t"), "💬 سؤال"), "لعبة لشخصين عزيزين",
+                    "أسئلة من القلب… ولحظات مع بعض 💞",
+                    [f"{num(len(Q))} بطاقة", "أسئلة · لحظات · رسايل", "لشخصين"],
+                    ["اختار شخص عزيز عليك وتبادلوا الدور.", "كونوا صريحين — واللي يجاوب جواب مختصر ياخذ حكم 😏",
+                     "ما فيه «ما عندي إجابة» في هاللعبة!", "أحكام: " + " · ".join(PEN[:4])],
+                    ["تبادلوا الدور", "جاوب من قلبك", "اللحظات والرسايل تسوونها مع بعض 💞"],
+                    ("📸", "وثّقوا جلستكم بصورة", "العبوها أونلاين — منطقة الترفيه في إيلان دول"),
+                    lambda q: _bk("💞", "مشاعر", "تحذير: بتعرفون بعض أكثر 💞"), **ROMANCE)
+
+
+def cfg_nisf():
+    Q = old("NISF"); LV = {1: "🌙 أول الليل", 2: "🌌 نص الليل", 3: "🌅 قبل الفجر"}; TY = {"all": "🔄 الكل يجاوب", "pick": "🎯 اختار شخص"}
+    lab = lambda q: LV[q["lv"]] + (" · " + TY[q["t"]] if q.get("t") else "")
+    return _old_cfg("NisfAllail", "نص الليل", Q, lab, "أسئلة صراحة للسهرة",
+                    "كل ما تعمّق الليل… تعمّقت الأسئلة 🌙",
+                    [f"{num(len(Q))} سؤال", "٣ مراحل", "شخصين أو أكثر"],
+                    ["ابدأوا بـ«أول الليل» وكمّلوا لين «قبل الفجر».", "الجواب بكل صدق وصراحة.",
+                     "لكل شخص محاولتين تخطّي بس — استخدمها بحكمة.", "تقدر تخلّي السؤال يدور على الكل 🔄"],
+                    ["ابدأوا من «أول الليل» 🌙", "جاوب بصدق وصراحة", "كل ما تعمّق الليل تعمّقت الأسئلة 🌅"],
+                    ("🌙", "ولا تنسون توثّقون سهرتكم 📸", "العبوها أونلاين — منطقة الترفيه في إيلان دول"),
+                    lambda q: _bk({1: "🌙", 2: "🌌", 3: "🌅"}[q["lv"]], "نص الليل", LV[q["lv"]]), bg="#0B1F5E", bg2="#07080C")
+
+
+GAMES = {"lawkunt": cfg_lawkunt, "jawib": cfg_jawib, "qulha": cfg_qulha, "couples": cfg_couples,
+         "lahad": cfg_lahad, "family": cfg_family, "bahar": cfg_bahar, "mashaer": cfg_mashaer, "nisf": cfg_nisf}
 
 
 # ---------------------------------------------------------------- builders

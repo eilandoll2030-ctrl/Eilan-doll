@@ -168,22 +168,22 @@ reaction(K,eq){const T=K.THREE,root=new T.Group();const txt=(eq.f+' '+eq.n.join(
  const colA=new T.Color(/Cu|نحاس|كبريتات النحاس/i.test(txt)?0x2f7de0:/Fe|حديد|صدأ|rust/i.test(txt)?0xd9a066:/MnO₄|برمنغنات/i.test(txt)?0x8a2be2:/Cr₂O₇|دايكرومات/i.test(txt)?0xf08a24:/حليب|milk|لبن/i.test(txt)?0xf4f0e6:/I₂|يود|نشا|starch/i.test(txt)?0xe8d48a:0x4f7fe0);
  const colB=new T.Color(/Cr₂O₇|دايكرومات/i.test(txt)?0x3a9a4a:/MnO₄|برمنغنات/i.test(txt)?0xf4d0e8:/Fe|حديد|صدأ|rust/i.test(txt)?0xa0461e:/I₂|يود|نشا|starch/i.test(txt)?0x1b1f5e:/Cu/.test(txt)?0x6fb7e8:0x8cc7a6);
  /* bench */
- const bench=new T.Group();bench.add(K.box(.8,.012,.3,K.M(0xd9b382)));K.place(root,bench,0,.12);
+ const bench=new T.Group();bench.add(K.box(.8,.012,.3,K.bench));K.place(root,bench,0,.12);
  /* beaker with sloshing liquid */
- const bk=new T.Group();bk.add(K.lathe([[0,0],[.085,0],[.09,.005],[.09,.21],[.1,.225]],K.glass,{soft:true}));for(let i=1;i<=4;i++)bk.add(K.line([[.091,i*.04,0],[.091,i*.04,.02]]));
- const liqM=new T.MeshStandardMaterial({color:colA.clone(),transparent:true,opacity:.72,roughness:.15});const liq=K.cyl(.085,.085,1,liqM,{edge:false});bk.add(liq);
- const surfG=new T.CircleGeometry(.085,32,0,Math.PI*2);surfG.rotateX(-Math.PI/2);const surf=new T.Mesh(surfG,new T.MeshStandardMaterial({color:colA.clone(),transparent:true,opacity:.85,roughness:.05,metalness:.1}));bk.add(surf);const base0=surfG.attributes.position.array.slice();
+ const bk=new T.Group();bk.add(K.lathe([[0,0],[.085,0],[.09,.005],[.09,.21],[.1,.225]],K.glass,{soft:true}));bk.add(K.gradOn(.09,.2,.008));
+ const liqM=K.liq(colA.clone(),.74);const liq=K.cyl(.085,.085,1,liqM,{edge:false});bk.add(liq);
+ const surfG=new T.CircleGeometry(.085,32,0,Math.PI*2);surfG.rotateX(-Math.PI/2);const surf=new T.Mesh(surfG,K.liq(colA.clone(),.86));bk.add(surf);const base0=surfG.attributes.position.array.slice();
  const bubs=[];for(let i=0;i<(gas?34:12);i++){const b=K.sph(.004+Math.random()*.004,K.M(0xffffff,{op:.85}),{hull:false,edge:false,center:true});b.userData.o=Math.random();b.userData.r=Math.random()*.07;b.userData.a=Math.random()*6.28;bk.add(b);bubs.push(b)}
  const ppts=[];if(ppt)for(let i=0;i<40;i++){const q=K.sph(.004,K.M(0xf4f4f8),{hull:false,edge:false,center:true});q.userData.o=Math.random();q.userData.x=(Math.random()-.5)*.13;q.userData.z=(Math.random()-.5)*.13;bk.add(q);ppts.push(q)}
  const stir=K.cyl(.004,.004,.28,K.glass,{soft:true});stir.rotation.z=.25;bk.add(stir);
  const bkP=K.place(root,bk,-.08,.12,0,.012);
  /* flask that tilts and pours */
  const fl=new T.Group();const fg=K.lathe([[0,0],[.06,0],[.062,.008],[.022,.11],[.02,.16],[.026,.17]],K.glass,{soft:true});const fpiv=new T.Group();const fin=new T.Group();fin.position.y=-.06;fpiv.position.y=.06;fpiv.add(fin);fin.add(fg);const lipM=new T.Object3D();lipM.position.y=.17;fin.add(lipM);
- const fliqM=new T.MeshStandardMaterial({color:colB.clone(),transparent:true,opacity:.75,roughness:.2});const fliq=K.lathe([[0,0],[.057,0],[.059,.006],[.035,.05],[0,.05]],fliqM,{edge:false});fin.add(fliq);fl.add(fpiv);
+ const fliqM=K.liq(colB.clone(),.78);const fliq=K.lathe([[0,0],[.057,0],[.059,.006],[.035,.05],[0,.05]],fliqM,{edge:false});fin.add(fliq);fl.add(fpiv);
  const flP=K.place(root,fl,.13,.12,0,.012);
  const stream=K.cyl(.006,.004,1,K.M(colB.getHex(),{op:.8}),{edge:false,seg:10});root.add(stream);stream.visible=false;
  /* burner (only lit for hot reactions) */
- const bur=new T.Group();bur.add(K.cyl(.03,.035,.012,K.dark,{edge:false}));const flames=[];for(let i=0;i<7;i++){const a=i/7*6.28;const f=K.cyl(0,.008,.035,K.M(flameCol,{e:flameCol,ei:1,op:.85}),{edge:false,seg:8});f.position.set(Math.cos(a)*.015,.012,Math.sin(a)*.015);bur.add(f);flames.push(f)}const burP=K.place(root,bur,-.08,.25,0,.012);
+ const bur=new T.Group();bur.add(K.cyl(.03,.035,.012,K.steel,{edge:false}));const flames=[];for(let i=0;i<7;i++){const a=i/7*6.28;const f=K.cyl(0,.008,.035,K.M(flameCol,{e:flameCol,ei:1,op:.85}),{edge:false,seg:8});f.position.set(Math.cos(a)*.015,.012,Math.sin(a)*.015);bur.add(f);flames.push(f)}const burP=K.place(root,bur,-.08,.25,0,.012);
  /* particle box (molecules moving, like a zoom-in) */
  const pb=new T.Group();pb.add(K.box(.16,.16,.16,K.glass,{soft:true}));const mols=[];for(let i=0;i<16;i++){const red=i%2===0;const m=K.sph(.011,red?K.red:K.blue,{hull:false,edge:false,center:true});m.position.set((Math.random()-.5)*.13,.015+Math.random()*.13,(Math.random()-.5)*.13);m.userData.v=new T.Vector3(Math.random()-.5,Math.random()-.5,Math.random()-.5).normalize();pb.add(m);mols.push(m)}
  const pbP=K.place(root,pb,.3,-.14,0,.012);

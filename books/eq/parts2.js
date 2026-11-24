@@ -39,6 +39,11 @@ export const PARTS2={
  ,weather:()=>[P('الأرض','Ground','سطح الأرض','the ground',{b:1}),P('السحابة','Cloud','منها ينزل المطر','where the rain comes from',{e:1,s:['rainmm','Tdew']}),P('الشمس','Sun','تسخن الهواء','warms the air',{e:1,s:['Tair','Tair2']}),P('توربين الرياح','Wind turbine','يبيّن قوة الرياح','shows how strong the wind is',{s:['vkmh','bft']}),P('الترمومتر','Thermometer','يقيس حرارة الجو','measures air temperature'),CARD]
  ,pump:()=>[P('الخزان','Tank','مصدر الماء','the water source',{e:1,s:['Vtank','pop_']}),P('المضخة','Pump','تدفع الماء في الأنابيب','pushes water through the pipes',{e:1,s:['Hpump','etap_','n1pm']}),P('الأنابيب والصمام','Pipes and valve','يمشي فيها الماء','the water flows through them',{e:1,s:['Lpipe','Dpp','Qpipe']}),P('مقياس الضغط','Pressure gauge','يقيس الضغط','measures the pressure'),CARD]
  ,desk:()=>[P('المكتب','Desk','مكان المذاكرة','where you study',{b:1}),P('الكتب','Books','المواد اللي تذاكرها','the subjects you study',{e:1,s:['pages','g1','gp1','words']}),P('الدفتر والقلم','Notebook and pen','تكتب وتراجع','write and review'),P('الساعة','Clock','تقيس وقت المذاكرة','times your study'),P('التقويم','Calendar','الأيام والمواعيد','days and dates'),CARD]
+ ,pet:()=>[P('الوسادة','Cushion','مكان راحة الحيوان','where the pet rests',{b:1}),
+  P('القطة','Cat','الحيوان الأليف في المعادلة','the pet in the equation',{e:1}),
+  P('صحن الأكل','Food bowl','كمية الأكل اليومية','the daily food portion',{e:1}),
+  P('صحن الماء','Water bowl','الماء اللي يحتاجه كل يوم','the water it needs each day',{e:1}),
+  P('ميزان الحيوان','Pet scale','نتابع به الوزن','used to track weight',{e:1}),CARD]
  ,garden:()=>[P('الأصيص','Pot','أصيص فخّار بصحنه','a clay pot with its saucer',{b:1}),
   P('التربة','Soil','منها تمتص الجذور الماء والأملاح','roots draw water and minerals from it',{e:1}),
   P('الساق والأوراق','Stem and leaves','الأوراق تصنع الغذاء من الضوء وتطلق الأكسجين','leaves make food from light and release oxygen',{e:1}),

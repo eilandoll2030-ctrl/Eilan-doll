@@ -129,7 +129,7 @@ window.EQ=(function(){
   ['drn','more','الطائرات بدون طيار','Drones','drone'],
   ['sns','more','المستشعرات والقياس','Sensors & measurement','laptop'],
   ['ppr','day','الورق والطباعة','Paper & printing','desk'],
-  ['pet','day','الحيوانات الأليفة','Pets','plant'],
+  ['pet','day','الحيوانات الأليفة','Pets','pet'],
   ['grn','chem','الكيمياء الخضراء','Green chemistry','reaction'],
   ['puz','math','الألغاز الرياضية','Maths puzzles','blocks'],
   ['shp','day','رياضيات التسوق','Shopping maths','coins'],

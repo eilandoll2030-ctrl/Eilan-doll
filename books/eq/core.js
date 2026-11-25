@@ -121,6 +121,7 @@ window.EQ=(function(){
   ['mlb','life','البيولوجيا الجزيئية والـDNA','Molecular biology & DNA','dna'],
   ['plb','phys','مختبر البندول والنابض','Pendulum & spring lab','pendulum'],
   ['flb','phys','مختبر الموائع','Fluids lab','fluid'],
+  ['hlb','phys','مختبر الحرارة','Heat lab','heat'],
   ['oil','more','النفط والغاز','Oil & gas','fluid'],
   ['wtr','more','المياه والصرف الصحي','Water supply & wastewater','pump'],
   ['stu','day','الدراسة والدرجات','Studying & grades','desk'],

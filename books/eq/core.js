@@ -119,6 +119,7 @@ window.EQ=(function(){
   ['mic','life','علم الأحياء الدقيقة','Microbiology','microscope'],
   ['msc','life','المجهر والخلية','The microscope & the cell','microscope'],
   ['mlb','life','البيولوجيا الجزيئية والـDNA','Molecular biology & DNA','dna'],
+  ['plb','phys','مختبر البندول والنابض','Pendulum & spring lab','pendulum'],
   ['oil','more','النفط والغاز','Oil & gas','fluid'],
   ['wtr','more','المياه والصرف الصحي','Water supply & wastewater','pump'],
   ['stu','day','الدراسة والدرجات','Studying & grades','desk'],

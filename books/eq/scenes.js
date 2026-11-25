@@ -123,13 +123,51 @@ orbit(K,eq){const T=K.THREE,root=new T.Group();const base=K.cyl(.05,.07,.03,K.pa
  [[.2,.025,0x1E44C8,1],[.32,.018,0xC8463C,.55],[.4,.03,0xC9A227,.32]].forEach(([r,s,c,sp],i)=>{const ring=K.tor(r,.0018,K.dark,{seg:96});ring.rotation.x=Math.PI/2;sys.add(ring);const pv=new T.Group();const pl=K.sph(s,K.M(c),{center:true,hull:1.08});pl.position.x=r;pv.add(pl);if(i===0){const moon=K.sph(.008,K.paper,{center:true});moon.position.set(r+.045,0,0);pv.add(moon);pl.userData.moonPv=moon}pv.rotation.y=i*2;sys.add(pv);orb.push({pv,sp,pl})});
  const st={k:1};return{root,update(v){const T0=pick(v,['T'],0);st.k=T0?K.clamp(2/Math.log10(10+T0),.15,1.5):1},tick(t,dt){orb.forEach(o=>o.pv.rotation.y+=o.sp*st.k*dt);sun.rotation.y+=dt*.2}}},
 
-/* ===== pendulum + spring ===== */
-pendulum(K,eq){const T=K.THREE,root=new T.Group();const fr=new T.Group();fr.add(K.box(.5,.012,.16,K.paper2));[-.22,.22].forEach(x=>{const p=K.box(.014,.42,.014);p.position.set(x,0,0);fr.add(p)});const bar=K.box(.46,.014,.016);bar.position.y=.42;fr.add(bar);
- const pv=new T.Group();pv.position.set(-.06,.42,0);fr.add(pv);const str=K.cyl(.0018,.0018,1,K.dark,{edge:false,seg:6});str.rotation.z=Math.PI;pv.add(str);const bob=K.sph(.03,K.gold,{center:true});pv.add(bob);
- const sp=new T.Group();sp.position.set(.13,.42,0);fr.add(sp);const coil=K.helix(.018,.0025,1,10,K.dark);coil.rotation.z=Math.PI;sp.add(coil);const blk=K.box(.05,.05,.05,K.blueL);sp.add(blk);
- K.place(root,fr,0,-.05);const st={L:.3,T:2,amp:.35,ext:.18};
- return{root,update(v){let Tp=pick(v,['T'],0);const Lm=pick(v,['len'],1);if(!Tp)Tp=2*Math.PI*Math.sqrt(Lm/9.8);st.T=K.clamp(Tp,.4,6);st.L=K.clamp(.12+Math.log10(1+Lm)*.25,.12,.34);str.scale.y=st.L;bob.position.y=-st.L},
-  tick(t){const ph=2*Math.PI*t/st.T;pv.rotation.z=st.amp*Math.cos(ph);const e=st.ext+.04*Math.sin(ph);coil.scale.y=e;blk.position.y=-e-.05}}},
+/* ===== مختبر البندول والنابض الواقعي: حامل حديد، بندول نحاسي بخيط، منقلة شفافة، نابض فولاذي بأثقال مشقوقة، مسطرة خشب، ساعة إيقاف ===== */
+pendulum(K,eq){const T=K.THREE,root=new T.Group();const PM=(c,o={})=>{const m=new T.MeshPhysicalMaterial({color:c,roughness:o.r??.3,metalness:o.m??0,clearcoat:o.cc??.6,clearcoatRoughness:o.ccr??.15,...(o.x||{})});m.userData.env=o.env??1.2;return m};
+ const brass=PM(0xc9a227,{r:.22,m:.9,cc:.5,env:1.5}),iron=PM(0x2a2d33,{r:.45,m:.6,cc:.8,ccr:.3,env:.8}),knobM=PM(0x15171c,{r:.35,cc:.9});
+ /* 1) الحامل: قاعدة حديد زهر على طاولة المختبر، عمود فولاذ، ذراع أفقي ومشابك */
+ const stand=new T.Group();const base=K.box(.22,.022,.16,iron,{edge:false});base.position.set(-.29,0,-.08);stand.add(base);[[-.38,-.15],[-.2,-.15],[-.38,-.01],[-.2,-.01]].forEach(([x,z])=>{const f=K.cyl(.008,.008,.004,knobM,{edge:false,seg:12});f.position.set(x,-.004,z);stand.add(f)});
+ const rod=K.cyl(.007,.007,.52,K.steel,{edge:false,seg:20});rod.position.set(-.33,.022,-.1);stand.add(rod);
+ const arm=K.cyl(.0055,.0055,.6,K.steel,{edge:false,seg:18});arm.rotation.z=Math.PI/2;arm.position.set(.265,.52,-.1);stand.add(arm);
+ const boss=(x,y)=>{const g=new T.Group();g.add(K.box(.026,.026,.026,iron,{edge:false}));const s=K.cyl(.004,.004,.022,K.steel,{edge:false,seg:10});s.rotation.x=Math.PI/2;s.position.set(0,.013,.022);g.add(s);const kn=K.cyl(.009,.009,.008,knobM,{edge:false,seg:16});kn.rotation.x=Math.PI/2;kn.position.set(0,.013,.034);g.add(kn);g.position.set(x,y-.013,-.1);return g};stand.add(boss(-.33,.52));
+ K.place(root,stand,0,0);
+ /* 2) المنقلة الشفافة خلف نقطة التعليق */
+ const PX=-.1,PY=.51,PZ=-.1;const ptex=K.canvasTex(512,280,(x,W,H)=>{x.clearRect(0,0,W,H);x.fillStyle='rgba(235,245,255,.18)';x.beginPath();x.arc(W/2,8,248,0,Math.PI);x.fill();x.strokeStyle='rgba(20,40,111,.9)';x.fillStyle='rgba(20,40,111,.9)';x.font='bold 16px sans-serif';x.textAlign='center';for(let d=0;d<=180;d+=5){const a=d*Math.PI/180,r1=248,r2=d%10?236:d%30?228:218;x.lineWidth=d%30?1.5:2.5;x.beginPath();x.moveTo(W/2+Math.cos(a)*r1,8+Math.sin(a)*r1);x.lineTo(W/2+Math.cos(a)*r2,8+Math.sin(a)*r2);x.stroke();if(!(d%30)){const lbl=Math.abs(90-d);x.fillText(String(lbl),W/2+Math.cos(a)*200,8+Math.sin(a)*200+6)}}x.lineWidth=1;x.beginPath();x.moveTo(W/2,8);x.lineTo(W/2,256);x.stroke()});
+ const prot=new T.Group();const pg=new T.PlaneGeometry(.26,.142);const pm=new T.Mesh(pg,new T.MeshBasicMaterial({map:ptex,transparent:true,depthWrite:false,side:T.DoubleSide}));pm.position.y=-.071;prot.add(pm);const pedge=new T.Mesh(new T.TorusGeometry(.126,.0016,6,48,Math.PI),PM(0xdfe9ff,{x:{transparent:true,opacity:.5}}));pedge.rotation.z=Math.PI;prot.add(pedge);
+ const protP=K.place(root,prot,PX,PZ-.012,0,PY);
+ /* 3) البندول: مشبك تعليق، خيط قطني، كرة نحاس بخطّاف */
+ const pend=new T.Group();const clip=K.box(.03,.016,.022,iron,{edge:false});clip.position.y=-.004;pend.add(clip);const pv=new T.Group();pend.add(pv);
+ const thread=K.cyl(.0011,.0011,1,K.M(0xf1e7cf,{r:.9}),{edge:false,seg:6});thread.rotation.z=Math.PI;pv.add(thread);
+ const bob=new T.Group();const ball=new T.Mesh(new T.SphereGeometry(.026,40,28),brass);ball.castShadow=true;bob.add(ball);const hook=K.cyl(.004,.004,.012,brass,{edge:false,seg:12});hook.position.y=.022;bob.add(hook);const eye=new T.Mesh(new T.TorusGeometry(.004,.0012,6,16),brass);eye.position.y=.037;bob.add(eye);pv.add(bob);
+ const pendP=K.place(root,pend,PX,PZ,0,PY);
+ /* 4) النابض الفولاذي مع حامل الأثقال المشقوقة */
+ const SX=.17;const spr=new T.Group();const sHook=K.cyl(.002,.002,.012,K.steel,{edge:false,seg:8});sHook.position.y=-.012;spr.add(sHook);const coil=K.helix(.016,.0018,1,13,K.steel);coil.rotation.z=Math.PI;spr.add(coil);
+ const hanger=new T.Group();const hRod=K.cyl(.0025,.0025,.07,K.steel,{edge:false,seg:10});hRod.position.y=-.07;hanger.add(hRod);const hBase=K.cyl(.02,.02,.005,K.steel,{edge:false,seg:28});hBase.position.y=-.075;hanger.add(hBase);
+ const discs=[];for(let i=0;i<6;i++){const d=new T.Mesh(new T.CylinderGeometry(.019,.019,.007,32),brass);d.castShadow=true;d.position.y=-.068+i*.0075;hanger.add(d);const slot=K.box(.016,.0072,.005,K.M(0x07080C),{edge:false});slot.position.set(.011,d.position.y-.0036,0);hanger.add(slot);discs.push(d,slot)}spr.add(hanger);
+ const sprP=K.place(root,spr,SX,PZ,0,PY);
+ /* 5) مسطرة خشب مترية واقفة جنب النابض */
+ const rtex=K.canvasTex(64,1024,(x,W,H)=>{x.fillStyle='#e2c48e';x.fillRect(0,0,W,H);for(let i=0;i<30;i++){x.strokeStyle=`rgba(140,95,45,${.08+Math.random()*.12})`;x.beginPath();x.moveTo(Math.random()*W,0);x.lineTo(Math.random()*W,H);x.stroke()}x.fillStyle='#26282f';x.font='bold 16px sans-serif';x.textAlign='left';for(let mm=0;mm<=500;mm+=5){const y=8+mm*2;const l=mm%50?(mm%10?10:18):30;x.fillRect(0,y,l,mm%50?1.5:2.5);if(!(mm%50)&&mm)x.fillText(String(mm/10),34,y+6)}});
+ const ruler=new T.Group();const rm=new T.Mesh(new T.BoxGeometry(.03,.5,.006),[K.M(0xd9b77c),K.M(0xd9b77c),K.M(0xd9b77c),K.M(0xd9b77c),new T.MeshStandardMaterial({map:rtex,roughness:.7}),K.M(0xd9b77c)]);rm.position.y=.264;rm.castShadow=true;ruler.add(rm);const rFoot=K.box(.06,.012,.04,iron,{edge:false});ruler.add(rFoot);
+ K.place(root,ruler,SX+.07,PZ+.02,0,.012);
+ /* 6) ساعة الإيقاف الرقمية: تعدّ الزمن والاهتزازات */
+ const sw=new T.Group();const swc=new T.Mesh(new T.CylinderGeometry(.055,.055,.018,48),PM(0x1b1d22,{r:.4,cc:1}));swc.position.y=.009;swc.castShadow=true;sw.add(swc);const ring=new T.Mesh(new T.TorusGeometry(.055,.004,10,48),K.steel);ring.rotation.x=Math.PI/2;ring.position.y=.018;sw.add(ring);
+ const crown=K.cyl(.007,.007,.012,K.steel,{edge:false,seg:16});crown.rotation.x=Math.PI/2;crown.position.set(0,.009,-.062);sw.add(crown);
+ const ftex=K.canvasTex(256,256,()=>{});const face=new T.Mesh(new T.CircleGeometry(.047,48),new T.MeshStandardMaterial({map:ftex,emissive:0xffffff,emissiveMap:ftex,emissiveIntensity:.25,roughness:.2}));face.rotation.x=-Math.PI/2;face.position.y=.0185;sw.add(face);
+ const swP=K.place(root,sw,.3,.26,-.3);sw.rotation.x=.35;
+ /* 7) بطاقة المعادلة */
+ const card=K.card(.32,.1,()=>{});K.place(root,card,-.12,.36);
+ const isSpr=eq.ins.some(k=>['k','ks1','ks2','plms'].includes(k))||eq.out==='k'||/spring|نابض/i.test(eq.n[1]+eq.n[0]);
+ const st={L:.28,T:2,amp:.3,ext:.12,kT:1.4,n:0,t0:0,last:-1,ph:0,ph2:0,nm:3};
+ const drawFace=(sec,n)=>{const {x}=ftex.userData;x.fillStyle='#d9e6d2';x.fillRect(0,0,256,256);x.fillStyle='#0b1f12';x.textAlign='center';x.textBaseline='middle';x.font='700 54px "Courier New",monospace';x.direction='ltr';x.fillText(sec.toFixed(2),128,112);x.font='600 22px system-ui,sans-serif';x.fillText((K.L('اهتزازات ','osc ')+n),128,172);x.font='700 16px system-ui';x.fillStyle='#0F6B44';x.fillText('EILAN',128,212);ftex.needsUpdate=true};drawFace(0,0);
+ return{root,update(v){let Tp=pick(v,['Tp','plT'],0);const Lm=pick(v,['Lp','plL','plLe'],1),gv=pick(v,['g','plgE'],9.8);if(!Tp||!isFinite(Tp))Tp=2*Math.PI*Math.sqrt(Math.max(Lm,.01)/Math.max(gv,.1));st.T=K.clamp(Tp,.5,6);st.L=K.clamp(.14+Math.log10(1+Math.abs(Lm))*.4,.14,.38);
+   const th=pick(v,['th','plth0'],15);st.amp=K.clamp(Math.abs(th)*Math.PI/180,.08,.6);
+   const m=pick(v,['m','plm'],1),k=pick(v,['k','plk'],200);st.kT=K.clamp(2*Math.PI*Math.sqrt(Math.max(m,.01)/Math.max(k,.01)),.5,4);st.nm=K.clamp(Math.round(1+K.lg(m,.05)*5),1,6);st.ext=K.clamp(.13+K.lg(m*9.8/Math.max(k,.01),.005)*.2,.13,.28);
+   discs.forEach((d,i)=>{d.visible=(i>>1)<st.nm});thread.scale.y=st.L-.026;bob.position.y=-st.L;card.userData.redraw((c,W,H)=>K.fit(c,eq.f,W,H));const per=isSpr?st.kT:st.T;if(Math.abs(per-(st.per||0))>1e-3){st.per=per;st.t0=-1}},
+  tick(t,dt){const pOn=pendP.visible!==false,sOn=sprP.visible!==false,wOn=swP.visible!==false;
+   if(pOn){st.ph+=dt*2*Math.PI/st.T;pv.rotation.z=st.amp*Math.cos(st.ph)}else pv.rotation.z=0;
+   if(sOn){st.ph2+=dt*2*Math.PI/st.kT;const e=st.ext*(1+.25*Math.sin(st.ph2));coil.scale.y=e;hanger.position.y=-e-.012}
+   const per=isSpr?st.kT:st.T,run=(isSpr?sOn:pOn)&&wOn&&dt>0;if(!run&&st.t0>=0){st.t0=-1;drawFace(0,0)}if(run){if(st.t0<0)st.t0=t;const el=t-st.t0;if(el>60){st.t0=t}const n=Math.floor((t-st.t0)/per);if(Math.floor(el*20)!==st.last){st.last=Math.floor(el*20);drawFace(t-st.t0,n)}}}}},
 
 /* ===== fluids ===== */
 fluid(K,eq){const T=K.THREE,root=new T.Group();const tank=new T.Group();const G=K.box(.42,.26,.24,K.glass,{soft:true});tank.add(G);const w=K.box(.405,.18,.225,K.water,{edge:false});w.position.y=.003;tank.add(w);

@@ -236,7 +236,7 @@ module.exports = async (req, res) => {
         return;
       }
       try {
-        const html = await get(url, UA, deadline);
+        const html = (await get(url, UA, deadline)).text;
         const m = html.match(/<meta\s+(?:property="og:image"|name="twitter:image")\s+content="([^"]+)"/i);
         const img = m ? m[1] : 'https://www.youtube.com/img/desktop/auto/logo_channel_default_light.png';
         res.setHeader('Cache-Control', 'public, max-age=604800, s-maxage=2592000');

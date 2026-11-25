@@ -221,15 +221,53 @@ fluid(K,eq){const T=K.THREE,root=new T.Group();const PM=(c,o={})=>{const m=new T
    needle.rotation.z+=((Math.PI*.75-(tOn?st.ang:0)*Math.PI*1.5)-needle.rotation.z)*Math.min(1,dt*4+.02);
    mcW.scale.y=.215*st.mc;mcW.position.y=.008+mcW.scale.y/2}}},
 
-/* ===== heat ===== */
-heat(K,eq){const T=K.THREE,root=new T.Group();const st={T:.5};
- const burner=new T.Group();burner.add(K.cyl(.07,.08,.04,K.dark));const flame=K.cyl(0,.03,.07,K.M(0xff9a3c,{e:0xff6a00,ei:1.2,op:.85}),{edge:false});flame.position.y=.04;burner.add(flame);
- const pot=K.lathe([[0,0],[.07,0],[.075,.08],[.078,.09]],K.metal,{side:true});pot.position.y=.12;burner.add(pot);const ring=K.tor(.075,.004,K.dark);ring.rotation.x=Math.PI/2;ring.position.y=.12;burner.add(ring);K.place(root,burner,-.22,-.1);
- const steam=[];for(let i=0;i<12;i++){const s=K.sph(.012,K.M(0xffffff,{op:.35}),{hull:false,edge:false,center:true});s.userData.o=Math.random();burner.add(s);steam.push(s)}
- const th=new T.Group();th.add(K.box(.06,.012,.06,K.paper2));const tube=K.cyl(.012,.012,.36,K.glass,{soft:true});th.add(tube);const bulbs=K.sph(.022,K.red,{hull:1.08});th.add(bulbs);const col=K.cyl(.006,.006,1,K.red,{edge:false,seg:10});col.position.y=.03;th.add(col);for(let i=0;i<8;i++)th.add(K.line([[.014,.06+i*.04,0],[.026,.06+i*.04,0]]));K.place(root,th,.25,-.15);
- const cup=new T.Group();cup.add(K.cyl(.045,.036,.09,K.paper));const tea=K.cyl(.041,.041,.003,K.M(0x8a5a3c),{edge:false});tea.position.y=.08;cup.add(tea);K.place(root,cup,.02,.3);
- return{root,update(v){const Tv=pick(v,['Tk','T2','T1'],0)||(pick(v,['Tc'],25)+273);st.T=K.clamp((Tv-200)/500,.08,1);col.scale.y=.03+st.T*.3;flame.scale.setScalar(.5+st.T*.8)},
-  tick(t,dt){steam.forEach(s=>{const k=(t*.25+s.userData.o)%1;s.position.set(Math.sin(k*9+s.userData.o*6)*.02,.22+k*.25*st.T,0);s.scale.setScalar(.5+k*1.5);s.children[0].material.opacity=.35*(1-k)});flame.scale.x=flame.scale.z=(.5+st.T*.8)*(1+Math.sin(t*20)*.08)}}},
+/* ===== heat: مختبر الحرارة الواقعي — موقد بنزن بلهب أزرق، حامل ثلاثي وشبكة سيراميك، كأس بايركس يغلي، ميزان حرارة زجاجي بمشبك، مسعر حراري ===== */
+heat(K,eq){const T=K.THREE,root=new T.Group();const PM=(c,o={})=>{const m=new T.MeshPhysicalMaterial({color:c,roughness:o.r??.3,metalness:o.m??0,clearcoat:o.cc??.6,clearcoatRoughness:o.ccr??.15,transparent:!!o.op,opacity:o.op??1,depthWrite:o.op?false:true,side:o.ds?T.DoubleSide:T.FrontSide,emissive:o.e??0,emissiveIntensity:o.ei??1});m.userData.env=o.env??1.2;return m};
+ const brass=PM(0xc9a227,{r:.25,m:.9,env:1.5}),iron=PM(0x2a2d33,{r:.5,m:.6,cc:.5}),glassM=PM(0xe4f2ff,{r:.04,op:.2,cc:1,ds:1,env:2.2}),waterM=PM(0x5aa6e8,{r:.06,op:.45,cc:1,env:1.6}),dark=PM(0x1b1d22,{r:.4,cc:.9});
+ const ph=Math.PI;
+ /* 1) موقد بنزن */
+ const bn=new T.Group();const bb=new T.Mesh(new T.CylinderGeometry(.045,.055,.014,40),iron);bb.position.y=.007;bn.add(bb);const bt=K.cyl(.011,.011,.14,brass,{edge:false,seg:24});bt.position.y=.014;bn.add(bt);
+ const collar=K.cyl(.014,.014,.02,K.steel,{edge:false,seg:20});collar.position.y=.03;bn.add(collar);const hoseN=K.cyl(.004,.004,.04,brass,{edge:false,seg:10});hoseN.rotation.z=ph/2;hoseN.position.set(.04,.022,0);bn.add(hoseN);
+ const hose=new T.Mesh(new T.TubeGeometry(new T.CatmullRomCurve3([new T.Vector3(.04,.022,0),new T.Vector3(.09,.012,.02),new T.Vector3(.12,.004,.08)]),16,.006,8),PM(0xd0532f,{r:.6,cc:.2}));bn.add(hose);
+ const flO=new T.Mesh(new T.ConeGeometry(.016,.09,24,1,true),PM(0x6aa0ff,{op:.6,e:0x3d6bff,ei:2,ds:1}));flO.position.y=.154+.045;bn.add(flO);const flI=new T.Mesh(new T.ConeGeometry(.009,.04,20,1,true),PM(0xbff0ff,{op:.9,e:0x9fe8ff,ei:2.6,ds:1}));flI.position.y=.154+.02;bn.add(flI);
+ const glow=new T.PointLight(0x6f8cff,0,.4);glow.position.y=.2;bn.add(glow);
+ const bnP=K.place(root,bn,-.13,-.05);
+ /* 2) الحامل الثلاثي والشبكة */
+ const tri=new T.Group();const TY=.25;const ringT=new T.Mesh(new T.TorusGeometry(.075,.005,10,40),iron);ringT.rotation.x=ph/2;ringT.position.y=TY;tri.add(ringT);
+ for(let i=0;i<3;i++){const a=i*ph*2/3;const leg=new T.Mesh(new T.CylinderGeometry(.004,.004,TY,10),iron);leg.position.set(Math.cos(a)*.085,TY/2,Math.sin(a)*.085);leg.castShadow=true;tri.add(leg)}
+ const gz=K.canvasTex(256,256,(x,w,h)=>{x.clearRect(0,0,w,h);x.fillStyle='#9aa0a8';x.fillRect(0,0,w,h);x.strokeStyle='#5c6168';x.lineWidth=1.2;for(let i=0;i<w;i+=8){x.beginPath();x.moveTo(i,0);x.lineTo(i,h);x.stroke();x.beginPath();x.moveTo(0,i);x.lineTo(w,i);x.stroke()}const g=x.createRadialGradient(128,128,10,128,128,70);g.addColorStop(0,'#f2ece2');g.addColorStop(1,'rgba(230,224,214,0)');x.fillStyle=g;x.beginPath();x.arc(128,128,70,0,7);x.fill()});
+ const gauze=new T.Mesh(new T.BoxGeometry(.17,.003,.17),new T.MeshStandardMaterial({map:gz,roughness:.8,metalness:.3}));gauze.position.y=TY+.006;tri.add(gauze);
+ K.place(root,tri,-.13,-.05);
+ /* 3) كأس بايركس فيه ماء يغلي */
+ const bk=new T.Group();const BY=TY+.008;const bkG=new T.Mesh(new T.CylinderGeometry(.052,.05,.13,40,1,true),glassM);bkG.position.y=BY+.065;bk.add(bkG);const bkB=new T.Mesh(new T.CircleGeometry(.05,40),glassM);bkB.rotation.x=-ph/2;bkB.position.y=BY+.001;bk.add(bkB);
+ const lip=new T.Mesh(new T.TorusGeometry(.052,.0025,8,40),glassM);lip.rotation.x=ph/2;lip.position.y=BY+.13;bk.add(lip);for(let i=1;i<=4;i++){bk.add(K.line([[-.02,BY+i*.025,.051],[.0,BY+i*.025,.0515]]))}
+ const bw=new T.Mesh(new T.CylinderGeometry(.048,.047,.09,36),waterM);bw.position.y=BY+.046;bk.add(bw);
+ const bub=[];for(let i=0;i<22;i++){const b=new T.Mesh(new T.SphereGeometry(.0028+Math.random()*.003,8,6),PM(0xffffff,{op:.65,cc:1,env:2}));b.userData={o:Math.random(),a:Math.random()*ph*2,r:Math.random()*.038};bk.add(b);bub.push(b)}
+ const steam=[];const stM=()=>new T.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:.3,depthWrite:false});for(let i=0;i<14;i++){const s=new T.Mesh(new T.SphereGeometry(.014,12,10),stM());s.userData.o=Math.random();bk.add(s);steam.push(s)}
+ const bkP=K.place(root,bk,-.13,-.05);
+ /* 4) ميزان حرارة زجاجي بمشبك على حامل */
+ const th=new T.Group();const tp=K.cyl(.005,.005,.6,K.steel,{edge:false,seg:14});tp.position.set(.12,0,0);th.add(tp);const tbase=K.box(.1,.014,.08,dark,{edge:false});tbase.position.set(.12,0,0);th.add(tbase);
+ const tarm=K.cyl(.004,.004,.1,K.steel,{edge:false,seg:10});tarm.rotation.z=ph/2;tarm.position.set(.12,.55,0);th.add(tarm);const clampB=K.box(.016,.02,.016,dark,{edge:false});clampB.position.set(0,.54,0);th.add(clampB);
+ const tg=new T.Group();tg.position.set(0,.56,0);th.add(tg);const tube=new T.Mesh(new T.CylinderGeometry(.006,.006,.26,16),PM(0xf4f9ff,{op:.5,cc:1,env:2}));tube.position.y=-.13;tg.add(tube);const bulb=new T.Mesh(new T.SphereGeometry(.008,16,12),PM(0xd8262c,{r:.2,cc:1}));bulb.position.y=-.262;tg.add(bulb);
+ const colm=K.cyl(.0022,.0022,1,PM(0xd8262c,{r:.3}),{edge:false,seg:8});colm.position.y=-.258;tg.add(colm);
+ const tsc=K.canvasTex(48,512,(x,w,h)=>{x.fillStyle='rgba(255,255,255,.95)';x.fillRect(0,0,w,h);x.fillStyle='#14286f';x.font='bold 15px sans-serif';for(let c=0;c<=110;c+=5){const y=h-20-c*4.3;x.fillRect(0,y,c%10?8:16,c%50?1.5:2.5);if(!(c%20))x.fillText(String(c),20,y+5)}});const tscm=new T.Mesh(new T.PlaneGeometry(.012,.24),new T.MeshBasicMaterial({map:tsc,transparent:true}));tscm.position.set(0,-.13,.0062);tg.add(tscm);
+ const thP=K.place(root,th,-.115,-.04);
+ /* 5) مسعر حراري: كوبين فلّين بغطاء ومحرّك */
+ const cal=new T.Group();const foam=PM(0xf5f3ee,{r:.9,cc:0});const c1=new T.Mesh(new T.CylinderGeometry(.045,.034,.1,36),foam);c1.position.y=.05;c1.castShadow=true;cal.add(c1);const c2=new T.Mesh(new T.CylinderGeometry(.047,.045,.03,36,1,true),foam);c2.position.y=.085;cal.add(c2);
+ const lid=new T.Mesh(new T.CylinderGeometry(.049,.049,.008,36),PM(0xe9e6df,{r:.85,cc:0}));lid.position.y=.103;cal.add(lid);const stir=K.cyl(.0018,.0018,.1,K.steel,{edge:false,seg:8});stir.position.set(.018,.07,0);cal.add(stir);const stirR=new T.Mesh(new T.TorusGeometry(.008,.0015,6,16),K.steel);stirR.rotation.x=ph/2;stirR.position.set(.018,.168,0);cal.add(stirR);
+ const dpr=K.cyl(.0025,.0025,.12,K.steel,{edge:false,seg:8});dpr.position.set(-.016,.06,0);cal.add(dpr);const dm=K.box(.05,.022,.075,PM(0xf1c40f,{r:.4,cc:.6}),{edge:false});dm.position.set(.11,0,.0);cal.add(dm);
+ const dtex=K.canvasTex(256,96,()=>{});const dscr=new T.Mesh(new T.PlaneGeometry(.04,.02),new T.MeshStandardMaterial({map:dtex,emissive:0xffffff,emissiveMap:dtex,emissiveIntensity:.35}));dscr.rotation.x=-ph/2;dscr.position.set(.11,.0225,-.012);cal.add(dscr);
+ const wire=new T.Mesh(new T.TubeGeometry(new T.CatmullRomCurve3([new T.Vector3(-.016,.18,0),new T.Vector3(.04,.2,.02),new T.Vector3(.1,.06,.03),new T.Vector3(.11,.022,.03)]),20,.0018,6),dark);cal.add(wire);
+ const calP=K.place(root,cal,.2,.24);
+ /* 6) بطاقة المعادلة */
+ const card=K.card(.28,.1,()=>{});K.place(root,card,.22,-.26);
+ const st={T:.5,Tc:25,last:''};const drawD=c=>{const s=c.toFixed(1)+' °C';if(s===st.last)return;st.last=s;const {x}=dtex.userData;x.fillStyle='#c9d8c4';x.fillRect(0,0,256,96);x.fillStyle='#0b1f12';x.font='700 52px "Courier New",monospace';x.textAlign='center';x.textBaseline='middle';x.fillText(s,128,50);dtex.needsUpdate=true};drawD(25);
+ return{root,update(v){const dTv=pick(v,['dT','hlDT'],0),Tv=pick(v,['Tk','T2','Th','T1','hlTf'],0)||(pick(v,['Tc','hlTc'],0)||(20+dTv))+273.15;const Tc=Tv-273.15;st.Tc=Tc;st.T=K.clamp((Tc+10)/110,.02,1);
+   const q=pick(v,['Qh','QH','Qdot','P'],0);st.fl=K.clamp(.5+K.lg(Math.abs(q)||1000,100)*.25,.5,1.3);colm.scale.y=.008+K.clamp((Tc)/110,0,1)*.236;drawD(K.clamp(Tc,-50,999));card.userData.redraw((c,W,H)=>K.fit(c,eq.f,W,H))},
+  tick(t,dt){const on=bnP.visible!==false,bkOn=bkP.visible!==false;flO.visible=flI.visible=on;glow.intensity=on?.6*st.fl:0;const fs=st.fl*(1+Math.sin(t*23)*.06+Math.sin(t*37)*.04);flO.scale.set(fs*.9,fs,fs*.9);flI.scale.setScalar(st.fl);flO.position.y=.154+.045*fs;
+   const boil=on&&bkOn?st.T:0;bub.forEach((b,i)=>{const k=(t*(.25+boil*.9)+b.userData.o)%1;b.visible=boil>.15&&i<4+boil*18;b.position.set(Math.cos(b.userData.a)*b.userData.r,BY+.004+k*.088,Math.sin(b.userData.a)*b.userData.r)});
+   steam.forEach(s=>{const k=(t*.22+s.userData.o)%1;s.visible=boil>.35;s.position.set(Math.sin(k*8+s.userData.o*6)*.02,BY+.13+k*.2*boil,Math.cos(k*6)*.01);s.scale.setScalar(.5+k*1.6);s.material.opacity=.3*(1-k)});
+   bw.position.y=BY+.046+(boil>.6?Math.sin(t*14)*.0012:0);stir.position.y=.07+Math.max(0,Math.sin(t*2))*.012;stirR.position.y=stir.position.y+.098}}},
 
 /* ===== gas: piston + particles ===== */
 gas(K,eq){const T=K.THREE,root=new T.Group();const cyl=new T.Group();const g=K.cyl(.13,.13,.34,K.glass,{open:true,soft:true});cyl.add(g);cyl.add(K.cyl(.135,.135,.012,K.paper2));
